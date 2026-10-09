@@ -711,6 +711,34 @@ textarea.pn-in{resize:vertical;line-height:1.45}
 /* ===== v7 : liste de courses lisible sur téléphone ===== */
 @media (max-width:520px){.item{flex-wrap:wrap;row-gap:0}.item .check{flex:1 1 100%;padding-bottom:0}.item>.item-qty{margin-left:40px;color:var(--accent)}.item>.have{margin-left:auto}.item.owned-item .item-txt{padding:4px 0}}
 
+/* ===== v8 : pourquoi ce score ===== */
+.why-link{font-size:.78rem;padding:2px 0;align-self:flex-start}
+.sv-why summary{display:flex;align-items:center;justify-content:space-between;gap:12px;cursor:pointer;list-style:none}
+.sv-why summary::-webkit-details-marker{display:none}
+.why-sum{display:flex;flex-direction:column;line-height:1.3}
+.why-sum b{font-family:"Bricolage Grotesque",sans-serif;font-size:1.1rem}
+.why-sum span{font-size:.85rem;color:var(--muted)}
+.why-badge{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:1.3rem;border:2px solid var(--line);border-radius:14px;padding:4px 10px;white-space:nowrap}
+.why-badge small{font-size:.7rem;color:var(--muted);font-weight:700}
+.why-badge.ok{border-color:var(--ok);color:var(--ok)}.why-badge.low{border-color:var(--low);color:var(--low)}.why-badge.high{border-color:var(--high);color:var(--high)}
+.sv-why[open] summary{margin-bottom:6px}
+.why-parts{display:grid;gap:12px;margin:10px 0}
+@media (min-width:700px){.why-parts{grid-template-columns:1fr 1fr}}
+.why-row p{margin:4px 0 0;font-size:.84rem;line-height:1.4}
+.why-h{display:flex;justify-content:space-between;align-items:baseline;font-size:.86rem;font-weight:700;margin-bottom:4px}
+.why-h small{color:var(--muted);font-weight:400}
+.why-row.low .sv-bar i{background:var(--low)}.why-row.high .sv-bar i{background:var(--high)}
+.why-notes{margin:8px 0;padding-left:18px;font-size:.84rem;color:var(--muted)}
+.why-notes li{margin:3px 0}
+.why-h4{font-size:.98rem;margin:14px 0 6px}
+.why-sugg{list-style:none;padding:0;margin:0;display:grid;gap:8px}
+.why-sugg li{display:flex;align-items:center;gap:10px;background:var(--surface-2);border-radius:var(--r-md);padding:8px 10px;font-size:.86rem;line-height:1.35}
+.why-ico{flex:0 0 auto;font-size:1.05rem}
+.why-t{flex:1;min-width:0}
+.why-sugg .btn{flex:0 0 auto}
+.why-est{font-size:.88rem;margin:10px 0 0;padding:8px 10px;border-radius:var(--r-md);background:var(--accent-soft)}
+.why-tip{font-size:.84rem;color:var(--muted);margin:12px 0 0}
+
 </style>
 </head>
 <body>
@@ -2576,7 +2604,7 @@ function calcTargets(pr){const bmr=10*pr.kg+6.25*pr.cm-5*pr.age+(pr.sex==="h"?5:
  return{t:{k,p,f,c,fi},bmr:Math.round(bmr),tdee:Math.round(tdee),floored,bmi:r1(bmi),ref:r1(ref),delta:Math.round(k-tdee)}}
 
 // ---------- score du jour & historique ----------
-function dayScore(T,t){if(!T||!(T.k>0))return null;const kd=Math.abs(T.k-t.k)/t.k;const sk=kd<=0.1?1:Math.max(0,1-(kd-0.1)/0.25);const sp=Math.min(1,(T.p||0)/t.p);const sfi=Math.min(1,(T.fi||0)/t.fi);const sf=(T.f||0)<=t.f*1.1?1:Math.max(0,1-((T.f||0)-t.f*1.1)/(t.f*0.5));return Math.round(40*sk+30*sp+15*sfi+15*sf)}
+function dayScore(T,t){if(!T||!(T.k>0))return null;const s=scoreParts(T,t);return Math.round(s.k+s.p+s.fi+s.f)}
 function snapHist(){if(!state.hist||typeof state.hist!=="object")state.hist={};for(const[d]of DAYS){const row=[0,1].map(pi=>{const T=dayData(d,pi).tot;return{k:Math.round(T.k),p:r1(T.p),f:r1(T.f),c:r1(T.c),fi:r1(T.fi),s:dayScore(T,state.people[pi].t)}});if(row[0].k||row[1].k)state.hist[d]=row;else delete state.hist[d]}}
 function seriesFor(pi){const d0=dateFromYmd(DAYS[0][0]),out=[];for(let i=-6;i<=6;i++){const x=new Date(d0);x.setDate(x.getDate()+i);const d=ymd(x);let v=null;
  if(i>=0){const T=dayData(d,pi).tot;if(T.k>0)v={k:T.k,p:T.p,f:T.f,c:T.c,fi:T.fi,s:dayScore(T,state.people[pi].t)}}else{const h=state.hist[d];if(h&&h[pi]&&h[pi].k>0)v=h[pi]}
@@ -2648,7 +2676,7 @@ function renderSuivi(){const el=document.getElementById("suivi");if(!el)return;
  const day=`<div class="sv-card"><div class="chips nt-days" role="group" aria-label="Jour">${DAYS.map(([d,l],i)=>`<button type="button" class="chip" data-ntday="${d}" aria-pressed="${d===ui.ntDay}">${i===0?"Aujourd'hui":i===1?"Demain":l.slice(0,3)+". "+dateFromYmd(d).getDate()}</button>`).join("")}</div>
   <div class="sv-hero"><div class="sv-ring ${kSt}">${ringSvg(t.k?tot.k/t.k:0,kSt)}<div class="sv-ring-c"><b>${fmtInt(tot.k)}</b><span>/ ${fmtInt(t.k)} kcal</span></div></div>
   <div class="sv-hero-txt"><p class="sv-left">${tot.k<=t.k?`Reste <b>${fmtInt(t.k-tot.k)} kcal</b>`:`<b>${fmtInt(tot.k-t.k)} kcal</b> au-dessus`} ${dayLabel(ui.ntDay)}</p>
-   <div class="sv-score ${scCls}"><span class="sv-sc-n">${sc==null?"–":sc}</span><span class="sv-sc-l">${fut?"score prévu":"score du jour"}<span class="stars" aria-hidden="true">${stars}</span></span></div>
+   <div class="sv-score ${scCls}"><span class="sv-sc-n">${sc==null?"–":sc}</span><span class="sv-sc-l">${fut?"score prévu":"score du jour"}<span class="stars" aria-hidden="true">${stars}</span><button type="button" class="link why-link" data-act="why-go">Pourquoi ?</button></span></div>
    ${G.cur?`<span class="sv-chip">🔥 ${G.cur} jour${G.cur>1?"s":""} de suite</span>`:""}</div></div>
   <div class="sv-macros">${NUTS.map(([x,lab])=>macroRow(x,lab,tot[x],t[x])).join("")}</div>
   ${split}${cantPrompt(ui.ntDay,pi)}${partial?`<p class="pn-help">Lipides, glucides ou fibres inconnus pour une recette : totaux partiels.</p>`:""}
@@ -2686,7 +2714,7 @@ function renderSuivi(){const el=document.getElementById("suivi");if(!el)return;
   <div class="sv-need">${[["Calories",fmtInt(t.k)+" kcal"],["Protéines",t.p+" g"],["Lipides",t.f+" g"],["Glucides",t.c+" g"],["Fibres",t.fi+" g"]].map(([l,v])=>`<div><span>${l}</span><b>${v}</b></div>`).join("")}</div>
   ${pr&&pr.auto&&calc?`<p class="pn-help">${pr.sex==="h"?"Homme":"Femme"}, ${pr.age} ans, ${pr.cm} cm, ${fmtG(pr.kg)} kg (IMC ${fmtG(calc.bmi)}). Métabolisme de base ${fmtInt(calc.bmr)} kcal × activité « ${ACT[pr.act][1].toLowerCase()} » = ${fmtInt(calc.tdee)} kcal par jour. Objectif ${GOALS[pr.goal].l.toLowerCase()} : ${GOALS[pr.goal].d}${calc.floored?", relevé au minimum de sécurité":""} → <b>${fmtInt(t.k)} kcal</b>. Protéines : ${fmtG(GOALS[pr.goal].pk)} g par kg${calc.ref<pr.kg?` (calculées sur ${fmtG(calc.ref)} kg)`:""}.</p>`:`<p class="pn-help">${pr?"Valeurs réglées à la main.":"Valeurs par défaut : complète le profil pour un calcul personnalisé."}</p>`}
   ${pr&&goalKg&&pr.cm&&goalKg/((pr.cm/100)**2)<18.5?`<p class="sv-warn">Le poids visé correspond à un IMC sous 18,5 : parles-en à un professionnel de santé avant de viser ce chiffre.</p>`:""}</div>`;
- el.innerHTML=head+cta+day+trendC+weightC+gameC+needC+`<p class="sv-disc">Estimations calculées avec la formule de Mifflin-St Jeor et les valeurs nutritionnelles des recettes (certaines sont estimées). Ce n'est pas un avis médical.</p>`}
+ el.innerHTML=head+cta+day+whyCard(ui.ntDay,pi)+trendC+weightC+gameC+needC+`<p class="sv-disc">Estimations calculées avec la formule de Mifflin-St Jeor et les valeurs nutritionnelles des recettes (certaines sont estimées). Ce n'est pas un avis médical.</p>`}
 
 // ---------- panneau : profils ----------
 function panelProfile(){return`<h2 class="pn-title">Profils & objectifs</h2><p class="pn-help">Les besoins de chacun se calculent automatiquement à partir du sexe, de l'âge, de la taille, du poids, du niveau d'activité et de l'objectif.</p>
@@ -3051,6 +3079,55 @@ function renderShop(){
 function shopText(){const{out}=shopList();const groups=shopGroups(out).filter(g=>!g.ids.every(id=>state.bought[id]));let t="Courses – semaine du "+fmtDate(dateOf(0))+"\n";
  AISLE_ORDER.forEach(a=>{const it=groups.filter(g=>g.aisle===a).sort((x,y)=>x.name.localeCompare(y.name,"fr"));if(!it.length)return;t+="\n"+AISLES[a]+"\n";
   it.forEach(g=>{const q=g.items.length===1?(isStaple(g.ids[0])?"":fmtQty(g.ids[0],g.items[0].buy)):groupQty(g.items).txt;t+="- "+g.name+(q?" : "+q:"")+"\n"})});return t}
+
+// ================= v8 : expliquer le score et proposer comment atteindre la cible =================
+function scoreParts(T,t){const kd=Math.abs((T.k||0)-t.k)/t.k;return{k:40*(kd<=0.1?1:Math.max(0,1-(kd-0.1)/0.25)),p:30*Math.min(1,(T.p||0)/t.p),fi:15*Math.min(1,(T.fi||0)/t.fi),f:15*((T.f||0)<=t.f*1.1?1:Math.max(0,1-((T.f||0)-t.f*1.1)/(t.f*0.5)))}}
+// encas et compléments simples : [nom, portion, kcal, prot., lip., gluc., fibres]
+const BOOST=[["Petit-déjeuner : flocons d'avoine, lait et fruit","50 g + 200 ml + 1 fruit",370,15,8,58,7],["Petit-déjeuner : 2 tartines complètes et 2 œufs","2 tranches + 2 œufs",380,22,14,40,6],["Petit-déjeuner : skyr, muesli et fruit","150 g + 40 g + 1 fruit",340,21,5,52,6],["Skyr nature","150 g",90,16,0.3,6,0],["Fromage blanc 0 %","200 g",92,15,0.4,8,0],["Yaourt grec 0 % et fruits rouges","150 g + 80 g",120,15,0.5,13,3],["2 œufs durs","2 œufs",155,13,11,1,0],["Thon au naturel","1 petite boîte (100 g)",115,26,1,0,0],["Blanc de poulet","100 g",120,23,2.5,0,0],["Shaker de whey","30 g + eau",115,24,1.5,2.5,0],["Edamame","100 g",120,11,5,9,5],["Pomme","1 fruit",80,0.4,0.3,19,3.6],["Poire","1 fruit",95,0.6,0.2,22,5.5],["Banane","1 fruit",105,1.3,0.4,24,3],["Amandes","20 g",120,4,10,1.5,2.5],["Crudités (carotte, concombre)","200 g",60,2,0.4,10,5],["Soupe de légumes","300 ml",100,3,3,14,4],["Houmous et bâtonnets de légumes","50 g + 150 g",175,6,10,15,6],["Lentilles cuites","150 g",175,13,0.6,26,8],["Flocons d'avoine et lait","40 g + 150 ml",220,11,6,30,4],["Tartine complète au beurre de cacahuète","1 tranche + 15 g",175,7,8,18,3.5]];
+const GOAL_TIP={perte:"Garde les protéines hautes (elles protègent le muscle et calment la faim) et complète avec des légumes, des fruits et des fibres plutôt qu'avec des encas sucrés.",seche:"Priorité aux protéines maigres (skyr, poulet, poisson, œufs), lipides modérés, glucides surtout autour du sport.",maintien:"Vise l'équilibre : une source de protéines et des légumes à chaque repas, des féculents complets.",masse:"Ajoute des collations denses : flocons d'avoine, oléagineux, beurre de cacahuète, et une source de protéines à chaque prise."};
+const addT=(T,n,m)=>{m=m||1;return{k:T.k+(n.k||0)*m,p:T.p+(n.p||0)*m,f:T.f+(n.f||0)*m,c:T.c+(n.c||0)*m,fi:T.fi+(n.fi||0)*m}};
+function boostPlan(T,t,goal){const pool=BOOST.map(b=>({n:b[0],q:b[1],k:b[2],p:b[3],f:b[4],c:b[5],fi:b[6]})).concat(SNACK_RECIPES.filter(r=>r.nut&&r.nut.k).map(r=>({n:short(r),q:"1 "+(r.unitS||"pièce"),k:r.nut.k,p:r.nut.p||0,f:r.nut.f||0,c:r.nut.c||0,fi:r.nut.fi||0})));
+ let cur={...T},sc=dayScore(cur,t)||0;const picks=[],cap=t.k*(goal==="masse"?1.1:1.05);
+ for(let i=0;i<4;i++){let best=null,bs=sc;for(const it of pool){if(picks.includes(it)||(/^Petit-déjeuner/.test(it.n)&&picks.some(x=>/^Petit-déjeuner/.test(x.n))))continue;const nt=addT(cur,it);if(nt.k>cap)continue;const s=dayScore(nt,t);if(s>bs+1){bs=s;best=it}}if(!best)break;picks.push(best);cur=addT(cur,best);sc=bs;if(sc>=90)break}
+ return{picks,score:sc,T:cur}}
+function slotSuggest(d,pi,T,t){const out=[];for(const[m,ml]of MEALS){const k=d+"-"+m;if(state.plan[k]||atCant(k,pi))continue;let best=null,bs=-1;
+ for(const r of VISIBLE){if(r.gen||r.snack||state.dislikes[r.id])continue;const n=nutOr(rNut(r));if(!n.k)continue;const s=dayScore(addT(T,n),t);if(s>bs){bs=s;best=r}}if(best)out.push({k,ml,r:best,s:bs})}return out}
+function swapSuggest(d,pi,T,t){if(T.k<=t.k*1.1)return null;let best=null;for(const[m,ml]of MEALS){const k=d+"-"+m,cur=RMAP[state.plan[k]];if(!cur||state.done[k]||!eats(k,pi))continue;const cn=nutOr(rNut(cur));const base={k:T.k-cn.k,p:T.p-cn.p,f:T.f-cn.f,c:T.c-cn.c,fi:T.fi-cn.fi};
+ for(const r of VISIBLE){if(r.id===cur.id||r.gen||r.snack||state.dislikes[r.id])continue;const n=nutOr(rNut(r));if(!n.k)continue;const s=dayScore(addT(base,n),t);if(!best||s>best.s)best={k,ml,cur,r,s,dk:n.k-cn.k}}}
+ return best&&best.s>(dayScore(T,t)||0)+3?best:null}
+function whyCard(d,pi){const P=state.people[pi],t=P.t,today=DAYS[0][0],fut=d>today;const{rows,tot,partial}=dayData(d,pi);const T={k:tot.k||0,p:tot.p||0,f:tot.f||0,c:tot.c||0,fi:tot.fi||0};
+ const sc=dayScore(T,t),S=scoreParts(T,t),goal=(P.prof&&P.prof.goal)||goalNow();const lim=Math.round(t.f*1.1);
+ const fatTop=rows.map(r=>r.type==="meal"?(r.on?{n:short(r.r),f:r.n.f}:null):{n:r.it.n,f:r.it.f}).filter(x=>x&&x.f!=null).sort((a,b)=>b.f-a.f)[0];
+ const line=(x,lab,pts,max,txt)=>{const ok=pts>=max-0.5;return`<div class="why-row ${ok?"ok":pts>=max*0.5?"low":"high"}"><div class="why-h"><span>${lab}</span><b>${Math.round(pts)}<small>/${max}</small></b></div><span class="sv-bar" aria-hidden="true"><i style="width:${(pts/max*100).toFixed(0)}%"></i></span><p>${txt}</p></div>`};
+ const kTxt=T.k<t.k*0.9?`${fmtInt(T.k)} kcal sur ${fmtInt(t.k)} : il manque <b>${fmtInt(t.k-T.k)} kcal</b>. Les 40 points sont acquis entre ${fmtInt(t.k*0.9)} et ${fmtInt(t.k*1.1)} kcal.`:T.k>t.k*1.1?`${fmtInt(T.k)} kcal : <b>${fmtInt(T.k-t.k)} kcal de trop</b> par rapport à l'objectif (${fmtInt(t.k)}).`:`${fmtInt(T.k)} kcal : dans la cible ✓`;
+ const pTxt=T.p<t.p?`${fmtG(r1(T.p))} g sur ${t.p} g : il manque <b>${fmtG(r1(t.p-T.p))} g de protéines</b>.`:`${fmtG(r1(T.p))} g : objectif atteint ✓`;
+ const fiTxt=T.fi<t.fi?`${fmtG(r1(T.fi))} g sur ${t.fi} g : il manque <b>${fmtG(r1(t.fi-T.fi))} g de fibres</b> (légumes, fruits, légumineuses, céréales complètes).`:`${fmtG(r1(T.fi))} g : objectif atteint ✓`;
+ const fTxt=T.f>lim?`${fmtG(r1(T.f))} g pour une limite de ${lim} g : <b>${fmtG(r1(T.f-lim))} g de trop</b>${fatTop?`, surtout à cause de « ${esc(fatTop.n)} » (${fmtG(r1(fatTop.f))} g)`:""}.`:`${fmtG(r1(T.f))} g, sous la limite de ${lim} g ✓`;
+ const notes=[];const L=(state.log[d]&&state.log[d][pi])||[];
+ if(!L.length&&T.k<t.k*0.9)notes.push(`Le petit-déjeuner n'est pas noté : il représente souvent 20 à 25 % de la journée. Note-le avec « + Ajouter un encas ».`);
+ if(atCant(d+"-midi",pi)&&!L.some(it=>it.src==="cant"))notes.push(`Le plateau de cantine du midi n'est pas encore noté.`);
+ if(partial)notes.push(`Une recette n'a pas toutes ses valeurs (lipides, glucides ou fibres) : le score peut être un peu sous-estimé.`);
+ if(d===today&&T.k<t.k*0.9)notes.push(`La journée n'est pas finie : le score monte au fil des repas et des encas notés.`);
+ const sug=[];ui.why={d,pi,picks:[]};
+ const slots=slotSuggest(d,pi,T,t);let T2=T;
+ slots.forEach(x=>{const n=nutOr(rNut(x.r));T2=addT(T2,n);sug.push(`<li><span class="why-ico" aria-hidden="true">🍽️</span><span class="why-t"><b>${x.ml} : rien de prévu.</b> « ${esc(short(x.r))} » (${Math.round(n.k)} kcal, ${fmtG(r1(n.p))} g de prot.) te rapprocherait le plus de la cible.</span><button type="button" class="btn small" data-whyplan="${x.k}|${x.r.id}">Ajouter</button></li>`)});
+ const sw=swapSuggest(d,pi,T,t);if(sw)sug.push(`<li><span class="why-ico" aria-hidden="true">🔁</span><span class="why-t"><b>${sw.ml} plus léger :</b> remplace « ${esc(short(sw.cur))} » par « ${esc(short(sw.r))} » (${sw.dk<0?"−":"+"}${fmtInt(Math.abs(sw.dk))} kcal) : score estimé ${sw.s}. Tu peux aussi réduire la portion.</span><button type="button" class="btn small" data-whyswap="${sw.k}|${sw.r.id}">Remplacer</button></li>`);
+ const B=boostPlan(T2,t,goal);ui.why.picks=B.picks;
+ B.picks.forEach((it,i)=>sug.push(`<li><span class="why-ico" aria-hidden="true">➕</span><span class="why-t"><b>${esc(it.n)}</b> (${esc(it.q)}) · ${Math.round(it.k)} kcal · ${fmtG(r1(it.p))} g prot.${it.fi>=3?` · ${fmtG(r1(it.fi))} g fibres`:""}</span><button type="button" class="btn small" data-whyboost="${i}">${fut?"Prévoir":"Noter"}</button></li>`));
+ const est=dayScore(B.T,t);const better=(slots.length||B.picks.length)&&est!=null&&est>(sc||0);
+ const head=sc==null?"Rien de noté ni de prévu":sc>=85?"Bravo, journée dans la cible":sc>=70?"Bonne journée, encore un petit effort":sc>=50?"Il manque quelques éléments":"Score bas : voici pourquoi";
+ const open=sc==null||sc<85;
+ return`<details class="sv-card sv-why" id="whyCard"${open?" open":""}><summary><span class="why-sum"><b>Pourquoi ce score ?</b><span>${esc(head)}</span></span><span class="why-badge ${sc==null?"none":sc>=70?"ok":sc>=50?"low":"high"}">${sc==null?"–":sc}<small>/100</small></span></summary>
+  <p class="pn-help">Le score sur 100 compte les calories proches de l'objectif (40 points), les protéines (30), les fibres (15) et des lipides pas trop élevés (15). À partir de 70, la journée compte pour ta série 🔥.</p>
+  <div class="why-parts">${line("k","Calories",S.k,40,kTxt)}${line("p","Protéines",S.p,30,pTxt)}${line("fi","Fibres",S.fi,15,fiTxt)}${line("f","Lipides",S.f,15,fTxt)}</div>
+  ${notes.length?`<ul class="why-notes">${notes.map(n=>`<li>${n}</li>`).join("")}</ul>`:""}
+  ${sug.length?`<h4 class="why-h4">${fut?"Pour que cette journée atteigne la cible":"Pour atteindre ta cible "+(d===today?"aujourd'hui":"")}</h4><ul class="why-sugg">${sug.join("")}</ul>${better?`<p class="why-est">Avec ${slots.length&&B.picks.length?"ces ajouts":slots.length?"ce repas":"ces ajouts"} : <b>score estimé ${est}/100</b> (${fmtInt(B.T.k)} kcal, ${fmtG(r1(B.T.p))} g de protéines, ${fmtG(r1(B.T.fi))} g de fibres).</p>`:""}`:sc!=null&&sc<85&&T.k>t.k*1.1?`<p class="why-est">Pour le reste de la journée, privilégie des légumes et des protéines maigres, sans encas.</p>`:""}
+  <p class="why-tip">💡 ${esc(GOAL_TIP[goal]||GOAL_TIP.perte)}</p></details>`}
+document.addEventListener("click",e=>{const t=e.target.closest("button");if(!t)return;const W=ui.why;
+ if(t.dataset.whyboost!=null&&t.dataset.whyboost!==""&&W){const it=W.picks[Number(t.dataset.whyboost)];if(!it)return;logItem(W.d,[W.pi],{n:it.n,q:it.q,k:Math.round(it.k),p:it.p,f:it.f,c:it.c,fi:it.fi});renderSuivi();toast(it.n+" noté");return}
+ if(t.dataset.whyplan){const[k,id]=t.dataset.whyplan.split("|");if(RMAP[id]&&!state.plan[k]){state.plan[k]=id;commit();renderAll();toast("Ajouté : "+slotLabel(k))}return}
+ if(t.dataset.whyswap){const[k,id]=t.dataset.whyswap.split("|");if(RMAP[id]&&state.plan[k]&&!state.done[k]){state.plan[k]=id;commit();renderAll();toast("Remplacé : "+short(RMAP[id]))}return}
+ if(t.dataset.act==="why-go"){const el=document.getElementById("whyCard");if(el){el.open=true;try{el.scrollIntoView({behavior:"smooth",block:"start"})}catch(err){el.scrollIntoView()}}}});
 
 setTab(ui.tab);renderAll();initDb();sbStart();
 
