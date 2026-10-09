@@ -436,6 +436,13 @@ body.panel-open main.wrap{display:none}
 .qr-txt{word-break:break-all;background:var(--surface-2);border-radius:10px;padding:10px;font-size:.9rem}
 .scanbar{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 14px}
 .scanbar .btn{flex:1 1 160px}
+.vids{margin:18px 0 6px}
+.vids h3{margin:0 0 10px}
+.vid{margin:0 0 12px}
+.vid-frame{position:relative;width:100%;aspect-ratio:16/9;border-radius:var(--r-md);overflow:hidden;background:#000}
+.vid-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.vid figcaption{font-size:.84rem;color:var(--muted);margin-top:6px}
+.vids .btn{display:inline-block;margin:0 8px 8px 0}
 .item-img{flex:0 0 34px;width:34px;height:34px;object-fit:contain;border-radius:6px;background:#fff;margin-top:-2px}
 
 main.wrap{padding-top:26px;padding-bottom:calc(100px + env(safe-area-inset-bottom,0px))}
@@ -1208,7 +1215,7 @@ Object.assign(USER_KW,{et_boeuf:["boeuf","viande hachee","steak hache"],et_beurr
  qt_aneth:["aneth"],qt_vin_blanc:["vin blanc"],qt_celeri:["celeri"],qt_saumon:["saumon"],qt_hache_soja:["hache vegetal","soja"],qt_thon:["thon"],qt_pate_brisee:["pate brisee"],qt_galettes:["galette","ble noir","sarrasin"],qt_puree_tomates:["puree de tomates","tomate"]});
 Object.assign(VIZ_ALIAS,{et_boeuf:"boeuf_hache",qt_butternut:"butternut",qt_feta:"feta",qt_coriandre:"coriandre",qt_pain_noir:"pain",qt_aneth:"aneth",qt_saumon:"saumon",qt_celeri:"celeri",qt_hache_soja:"boeuf_hache",qt_thon:"thon",qt_puree_tomates:"tomates_concassees",qt_galettes:"tortillas"});
 const URL_RECIPES_3=[
-{id:"et_hachis_parmentier",n:"Le hachis parmentier de Philippe Etchebest",p:"boeuf",s:"pdt",t:70,k:2160,pr:98,base:2,u:"https://philippe-etchebest.com/le-hachis-parmentier/",vid:"https://youtu.be/lUzqiY3ChRE",
+{id:"et_hachis_parmentier",n:"Le hachis parmentier de Philippe Etchebest",p:"boeuf",s:"pdt",t:70,k:770,pr:31,base:6,baseNote:"Quantités du chef ≈ 6 parts",u:"https://philippe-etchebest.com/le-hachis-parmentier/",
  i:[["oignon",2],["ail","5 gousses"],["et_huile_tournesol","1 cs"],["et_beurre",210],["et_boeuf",800],["et_fond","20 cl"],["et_persil",5],["et_estragon",5],["et_thym",3],["qt_chapelure",60],["hf_pdt",1000],["hf_lait",200],["sel","selon le goût"]],
  st:["Épluche les pommes de terre et coupe-les en gros morceaux. Mets-les dans une grande casserole d'eau froide salée, porte à ébullition et laisse cuire 20-25 min, jusqu'à ce que la pointe d'un couteau s'enfonce sans résistance.",
   "Pendant ce temps, épluche et cisèle finement les oignons et l'ail. Effeuille et hache le persil, l'estragon (si tu en mets) et le thym.",
@@ -1217,7 +1224,7 @@ const URL_RECIPES_3=[
   "Préchauffe le four à 200°C. Égoutte les pommes de terre et passe-les au presse-purée. Fais chauffer le lait, puis incorpore-le avec 200 g de beurre en morceaux. Sale.",
   "Étale la viande dans un plat à gratin, recouvre-la de purée et lisse le dessus. Parsème de chapelure.",
   "Enfourne 15-20 min, jusqu'à ce que le dessus soit bien doré."],
- tip:"Le site du chef donne les ingrédients (pour 2 personnes) mais pas les étapes : celles-ci sont une méthode classique écrite par Claude, pas celle de la vidéo. Le temps, les calories et les protéines sont estimés. Regarde la vidéo pour la façon de faire du chef."},
+ tip:"Le site du chef indique « pour 2 personnes », mais ses quantités (800 g de bœuf, 1 kg de pommes de terre, 210 g de beurre) donnent environ 6 parts : la fiche est donc comptée pour 6, ingrédients inchangés. Les étapes sont une méthode classique écrite par Claude (regarde la vidéo pour la façon de faire du chef). Temps, calories et protéines sont estimés."},
 {id:"qt_soupe_butternut",n:"Soupe de butternut - pois chiches au cumin, féta, œuf mollet & mouillettes de pain noir",p:"oeufs",s:"legumineuses",t:40,k:428,pr:21,base:2,u:"https://www.quitoque.fr/recettes/soupe-de-butternut-pois-chiches-au-cumin-feta-oeuf-mollet-mouillettes-de-pain-noir",
  i:[["qt_butternut",250],["ww_pois_chiches",265],["cumin","2 cc"],["curcuma","1 cc"],["oignon",1],["qt_feta",80],["qt_coriandre",5],["qt_pain_noir",2],["oeufs",2],["bouillon_legumes","½ cube"],["huile","1 filet"],["sel","selon le goût"]],
  st:["Épluche la courge, retire les graines et coupe-la en dés. Émince l'oignon. Égoutte et rince les pois chiches.",
@@ -1270,6 +1277,21 @@ const URL_RECIPES_3=[
  tip:""}
 ];
 URL_RECIPES_3.forEach(r=>{RECIPES.push(r);VISIBLE.push(r)});
+// ---------- PHOTOS & VIDÉOS (sources d'origine) ----------
+const RECIPE_PHOTOS={
+ hf_cretoise_thon:"https://img.hellofresh.com/f_auto,fl_lossy,q_auto,w_900/hellofresh_s3/image/HF_Y26_R258_W43_FR_RFR60528-5_main_remove_tuna_piece_edit_high-318423ce.jpg",
+ hf_cordon_bleu:"https://img.hellofresh.com/f_auto,fl_lossy,q_auto,w_900/hellofresh_s3/image/HF_Y26_R207_W05_FR_RFR29804544-6_Main_16_high-07a41b21.jpg",
+ ww_mijote_poulet_pois_chiches:"https://v.cdn.ww.com/media/system/wine/5a844993a86f782582f2b552/e034dc1d-a79a-47de-a688-579e84233b06/byelvqzggvxlaecniruo.jpg?fit=crop&height=800&width=800&enable=upscale&quality=80",
+ ff_lasagnes_proteinees:"https://www.fitnessfirst.fr/images/lasagnes-proteinees.jpg",
+ et_hachis_parmentier:"https://philippe-etchebest.com/wp-content/uploads/2022/09/hachis-parmentier-thumb.jpeg"};
+const RECIPE_VIDEOS={
+ et_hachis_parmentier:[{id:"lUzqiY3ChRE",t:"La recette en vidéo par Philippe Etchebest",full:true}],
+ qt_soupe_butternut:[{id:"OKx5f0u6QWk",t:"Geste de cuisine Quitoque : préparer une courge butternut"}],
+ qt_parmentier_vege:[{id:"OKx5f0u6QWk",t:"Geste de cuisine Quitoque : préparer une courge butternut"}],
+ qt_saumon_lentilles:[{id:"epIo1DnEzPE",t:"Geste de cuisine Quitoque : couper une carotte en dés"}],
+ qt_chausson_thon:[{id:"epIo1DnEzPE",t:"Geste de cuisine Quitoque : couper une carotte en dés"}],
+ qt_galette_thon:[{id:"6Xo1oe0M-7Y",t:"Geste de cuisine Quitoque : hacher une gousse d'ail"}]};
+RECIPES.forEach(r=>{if(RECIPE_PHOTOS[r.id]){r.img=RECIPE_PHOTOS[r.id];const m=r.img.match(/^(https:\/\/img\.hellofresh\.com\/)[^/]*,[^/]*\/(hellofresh_s3\/.*)$/);if(m)r.img2=m[1]+m[2]}if(RECIPE_VIDEOS[r.id])r.vids=RECIPE_VIDEOS[r.id]});
 // ---------- ENCAS ----------
 AISLES.G="Encas & goûters";AISLE_ORDER.splice(AISLE_ORDER.indexOf("E"),0,"G");
 // Recettes d'encas : {id,n,emoji,yieldN,yieldU,unitS,t,k (kcal/pièce),pr (g prot/pièce),u,i (quantités pour 1 fournée),st,tip}
@@ -1388,7 +1410,9 @@ function plateSVG(r){
  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"><defs><clipPath id="k"><circle cx="200" cy="152" r="104"/></clipPath></defs>${o.join("")}</svg>`;
 }
 const IMG_CACHE={};
-function imgSrc(r){if(r.snack)return IMG_CACHE[r.id]||(IMG_CACHE[r.id]="data:image/svg+xml;charset=utf-8,"+encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"><rect width="400" height="300" fill="#F1E2C6"/><circle cx="40" cy="30" r="90" fill="#fff" opacity=".25"/><circle cx="200" cy="152" r="98" fill="#fff" opacity=".75"/><text x="200" y="158" font-size="118" text-anchor="middle" dominant-baseline="central">${r.emoji||"🍪"}</text></svg>`));return IMG_CACHE[r.id]||(IMG_CACHE[r.id]="data:image/svg+xml;charset=utf-8,"+encodeURIComponent(plateSVG(r)))}
+const PHOTO_FB={};
+function imgSrc(r){if(r.img&&HOSTED){if(!PHOTO_FB[r.img]){const sv=svgSrc(r);PHOTO_FB[r.img]=r.img2||sv;if(r.img2)PHOTO_FB[r.img2]=sv}return r.img}return svgSrc(r)}
+function svgSrc(r){if(r.snack)return IMG_CACHE[r.id]||(IMG_CACHE[r.id]="data:image/svg+xml;charset=utf-8,"+encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"><rect width="400" height="300" fill="#F1E2C6"/><circle cx="40" cy="30" r="90" fill="#fff" opacity=".25"/><circle cx="200" cy="152" r="98" fill="#fff" opacity=".75"/><text x="200" y="158" font-size="118" text-anchor="middle" dominant-baseline="central">${r.emoji||"🍪"}</text></svg>`));return IMG_CACHE[r.id]||(IMG_CACHE[r.id]="data:image/svg+xml;charset=utf-8,"+encodeURIComponent(plateSVG(r)))}
 
 PROT_ORDER.length=0;PROT_ORDER.push("saumon","saumon_fume","truite","cabillaud","thon_frais","thon","crevettes","fruits_mer","poulet","dinde_esc","dinde_hachee","agneau","boeuf_emince","boeuf_hache","porc","tofu","oeufs","jambon");
 STARCH_ORDER.push("lasagnes","pain_burger","pita","galettes_riz");
@@ -1570,7 +1594,7 @@ const have=id=>state.stock[id]||0;
 function stockScore(r){let tot=0,ok=0;const miss=[];for(const[id,q]of r.i){if(id==="sel")continue;const w=isStaple(id)?0.25:(ING[id][1]==="V"||["oeufs","tofu","thon"].includes(id)?2:1);tot+=w;const got=isStaple(id)?have(id)>0:have(id)>=q*(2/(r.base||2))*0.8;if(got)ok+=w;else if(!isStaple(id))miss.push(ING[id][0])}
  const fresh=r.i.filter(x=>!isStaple(x[0]));const freshOk=fresh.filter(([id,q])=>have(id)>=q*(2/(r.base||2))*0.8).length;return{score:tot?ok/tot:0,miss,freshOk,freshTot:fresh.length}}
 
-function card(r,extra){const n=usage(r.id).length,f=!!state.favs[r.id];return`<div class="cardw"><button type="button" class="card" data-rid="${r.id}"><span class="card-img"><img src="${imgSrc(r)}" alt="" loading="lazy" decoding="async">${n?`<span class="badge">${n}×</span>`:""}${r.gen?`<span class="newb">Idée de chef</span>`:r.cr?`<span class="newb">Création</span>`:""}</span><span class="card-name">${esc(r.n)}</span>${extra||""}</button></div>`}
+function card(r,extra){const n=usage(r.id).length,f=!!state.favs[r.id];return`<div class="cardw"><button type="button" class="card" data-rid="${r.id}"><span class="card-img"><img src="${imgSrc(r)}" alt="" loading="lazy" decoding="async">${n?`<span class="badge">${n}×</span>`:""}${r.gen?`<span class="newb">Idée de chef</span>`:r.cr?`<span class="newb">Création</span>`:(r.vids||[]).some(v=>v.full)?`<span class="newb">▶ Vidéo</span>`:""}</span><span class="card-name">${esc(r.n)}</span>${extra||""}</button></div>`}
 function renderRecipes(){
  document.getElementById("planCount").textContent=filled()+" / 14 repas planifiés";
  const pb=document.getElementById("pending");
@@ -1703,16 +1727,17 @@ function renderModal(){
  <div class="m-hero"><img src="${imgSrc(r)}" alt=""></div>
  <div class="m-body">
   <h2 id="mTitle">${esc(r.n)}</h2>
-  <ul class="facts">${r.t?`<li>${r.t} min</li>`:""}${r.snack?`<li>1 fournée = ${r.yieldN} ${esc(r.yieldU)}</li><li>≈ ${r.k} kcal par ${esc(r.unitS||"pièce")}</li><li>${r.pr} g de protéines par ${esc(r.unitS||"pièce")}</li>`:`<li>≈ ${r.k} kcal par portion</li><li>${r.pr} g de protéines par portion</li>${r.base&&!r.cr?`<li>Recette d'origine pour ${r.base} pers.</li>`:""}`}</ul>
+  <ul class="facts">${r.t?`<li>${r.t} min</li>`:""}${r.snack?`<li>1 fournée = ${r.yieldN} ${esc(r.yieldU)}</li><li>≈ ${r.k} kcal par ${esc(r.unitS||"pièce")}</li><li>${r.pr} g de protéines par ${esc(r.unitS||"pièce")}</li>`:`<li>≈ ${r.k} kcal par portion</li><li>${r.pr} g de protéines par portion</li>${r.base&&!r.cr?`<li>${r.baseNote?esc(r.baseNote):`Recette d'origine pour ${r.base} pers.`}</li>`:""}`}</ul>
   <div class="m-serv"><span>${servNote}</span><span class="serv"><button type="button" data-mserv="-1" aria-label="Une portion de moins" ${sv<=1?"disabled":""}>−</button><span class="serv-n">${r.snack?`${sv} fournée${sv>1?"s":""}`:`${sv} portion${sv>1?"s":""}`}</span><button type="button" data-mserv="1" aria-label="Une portion de plus" ${sv>=(ui.modalBatch?40:8)?"disabled":""}>+</button></span></div>
   ${snackPlanned}<p class="m-planned"${r.snack?" hidden":""}>${used.length?"Au menu : "+used.map(k=>slotLabel(k)+(servOf(k)!==2?" ("+servOf(k)+" p.)":"")).join(", "):"Pas encore au planning."}</p>
   
   ${batchCard}<div class="m-actions">${isBatch?"":`<button type="button" class="btn primary" data-act="cook-start">Cuisiner pas à pas, avec minuteurs</button>`}${primary}${L.src?"":L.cr?(RMAP[r.inspi]?`<button type="button" class="btn ghost" data-open="${r.inspi}">Recette d'inspiration</button>`:""):`<a class="btn ghost" href="${esc(L.href)}" target="_blank" rel="noopener noreferrer">${L.direct?"Recette d'origine":L.gen?"Voir sur YouTube":"Chercher sur Marmiton"}</a>`}${r.vid?`<a class="btn ghost" href="${esc(r.vid)}" target="_blank" rel="noopener noreferrer">Voir la vidéo</a>`:""}${r.u2?`<a class="btn ghost" href="${esc(r.u2)}" target="_blank" rel="noopener noreferrer">${esc(r.u2l||"Autre source")}</a>`:""}</div>${picker}
+  ${(r.vids||[]).length?`<div class="vids"><h3>${r.vids.some(v=>v.full)?"Vidéo de la recette":"Vidéo de préparation"}</h3>${r.vids.map(v=>HOSTED?`<figure class="vid"><div class="vid-frame"><iframe src="https://www.youtube-nocookie.com/embed/${esc(v.id)}?rel=0&playsinline=1" title="${esc(v.t)}" loading="lazy" allow="encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div><figcaption>${esc(v.t)}</figcaption></figure>`:`<a class="btn ghost" href="https://www.youtube.com/watch?v=${esc(v.id)}" target="_blank" rel="noopener noreferrer">▶ ${esc(v.t)}</a>`).join("")}</div>`:""}
   <div class="m-cols">
    <div><div class="ing-head"><h3>Ingrédients</h3><span>${r.snack?`pour ${sv*r.yieldN} ${esc(r.yieldU)}`:`pour ${sv} personne${sv>1?"s":""}`}</span></div><ul class="ingx">${fresh.map(([id,q])=>`<li><span class="ico" aria-hidden="true">${icon(id)}</span><span class="ix"><b>${esc(ING[id][0])}</b><span class="qt">${esc(scaledQty(id,q,fct))}${inStock(id,q)?` <span class="pill ok">en stock</span>`:""}</span></span></li>`).join("")}</ul>
    ${pantry.length?`<h4 class="ing-sub">À ajouter vous-même</h4><ul class="ingx small">${pantry.map(([id,q])=>`<li><span class="ico" aria-hidden="true">${icon(id)}</span><span class="ix"><b>${esc(ING[id][0])}</b><span class="qt">${esc(scaledQty(id,q,fct))}${inStock(id,q)?` <span class="pill ok">en stock</span>`:""}</span></span></li>`).join("")}</ul>`:""}</div>
    <div><h3>Préparation</h3><ol class="stepx">${r.st.map((s,i)=>`<li><span class="num" aria-hidden="true">${i+1}</span><p>${richStep(s)}</p></li>`).join("")}</ol>${r.tip?`<p class="tip">${esc(r.tip)}</p>`:""}
-   <div class="source">${L.src?`<p><b>Source</b> : ${esc(L.label)}. Ingrédients repris tels quels, les quantités s'ajustent au nombre de portions.</p><p hidden>`:L.cr?`<p><b>Création Claude</b>${RMAP[r.inspi]?`, inspirée de <button type="button" class="link" data-open="${r.inspi}">${esc(RMAP[r.inspi].n)}</button>. Pas de recette d'origine en ligne : variante imaginée à partir de tes recettes.`:`. Pas de recette d'origine en ligne : recette imaginée à ta demande, kcal et protéines estimés.`}</p>`:`<a href="${esc(L.href)}" target="_blank" rel="noopener noreferrer">${esc(L.label)}</a><p>`}${L.cr&&!L.src?"<p hidden>":""}${L.gen?"Recette proposée par Claude"+(r.chef?", inspirée du style de "+esc(r.chef):"")+". Ce n'est pas la recette exacte du chef : le lien lance une recherche YouTube.":L.direct?(r.base?"Ingrédients repris tels quels depuis la recette d'origine (pour "+(r.snack?"1 fournée":r.base+" pers.")+"), les quantités s'ajustent au nombre de portions.":"Cette fiche est une version adaptée et allégée : les quantités et certains temps peuvent différer de l'original."):"Pas de lien direct pour cette recette : le lien lance une recherche avec son nom."}</p></div></div>
+   <div class="source">${L.src?`<p><b>Source</b> : ${esc(L.label)}. Ingrédients repris tels quels, les quantités s'ajustent au nombre de portions.</p><p hidden>`:L.cr?`<p><b>Création Claude</b>${RMAP[r.inspi]?`, inspirée de <button type="button" class="link" data-open="${r.inspi}">${esc(RMAP[r.inspi].n)}</button>. Pas de recette d'origine en ligne : variante imaginée à partir de tes recettes.`:`. Pas de recette d'origine en ligne : recette imaginée à ta demande, kcal et protéines estimés.`}</p>`:`<a href="${esc(L.href)}" target="_blank" rel="noopener noreferrer">${esc(L.label)}</a><p>`}${L.cr&&!L.src?"<p hidden>":""}${L.gen?"Recette proposée par Claude"+(r.chef?", inspirée du style de "+esc(r.chef):"")+". Ce n'est pas la recette exacte du chef : le lien lance une recherche YouTube.":L.direct?(r.base?"Ingrédients repris tels quels depuis la recette d'origine (pour "+(r.snack?"1 fournée":r.baseNote?"environ "+r.base+" parts":r.base+" pers.")+"), les quantités s'ajustent au nombre de portions.":"Cette fiche est une version adaptée et allégée : les quantités et certains temps peuvent différer de l'original."):"Pas de lien direct pour cette recette : le lien lance une recherche avec son nom."}</p></div></div>
   </div>
  </div>`;
 }
@@ -2021,6 +2046,7 @@ document.addEventListener("submit",e=>{const f=e.target;if(!f)return;
 document.addEventListener("change",e=>{if(e.target&&e.target.id==="scanFile"){scanPhoto(e.target.files&&e.target.files[0]);e.target.value=""}});
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&ui.panel&&!ui.modal)closePanel()});
 {const sbar=document.getElementById("scanBar");if(sbar)sbar.hidden=!HOSTED}
+document.addEventListener("error",e=>{const t=e.target;if(t&&t.tagName==="IMG"){const fb=PHOTO_FB[t.getAttribute("src")];if(fb)t.src=fb}},true);
 function addExtraNeeds(m){for(const id in (state.extras||{})){const n=state.extras[id];if(!n||!ING[id])continue;const e=m[id]||(m[id]={id,q:0,recs:[]});e.q+=n;if(!e.recs.includes("__extra"))e.recs.push("__extra")}}
 
 setTab(ui.tab);renderAll();initDb();sbStart();
