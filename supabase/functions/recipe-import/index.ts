@@ -2,6 +2,8 @@
 // - action "import" : lit une page (site de recettes, YouTube, Instagram, TikTok…) et renvoie
 //   titre, photo, ingrédients, étapes, portions, temps et valeurs nutritionnelles quand la page les donne.
 // - action "photo"  : range la photo d'une recette dans le stockage Supabase (dossier public « recettes »).
+// - action "meal"   : analyse la photo d'un plateau (cantine, restaurant) et estime aliments, portions et nutriments.
+//   Nécessite un secret GEMINI_API_KEY (clé gratuite Google AI Studio) ou ANTHROPIC_API_KEY.
 // Réservée aux foyers existants : l'en-tête x-foyer doit correspondre à une ligne de la table planner.
 
 const CORS = {
@@ -245,6 +247,63 @@ async function photo(code: string, id: unknown, data: unknown) {
   if (!up.ok) return json({ error: "storage", message: (await up.text()).slice(0, 200) }, 500);
   return json({ url: `${SB}/storage/v1/object/public/recettes/${path}` });
 }
+// ---------- analyse d'un plateau-repas en photo ----------
+const MEAL_PROMPT = `Tu es diététicien. La photo montre un repas : plateau de cantine d'entreprise, assiette ou repas au restaurant, en France.
+Identifie chaque aliment ou plat visible (entrée, plat, accompagnement, sauce, pain, laitage, dessert, boisson) et estime de façon réaliste la portion en grammes, puis ses valeurs nutritionnelles pour cette portion.
+Réponds UNIQUEMENT avec ce JSON, sans texte autour :
+{"items":[{"n":"Poulet rôti","g":150,"k":285,"p":38,"f":14,"c":0,"fi":0}],"note":"une phrase courte sur ce qui est incertain"}
+n = nom court en français, g = grammes, k = kcal, p = protéines, f = lipides, c = glucides, fi = fibres (en grammes).
+Si la photo ne montre pas de repas, renvoie {"items":[],"note":"…"}.`;
+function parseJson(text: string) {
+  const s = String(text || "").replace(/```json|```/g, "");
+  const i = s.indexOf("{"), k = s.lastIndexOf("}");
+  if (i < 0 || k < i) return null;
+  try { return JSON.parse(s.slice(i, k + 1)); } catch { return null; }
+}
+async function meal(data: unknown) {
+  const m = String(data || "").match(/^data:image\/(jpeg|png|webp);base64,([A-Za-z0-9+/=]+)$/);
+  if (!m) return json({ error: "photo" }, 400);
+  if (m[2].length > 3_000_000) return json({ error: "photo", message: "photo trop lourde" }, 413);
+  const GK = Deno.env.get("GEMINI_API_KEY") ?? "", AK = Deno.env.get("ANTHROPIC_API_KEY") ?? "";
+  if (!GK && !AK) return json({ error: "noai" }, 501);
+  let text = "", used = "", lastErr = "";
+  if (GK) {
+    for (const mo of [Deno.env.get("GEMINI_MODEL"), "gemini-flash-latest", "gemini-2.5-flash"].filter(Boolean) as string[]) {
+      const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${mo}:generateContent`, {
+        method: "POST", headers: { "Content-Type": "application/json", "x-goog-api-key": GK },
+        body: JSON.stringify({ contents: [{ parts: [{ inline_data: { mime_type: `image/${m[1]}`, data: m[2] } }, { text: MEAL_PROMPT }] }], generationConfig: { responseMimeType: "application/json", temperature: 0.2 } }),
+      });
+      if (r.status === 404) continue;
+      const j = await r.json().catch(() => ({}));
+      if (!r.ok) { lastErr = j?.error?.message || `Gemini ${r.status}`; break; }
+      // deno-lint-ignore no-explicit-any
+      text = (j?.candidates?.[0]?.content?.parts || []).map((p: any) => p.text || "").join("");
+      used = mo;
+      break;
+    }
+  }
+  if (!text && AK) {
+    for (const mo of [Deno.env.get("ANTHROPIC_MODEL"), "claude-haiku-5-5", "claude-sonnet-5-5"].filter(Boolean) as string[]) {
+      const r = await fetch("https://api.anthropic.com/v1/messages", {
+        method: "POST", headers: { "x-api-key": AK, "anthropic-version": "2023-06-01", "content-type": "application/json" },
+        body: JSON.stringify({ model: mo, max_tokens: 1200, messages: [{ role: "user", content: [{ type: "image", source: { type: "base64", media_type: `image/${m[1]}`, data: m[2] } }, { type: "text", text: MEAL_PROMPT }] }] }),
+      });
+      if (r.status === 404) continue;
+      const j = await r.json().catch(() => ({}));
+      if (!r.ok) { lastErr = j?.error?.message || `Anthropic ${r.status}`; break; }
+      // deno-lint-ignore no-explicit-any
+      text = (j?.content || []).map((c: any) => c.text || "").join("");
+      used = mo;
+      break;
+    }
+  }
+  if (!text) return json({ error: "ai", message: (lastErr || "aucune réponse du service d'analyse").slice(0, 160) }, 502);
+  const o = parseJson(text) || {};
+  const n = (v: unknown, max: number) => { const x = Number(v); return isFinite(x) && x >= 0 ? Math.min(max, Math.round(x * 10) / 10) : 0; };
+  // deno-lint-ignore no-explicit-any
+  const items = (Array.isArray(o.items) ? o.items : []).filter((x: any) => x && x.n).slice(0, 12).map((x: any) => ({ n: String(x.n).slice(0, 40), g: n(x.g, 2000), k: Math.round(n(x.k, 3000)), p: n(x.p, 300), f: n(x.f, 300), c: n(x.c, 500), fi: n(x.fi, 100) }));
+  return json({ items, note: String(o.note || "").slice(0, 200), model: used });
+}
 // ---------- accès réservé aux foyers ----------
 async function foyerOk(code: string, apikey: string) {
   if (!/^[a-f0-9]{24,64}$/.test(code) || !SB) return false;
@@ -266,6 +325,7 @@ Deno.serve(async (req: Request) => {
   try { body = await req.json(); } catch { return json({ error: "body" }, 400); }
   try {
     if (body.action === "photo") return await photo(code, body.id, body.data);
+    if (body.action === "meal") return await meal(body.data);
     if (body.action === "import") {
       const u = safeUrl(String(body.url || "").trim());
       if (!u) return json({ error: "url" }, 400);
