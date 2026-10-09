@@ -659,6 +659,29 @@ textarea.pn-in{resize:vertical;line-height:1.45}
 .pn-card .pf-row{align-items:flex-end}
 .pn-card .pf-row+.pf-actions,.pn-card .pf-row+.pf-actions{margin-top:12px}
 
+/* ===== v5 : compléter selon les objectifs ===== */
+.fp-h3{margin-top:14px!important}
+.fp-sum p{margin:0 0 6px;font-size:.92rem}
+.fp-days{display:grid;grid-template-columns:minmax(0,1fr);gap:12px}
+@media (min-width:760px){.fp-days{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.fp-day{min-width:0;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-md);padding:12px}
+.fp-dh{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}
+.fp-row{display:flex;align-items:center;gap:10px;padding:6px 0;border-top:1px solid var(--line)}
+.fp-row img{width:52px;height:40px;border-radius:8px;object-fit:cover;flex:0 0 auto}
+.fp-row.empty{gap:8px}
+.fp-txt{display:flex;flex-direction:column;min-width:0;flex:1;line-height:1.3}
+.fp-meal{font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
+.fp-badge{font-size:.66rem;background:var(--accent);color:var(--accent-ink);border-radius:999px;padding:1px 7px;margin-left:4px;letter-spacing:0;text-transform:none}
+.fp-name{font-weight:700;font-size:.92rem;line-height:1.25}
+.fp-txt small{color:var(--muted);font-size:.78rem}
+.fp-ppl{display:flex;flex-direction:column;gap:4px;margin-top:8px}
+.fp-p{font-size:.78rem;border-radius:8px;padding:4px 8px;background:var(--surface-2);border-left:4px solid var(--line)}
+.fp-p.ok{border-left-color:var(--ok)}.fp-p.low{border-left-color:var(--low)}.fp-p.high{border-left-color:var(--high)}
+.fp-act{display:flex;gap:8px;position:sticky;bottom:calc(76px + env(safe-area-inset-bottom,0px));background:var(--bg);padding:12px 0;margin-top:12px;z-index:3}
+@media (min-width:900px){.fp-act{bottom:0}}
+.fp-act .btn{flex:1;white-space:nowrap}
+.pn-card .seg button{white-space:nowrap}
+
 </style>
 </head>
 <body>
@@ -696,7 +719,7 @@ textarea.pn-in{resize:vertical;line-height:1.45}
 
  <section id="tab-semaine" class="tab" hidden>
   <div class="sec-head"><div><h1 id="weekTitle">Semaine</h1><p class="sub" id="weekSub"></p></div>
-   <div class="head-actions"><button type="button" class="btn" data-act="fill">Compléter au hasard</button><button type="button" class="btn ghost" data-act="new-week">Vider le planning</button></div></div>
+   <div class="head-actions"><button type="button" class="btn primary" data-act="fill-goal">✨ Compléter selon nos objectifs</button><button type="button" class="btn ghost" data-act="new-week">Vider le planning</button></div></div>
   <div class="tt" id="tt"></div>
   <h2 class="block-title">À cuisiner</h2>
   <p class="sub">Les repas pas encore cuisinés, regroupés par recette. Une recette prévue plusieurs fois se cuisine en une fois : touche-la pour lancer le batch.</p>
@@ -2196,7 +2219,8 @@ function renderPanel(){const b=document.getElementById("panelBody");if(!b)return
  else if(ui.panel==="goals")b.innerHTML=panelGoals();
  else if(ui.panel==="profile")b.innerHTML=panelProfile();
  else if(ui.panel==="addrec")b.innerHTML=panelAddRec();
- else if(ui.panel==="recform")b.innerHTML=panelRecForm()}
+ else if(ui.panel==="recform")b.innerHTML=panelRecForm();
+ else if(ui.panel==="fillplan")b.innerHTML=panelFill()}
 function isTyping(){const a=document.activeElement;return!!(a&&/^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName)&&a.type!=="checkbox"&&a.type!=="file")}
 function copyText(txt,inputId,okMsg){const fb=()=>{const el=inputId&&document.getElementById(inputId);if(el){el.focus();el.select()}toast("Sélectionne le texte pour le copier")};try{navigator.clipboard.writeText(txt).then(()=>toast(okMsg||"Copié"),fb)}catch(e){fb()}}
 
@@ -2842,6 +2866,58 @@ document.addEventListener("change",e=>{const t=e.target;if(!t)return;
  if(t.id==="rfPhoto"){setDishPhoto(t.files&&t.files[0]);t.value="";return}});
 document.addEventListener("input",e=>{const t=e.target;if(t&&t.id==="rfIl"){const el=document.getElementById("rfPrev");if(el){clearTimeout(t._t);t._t=setTimeout(()=>{el.innerHTML=ingPreview(t.value.split("\n").map(x=>x.trim()).filter(Boolean))},250)}}});
 try{snapHist();saveLocal()}catch(e){}
+
+// ================= v5 : compléter le planning selon les objectifs et les besoins du jour =================
+const MEAL_SHARE=0.75; // midi + soir ≈ 75 % des besoins du jour (le reste : petit-déjeuner, encas)
+function fillCands(){return VISIBLE.filter(r=>!r.gen&&!r.snack&&!state.dislikes[r.id]&&(rNut(r).k||0)>0)}
+function nutOr(n){return{k:n.k||0,p:n.p||0,f:n.f!=null?n.f:(n.k||0)*0.3/9,c:n.c!=null?n.c:0,fi:n.fi!=null?n.fi:3}}
+function planFill(opt){const plan={...state.plan},added={};const C=fillCands();if(!C.length)return{plan,added};
+ const cov={},fit={};C.forEach(r=>{cov[r.id]=covOf(r).cov;fit[r.id]=fitOf(r,opt.goal).s});
+ const uses={};Object.values(plan).forEach(id=>uses[id]=(uses[id]||0)+1);const P=state.people;
+ for(const[d]of DAYS)for(const[m]of MEALS){const k=d+"-"+m;if(plan[k])continue;
+  const om=MEALS.find(x=>x[0]!==m)[0],other=RMAP[plan[d+"-"+om]],on=other?nutOr(rNut(other)):null,share=on?MEAL_SHARE:MEAL_SHARE/2;
+  let best=null,bs=-1e9;
+  for(const r of C){const u=uses[r.id]||0;if(u>=opt.rep||(other&&other.id===r.id))continue;const n=nutOr(rNut(r));let sc=0;
+   for(const p of P){const t=p.t,T={k:n.k+(on?on.k:0),p:n.p+(on?on.p:0),f:n.f+(on?on.f:0),fi:n.fi+(on?on.fi:0)};
+    const sk=Math.max(0,1-Math.abs(T.k-t.k*share)/(t.k*share)/0.35),sp=Math.min(1,T.p/(t.p*share)),lim=t.f*share*1.15,sf=T.f<=lim?1:Math.max(0,1-(T.f-lim)/(t.f*share*0.6)),sfi=Math.min(1,T.fi/(t.fi*share));
+    sc+=(0.4*sk+0.25*sp+0.08*sf+0.07*sfi)/P.length}
+   sc+=0.12*fit[r.id]+0.12*cov[r.id]+(state.favs[r.id]||state.likes[r.id]?0.04:0)+(u>0&&opt.rep>1?0.03:0)+Math.random()*0.08;
+   if(sc>bs){bs=sc;best=r}}
+  if(best){plan[k]=best.id;added[k]=true;uses[best.id]=(uses[best.id]||0)+1}}
+ return{plan,added}}
+function portionQ(f){const q=Math.round(f*4)/4;return q>=1.25?Math.min(2,q):q<=0.75?Math.max(0.5,q):1}
+function mealsTot(plan,d){const T={k:0,p:0,f:0,c:0,fi:0};MEALS.forEach(([m])=>{const r=RMAP[plan[d+"-"+m]];if(!r)return;const n=nutOr(rNut(r));T.k+=n.k;T.p+=n.p;T.f+=n.f;T.c+=n.c;T.fi+=n.fi});return T}
+function fillRun(){const F=ui.fill;F.res=planFill({goal:F.goal,rep:F.rep})}
+function openFill(){const empty=SLOTS.filter(k=>!state.plan[k]).length;if(!empty){toast("Le planning est déjà complet");return}if(!fillCands().length){toast("Ajoute d'abord des recettes avec leurs valeurs nutritionnelles");return}
+ let rep=2;try{const v=parseInt(localStorage.getItem(LS+"-frep"),10);if(v>=1&&v<=3)rep=v}catch(e){}ui.fill={goal:goalNow(),rep};fillRun();openPanel("fillplan")}
+function panelFill(){const F=ui.fill;if(!F||!F.res)return"";const{plan,added}=F.res,n=Object.keys(added).length,P=state.people;const noProf=P.some(p=>!p.prof);
+ const tgt=P.map(p=>({k:Math.round(p.t.k*MEAL_SHARE),p:Math.round(p.t.p*MEAL_SHARE)}));
+ const days=DAYS.map(([d,l],i)=>{const T=mealsTot(plan,d);const full=MEALS.every(([m])=>plan[d+"-"+m]);
+  const rows=MEALS.map(([m,ml])=>{const k=d+"-"+m,r=RMAP[plan[k]];if(!r)return`<div class="fp-row empty"><span class="nt-tag">${ml}</span><span class="muted small">Pas de recette adaptée</span></div>`;const nn=nutOr(rNut(r));
+   return`<div class="fp-row${added[k]?" new":""}"><img src="${imgSrc(r)}" alt=""><span class="fp-txt"><span class="fp-meal">${ml}${added[k]?' <b class="fp-badge">nouveau</b>':""}</span><span class="fp-name">${esc(short(r))}</span><small>${Math.round(nn.k)} kcal · ${fmtG(r1(nn.p))} g prot.</small></span></div>`}).join("");
+  const ppl=P.map((p,pi)=>{const t=tgt[pi],r=T.k/t.k;const st=!full?"part":r<0.85?"low":r>1.15?"high":"ok";const q=full&&T.k?portionQ(t.k/T.k):1;return`<span class="fp-p ${st}"><b>${esc(p.n)}</b> ${fmtInt(T.k)} / ${fmtInt(t.k)} kcal · ${fmtG(r1(T.p))} / ${t.p} g prot.${q!==1?` · <b>portions ×${frac(q)}</b>`:""}</span>`}).join("");
+  return`<div class="fp-day"><div class="fp-dh"><b>${i===0?"Aujourd'hui":i===1?"Demain":esc(l)}</b><span class="muted small">${esc(fmtDate(dateFromYmd(d),{day:"numeric",month:"short"}))}</span></div>${rows}<div class="fp-ppl">${ppl}</div></div>`}).join("");
+ const full=DAYS.filter(([d])=>MEALS.every(([m])=>plan[d+"-"+m]));const avgK=full.length?avg(full.map(([d])=>mealsTot(plan,d).k)):0,avgP=full.length?avg(full.map(([d])=>mealsTot(plan,d).p)):0;
+ const okP=P.map((p,pi)=>full.filter(([d])=>Math.abs(mealsTot(plan,d).k-tgt[pi].k)/tgt[pi].k<=0.15).length);const qP=P.map((p,pi)=>full.length?portionQ(avg(full.map(([d])=>tgt[pi].k/(mealsTot(plan,d).k||1)))):1);
+ const buy=new Set();Object.keys(added).forEach(k=>{const r=RMAP[plan[k]];r.i.forEach(([id,q])=>{if(id==="sel"||!ING[id])return;const c=eqCover(id,isStaple(id)||typeof q!=="number"?null:q);if(!c.ok)buy.add(id)})});
+ const recs=new Set(Object.keys(added).map(k=>plan[k]));
+ return`<h2 class="pn-title">Compléter selon vos objectifs</h2><p class="pn-help">Les créneaux vides des 7 prochains jours sont remplis avec vos recettes qui respectent le mieux les besoins de chacun. Le midi et le soir visent environ 75 % des calories du jour : le reste va au petit-déjeuner et aux encas. Rien n'est enregistré avant « Valider ».</p>
+ ${noProf?`<p class="sv-warn">Profil incomplet pour ${esc(P.filter(p=>!p.prof).map(p=>p.n).join(" et "))} : objectifs par défaut utilisés. <button type="button" class="link" data-act="sv-profile">Compléter le profil</button></p>`:""}
+ <div class="pn-card"><h3>Objectif</h3><div class="chips" role="group" aria-label="Objectif">${Object.entries(GOALS).map(([k,G])=>`<button type="button" class="chip" data-fg="${k}" aria-pressed="${k===F.goal}">${G.e} ${G.l}</button>`).join("")}</div>
+  <h3 class="fp-h3">Même recette dans la semaine</h3><div class="seg" role="group" aria-label="Répétitions">${[[1,"1 fois"],[2,"2 fois"],[3,"3 fois"]].map(([v,l])=>`<button type="button" data-frep="${v}" aria-pressed="${v===F.rep}">${l}</button>`).join("")}</div><p class="pn-help">2 ou 3 fois : la même recette revient sur plusieurs repas, pour cuisiner en batch.</p></div>
+ <div class="pn-card fp-sum">${n?`<p><b>${n} repas ajoutés</b> avec ${recs.size} recette${recs.size>1?"s":""} différente${recs.size>1?"s":""}${F.rep>1&&recs.size<n?" (batch cooking possible)":""}.</p>
+  <p>Repas du jour en moyenne : <b>${fmtInt(avgK)} kcal</b> et <b>${fmtG(r1(avgP))} g</b> de protéines par personne. Cible des repas : ${P.map((p,pi)=>`${esc(p.n)} ${fmtInt(tgt[pi].k)} kcal`).join(", ")}.</p>
+  <p>Dans la cible (±15 %) avec une portion chacun : ${P.map((p,pi)=>`${esc(p.n)} ${okP[pi]}/${full.length} jours`).join(", ")}${buy.size?` · 🛒 ${buy.size} ingrédient${buy.size>1?"s":""} à acheter`:" · ✓ tout est en stock"}.</p>
+  ${qP.some(q=>q!==1)?`<p class="pn-help">Vous mangez la même recette mais vos besoins diffèrent : ${P.map((p,pi)=>qP[pi]>1?`${esc(p.n)} peut prendre environ ${frac(qP[pi])} portion (ou un encas en plus)`:qP[pi]<1?`${esc(p.n)} environ ${frac(qP[pi])} portion`:"").filter(Boolean).join(", ")}. Le détail est indiqué jour par jour.</p>`:""}`:`<p>Aucune recette ne correspond aux créneaux vides.</p>`}</div>
+ <div class="fp-days">${days}</div>
+ <div class="fp-act"><button type="button" class="btn primary" data-act="fill-ok"${n?"":" disabled"}>✓ Valider ${n} repas</button><button type="button" class="btn" data-act="fill-again">🔄 Autre idée</button></div>`}
+document.addEventListener("click",e=>{const t=e.target.closest("button");if(!t)return;
+ if(t.dataset.fg&&ui.fill){ui.fill.goal=t.dataset.fg;fillRun();renderPanel();return}
+ if(t.dataset.frep&&ui.fill){ui.fill.rep=Number(t.dataset.frep)||2;try{localStorage.setItem(LS+"-frep",String(ui.fill.rep))}catch(err){}fillRun();renderPanel();return}
+ const a=t.dataset.act;if(!a)return;
+ if(a==="fill-goal")openFill();
+ else if(a==="fill-again"&&ui.fill){fillRun();renderPanel();try{window.scrollTo(0,0)}catch(err){}}
+ else if(a==="fill-ok"&&ui.fill&&ui.fill.res){const{plan,added}=ui.fill.res;let n=0;for(const k in added){if(!state.plan[k]&&plan[k]&&RMAP[plan[k]]){state.plan[k]=plan[k];delete state.done[k];n++}}ui.fill=null;commit();closePanel();setTab("semaine");renderAll();toast(n?n+" repas ajoutés selon vos objectifs":"Rien à ajouter")}});
 
 setTab(ui.tab);renderAll();initDb();sbStart();
 
