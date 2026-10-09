@@ -708,6 +708,9 @@ textarea.pn-in{resize:vertical;line-height:1.45}
 .removed summary{cursor:pointer;font-weight:700;color:var(--muted);padding:6px 0}
 .rm-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 0;border-bottom:1px solid var(--line)}
 
+/* ===== v7 : liste de courses lisible sur téléphone ===== */
+@media (max-width:520px){.item{flex-wrap:wrap;row-gap:0}.item .check{flex:1 1 100%;padding-bottom:0}.item>.item-qty{margin-left:40px;color:var(--accent)}.item>.have{margin-left:auto}.item.owned-item .item-txt{padding:4px 0}}
+
 </style>
 </head>
 <body>
@@ -1836,13 +1839,13 @@ function scaleText(str,fct){if(typeof str!=="string"||!isFinite(fct)||Math.abs(f
  return out}
 // --- équivalences d'ingrédients : « Farine » dans une recette = « Farine d'orge » en stock ---
 const EQ_STOP=new Set("de d du des la le les l au aux a en et ou pour sans avec sur un une light allege allegee leger legere bio extra fin fine environ cl ml g kg mg gr pc".split(" "));
-const EQ_COMP=[[/pommes? de terre/g,"pdt"],[/patates? douces?/g,"patatedouce"],[/(lait|creme|yaourt|boisson)s? (?:de |d )?(coco|soja|riz|amandes?|avoine)/g,"$1$2"],[/noix (?:de |d )?(coco|cajou|muscade|pecan)/g,"noix$1"],[/beurres? (?:de |d )?(cacahuetes?|amandes?|noisettes?)/g,"beurre$1"],[/fruits? de mer/g,"fruitsmer"],[/fleur de sel/g,"fleurdesel"],[/fromages? (frais|blanc)/g,"fromage$1"],[/pates? (?:a |de )?(tartiner|pizza|brisee|feuilletee|sablee)/g,"pate$1"],[/\bpates\b/g,"pasta"],[/petits? pois/g,"petitspois"],[/haricots? verts?/g,"haricotsverts"],[/pois gourmands?/g,"poisgourmands"],[/oignons? (?:nouveaux?|verts?)/g,"oignonnouveau"],[/sauce soja/g,"saucesoja"],[/chou[ -]fleur/g,"choufleur"],[/jaunes? d oeufs?/g,"jaune oeuf"],[/blancs? d oeufs?/g,"blancoeuf"]];
-const EQ_HEAD_SKIP=new Set(["filet","pave","blanc","jaune","cuisse","dos","morceau","tranche","feuille","brin","branche","gousse","botte","sachet","boite","pot","paquet","brique","barquette","bocal","sac","poignee"]);
+const EQ_COMP=[[/blancs? de (poulet|dinde|volaille)/g,"filet $1"],[/saumons? fumes?/g,"saumonfume"],[/pommes? de terre/g,"pdt"],[/patates? douces?/g,"patatedouce"],[/(lait|creme|yaourt|boisson)s? (?:de |d )?(coco|soja|riz|amandes?|avoine)/g,"$1$2"],[/noix (?:de |d )?(coco|cajou|muscade|pecan)/g,"noix$1"],[/beurres? (?:de |d )?(cacahuetes?|amandes?|noisettes?)/g,"beurre$1"],[/fruits? de mer/g,"fruitsmer"],[/fleur de sel/g,"fleurdesel"],[/fromages? (frais|blanc)/g,"fromage$1"],[/pates? (?:a |de )?(tartiner|pizza|brisee|feuilletee|sablee)/g,"pate$1"],[/\bpates\b/g,"pasta"],[/petits? pois/g,"petitspois"],[/haricots? verts?/g,"haricotsverts"],[/pois gourmands?/g,"poisgourmands"],[/oignons? (?:nouveaux?|verts?)/g,"oignonnouveau"],[/sauce soja/g,"saucesoja"],[/chou[ -]fleur/g,"choufleur"],[/jaunes? d oeufs?/g,"jaune oeuf"],[/blancs? d oeufs?/g,"blancoeuf"]];
+const EQ_HEAD_SKIP=new Set(["viande","filet","pave","blanc","jaune","cuisse","dos","morceau","tranche","feuille","brin","branche","gousse","botte","sachet","boite","pot","paquet","brique","barquette","bocal","sac","poignee"]);
 const EQ_TOK={},EQ_PAIR={};
 function eqTok(name){let c=EQ_TOK[name];if(c)return c;
  let s=nrm4(name).replace(/\([^)]*\)/g," ").split(/[,;:]/)[0].replace(/[’']/g," ").replace(/\d+(?:[.,]\d+)?/g," ").replace(/%/g," ");
  for(const[re,to]of EQ_COMP)s=s.replace(re,to);
- const w=s.split(/[^a-z0-9]+/).filter(x=>x&&!EQ_STOP.has(x)).map(x=>x.length>3?x.replace(/[sx]$/,""):x);
+ const w=s.split(/[^a-z0-9]+/).filter(x=>x&&!EQ_STOP.has(x)).map(x=>x.length>3?x.replace(/[sx]$/,"").replace(/ee$/,"e"):x);
  c={set:new Set(w),head:w.find(x=>!EQ_HEAD_SKIP.has(x))||w[0]||""};EQ_TOK[name]=c;return c}
 function eqMatch(a,b){if(a===b)return true;if(!ING[a]||!ING[b])return false;const na=ING[a][0],nb=ING[b][0];const key=na<nb?na+"|"+nb:nb+"|"+na;if(key in EQ_PAIR)return EQ_PAIR[key];
  const A=eqTok(na),B=eqTok(nb);let r=false;if(A.set.size&&B.set.size){const sub=(X,Y)=>{for(const t of X.set)if(!Y.set.has(t))return false;return true};if(sub(A,B))r=A.set.has(B.head);else if(sub(B,A))r=B.set.has(A.head)}
@@ -2059,25 +2062,6 @@ function renderWeek(){
 function shopList(){const m=needs(),out=[],covered=[];for(const e of Object.values(m)){if(!ING[e.id])continue;const c=eqCover(e.id,isStaple(e.id)?null:e.q);const via=c.via.length?c.via:null;
  if(isStaple(e.id)){if(c.ok)covered.push({...e,via});else out.push({...e,buy:1,staple:true})}
  else if(c.ok)covered.push({...e,via,hq:c.q});else{const miss=e.q-c.q;out.push({...e,buy:buyAmount(e.id,miss),partial:c.q>0,hq:c.q})}}return{out,covered}}
-function renderShop(){
- const{out,covered}=shopList();
- const cartIds=Object.keys(state.bought);const toBuy=out.filter(e=>!state.bought[e.id]);
- const left=SLOTS.filter(k=>state.plan[k]&&!state.done[k]).length;
- document.getElementById("shopSub").textContent=out.length?`${left?`Pour ${left} repas à venir${Object.keys(state.snacks||{}).length?" et tes encas":""}`:"Pour tes encas"} : ${toBuy.length} article${toBuy.length>1?"s":""} encore à prendre${cartIds.length?`, ${cartIds.length} déjà dans le panier`:""}.`:(covered.length?"Tout est déjà à la maison pour les repas prévus.":"Ajoute des recettes au planning pour générer la liste.");
- document.getElementById("shopBar").style.width=(out.length?(out.length-toBuy.length)/out.length*100:0)+"%";
- document.getElementById("shopCount").textContent=out.length?`${out.length-toBuy.length} / ${out.length}`:"";
- const rb=document.getElementById("rangeBox");rb.hidden=!cartIds.length;
- rb.innerHTML=cartIds.length?`<span><b>${cartIds.length} article${cartIds.length>1?"s":""} dans le panier</b><br>De retour à la maison ? Range-les : ils passent dans le stock.</span><button type="button" class="btn primary" data-act="range">Ranger mes courses</button>`:"";
- const how=out.length?`<ol class="howto"><li>Coche ce que tu mets dans le panier.</li><li>De retour, touche « Ranger mes courses ».</li><li>Le stock se met à jour, la liste se vide.</li></ol>`:"";
- const row=(e,inCart)=>{const st=isStaple(e.id);const rc=(e.recs||[]).filter(x=>x!=="__extra");const isX=!!(state.extras&&state.extras[e.id]);const cimg=state.catalog&&state.catalog[e.id]&&state.catalog[e.id].img;const detail=st?"Produit de placard":e.partial?`Il en faut ${fmtQty(e.id,e.q)}, tu en as ${fmtQty(e.id,e.hq)}`:rc.length?`Pour ${rc.length>2?rc.slice(0,2).join(", ")+"…":rc.join(", ")}`:isX?"Ajouté à la liste":"";
-  return`<div class="item${inCart?" done":""}"><label class="check"><input type="checkbox" data-buy="${e.id}" data-amt="${e.buy}" ${inCart?"checked":""}><span class="box" aria-hidden="true"></span>${cimg?`<img class="item-img" src="${esc(cimg)}" alt="" loading="lazy">`:""}<span class="item-txt"><span class="item-name">${esc(ING[e.id][0])}</span><span class="item-for">${esc(detail)}</span></span></label><span class="item-qty">${st?"":esc(fmtQty(e.id,e.buy))}</span>${inCart?"":isX&&!rc.length?`<button type="button" class="have" data-xrm="${e.id}">Retirer</button>`:`<button type="button" class="have" data-have="${e.id}" data-amt="${st?1:e.q}" title="Je l'ai déjà : l'ajouter au stock">Déjà à la maison</button>`}</div>`};
- const groups=AISLE_ORDER.map(a=>[a,toBuy.filter(e=>ING[e.id][1]===a).sort((x,y)=>ING[x.id][0].localeCompare(ING[y.id][0],"fr"))]).filter(g=>g[1].length);
- const cartRows=cartIds.map(id=>out.find(e=>e.id===id)||{id,q:state.bought[id],buy:state.bought[id],recs:[]}).sort((x,y)=>ING[x.id][0].localeCompare(ING[y.id][0],"fr"));
- document.getElementById("shopList").innerHTML=how+(groups.length?groups.map(([a,items])=>`<section class="aisle"><h3>${esc(AISLES[a])}</h3>${items.map(e=>row(e,false)).join("")}</section>`).join(""):(out.length?`<p class="muted">Tout est dans le panier.</p>`:""))+(cartRows.length?`<section class="aisle cart"><h3>Dans le panier (${cartRows.length})</h3>${cartRows.map(e=>row(e,true)).join("")}</section>`:"");
- const ob=document.getElementById("ownedBox");ob.hidden=!covered.length;
- document.getElementById("ownedSum").textContent=`Déjà à la maison (${covered.length})`;
- document.getElementById("ownedList").innerHTML=covered.sort((x,y)=>ING[x.id][0].localeCompare(ING[y.id][0],"fr")).map(e=>`<div class="item owned-item"><span class="item-txt"><span class="item-name">${esc(ING[e.id][0])}</span><span class="item-for">${e.via?"En stock : "+esc(eqNames(e.via)):isStaple(e.id)?"En stock":`Il en faut ${esc(fmtQty(e.id,e.q))}, tu en as ${esc(fmtQty(e.id,have(e.id)))}`}</span></span></div>`).join("");
-}
 
 
 // ---------- portions, étapes & minuteurs ----------
@@ -2170,7 +2154,6 @@ function setStock(id,v){v=Math.max(0,Math.round(v*100)/100);if(v>0)state.stock[i
 function applyRecipe(r,sign,servings){const fct=(servings||2)/(r.base||2);for(const[id,q]of r.i){if(isStaple(id)||typeof q!=="number"||!ING[id])continue;let amt=q*fct;const same=()=>eqStock(id).ids.filter(x=>ING[x][2]===ING[id][2]);
  if(sign<0){const own=Math.min(have(id),amt);if(own>0){setStock(id,have(id)-own);amt-=own}if(amt>0.001)for(const x of same()){const t=Math.min(have(x),amt);if(t>0){setStock(x,have(x)-t);amt-=t}if(amt<=0.001)break}}
  else{let tgt=id;if(!have(id)){const x=same()[0];if(x)tgt=x}setStock(tgt,have(tgt)+amt)}}}
-function shopText(){const{out}=shopList();let t="Courses – semaine du "+fmtDate(dateOf(0))+"\n";AISLE_ORDER.forEach(a=>{const it=out.filter(e=>ING[e.id][1]===a&&!state.bought[e.id]).sort((x,y)=>ING[x.id][0].localeCompare(ING[y.id][0],"fr"));if(!it.length)return;t+="\n"+AISLES[a]+"\n";it.forEach(e=>{t+="- "+ING[e.id][0]+(e.staple?"":" : "+fmtQty(e.id,e.buy))+"\n"})});return t}
 function refreshStockViews(){renderStock();renderShop();renderRecipes()}
 
 document.addEventListener("submit",e=>{if(!e.target||e.target.id!=="pform")return;e.preventDefault();const f=new FormData(e.target);const n=String(f.get("n")||"").trim();if(!n)return;
@@ -2199,7 +2182,7 @@ document.addEventListener("click",e=>{
  if(t.dataset.snf){ui.snf=t.dataset.snf;renderSnacks();return}
  if(t.dataset.done){const k=t.dataset.done,r=RMAP[state.plan[k]];if(!r)return;if(state.done[k]){applyRecipe(r,1,state.done[k]);delete state.done[k];toast("Ingrédients remis dans le stock")}else{const sv=servOf(k);state.done[k]=sv;applyRecipe(r,-1,sv);toast("Bon appétit ! Ingrédients retirés du stock ("+sv+" portion"+(sv>1?"s":"")+")")}commit();renderAll();return}
  if(t.dataset.slot){const k=t.dataset.slot,id=ui.modal;if(state.done[k]&&RMAP[state.plan[k]])applyRecipe(RMAP[state.plan[k]],1,state.done[k]);if(state.plan[k]===id){delete state.plan[k];delete state.done[k];toast("Retiré : "+slotLabel(k))}else{state.plan[k]=id;delete state.done[k];toast("Ajouté : "+slotLabel(k))}commit();renderAll();return}
- if(t.dataset.have){const id=t.dataset.have;setStock(id,isStaple(id)?1:Math.max(have(id),Number(t.dataset.amt)));delete state.bought[id];commit();refreshStockViews();toast(ING[id][0]+" ajouté au stock");return}
+ if(t.dataset.have){const ids=t.dataset.have.split(","),am=String(t.dataset.amt||"").split(",");ids.forEach((id,i)=>{if(!ING[id])return;setStock(id,isStaple(id)?1:Math.max(have(id),Number(am[i])||0));delete state.bought[id]});commit();refreshStockViews();toast((t.dataset.name||ING[ids[0]][0])+" ajouté au stock");return}
  if(t.dataset.tog){const id=t.dataset.tog;setStock(id,have(id)?0:1);commit();refreshStockViews();return}
  if(t.dataset.step){const id=t.dataset.step,dir=Number(t.dataset.dir),v=have(id);const s=stepOf(id,dir>0?v:Math.max(0,v-0.01));setStock(id,dir>0?v+s:v-s);commit();refreshStockViews();const inp=document.querySelector(`[data-step="${id}"][data-dir="${dir}"]`);if(inp)inp.focus();return}
  if(t.dataset.serv){const k=t.dataset.serv,v=Math.min(6,Math.max(1,servOf(k)+Number(t.dataset.dir)));if(v===defServ(k))delete state.servings[k];else state.servings[k]=v;commit();renderWeek();renderShop();renderStock();renderRecipes();toast(slotLabel(k).replace(/^./,c=>c.toUpperCase())+" : "+v+" portion"+(v>1?"s":""));return}
@@ -2232,7 +2215,7 @@ document.addEventListener("click",e=>{
   try{navigator.clipboard.writeText(txt).then(()=>toast("Liste copiée"),fb)}catch(err){fb()}}
 });
 document.addEventListener("change",e=>{const t=e.target;if(!t.dataset)return;
- if(t.dataset.buy){const id=t.dataset.buy;if(t.checked)state.bought[id]=isStaple(id)?1:(Number(t.dataset.amt)||1);else delete state.bought[id];commit();renderShop();return}
+ if(t.dataset.buy){const ids=t.dataset.buy.split(","),am=String(t.dataset.amt||"").split(",");ids.forEach((id,i)=>{if(!ING[id])return;if(t.checked)state.bought[id]=isStaple(id)?1:(Number(am[i])||1);else delete state.bought[id]});commit();renderShop();return}
  if(t.dataset.qty){const id=t.dataset.qty;const v=parseFloat(String(t.value).replace(",","."));setStock(id,isNaN(v)?0:v);commit();refreshStockViews()}});
 document.getElementById("q").addEventListener("input",e=>{ui.q=e.target.value;renderRecipes()});
 document.getElementById("stockQ").addEventListener("input",e=>{ui.sq=e.target.value;renderStock()});
@@ -3023,6 +3006,51 @@ document.addEventListener("click",e=>{const t=e.target.closest("button");if(!t)r
  else if(a==="rec-hide"){if(t.dataset.armed!=="1"){t.dataset.armed="1";t.textContent="Confirmer la suppression";clearTimeout(t._t);t._t=setTimeout(()=>{t.dataset.armed="0";t.textContent="Supprimer"},4000);return}
   const id=ui.modal;if(!id)return;if(!state.removed)state.removed={};state.removed[id]=true;for(const s of SLOTS)if(state.plan[s]===id&&!state.done[s]){delete state.plan[s];delete state.servings[s]}delete state.snacks[id];delete state.favs[id];delete state.likes[id];applyRemoved(state.removed);commit();closeModal();renderAll();toast("Recette supprimée : tu peux la restaurer en bas de l'onglet Recettes")}});
 document.addEventListener("change",e=>{const t=e.target;if(t&&t.id==="cantPhoto"){cantPhoto(t.files&&t.files[0]);t.value=""}});
+
+// ================= v7 : liste de courses regroupée (même ingrédient = une ligne, quantité totale) =================
+const HERB_G={sachet:10,branche:2,botte:40};
+function gramsOf(id,q){const u=ING[id][2];if(u==="g"||u==="ml")return q;if(u===null)return null;const n=nrm4(ING[id][0]);if(ING[id][1]==="H"&&HERB_G[u])return q*HERB_G[u];
+ const e=NUTDB.find(z=>z[0].test(n));if(!e||(e[1]===0&&e[2]===0))return null;if(u===""||u==="pièce"||u==="pavé")return e[6]?q*e[6]:(e[7]?q*e[7]:null);return e[7]?q*e[7]:null}
+function groupName(n){return n.replace(/\s*\([^)]*\)/g,"").split(",")[0].replace(/\s+/g," ").trim()||n}
+function shopGroups(list){const n=list.length,par=list.map((_,i)=>i);const f=i=>par[i]===i?i:(par[i]=f(par[i]));
+ for(let i=0;i<n;i++)for(let j=i+1;j<n;j++)if(eqMatch(list[i].id,list[j].id))par[f(j)]=f(i);
+ const G={};list.forEach((e,i)=>{(G[f(i)]=G[f(i)]||[]).push(e)});
+ return Object.values(G).map(items=>{const main=items.slice().sort((a,b)=>eqTok(ING[a.id][0]).set.size-eqTok(ING[b.id][0]).set.size||ING[a.id][0].length-ING[b.id][0].length)[0];
+  return{items,main,ids:items.map(e=>e.id),name:items.length>1?groupName(ING[main.id][0]):ING[main.id][0],aisle:ING[main.id][1]}})}
+function groupQty(items){const byU={};const st=items.some(e=>isStaple(e.id));
+ for(const e of items){if(isStaple(e.id))continue;let u=ING[e.id][2];if(u==="pièce")u="";const miss=Math.max(0,e.q-(e.hq||0));const x=byU[u]||(byU[u]={u,q:0,rep:e.id,parts:[]});x.q+=miss;x.parts.push([e.id,miss])}
+ const us=Object.values(byU);if(!us.length)return{txt:"",parts:""};
+ const fmt=x=>fmtQty(x.rep,buyAmount(x.rep,x.q));const parts=us.map(fmt).join(" + ");let txt=parts;
+ if(us.length>1){const gU=us.find(x=>x.u==="g")||us.find(x=>x.u==="ml");if(gU){let tot=0,ok=true;for(const x of us)for(const[id,q]of x.parts){const g=x.u===gU.u?q:gramsOf(id,q);if(g==null){ok=false;break}tot+=g}if(ok)txt="≈ "+fmtQty(gU.rep,buyAmount(gU.rep,tot))}}
+ return{txt:txt+(st?" + un peu":""),parts:us.length>1?parts:""}}
+function renderShop(){
+ const{out,covered}=shopList();const groups=shopGroups(out);const inCart=g=>g.ids.every(id=>state.bought[id]);
+ const toBuy=groups.filter(g=>!inCart(g)),cartG=groups.filter(inCart);const inOut=new Set(out.map(e=>e.id));const orphan=Object.keys(state.bought).filter(id=>!inOut.has(id)&&ING[id]);const nCart=cartG.length+orphan.length;
+ const left=SLOTS.filter(k=>state.plan[k]&&!state.done[k]).length;
+ document.getElementById("shopSub").textContent=groups.length?`${left?`Pour ${left} repas à venir${Object.keys(state.snacks||{}).length?" et tes encas":""}`:"Pour tes encas"} : ${toBuy.length} article${toBuy.length>1?"s":""} encore à prendre${nCart?`, ${nCart} déjà dans le panier`:""}.`:(covered.length?"Tout est déjà à la maison pour les repas prévus.":"Ajoute des recettes au planning pour générer la liste.");
+ document.getElementById("shopBar").style.width=(groups.length?cartG.length/groups.length*100:0)+"%";
+ document.getElementById("shopCount").textContent=groups.length?`${cartG.length} / ${groups.length}`:"";
+ const rb=document.getElementById("rangeBox");rb.hidden=!nCart;
+ rb.innerHTML=nCart?`<span><b>${nCart} article${nCart>1?"s":""} dans le panier</b><br>De retour à la maison ? Range-les : ils passent dans le stock.</span><button type="button" class="btn primary" data-act="range">Ranger mes courses</button>`:"";
+ const how=groups.length?`<ol class="howto"><li>Coche ce que tu mets dans le panier.</li><li>De retour, touche « Ranger mes courses ».</li><li>Le stock se met à jour, la liste se vide.</li></ol>`:"";
+ const row=(g,done)=>{const one=g.items.length===1?g.items[0]:null,id0=g.ids[0];const st=g.items.every(e=>isStaple(e.id));const recs=[...new Set(g.items.flatMap(e=>(e.recs||[]).filter(x=>x!=="__extra")))];
+  const isX=!!(one&&state.extras&&state.extras[one.id]&&!recs.length);const cimg=one&&state.catalog&&state.catalog[one.id]&&state.catalog[one.id].img;const Q=one?{txt:st?"":fmtQty(one.id,one.buy),parts:""}:groupQty(g.items);const names=[...new Set(g.items.map(e=>ING[e.id][0]))];
+  const pour=recs.length?`Pour ${recs.length>2?recs.slice(0,2).join(", ")+"…":recs.join(", ")}`:"";
+  const detail=one?(st?"Produit de placard":one.partial?`Il en faut ${fmtQty(one.id,one.q)}, tu en as ${fmtQty(one.id,one.hq||0)}`:pour||(isX?"Ajouté à la liste":"")):[names.length>1?"Regroupe : "+names.join(", "):"",Q.parts&&Q.txt!==Q.parts?"("+Q.parts+")":"",pour].filter(Boolean).join(" · ");
+  const ids=g.ids.join(","),amts=g.items.map(e=>e.staple?1:e.buy).join(","),need=g.items.map(e=>isStaple(e.id)?1:e.q).join(",");
+  return`<div class="item${done?" done":""}"><label class="check"><input type="checkbox" data-buy="${ids}" data-amt="${amts}" ${done?"checked":""}><span class="box" aria-hidden="true"></span>${cimg?`<img class="item-img" src="${esc(cimg)}" alt="" loading="lazy">`:""}<span class="item-txt"><span class="item-name">${esc(g.name)}</span><span class="item-for">${esc(detail)}</span></span></label><span class="item-qty">${esc(Q.txt)}</span>${done?"":isX?`<button type="button" class="have" data-xrm="${id0}">Retirer</button>`:`<button type="button" class="have" data-have="${ids}" data-amt="${need}" data-name="${esc(g.name)}" title="Je l'ai déjà : l'ajouter au stock">Déjà à la maison</button>`}</div>`};
+ const byName=(a,b)=>a.name.localeCompare(b.name,"fr");
+ const sections=AISLE_ORDER.map(a=>[a,toBuy.filter(g=>g.aisle===a).sort(byName)]).filter(x=>x[1].length);
+ const cartRows=cartG.concat(orphan.map(id=>({items:[{id,q:state.bought[id],buy:state.bought[id],recs:[]}],ids:[id],name:ING[id][0],aisle:ING[id][1]}))).sort(byName);
+ document.getElementById("shopList").innerHTML=how+(sections.length?sections.map(([a,list])=>`<section class="aisle"><h3>${esc(AISLES[a])}</h3>${list.map(g=>row(g,false)).join("")}</section>`).join(""):(groups.length?`<p class="muted">Tout est dans le panier.</p>`:""))+(cartRows.length?`<section class="aisle cart"><h3>Dans le panier (${cartRows.length})</h3>${cartRows.map(g=>row(g,true)).join("")}</section>`:"");
+ const cg=shopGroups(covered).sort(byName);const ob=document.getElementById("ownedBox");ob.hidden=!cg.length;
+ document.getElementById("ownedSum").textContent=`Déjà à la maison (${cg.length})`;
+ document.getElementById("ownedList").innerHTML=cg.map(g=>{const e=g.items[0];const names=[...new Set(g.items.map(x=>ING[x.id][0]))];const via=[...new Set(g.items.flatMap(x=>x.via||[]))];
+  const txt=g.items.length>1?(via.length?"En stock : "+eqNames(via):"En stock")+" · regroupe "+names.join(", "):e.via?"En stock : "+eqNames(e.via):isStaple(e.id)?"En stock":`Il en faut ${fmtQty(e.id,e.q)}, tu en as ${fmtQty(e.id,have(e.id))}`;
+  return`<div class="item owned-item"><span class="item-txt"><span class="item-name">${esc(g.name)}</span><span class="item-for">${esc(txt)}</span></span></div>`}).join("")}
+function shopText(){const{out}=shopList();const groups=shopGroups(out).filter(g=>!g.ids.every(id=>state.bought[id]));let t="Courses – semaine du "+fmtDate(dateOf(0))+"\n";
+ AISLE_ORDER.forEach(a=>{const it=groups.filter(g=>g.aisle===a).sort((x,y)=>x.name.localeCompare(y.name,"fr"));if(!it.length)return;t+="\n"+AISLES[a]+"\n";
+  it.forEach(g=>{const q=g.items.length===1?(isStaple(g.ids[0])?"":fmtQty(g.ids[0],g.items[0].buy)):groupQty(g.items).txt;t+="- "+g.name+(q?" : "+q:"")+"\n"})});return t}
 
 setTab(ui.tab);renderAll();initDb();sbStart();
 
