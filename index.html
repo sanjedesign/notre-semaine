@@ -2099,9 +2099,9 @@ function aisleByName(name){const n=nrm4(name).replace(/['’]/g," ");for(const L
 // ================= v11 (avant l'état) : un seul identifiant par ingrédient (fin des doublons) =================
 // [id en double, id gardé, facteur] : facteur = conversion ancienne unité → unité gardée ; null = produit de placard
 const CANON_LIST=[["hf_pdt","pdt",1],["hf_thon","thon",1],["qt_thon","thon",1/112],["sj_yaourt","yaourt",1],["hf_echalote","echalote",1],["sj_oeuf","oeufs",1],["qt_jaune","oeufs",1],
- ["hf_blanc_poulet","poulet",1],["hf_filet_poulet","poulet",140],["qt_saumon","saumon",1/125],["qt_coriandre","coriandre",1/30],["hf_aneth","aneth",1/3],["qt_aneth","aneth",1/30],["qt_butternut","butternut",1/1000],
+ ["hf_blanc_poulet","poulet",1],["hf_filet_poulet","poulet",140],["qt_saumon","saumon",1/125],["qt_coriandre","coriandre",1/30],["hf_aneth","aneth",0.25],["qt_aneth","aneth",1/30],["qt_butternut","butternut",1/1000],
  ["hf_concentre","concentre",null],["hf_panko","panko",null],["qt_chapelure","panko",null],["hf_thym","thym",null],["hf_lait","lait",1],["qt_lait","lait",1],["et_beurre","hf_beurre",null],
- ["hf_oignon","oignon",1],["hf_citron","citron",1],["hf_gousse_ail","ail",null],["hf_tortillas","tortillas",1],["hf_persil","persil",1/3],["ww_persil","persil",1/30],["et_persil","persil",0.1],["hf_origan","origan",null],
+ ["hf_oignon","oignon",1],["hf_citron","citron",1],["hf_gousse_ail","ail",null],["hf_tortillas","tortillas",1],["hf_persil","persil",0.25],["ww_persil","persil",1/30],["et_persil","persil",0.1],["hf_origan","origan",null],
  ["hf_salade","salade",100],["hf_salade_sachet","salade",125],["sj_sel_fin","sel",null],["hf_balsamique","vinaigre",null],["hf_bouillon_volaille","bouillon_volaille",null],["mm_huile_pate","huile",null],
  ["ff_mozza","mozzarella",1],["hf_mozza_rapee","mozzarella",100],["ww_pois_chiches","pois_chiches",1/265],["qt_feta","feta",1],["et_boeuf","boeuf_hache",1]];
 const CANON={};for(const[a,b,f]of CANON_LIST)if(ING[a]&&ING[b]&&a!==b)CANON[a]={to:b,f:ING[b][2]===null?null:f,fu:ING[a][2]};
@@ -2133,7 +2133,7 @@ function canonT(t){const[id,q,tx,nm]=t;const C=ING[id]?aliasOf(id):null;if(!C||!
  if(ING[to][2]===null){const txt=typeof q==="string"?q:(typeof tx==="string"?tx:fmtQty(id,q));return[to,txt,undefined,name]}
  if(typeof q!=="number")return[to,Math.max(0.01,amtFromTxt(q,ING[to][2])),q,name];
  const f=typeof C.f==="number"?C.f:1;let txt=tx;
- if(typeof txt!=="string"&&f!==1){txt=fmtQty(id,q);if(ING[to][2]==="g"&&ING[id][2]!=="g")txt+=" (≈ "+Math.round(q*f)+" g)"}
+ if(f!==1){if(typeof txt!=="string")txt=fmtQty(id,q);if(ING[to][2]==="g"&&ING[id][2]!=="g"&&!/\d\s*(g|kg)\b|≈/.test(txt))txt+=" (≈ "+Math.round(q*f)+" g)"}
  return[to,q*f,txt,name]}
 function canonI(list){return(list||[]).map(t=>{const x=canonT(t);if(x!==t&&/^u_/.test(t[0]))delete ING[t[0]];return x})}
 RECIPES.forEach(r=>{r.i=canonI(r.i)});
@@ -3675,6 +3675,11 @@ const NUT_SH={k:"kcal",p:"prot.",f:"lip.",c:"gluc.",fi:"fibres"};
 function factsV13(r){const n=(r.k||r.nut)?rNut(r):null;const per=r.snack?(r.unitS||"pièce"):"portion";
  const items=n&&n.k?[["k",fmtInt(n.k)],["p",fmtG(r1(n.p))+" g"]].concat(n.f!=null?[["f",fmtG(r1(n.f))+" g"],["c",fmtG(r1(n.c))+" g"],["fi",fmtG(r1(n.fi))+" g"]]:[]):[];
  return`<div class="m-facts">${r.t?`<span class="mf">⏱ ${r.t} min</span>`:""}${r.snack&&r.yieldN?`<span class="mf">${r.yieldN} ${esc(r.yieldU||"")} par fournée</span>`:""}</div>${items.length?`<div class="m-nut" aria-label="Valeurs nutritionnelles par ${per}">${items.map(([x,v])=>`<span>${mdot(x)}<b>${v}</b> ${NUT_SH[x]}</span>`).join("")}<small>par ${esc(per)}</small></div>`:""}`}
+
+// ================= v14 : grammes affichés pour les pots, sachets et herbes (yaourt, aïoli, aneth…) =================
+const PACK_G=[[/yaourt.*grec|grecque/,"pot",100],[/yaourt|skyr|fromage blanc|faisselle/,"pot",125],[/aioli|mayonnaise|sauce|ketchup/,"sachet",25],[/pesto|houmous|tzatziki/,"pot",100],[/rape|gouda|emmental/,"sachet",50]];
+approxG=(f=>function(id,q){if(!ING[id]||typeof q!=="number"||!(q>0))return f(id,q);const u=ING[id][2],n=nrmS(ING[id][0]);
+ if(ING[id][1]==="H"&&HERB_G[u])return q*HERB_G[u];const z=PACK_G.find(p=>p[1]===u&&p[0].test(n));if(z)return q*z[2];return f(id,q)})(approxG);
 
 setTab(ui.tab);renderAll();initDb();sbStart();
 
