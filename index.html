@@ -786,6 +786,57 @@ details *,details *::before,details *::after{box-sizing:border-box}
 .subs-add .fl{flex:1 1 140px}
 .subs-add .btn{flex:0 0 auto}
 .ingx .ix .was{display:block;font-weight:500;font-size:.76rem;color:var(--muted)}
+/* v13 : une couleur par indicateur (palette validée : contraste ≥ 3:1 en sombre, libellés visibles en clair) */
+:root{--m-k:#2a78d6;--m-p:#eb6834;--m-f:#1baf7a;--m-c:#eda100;--m-fi:#e87ba4}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--m-k:#3987e5;--m-p:#d95926;--m-f:#199e70;--m-c:#c98500;--m-fi:#d55181}}
+:root[data-theme="dark"]{--m-k:#3987e5;--m-p:#d95926;--m-f:#199e70;--m-c:#c98500;--m-fi:#d55181}
+.mdot{display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--c);margin-right:6px;flex:0 0 auto;vertical-align:1px}
+.sv-gauges{display:flex;flex-direction:column;gap:2px;margin:4px 0 10px}
+.mg{display:grid;grid-template-columns:96px 1fr auto;align-items:center;gap:10px;padding:5px 0}
+.mg-l{display:flex;align-items:center;font-size:.86rem;font-weight:700;color:var(--ink)}
+.mg-bar{position:relative;display:block;height:10px;border-radius:99px;background:var(--line);overflow:hidden}
+.mg-bar i{position:absolute;left:0;top:0;bottom:0;background:var(--c);border-radius:99px}
+.mg-v{font-weight:800;font-size:.92rem;font-variant-numeric:tabular-nums;text-align:right;min-width:86px;white-space:nowrap}
+.mg-v small{font-weight:600;color:var(--muted);font-size:.8rem}
+.mg-v em{font-style:normal;margin-left:4px;color:var(--muted);font-weight:700}
+.sv-left{font-size:1rem}
+.sv-sc{display:flex;align-items:center;gap:10px;background:none;border:0;padding:0;font:inherit;color:inherit;cursor:pointer;text-align:left}
+.sv-sc b{font-family:"Bricolage Grotesque",sans-serif;font-size:1.45rem;font-weight:800;width:52px;height:52px;border-radius:16px;display:grid;place-items:center;background:var(--surface-2);border:2px solid var(--line)}
+.sv-sc span{display:flex;flex-direction:column;font-size:.78rem;color:var(--muted);line-height:1.25}
+.sv-sc em{font-style:normal;color:var(--ink);letter-spacing:1px}
+.sv-acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.sv-acts .btn{flex:1 1 0}
+.sv-mini{font-size:.82rem;color:var(--muted);margin:8px 0 0;line-height:1.4}
+.sv-mini b{color:var(--ink)}
+.dashk{display:inline-block;width:14px;border-top:2px dashed var(--muted);vertical-align:3px;margin-right:2px}
+.sv-mchips{flex-wrap:nowrap;overflow-x:auto;margin:0 -2px 6px;padding:2px;scrollbar-width:none}
+.sv-mchips::-webkit-scrollbar{display:none}
+.sv-mchips .chip{display:inline-flex;align-items:center;font-size:.8rem;padding:5px 10px}
+.sv-got{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.sv-chip2{font-size:.78rem;font-weight:700;background:var(--surface-2);border:1px solid var(--line);border-radius:999px;padding:3px 9px}
+.sv-need span{display:inline-flex;align-items:center}
+.sv-why>summary{display:flex;align-items:center;justify-content:space-between;gap:10px;cursor:pointer;list-style:none}
+.sv-why>summary::-webkit-details-marker{display:none}
+.sv-why .why-badge{border:2px solid var(--line);color:var(--ink);background:var(--surface-2)}
+.why-parts{display:flex;flex-direction:column;gap:10px;margin-top:12px}
+.why-row{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:4px 10px}
+.why-row .why-l{display:flex;align-items:center;font-size:.86rem;font-weight:700}
+.why-row .why-d{font-size:.82rem;color:var(--muted);text-align:right;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.why-row b{font-size:.86rem;font-variant-numeric:tabular-nums}
+.why-row b small{color:var(--muted);font-weight:600}
+.why-row .mg-bar{grid-column:1/-1;height:8px}
+.why-sugg li{display:flex;align-items:center;gap:10px;justify-content:space-between}
+.why-sugg .why-t{font-size:.86rem;min-width:0}
+.why-sugg .why-t small{color:var(--muted);margin-left:4px;white-space:nowrap}
+.m-facts{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 8px}
+.m-facts:empty{display:none}
+.mf{font-size:.84rem;font-weight:700;background:var(--surface-2);border:1px solid var(--line);border-radius:999px;padding:4px 11px}
+.m-nut{display:flex;flex-wrap:wrap;align-items:center;gap:4px 14px;font-size:.86rem;margin:0 0 12px;color:var(--muted)}
+.m-nut span{display:inline-flex;align-items:center;white-space:nowrap}
+.m-nut b{color:var(--ink);margin-right:3px}
+.m-nut small{font-size:.76rem}
+.m-planned:empty{display:none}
+.log-est .muted{color:var(--muted)}
 
 </style>
 </head>
@@ -833,7 +884,7 @@ details *,details *::before,details *::after{box-sizing:border-box}
  </section>
 
  <section id="tab-suivi" class="tab" hidden>
-  <div class="sec-head"><div><h1>Suivi</h1><p class="sub">Calories, protéines, lipides, glucides et fibres de chacun, avec des objectifs calculés pour votre profil.</p></div></div>
+  <div class="sec-head"><div><h1>Suivi</h1></div></div>
   <div id="suivi"></div>
  </section>
 
@@ -2283,15 +2334,15 @@ function renderModal(){
  <div class="m-hero"><img src="${imgSrc(r)}" alt=""></div>
  <div class="m-body">
   <h2 id="mTitle">${esc(r.n)}</h2>
-  <ul class="facts">${r.t?`<li>${r.t} min</li>`:""}${r.snack?`<li>1 fournée = ${r.yieldN} ${esc(r.yieldU)}</li>${r.k?`<li>≈ ${r.k} kcal par ${esc(r.unitS||"pièce")}</li><li>${fmtG(r.nut?r.nut.p:r.pr)} g de protéines par ${esc(r.unitS||"pièce")}</li>${r.nut&&r.nut.f!=null?`<li>Lipides ${fmtG(r.nut.f)} g · Glucides ${fmtG(r.nut.c)} g · Fibres ${fmtG(r.nut.fi)} g${r.nut.est?" (estimés)":""}</li>`:""}`:`<li>Valeurs nutritionnelles à compléter</li>`}`:`${r.k?`<li>≈ ${r.k} kcal par portion</li><li>${r.pr} g de protéines par portion</li>`:`<li>Valeurs nutritionnelles à compléter</li>`}${r.nut&&r.nut.f!=null?`<li>Lipides ${fmtG(r.nut.f)} g · Glucides ${fmtG(r.nut.c)} g · Fibres ${fmtG(r.nut.fi)} g${r.nut.est?" (estimés)":""}</li>`:""}${r.base&&!r.cr?`<li>${r.baseNote?esc(r.baseNote):`Recette d'origine pour ${r.base} pers.`}</li>`:""}`}</ul>
+  ${factsV13(r)}
   <div class="m-serv"><span>${servNote}</span><span class="serv"><button type="button" data-mserv="-1" aria-label="Une portion de moins" ${sv<=1?"disabled":""}>−</button><span class="serv-n">${r.snack?`${sv} fournée${sv>1?"s":""}`:`${sv} portion${sv>1?"s":""}`}</span><button type="button" data-mserv="1" aria-label="Une portion de plus" ${sv>=(ui.modalBatch?40:8)?"disabled":""}>+</button></span></div>
-  ${snackPlanned}<p class="m-planned"${r.snack?" hidden":""}>${used.length?"Au menu : "+used.map(k=>slotLabel(k)+(servOf(k)!==2?" ("+servOf(k)+" p.)":"")).join(", "):"Pas encore au planning."}</p>
+  ${snackPlanned}<p class="m-planned"${r.snack?" hidden":""}>${used.length?"Au menu : "+used.map(k=>slotLabel(k)+(servOf(k)!==2?" ("+servOf(k)+" p.)":"")).join(", "):""}</p>
   
   ${batchCard}<div class="m-actions">${isBatch?"":`<button type="button" class="btn primary" data-act="cook-start">Cuisiner pas à pas, avec minuteurs</button>`}${primary}${r.my?`<button type="button" class="btn ghost" data-act="rec-edit">✏️ Modifier</button><button type="button" class="btn ghost" data-act="rec-del">Supprimer</button>`:`<button type="button" class="btn ghost" data-act="rec-hide">Supprimer</button>`}${L.src?"":L.cr?(RMAP[r.inspi]?`<button type="button" class="btn ghost" data-open="${r.inspi}">Recette d'inspiration</button>`:""):`<a class="btn ghost" href="${esc(L.href)}" target="_blank" rel="noopener noreferrer">${L.direct?"Recette d'origine":L.gen?"Voir sur YouTube":"Chercher sur Marmiton"}</a>`}${r.vid?`<a class="btn ghost" href="${esc(r.vid)}" target="_blank" rel="noopener noreferrer">Voir la vidéo</a>`:""}${r.u2?`<a class="btn ghost" href="${esc(r.u2)}" target="_blank" rel="noopener noreferrer">${esc(r.u2l||"Autre source")}</a>`:""}</div>${picker}
   ${(r.vids||[]).length?`<div class="vids"><h3>${r.vids.some(v=>v.full)?"Vidéo de la recette":"Vidéo de préparation"}</h3>${r.vids.map(v=>HOSTED?`<figure class="vid"><div class="vid-frame"><iframe src="https://www.youtube-nocookie.com/embed/${esc(v.id)}?rel=0&playsinline=1" title="${esc(v.t)}" loading="lazy" allow="encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div><figcaption>${esc(v.t)}</figcaption></figure>`:`<a class="btn ghost" href="https://www.youtube.com/watch?v=${esc(v.id)}" target="_blank" rel="noopener noreferrer">▶ ${esc(v.t)}</a>`).join("")}</div>`:""}
   <div class="m-cols">
-   <div><div class="ing-head"><h3>Ingrédients</h3><span>${r.snack?`pour ${sv*r.yieldN} ${esc(r.yieldU)}`:`pour ${sv} personne${sv>1?"s":""}`}</span></div><ul class="ingx">${fresh.map(([id,q,tx,nm,was])=>`<li><span class="ico" aria-hidden="true">${icon(id)}</span><span class="ix"><b>${esc(nm||ING[id][0])}${was?`<small class="was">au lieu de ${esc(was)}</small>`:""}</b><span class="qt">${esc(scaledQty(id,q,fct,tx))}${stockPill(id,q)}</span></span></li>`).join("")}</ul>
-   ${pantry.length?`<h4 class="ing-sub">À ajouter vous-même</h4><ul class="ingx small">${pantry.map(([id,q,tx,nm,was])=>`<li><span class="ico" aria-hidden="true">${icon(id)}</span><span class="ix"><b>${esc(nm||ING[id][0])}${was?`<small class="was">au lieu de ${esc(was)}</small>`:""}</b><span class="qt">${esc(scaledQty(id,q,fct,tx))}${stockPill(id,q)}</span></span></li>`).join("")}</ul>`:""}</div>
+   <div><div class="ing-head"><h3>Ingrédients</h3><span>${r.snack?`pour ${sv*r.yieldN} ${esc(r.yieldU)}`:`pour ${sv} personne${sv>1?"s":""}`}</span></div><ul class="ingx">${fresh.map(([id,q,tx,nm,was])=>`<li><span class="ico" aria-hidden="true">${icon(id)}</span><span class="ix"><b>${esc(nm||ING[id][0])}</b><span class="qt">${esc(scaledQty(id,q,fct,tx))}${stockPill(id,q)}</span></span></li>`).join("")}</ul>
+   ${pantry.length?`<h4 class="ing-sub">À ajouter vous-même</h4><ul class="ingx small">${pantry.map(([id,q,tx,nm,was])=>`<li><span class="ico" aria-hidden="true">${icon(id)}</span><span class="ix"><b>${esc(nm||ING[id][0])}</b><span class="qt">${esc(scaledQty(id,q,fct,tx))}${stockPill(id,q)}</span></span></li>`).join("")}</ul>`:""}</div>
    <div><h3>Préparation</h3><ol class="stepx">${r.st.map((s,i)=>`<li><span class="num" aria-hidden="true">${i+1}</span><p>${richStep(s)}</p></li>`).join("")}</ol>${r.tip?`<p class="tip">${esc(r.tip)}</p>`:""}
    <div class="source">${L.src?`<p><b>Source</b> : ${esc(L.label)}. Ingrédients repris tels quels, les quantités s'ajustent au nombre de portions.</p><p hidden>`:L.cr?`<p><b>Création Claude</b>${RMAP[r.inspi]?`, inspirée de <button type="button" class="link" data-open="${r.inspi}">${esc(RMAP[r.inspi].n)}</button>. Pas de recette d'origine en ligne : variante imaginée à partir de tes recettes.`:`. Pas de recette d'origine en ligne : recette imaginée à ta demande, kcal et protéines estimés.`}</p>`:`<a href="${esc(L.href)}" target="_blank" rel="noopener noreferrer">${esc(L.label)}</a><p>`}${L.cr&&!L.src?"<p hidden>":""}${L.gen?"Recette proposée par Claude"+(r.chef?", inspirée du style de "+esc(r.chef):"")+". Ce n'est pas la recette exacte du chef : le lien lance une recherche YouTube.":L.direct?(r.base?"Ingrédients repris tels quels depuis la recette d'origine (pour "+(r.snack?"1 fournée":r.baseNote?"environ "+r.base+" parts":r.base+" pers.")+"), les quantités s'ajustent au nombre de portions.":"Cette fiche est une version adaptée et allégée : les quantités et certains temps peuvent différer de l'original."):"Pas de lien direct pour cette recette : le lien lance une recherche avec son nom."}</p></div></div>
   </div>
@@ -2624,7 +2675,7 @@ function panelLog(){const c=ui.logCtx||{day:DAYS[0][0],pi:0};const P=state.peopl
  ${HOSTED?`<div class="pf-actions"><button type="button" class="btn primary" data-act="log-scan">📷 Scanner un produit</button><button type="button" class="btn" data-act="log-search">🔎 Chercher un produit</button></div>`:""}
  ${rec.length?`<div class="pn-card"><h3>Récents</h3><div class="off-list">${rec.map((it,i)=>`<button type="button" class="off-row" data-logrec="${i}"><span class="off-noimg" aria-hidden="true">🍽️</span><span class="off-txt"><span class="off-name">${esc(it.n)}</span><span class="off-meta">${it.q?esc(it.q)+" · ":""}${Math.round(it.k)} kcal · ${fmtG(it.p)} g prot.</span></span><span class="off-add" aria-hidden="true">+</span></button>`).join("")}</div></div>`:""}
  ${SNACK_RECIPES.length?`<div class="pn-card"><h3>Mes recettes d'encas</h3>${SNACK_RECIPES.map(r=>`<div class="log-rec"><span>${r.emoji||"🍪"} ${esc(r.n)} <small>${r.k} kcal / ${esc(r.unitS||"pièce")}</small></span><button type="button" class="btn small" data-logsr="${r.id}">+ 1 ${esc(r.unitS||"pièce")}</button></div>`).join("")}</div>`:""}
- <form class="pn-card" id="logForm" autocomplete="off"><h3>Saisie libre</h3><p class="pn-help">Tape un aliment et sa quantité : calories et nutriments se calculent tout seuls.</p><div class="log-quick">${LOG_QUICK.map(([n,q],i)=>`<button type="button" class="chip" data-lq="${i}">${esc(n)}</button>`).join("")}</div>
+ <form class="pn-card" id="logForm" autocomplete="off"><h3>Saisie libre</h3><p class="pn-help">Ex : « pomme + 30 g d'amandes ». Les valeurs se calculent seules.</p><div class="log-quick">${LOG_QUICK.map(([n,q],i)=>`<button type="button" class="chip" data-lq="${i}">${esc(n)}</button>`).join("")}</div>
   <label class="fl">Quoi ?<input class="pn-in" name="n" required maxlength="60" placeholder="Ex : une pomme, une poignée d'amandes"></label>
   <label class="fl">Quantité (facultatif)<input class="pn-in" name="q" maxlength="30" placeholder="Ex : 2, 30 g, 1 poignée"></label>
   <p class="pn-help log-est" id="logEst" aria-live="polite"></p>
@@ -3437,6 +3488,193 @@ document.addEventListener("click",e=>{const t=e.target.closest("button");if(!t)r
  if(t.dataset.subdel!=null&&t.dataset.subdel!==""){const r=state.subs[Number(t.dataset.subdel)];if(!r)return;state.subs.splice(Number(t.dataset.subdel),1);applySubs(state.subs);commit();renderAll();toast("Remplacement retiré : "+subLabel(r.f));return}
  if(t.dataset.act==="sub-add"){const f=(document.getElementById("subF")||{}).value,to=(document.getElementById("subT")||{}).value;if(!f||!ING[to]||f===to){toast("Choisis l'ingrédient à remplacer et son remplaçant");return}if(f[0]!=="@"&&!ING[f])return;
   state.subs=(state.subs||[]).filter(r=>r.f!==f);state.subs.push({f,t:to});state.subs=cleanSubs(state.subs);applySubs(state.subs);commit();renderAll();toast(subLabel(f)+" → "+ING[to][0]);return}});
+
+// ================= v13 : nutriments mieux détectés, Suivi lisible (une couleur par indicateur), textes courts =================
+// ---------- base nutritionnelle élargie (kcal, prot., lip., gluc., fibres pour 100 g ; poids d'une pièce ; poids d'une unité) ----------
+NUTDB.unshift(
+ [/oignons? nouveaux?|\bciboule\b|cebette/,30,1.8,0.2,4.4,2.6,15,100],[/brocoli|broccolini/,34,2.8,0.4,4,2.6,300,200],
+ [/pains? (a )?burgers?|\bbuns?\b/,270,9,4.5,48,2.5,70],[/pains? pitas?|\bpitas?\b/,275,9,1.2,55,2.2,60],[/pain de mie/,265,8,3.5,48,3,25,25],[/pain d epices/,330,4,1.5,75,2,25,25],[/biscottes?/,410,11,6,75,4,10],[/baguette/,260,8.5,1.2,53,2.7,250,30],
+ [/croque/,270,14,14,22,1.2,140],[/crepes?/,230,6.5,9,30,1,60],[/gaufres?/,400,6,20,48,1.5,60],[/muffins?/,400,5,20,50,1.5,80],[/donuts?|beignets?/,420,6,24,46,1.5,60],
+ [/frites/,300,3.5,15,37,3.2,150],[/\bpuree\b(?! de (tomate|sesame|piment|pois))/,85,2,3.5,11,1.4,200],[/porridge/,95,4,2.5,14,1.5,250],
+ [/^(?!pates? ).*\bpizzas?\b/,250,11,10,29,2,125],[/hamburger|cheeseburger|\bburgers?\b/,250,13,11,24,1.5,220],[/kebab|\btacos\b|durum/,215,11,10,20,1.5,350],[/sandwich|panini/,250,11,9,30,2,200],
+ [/sushis?|makis?|california/,150,6,2.5,26,0.8,30],[/quiche/,260,9,18,16,1,150],[/omelette/,155,11,12,1,0,120],[/oeufs? brouilles/,150,10,11,1.5,0,120],
+ [/skyr/,63,11,0.2,3.8,0,150],[/fromage blanc (0|maigre)/,45,7.5,0.2,4,0,100],[/yaourts? (aux|a la|au) (fruits?|fraises?|vanille|framboises?|peches?|abricots?|cerises?)/,95,3.5,2.5,14,0.3,125],
+ [/lait entier/,64,3.2,3.6,4.8,0,200],[/lait ecreme/,34,3.4,0.1,5,0,200],[/cafe au lait|cappuccino|latte/,45,2.5,1.8,4.5,0,200],[/\bcafe\b|expresso|espresso/,2,0.1,0,0.3,0,100],[/\bthe\b|tisane|infusion/,1,0,0,0.2,0,250],[/^eau\b|\beau (plate|gazeuse|petillante)/,0,0,0,0,0,250],
+ [/\bbrie\b|camembert|coulommiers/,290,20,23,0.5,0,30],[/comte|gruyere|beaufort/,410,27,34,0,0,30],[/raclette|reblochon|\btomme\b|morbier/,340,23,27,0.5,0,30],[/roquefort|\bbleu\b/,360,20,31,0.5,0,30],[/cancoillotte/,130,14,6,5,0,30],
+ [/mozzarella (light|allegee)|mozzarella .*allegee/,165,19,9,1.5,0,125],[/babybel|vache qui rit|portions? de fromage/,250,15,20,3,0,20],[/halloumi/,320,22,25,2,0,100],[/fromage (a la )?grec/,265,14,21,1,0,100,100],[/gouda/,360,25,28,0,0,30,50],
+ [/aioli|mayonnaise/,700,1.5,77,1.5,0,15,25],[/vinaigrette/,450,0.5,48,4,0,15],[/^olives?\b|\bolives? (noires?|vertes?|kalamata)/,150,1,15,1,3,4,40],[/tzatziki/,90,4,6,4,0.5,30],[/guacamole/,160,2,14,5,6,30],[/harissa/,60,2,3,6,4,5],[/sauce tomate/,50,1.5,2,6,1.3],
+ [/poulet (roti|cuit|grille)/,165,30,4.5,0,0,120],[/nuggets?/,260,15,15,17,1,20],[/cordon bleu/,240,14,12,18,1,100],[/surimi/,110,8,1,17,0,15],[/fruits de mer/,85,15,1.5,2,0],[/boulettes?/,230,15,16,6,0.5,25],
+ [/fenouil/,31,1.2,0.2,4.2,2.2,250],[/endives?/,17,1,0.1,2.5,1.1,120],[/betteraves?/,43,1.6,0.2,8.5,2.5,150],[/asperges?/,24,2.4,0.2,2.5,1.8,20],[/artichauts?/,35,2.5,0.2,4.5,4,40,240],[/\bkakis?\b/,70,0.6,0.2,16,2.5,200],
+ [/radis/,15,0.8,0.1,2,1.2,10],[/navets?/,22,0.9,0.1,3.8,2,120],[/panais/,70,1.4,0.4,13,4,150],[/celeri branche|branches? de celeri/,16,0.7,0.2,1.4,1.6,40,40],[/carotte et choux?|melange de carotte/,30,1,0.2,5,2.5,150,150],
+ [/^legumes?\b|ratatouille|poelee de legumes|legumes (grilles|du jour|vapeur|surgeles|sautes)/,40,1.5,1.5,5,2.5,200],[/^soupe|^veloute|^potage/,40,1.5,1.5,5,1.5,250],
+ [/sucrine|laitue|batavia|feuille de chene|mesclun|romaine|iceberg/,15,1.3,0.2,1.7,1.5,100],[/pak ?cho[iy]|bok ?cho[iy]/,13,1.5,0.2,1.2,1,150],
+ [/\boranges?\b/,47,0.9,0.1,9,2,150],[/fraises?/,33,0.7,0.3,6,2,15],[/framboises?/,52,1.2,0.7,5,6.5,5],[/myrtilles?/,57,0.7,0.3,12,2.4,1],[/fruits? de la passion/,97,2.2,0.7,11,10,20],[/litchis?/,66,0.8,0.4,15,1.3,15],
+ [/fruits? secs?|melange de noix/,520,14,40,30,7],[/graines? de courge/,570,30,49,5,6],[/graines? de lin/,530,18,42,2,27],[/graines? de tournesol/,600,21,51,11,9],
+ [/bonbons?|confiserie/,350,0,0,85,0,5],[/mousse au chocolat/,220,5,14,20,1.5,100],[/creme dessert|danette/,125,3,3.5,20,0.5,125],[/barres? chocolatees?|\bmars\b|snickers|twix|kinder/,480,6,23,60,1.5,45],
+ [/gateau|\bcake\b|quatre quarts/,400,5.5,20,50,1,60],[/tarte (aux|au|a la) /,280,4,13,36,1.5,120],
+ [/\b(coca|cola|soda)s?\b.*\b(zero|light)\b|\b(zero|light)\b.*\b(coca|cola|soda)/,0.5,0,0,0.1,0,330],[/\b(sodas?|coca|cola|limonade|ice tea|fanta|sprite|orangina)\b/,42,0,0,10.5,0,330],
+ [/biere/,43,0.4,0,3.5,0,250],[/champagne|\bcidre\b/,70,0.2,0,3,0,125],[/jus d orange|jus de (pomme|fruits?|raisin|ananas)/,45,0.6,0.1,10,0.2,200]);
+// une portion habituelle quand rien n'est précisé
+defPortion=function(n){return/amande|noix|noisette|cajou|pistache|cacahuete|graine|chocolat|biscuit|cookie|chips|secs?\b|dattes?|pruneau|granola|muesli|fromage(?! blanc)|emmental|comte|chevre|feta/.test(n)?30:/flocons|cereale/.test(n)?40:/yaourt|skyr|fromage blanc|compote/.test(n)?125:/lait|jus|smoothie|soda|biere/.test(n)?200:/\briz\b|pates|semoule|couscous|quinoa|boulgour|lentille|puree|pois chiche/.test(n)?180:100};
+const UNIT_W=[[/\bbols?\b/,250],[/\bmugs?\b/,300],[/\btasses?\b/,200],[/\bcanettes?\b/,330],[/\bbouteilles?\b/,500],[/\bassiettes?\b/,300],[/\bverres?\b/,200],[/\bpots?\b/,125],[/\bsachets?\b/,30],[/\bboules?\b/,50],[/\bmorceaux?\b/,30],[/\bpoignees?\b/,30],[/\bcarres?\b/,6],[/\bpincees?\b/,0.5],[/\bc(uilleres?|\.)? ?(a|à)? ?s(oupe)?\b|\bcs\b|\bcas\b|cuilleres? (a|à) soupe/,15],[/\bc(uilleres?|\.)? ?(a|à)? ?c(afe)?\b|\bcc\b|\bcac\b|cuilleres? (a|à) cafe/,5]];
+const ZERO_OK=/^eau\b|\beau |\bcafe\b|expresso|espresso|\bthe\b|tisane|infusion|zero|light/;
+// aliment + quantité (« 2 kiwis », « 30 g d'amandes », « 1 bol de riz », « une petite banane ») → valeurs
+estimateFood=function(name,qty,defG){name=String(name||"").trim();if(name.length<2)return null;let txt=String(qty||"").trim(),nm=name;
+ if(!txt){const x=parseIngLine(name);if(x&&x.name&&x.txt&&x.txt!=="selon le goût"&&(x.qty||x.unit===null)){txt=x.txt;nm=x.name}}
+ const nn=nrmS(nm).replace(/\s+/g," ").trim();const e=NUTDB.find(z=>z[0].test(nn));if(!e||(e[1]===0&&e[2]===0&&!ZERO_OK.test(nn)))return null;
+ const t=nrmS(txt);const both=nn+" "+t;const size=/\bpetite?s?\b/.test(both)?0.7:/\b(grosse?s?|grande?s?|gros)\b/.test(both)?1.3:1;let g,m,def=false;
+ if((m=t.match(/(\d+(?:[.,]\d+)?)\s*(kg|grammes?|gr|g|ml|cl|l)(?![a-z])/)))g=parseFloat(m[1].replace(",","."))*({kg:1000,cl:10,l:1000}[m[2]]||1);
+ else{m=t.match(/(\d+\s?\/\s?\d+|\d+(?:[.,]\d+)?|[½¼¾]|une?|deux|trois|quatre|cinq|demie?)/);const n=m?(/demi/.test(m[1])?0.5:(qVal(m[1].replace(/\s/g,""))||1)):1;let w=null;
+  const ut=t+" "+nn.replace(/^(bol|mug|tasse|verre|assiette|canette|bouteille|pot|sachet|boule|morceau|poignee|carre)s? (de |d )?/,"$1 ");if(/\bverres?\b/.test(ut)&&/\bvin\b|champagne/.test(nn))w=125;else for(const[re,v]of UNIT_W)if(re.test(ut)){w=v;break}
+  if(w===15&&/huile/.test(nn))w=13.5;
+  if(w==null){if(/\btranches?\b/.test(ut))w=e[7]||35;else if(/\bparts?\b/.test(ut))w=e[6]||150;else if(/\bbarres?\b/.test(ut))w=e[6]||25}
+  if(w==null){const dp=defPortion(nn);w=(e[6]||(dp!==100?dp:(defG||100)))*size;if(!m)def=true}
+  g=n*w}
+ if(!(g>0))return null;g=Math.min(g,3000);
+ let cf=1;if(e[1]>250&&!/\b(crus?|crues?|secs?|seches?)\b|galette|gateau|lait|farine|biscuit|barre|cracker|souffle/.test(nn)){const ck=COOKED.find(z=>z[0].test(nn));if(ck)cf=ck[1]}
+ const r=g/100*cf;return{g:Math.round(g),k:Math.round(e[1]*r),p:r1(e[2]*r),f:r1(e[3]*r),c:r1(e[4]*r),fi:r1(e[5]*r),def,cooked:cf!==1}};
+// plusieurs aliments d'un coup : « pomme + 30 g d'amandes », « poulet, riz et haricots verts »
+const PART_SEP=/\s*(?:\+|,|;|\bet\b|\bavec\b|\bpuis\b)\s*/;
+const cantCalcV10=cantCalc;
+const capF=x=>x.charAt(0).toUpperCase()+x.slice(1);
+function dishCover(p){const x=/\d/.test(p)?parseIngLine(p):null;const t=" "+nrmA((x&&x.name)||p).replace(/[^a-z0-9]+/g," ").trim()+" ";if(CANT_FREE.some(([re])=>re.test(t)))return 1;
+ let cov=0,u=t;for(const[re]of CANT_IDX){const m=u.match(re);if(m){cov+=m[0].trim().length;u=u.replace(m[0]," | ")}}const L=t.replace(/\b(de|du|des|d|la|le|les|l|a|au|aux|en|un|une)\b/g,"").replace(/\s+/g,"").length;return L?cov/L:0}
+function partCalc(p,defG){if(dishCover(p)>=0.6){const C=cantCalcV10(p);if(C)return C}
+ const E=estimateFood(p,"",defG);if(E)return{k:E.k,p:E.p,f:E.f,c:E.c,fi:E.fi,lab:capF(p.trim())+" · "+fmtInt(E.g)+" g"+(E.cooked?" cuits":""),miss:[]};
+ return cantCalcV10(p)}
+cantCalc=function(v,defG){const parts=String(v||"").split(PART_SEP).map(x=>x.trim()).filter(x=>/[a-zà-ÿ]{2}/i.test(x));if(!parts.length)return null;
+ const T={k:0,p:0,f:0,c:0,fi:0},labs=[],miss=[];for(const p of parts){const E=partCalc(p,defG);if(!E){miss.push(p);continue}for(const k in T)T[k]+=E[k];labs.push(E.lab);miss.push(...(E.miss||[]))}
+ if(!labs.length)return null;return{k:Math.round(T.k),p:r1(T.p),f:r1(T.f),c:r1(T.c),fi:r1(T.fi),lab:labs.join(" + "),miss}};
+function foodCalc(n,q){n=String(n||"").trim();q=String(q||"").trim();if(n.length<2)return null;
+ if(q){const E=estimateFood(n,q);if(E)return{...E,lab:fmtInt(E.g)+" g"+(E.cooked?" cuits":""),miss:[]}}
+ return cantCalc(n)}
+// produits du commerce : Open Food Facts quand l'aliment n'est pas dans la base
+const OFF_EST={};let offEstT=null;
+function offEstimate(n,q,cb){const key=nrmS(n);if(key.length<3||!HOSTED)return;if(key in OFF_EST){cb(OFF_EST[key]);return}clearTimeout(offEstT);
+ offEstT=setTimeout(async()=>{let r=null;try{const L=await offSearch(n);const p=(L||[]).find(x=>x.k100!=null);if(p)r=p}catch(e){}OFF_EST[key]=r;cb(r)},700)}
+function offVals(p,q){const t=nrmS(q||"");const m=t.match(/(\d+(?:[.,]\d+)?)\s*(kg|g|ml|cl|l)\b/);let g=m?parseFloat(m[1].replace(",","."))*({kg:1000,cl:10,l:1000}[m[2]]||1):null;
+ if(g==null){const n=(t.match(/(\d+(?:[.,]\d+)?)/)||[])[1];g=(p.sq||100)*(n?parseFloat(n.replace(",",".")):1)}const r=g/100;
+ return{g:Math.round(g),k:Math.round(p.k100*r),p:r1((p.p100||0)*r),f:r1((p.f100||0)*r),c:r1((p.c100||0)*r),fi:r1((p.fi100||0)*r),lab:p.n+(p.brand?" ("+p.brand+")":"")+" · "+Math.round(g)+" g"}}
+const estShort=(E,ic)=>`${ic||"🧮"} ${esc(E.lab)} → <b>${fmtInt(E.k)} kcal</b>`;
+LOG_QUICK.splice(0,LOG_QUICK.length,...LOG_QUICK.filter(x=>["Pomme","Banane","Kiwi","Amandes","Skyr","Yaourt grec 0 %","Carrés de chocolat noir","Œuf dur"].includes(x[0])));
+logEstimate=function(){const f=document.getElementById("logForm");if(!f)return;const n=f.elements.n.value,q=f.elements.q.value;const out=document.getElementById("logEst");
+ const fill=E=>{["k","p","f","c","fi"].forEach(x=>{const el=f.elements[x];if(!el||el.dataset.man==="1")return;if(E){el.value=E[x];el.dataset.auto="1"}else if(el.dataset.auto==="1"){el.value="";el.dataset.auto=""}})};
+ const E=foodCalc(n,q);fill(E);if(!out)return;
+ if(E){out.innerHTML=estShort(E)+(E.miss&&E.miss.length?` · <span class="muted">non compté : ${esc(E.miss.join(", "))}</span>`:"");return}
+ if(n.trim().length<3){out.textContent="";return}
+ out.textContent=HOSTED?"🔎 Recherche…":"Aliment inconnu : indique les kcal.";
+ offEstimate(n,q,p=>{const f2=document.getElementById("logForm");if(!f2||f2.elements.n.value!==n)return;if(!p){out.textContent="Aliment inconnu : indique les kcal.";return}const V=offVals(p,f2.elements.q.value);fill(V);out.innerHTML=estShort(V,"🔎")})};
+cantEstimate=function(){const n=document.getElementById("ctN");if(!n)return;const E=cantCalc(n.value);const map={ctK:"k",ctP:"p",ctF:"f",ctC:"c",ctFi:"fi"};
+ for(const id in map){const el=document.getElementById(id);if(!el||el.dataset.man==="1")continue;if(E){el.value=String(E[map[id]]).replace(".",",");el.dataset.auto="1"}else if(el.dataset.auto==="1"){el.value="";el.dataset.auto=""}}
+ const out=document.getElementById("ctEst");if(out){if(E)out.innerHTML=estShort(E)+(E.miss.length?` · <span class="muted">non compté : ${esc(E.miss.join(", "))}</span>`:"");else out.textContent=n.value.trim().length>2?"Plat inconnu : indique les kcal.":""}};
+
+// ---------- recettes : lipides, glucides et fibres calculés à partir des ingrédients ----------
+function ingGrams(id,q){const u=ING[id][2],n=nrmS(ING[id][0]);
+ if(u===null){if(typeof q!=="string")return 0;const gm=nrmS(q).match(/(\d+(?:[.,]\d+)?)\s*(kg|g|gr|ml|cl|l)\b/);if(gm)return parseFloat(gm[1].replace(",","."))*({kg:1000,cl:10,l:1000}[gm[2]]||1);const g=spoonG(q,n);if(g!=null)return g;const m=q.match(/^\s*(\d+(?:[.,]\d+)?)\s*$/);return m&&/cornichon|olive|capre/.test(n)?parseFloat(m[1])*8:0}
+ if(typeof q!=="number")return null;if(u==="g"||u==="ml")return q;let g=null;try{g=approxG(id,q)}catch(e){}return g||gramsOf(id,q)}
+function recipeNutCalc(r){const T={k:0,p:0,f:0,c:0,fi:0};let unk=0;
+ for(const[id,q]of r.i){if(!ING[id])continue;const n=nrmS(ING[id][0]);const e=NUTDB.find(z=>z[0].test(n));const g=ingGrams(id,q);if(!e||g==null){if(ING[id][2]!==null)unk++;continue}const m=g/100;T.k+=e[1]*m;T.p+=e[2]*m;T.f+=e[3]*m;T.c+=e[4]*m;T.fi+=e[5]*m}
+ const div=r.snack?(r.yieldN||1):(r.base||2);for(const x in T)T[x]/=div;return{T,unk}}
+function recipeNutFill(r){if(r.nut&&r.nut.f!=null&&r.nut.c!=null&&r.nut.fi!=null)return;const{T}=recipeNutCalc(r);
+ const k=r.k>0?r.k:Math.round(T.k),p=r.pr>0?r.pr:r1(T.p);let f,c,fi=T.fi;const rest=k-4*p,efc=9*T.f+4*T.c;
+ if(T.k>=k*0.45&&efc>0&&rest>0){const s=Math.max(0.6,Math.min(1.6,rest/efc));f=T.f*s;c=T.c*s}else{f=k*0.3/9;c=Math.max(0,(k-4*p-9*f)/4);fi=Math.max(fi,5)}
+ r.nut={k,p,f:r1(f),c:r1(c),fi:r1(Math.min(45,fi)),est:true};if(!r.k)r.k=k;if(!r.pr)r.pr=Math.round(p)}
+RECIPES.forEach(recipeNutFill);
+rNut=function(r){if(!r.nut||r.nut.f==null)recipeNutFill(r);return r.nut||{k:r.k||0,p:r.pr||0,f:null,c:null,fi:null}};
+
+// ---------- Suivi : une couleur par indicateur ----------
+const MC={k:["Calories","kcal","var(--m-k)"],p:["Protéines","g","var(--m-p)"],f:["Lipides","g","var(--m-f)"],c:["Glucides","g","var(--m-c)"],fi:["Fibres","g","var(--m-fi)"]};
+METRICS.f=["Lipides"," g"];METRICS.c=["Glucides"," g"];
+const CH_ORDER=[["k","Kcal"],["p","Prot."],["f","Lip."],["c","Gluc."],["fi","Fibres"],["s","Score"]];
+const mdot=x=>`<i class="mdot" style="--c:${MC[x]?MC[x][2]:"var(--muted)"}"></i>`;
+function gaugeRow(x,v,t){const pct=t?v/t:0;const flag=x==="f"?(v>t*1.1?"↑":""):x==="c"?(v>t*1.15?"↑":""):(pct>=0.9?"✓":"");
+ return`<div class="mg" style="--c:${MC[x][2]}"><span class="mg-l">${mdot(x)}${MC[x][0]}</span><span class="mg-bar" aria-hidden="true"><i style="width:${Math.min(100,pct*100).toFixed(1)}%"></i></span><span class="mg-v">${fmtG(r1(v))}<small>/${t} g</small>${flag?`<em>${flag}</em>`:""}</span></div>`}
+function ringK(p){const S=120,sw=12,r=(S-sw)/2,c=2*Math.PI*r,a=Math.max(0,Math.min(1,p||0));
+ return`<svg viewBox="0 0 ${S} ${S}" class="ring" aria-hidden="true"><circle cx="60" cy="60" r="${r}" class="rg-bg" stroke-width="${sw}" fill="none"/>${a>0?`<circle cx="60" cy="60" r="${r}" stroke="var(--m-k)" stroke-width="${sw}" fill="none" stroke-dasharray="${(c*a).toFixed(1)} ${c.toFixed(1)}" transform="rotate(-90 60 60)" stroke-linecap="round"/>`:""}</svg>`}
+function chartM(items,m,tgt){const W=320,H=170,L=6,R=6,T=22,B=36,n=items.length,bw=(W-L-R)/n;const vals=items.map(it=>it.v?Number(it.v[m])||0:0);const max=Math.max(tgt*1.25,...vals)*1.12||1;const y=v=>T+(H-T-B)*(1-v/max);
+ const col=MC[m]?MC[m][2]:"var(--muted)";let g="";const ti=items.findIndex(it=>it.today);
+ if(ti>=0){const sx=L+(ti+1)*bw;g+=`<rect class="futbg" x="${sx}" y="${T-14}" width="${W-R-sx}" height="${H-B-T+16}" rx="6"/><text class="sepl" x="${sx+5}" y="${T-4}">prévu</text>`}
+ items.forEach((it,i)=>{const v=vals[i],x=L+i*bw,cx=x+bw/2,w=Math.min(16,bw*0.6);const sel=ui.chSel===it.d;
+  g+=`<g class="cb${it.fut?" fut":""}${sel?" sel":""}" data-bar="${it.d}"><rect x="${x}" y="${T-14}" width="${bw}" height="${H-T+14}" fill="transparent"/>`;
+  g+=!(it.v&&v>0)?`<rect class="bar none" x="${cx-w/2}" y="${y(0)-2}" width="${w}" height="2" rx="1"/>`:`<rect class="mbar" x="${cx-w/2}" y="${y(v)}" width="${w}" height="${Math.max(2,y(0)-y(v))}" rx="4" fill="${col}"${it.fut?' fill-opacity=".45"':""}/>`;
+  if(sel&&it.v&&v>0)g+=`<text class="vl" x="${cx}" y="${y(v)-5}" text-anchor="middle">${m==="k"||m==="s"?fmtInt(v):fmtG(r1(v))}</text>`;
+  const wd=it.date.toLocaleDateString("fr-FR",{weekday:"short"}).replace(".","").slice(0,1).toUpperCase();
+  g+=(it.today?`<rect class="tdy" x="${cx-11}" y="${H-B+5}" width="22" height="29" rx="8"/>`:"")+`<text class="xl${it.today?" on":""}" x="${cx}" y="${H-B+17}" text-anchor="middle">${wd}</text><text class="xs${it.today?" on":""}" x="${cx}" y="${H-B+29}" text-anchor="middle">${it.date.getDate()}</text></g>`});
+ const ty=y(tgt);g+=`<line class="tgt" x1="${L}" x2="${W-R}" y1="${ty}" y2="${ty}"/>`;
+ return`<svg viewBox="0 0 ${W} ${H}" class="chart" role="img" aria-label="${esc(METRICS[m][0])} sur 13 jours, objectif ${fmtInt(tgt)}${METRICS[m][1]}">${g}</svg>`}
+const shortDay=d=>dateFromYmd(d).toLocaleDateString("fr-FR",{weekday:"short",day:"numeric",month:"short"}).replace(/\./g,"");
+renderSuivi=function(){const el=document.getElementById("suivi");if(!el)return;
+ if(!ui.ntDay||!DAYS.some(d=>d[0]===ui.ntDay))ui.ntDay=DAYS[0][0];const pi=ui.ntP||0,P=state.people[pi],t=P.t,O=state.people[1-pi],today=DAYS[0][0];
+ const{rows,tot}=dayData(ui.ntDay,pi);const sc=dayScore(tot,t),fut=ui.ntDay>today;const oT=dayData(ui.ntDay,1-pi).tot,osc=dayScore(oT,O.t);const G=gameOf(pi);
+ const nSt=sc==null?0:sc>=85?3:sc>=70?2:sc>=50?1:0;const stars=sc==null?"":"★".repeat(nSt)+"☆".repeat(3-nSt);const left=t.k-tot.k;
+ const head=`<div class="sv-top"><div class="seg" role="group" aria-label="Personne">${state.people.map((p,i)=>`<button type="button" data-ntp="${i}" aria-pressed="${i===pi}">${esc(p.n)}</button>`).join("")}</div><button type="button" class="btn small" data-act="sv-profile">⚙️ Profil</button></div>`;
+ const cta=P.prof?"":`<div class="sv-card sv-cta"><p><b>🎯 Complète le profil de ${esc(P.n)}</b> pour calculer ses besoins.</p><button type="button" class="btn primary" data-act="sv-profile">Compléter</button></div>`;
+ const day=`<div class="sv-card"><div class="chips nt-days" role="group" aria-label="Jour">${DAYS.map(([d,l],i)=>`<button type="button" class="chip" data-ntday="${d}" aria-pressed="${d===ui.ntDay}">${i===0?"Aujourd'hui":i===1?"Demain":l.slice(0,3)+". "+dateFromYmd(d).getDate()}</button>`).join("")}</div>
+  <div class="sv-hero"><div class="sv-ring">${ringK(t.k?tot.k/t.k:0)}<div class="sv-ring-c"><b>${fmtInt(tot.k)}</b><span>/ ${fmtInt(t.k)} kcal</span></div></div>
+   <div class="sv-hero-txt"><p class="sv-left">${left>=0?`Reste <b>${fmtInt(left)}</b> kcal`:`<b>+${fmtInt(-left)}</b> kcal ↑`}</p>
+    <button type="button" class="sv-sc" data-act="why-go" aria-label="Score ${sc==null?"non calculé":sc} sur 100, voir pourquoi"><b>${sc==null?"–":sc}</b><span>${fut?"score prévu":"score"}<em>${stars}</em></span></button>
+    ${G.cur?`<span class="sv-chip">🔥 ${G.cur} j</span>`:""}</div></div>
+  <div class="sv-gauges">${["p","f","c","fi"].map(x=>gaugeRow(x,tot[x],t[x])).join("")}</div>
+  ${cantPrompt(ui.ntDay,pi)}
+  <ul class="nt-list">${rows.length?rows.map(row=>row.type==="meal"?`<li class="${row.on?"":"off"}"><span class="nt-tag">${row.ml}</span><span class="nt-name">${esc(short(row.r))}<small>${!row.on&&atCant(row.k,pi)&&state.skip[row.k+"-"+pi]===undefined?"Cantine":`${Math.round(row.n.k)} kcal · ${Math.round(row.n.p)} g prot.`}</small></span><button type="button" class="nt-tog" data-nttog="${row.k}" aria-pressed="${row.on}">${row.on?"✓ Mangé":"Pas mangé"}</button></li>`:`<li><span class="nt-tag enc${row.it.src==="cant"?" cant":""}">${row.it.src==="cant"?"Cantine":"Encas"}</span><span class="nt-name">${esc(row.it.n)}<small>${row.it.q?esc(row.it.q)+" · ":""}${Math.round(row.it.k)} kcal</small></span><button type="button" class="nt-del" data-ntdel="${row.i}" aria-label="Retirer ${esc(row.it.n)}">×</button></li>`).join(""):`<li class="nt-empty">Rien de prévu ${dayLabel(ui.ntDay)}.</li>`}</ul>
+  <div class="sv-acts"><button type="button" class="btn primary" data-act="nt-add">+ Encas</button><button type="button" class="btn" data-act="cant-open">🍽️ Cantine</button></div>
+  <p class="nt-other">🤝 ${esc(O.n)} : ${fmtInt(oT.k)} / ${fmtInt(O.t.k)} kcal${osc!=null?` · score ${osc}`:""}</p></div>`;
+ // tendance
+ const m=METRICS[ui.chM]?ui.chM:"k";const S=seriesFor(pi);if(!S.some(it=>it.d===ui.chSel))ui.chSel=today;const tgt=m==="s"?70:t[m];const u=m==="k"?" kcal":m==="s"?"":" g";const fv=v=>m==="k"||m==="s"?fmtInt(v):fmtG(r1(v));
+ const sel=S.find(it=>it.d===ui.chSel);const pastV=S.filter(it=>it.i<=0&&it.v);const av=avg(pastV.map(it=>Number(it.v[m])||0));
+ const trendC=`<div class="sv-card"><div class="sv-h"><h3>Tendance</h3></div><div class="chips sv-mchips" role="group" aria-label="Indicateur">${CH_ORDER.map(([k,l])=>`<button type="button" class="chip" data-chm="${k}" aria-pressed="${k===m}">${MC[k]?mdot(k):""}${l}</button>`).join("")}</div>
+  ${chartM(S,m,tgt)}
+  <p class="sv-mini"><span class="dashk"></span> objectif ${fv(tgt)}${u}${sel&&sel.v?` · <b>${esc(shortDay(sel.d))}</b> : ${fv(Number(sel.v[m])||0)}${u}`:""}${pastV.length>1?` · moy. ${fv(av)}${u}`:""}</p></div>`;
+ // poids
+ const w=P.w||[],pr=P.prof,goalKg=pr&&pr.goalKg,curKg=w.length?w[w.length-1][1]:(pr&&pr.kg),start=(pr&&pr.startKg)||(w[0]&&w[0][1]);
+ const tr=wTrend(w);const calc=pr?calcTargets(pr):null;const rate=tr!=null?tr:(calc?calc.delta/7700:null);let proj=null,eta="";
+ if(goalKg&&curKg&&rate){const days=(goalKg-curKg)/rate;if(days>0&&days<730){proj={t:Date.now()+days*864e5};eta=`🎯 vers le <b>${new Date(proj.t).toLocaleDateString("fr-FR",{day:"numeric",month:"short",year:"numeric"}).replace(".","")}</b> · ${rate>0?"+":"−"}${fmtG(r1(Math.abs(rate*7)))} kg/sem.`}}
+ if(goalKg&&curKg&&Math.abs(goalKg-curKg)<0.3)eta="🎉 Poids visé atteint !";
+ const prog=start&&goalKg&&curKg&&Math.abs(goalKg-start)>=0.3?Math.max(0,Math.min(1,(curKg-start)/(goalKg-start))):null;
+ const weightC=`<div class="sv-card"><div class="sv-h"><h3>Poids</h3>${prog!=null?`<span class="muted small">${Math.round(prog*100)} % du chemin</span>`:""}</div>
+  ${curKg?`<div class="sv-wstats"><div><span>Départ</span><b>${start?fmtG(start):"–"}</b></div><div><span>Actuel</span><b>${fmtG(curKg)}</b>${start&&curKg!==start?`<small class="${(curKg-start)*(pr&&pr.goal==="masse"?1:-1)>0?"good":"bad"}">${curKg>start?"+":"−"}${fmtG(r1(Math.abs(curKg-start)))}</small>`:""}</div><div><span>Objectif</span><b>${goalKg?fmtG(goalKg):"–"}</b></div></div>`:""}
+  ${w.length>=2?chartWeight(w.slice(-60),goalKg,proj):""}${eta?`<p class="sv-mini">${eta}</p>`:""}
+  <form class="sv-wform" id="wForm" autocomplete="off"><label class="fl">Pesée du jour (kg)<input class="pn-in" name="kg" type="number" min="30" max="300" step="0.1" inputmode="decimal" placeholder="${curKg?fmtG(curKg).replace(",","."):"72.5"}" required></label><button type="submit" class="btn primary">Noter</button></form>
+  ${w.length?`<details class="sv-wlist"><summary>Mes pesées (${w.length})</summary>${w.slice(-8).reverse().map(([d,kg])=>`<div class="sv-wrow"><span>${esc(shortDay(d))}</span><b>${fmtG(kg)} kg</b><button type="button" class="nt-del" data-wdel="${d}" aria-label="Supprimer la pesée du ${d}">×</button></div>`).join("")}</details>`:""}</div>`;
+ // progression
+ const nx=lvlXp(G.L+1),pv=lvlXp(G.L);const got=G.B.filter(b=>b[3]);
+ const gameC=`<div class="sv-card game"><div class="sv-h"><h3>Progression</h3><span class="lvl">Niv. ${G.L} · ${LVL_T[Math.min(G.L-1,LVL_T.length-1)]}</span></div>
+  <span class="sv-bar big xp" aria-hidden="true"><i style="width:${Math.min(100,(G.xp-pv)/(nx-pv)*100).toFixed(1)}%"></i></span><p class="sv-mini">${fmtInt(G.xp)} XP · encore ${fmtInt(nx-G.xp)} pour le niveau ${G.L+1}</p>
+  <p class="sv-mini">🔥 ${G.cur} j de suite · 🏅 record ${G.rec} · 🤝 ${G.duo} en duo</p>
+  ${got.length?`<div class="sv-got">${got.map(([e,ti,de])=>`<span class="sv-chip2" title="${esc(de)}">${e} ${esc(ti)}</span>`).join("")}</div>`:""}
+  <details class="sv-wlist"><summary>Badges ${G.earned}/${G.B.length}</summary><div class="badges">${G.B.map(([e,ti,de,ok,pg])=>`<div class="badge-c${ok?" on":""}" title="${esc(de)}"><span class="be">${ok?e:"🔒"}</span><b>${esc(ti)}</b><small>${esc(ok?de:(pg?pg+" · ":"")+de)}</small></div>`).join("")}</div></details></div>`;
+ // besoins
+ const needC=`<div class="sv-card"><div class="sv-h"><h3>Besoins</h3><button type="button" class="link" data-act="sv-profile">Modifier</button></div>
+  <div class="sv-need">${[["k",fmtInt(t.k)],["p",t.p+" g"],["f",t.f+" g"],["c",t.c+" g"],["fi",t.fi+" g"]].map(([x,v])=>`<div><span>${mdot(x)}${MC[x][0]}</span><b>${v}</b></div>`).join("")}</div>
+  <p class="sv-mini">${pr&&pr.auto&&calc?`Dépense ${fmtInt(calc.tdee)} kcal/j · ${esc(GOALS[pr.goal].l.toLowerCase())} → ${fmtInt(t.k)} kcal`:pr?"Réglé à la main.":"Valeurs par défaut."}</p>
+  ${pr&&goalKg&&pr.cm&&goalKg/((pr.cm/100)**2)<18.5?`<p class="sv-warn">Poids visé sous un IMC de 18,5 : demande l'avis d'un professionnel de santé.</p>`:""}</div>`;
+ el.innerHTML=head+cta+day+whyCard(ui.ntDay,pi)+trendC+weightC+gameC+needC+`<p class="sv-disc">Estimations, pas un avis médical.</p>`};
+// ---------- « Pourquoi ce score ? » en version courte ----------
+whyCard=function(d,pi){const P=state.people[pi],t=P.t,today=DAYS[0][0],fut=d>today;const{rows,tot}=dayData(d,pi);const T={k:tot.k||0,p:tot.p||0,f:tot.f||0,c:tot.c||0,fi:tot.fi||0};
+ const sc=dayScore(T,t),S=scoreParts(T,t),goal=(P.prof&&P.prof.goal)||goalNow();const lim=Math.round(t.f*1.1);
+ const fatTop=rows.map(r=>r.type==="meal"?(r.on?{n:short(r.r),f:r.n.f}:null):{n:r.it.n,f:r.it.f}).filter(x=>x&&x.f!=null).sort((a,b)=>b.f-a.f)[0];
+ const line=(x,pts,max,txt)=>`<div class="why-row" style="--c:${MC[x][2]}"><span class="why-l">${mdot(x)}${MC[x][0]}</span><span class="why-d">${txt}</span><b>${Math.round(pts)}<small>/${max}</small></b><span class="mg-bar" aria-hidden="true"><i style="width:${(pts/max*100).toFixed(0)}%"></i></span></div>`;
+ const kTxt=T.k<t.k*0.9?`−${fmtInt(t.k-T.k)} kcal`:T.k>t.k*1.1?`+${fmtInt(T.k-t.k)} kcal`:"✓";
+ const pTxt=T.p<t.p?`−${fmtG(r1(t.p-T.p))} g`:"✓",fiTxt=T.fi<t.fi?`−${fmtG(r1(t.fi-T.fi))} g`:"✓";
+ const fTxt=T.f>lim?`+${fmtG(r1(T.f-lim))} g${fatTop?` · ${esc(fatTop.n)}`:""}`:"✓";
+ const L=(state.log[d]&&state.log[d][pi])||[];const notes=[];
+ if(atCant(d+"-midi",pi)&&!L.some(it=>it.src==="cant"))notes.push("Plateau de cantine non noté.");
+ const sug=[];ui.why={d,pi,picks:[]};const slots=slotSuggest(d,pi,T,t);let T2=T;
+ slots.forEach(x=>{const n=nutOr(rNut(x.r));T2=addT(T2,n);sug.push(`<li><span class="why-t">🍽️ <b>${x.ml}</b> · ${esc(short(x.r))} <small>${Math.round(n.k)} kcal</small></span><button type="button" class="btn small" data-whyplan="${x.k}|${x.r.id}">Ajouter</button></li>`)});
+ const sw=swapSuggest(d,pi,T,t);if(sw)sug.push(`<li><span class="why-t">🔁 <b>${sw.ml}</b> · ${esc(short(sw.r))} <small>${sw.dk<0?"−":"+"}${fmtInt(Math.abs(sw.dk))} kcal</small></span><button type="button" class="btn small" data-whyswap="${sw.k}|${sw.r.id}">Remplacer</button></li>`);
+ const B=boostPlan(T2,t,goal);ui.why.picks=B.picks;
+ B.picks.forEach((it,i)=>sug.push(`<li><span class="why-t">➕ ${esc(it.n)} <small>${Math.round(it.k)} kcal · ${Math.round(it.p)} g prot.</small></span><button type="button" class="btn small" data-whyboost="${i}">${fut?"Prévoir":"Noter"}</button></li>`));
+ const est=dayScore(B.T,t);const better=(slots.length||B.picks.length)&&est!=null&&est>(sc||0);
+ return`<details class="sv-card sv-why" id="whyCard"${sc!=null&&sc<85?" open":""}><summary><b>Pourquoi ce score ?</b><span class="why-badge">${sc==null?"–":sc}<small>/100</small></span></summary>
+  <div class="why-parts">${line("k",S.k,40,kTxt)}${line("p",S.p,30,pTxt)}${line("fi",S.fi,15,fiTxt)}${line("f",S.f,15,fTxt)}</div>
+  ${notes.length?`<p class="sv-mini">⚠️ ${notes.join(" ")}</p>`:""}
+  ${sug.length?`<h4 class="why-h4">Pour atteindre la cible</h4><ul class="why-sugg">${sug.join("")}</ul>${better?`<p class="sv-mini">→ score estimé <b>${est}</b></p>`:""}`:sc!=null&&sc<85&&T.k>t.k*1.1?`<p class="sv-mini">Reste de la journée : légumes et protéines maigres.</p>`:""}</details>`};
+
+// ---------- fiche recette : temps et valeurs en une ligne ----------
+const NUT_SH={k:"kcal",p:"prot.",f:"lip.",c:"gluc.",fi:"fibres"};
+function factsV13(r){const n=(r.k||r.nut)?rNut(r):null;const per=r.snack?(r.unitS||"pièce"):"portion";
+ const items=n&&n.k?[["k",fmtInt(n.k)],["p",fmtG(r1(n.p))+" g"]].concat(n.f!=null?[["f",fmtG(r1(n.f))+" g"],["c",fmtG(r1(n.c))+" g"],["fi",fmtG(r1(n.fi))+" g"]]:[]):[];
+ return`<div class="m-facts">${r.t?`<span class="mf">⏱ ${r.t} min</span>`:""}${r.snack&&r.yieldN?`<span class="mf">${r.yieldN} ${esc(r.yieldU||"")} par fournée</span>`:""}</div>${items.length?`<div class="m-nut" aria-label="Valeurs nutritionnelles par ${per}">${items.map(([x,v])=>`<span>${mdot(x)}<b>${v}</b> ${NUT_SH[x]}</span>`).join("")}<small>par ${esc(per)}</small></div>`:""}`}
 
 setTab(ui.tab);renderAll();initDb();sbStart();
 
