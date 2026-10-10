@@ -772,6 +772,20 @@ textarea.pn-in{resize:vertical;line-height:1.45}
 .log-est:empty,.ct-est:empty{display:none}
 /* le contenu d'un <details> hérite du slot interne (content-box) : on force border-box */
 details *,details *::before,details *::after{box-sizing:border-box}
+/* v12 : mes remplacements */
+.subs{margin:0 0 14px;border:1px solid var(--line);border-radius:var(--r-md);background:var(--surface);padding:10px 14px}
+.subs>summary{cursor:pointer;font-weight:700;list-style:none;display:flex;align-items:center;gap:8px}
+.subs>summary::-webkit-details-marker{display:none}
+.subs>summary::after{content:"▾";margin-left:auto;color:var(--muted)}
+.subs[open]>summary::after{content:"▴"}
+.subs>summary small{background:var(--accent-soft);color:var(--accent);border-radius:999px;padding:1px 8px;font-size:.78rem}
+.subs-list{list-style:none;margin:6px 0 10px;padding:0}
+.subs-list li{display:flex;align-items:center;gap:10px;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--line);font-size:.92rem}
+.subs-list li b{color:var(--accent)}
+.subs-add{display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end}
+.subs-add .fl{flex:1 1 140px}
+.subs-add .btn{flex:0 0 auto}
+.ingx .ix .was{display:block;font-weight:500;font-size:.76rem;color:var(--muted)}
 
 </style>
 </head>
@@ -828,6 +842,7 @@ details *,details *::before,details *::after{box-sizing:border-box}
    <div class="head-actions"><button type="button" class="btn" data-act="copy">Copier la liste</button><button type="button" class="btn ghost" data-act="uncheck">Tout décocher</button></div></div>
   <div class="scanbar" id="scanBar" hidden><button type="button" class="btn primary" data-act="scan-open-c">📷 Scanner un produit</button><button type="button" class="btn" data-act="search-open-c">🔎 Chercher un produit</button></div>
   <div id="budget" class="budget"></div>
+  <details id="subsBox" class="subs"></details>
   <div id="rangeBox" class="rangebox" hidden></div>
   <textarea id="copyArea" class="copy-area" hidden aria-label="Liste de courses à copier"></textarea>
   <div class="progress-row"><div class="progress"><i id="shopBar"></i></div><span id="shopCount"></span></div>
@@ -2086,6 +2101,22 @@ normalize=function(d){const s=normalize0(d);if(!d||typeof d!=="object")return s;
 // rayons corrigés (beurre au frigo, graines et farine au placard, conserves…)
 for(const[id,a]of [["hf_beurre","C"],["miel","P"],["sesame","P"],["graines","P"],["cajou","P"],["beurre_cacahuete","P"],["hf_farine","P"],["panko","P"],["concentre","B"],["cornichons","B"],["olives","B"],["tahini","P"]])if(ING[id])ING[id][1]=a;
 
+// ================= v12 (avant l'état) : mes remplacements (toute huile → huile d'olive…) =================
+ING.vinaigre_cidre=["Vinaigre de cidre","E",null];ING.chapelure_crispy=["Chapelure crispy","P",null];
+const SUB_FAM={"@huile":["Toutes les huiles",/^huiles?\b/],"@vinaigre":["Tous les vinaigres",/^vinaigres?\b/],"@chapelure":["Toute chapelure (panko…)",/chapelure|panko/],"@bouillon":["Tous les bouillons",/^(bouillon|fond|fumet)/],"@fromage_rape":["Tous les fromages râpés",/(fromage|emmental|gruyere|comte|mozzarella|gouda|parmesan).*\brapee?s?\b|\brapee?s? .*(fromage|emmental|gruyere|comte|mozzarella|gouda)/]};
+const DEFAULT_SUBS=[{f:"@huile",t:"huile"},{f:"@vinaigre",t:"vinaigre_cidre"},{f:"@chapelure",t:"chapelure_crispy"}];
+function cleanSubs(x){if(!Array.isArray(x))return DEFAULT_SUBS.map(r=>({...r}));const out=[],seen=new Set();for(const r of x){if(!r||typeof r!=="object")continue;const f=String(r.f||""),t=String(r.t||"");if(!(f[0]==="@"?SUB_FAM[f]:ING[f])||!ING[t]||f===t||seen.has(f))continue;seen.add(f);out.push({f,t});if(out.length>=30)break}return out}
+function subTarget(id,rules){if(!ING[id])return null;for(const r of rules){if(!ING[r.t]||id===r.t)continue;if(r.f[0]==="@"){const F=SUB_FAM[r.f];if(F&&F[1].test(nrmS(ING[id][0])))return r.t}else if(r.f===id)return r.t}return null}
+function subT(t,rules){const[id,q,tx,nm]=t;const to=subTarget(id,rules);if(!to)return t;const was=nm||ING[id][0];const tu=ING[to][2],fu=ING[id][2];const nu=u=>u==="pièce"?"":u;
+ if(tu===null)return[to,typeof q==="string"?q:(typeof tx==="string"?tx:fmtQty(id,q)),undefined,ING[to][0],was];
+ if(typeof q!=="number")return[to,Math.max(0.01,amtFromTxt(q,tu)),q,ING[to][0],was];
+ if(nu(fu)===nu(tu))return[to,q,tx,ING[to][0],was];
+ let g=null;try{g=(fu==="g"||fu==="ml")?q:(approxG(id,q)||gramsOf(id,q))}catch(e){}
+ return[to,(tu==="g"||tu==="ml")&&g?g:q,typeof tx==="string"?tx:fmtQty(id,q),ING[to][0],was]}
+function applySubs(rules){rules=rules||[];for(const r of RECIPES){if(!r.i0)r.i0=r.i;r.i=rules.length?r.i0.map(t=>subT(t,rules)):r.i0}}
+const normalizeV11=normalize;
+normalize=function(d){const s=normalizeV11(d);s.subs=cleanSubs(d&&typeof d==="object"?d.subs:undefined);applySubs(s.subs);return s};
+
 // ---------- état ----------
 const dayOf=k=>k.split("-")[0];
 function needsFor(plan,done,serv){const m={};for(const k of SLOTS){if(done&&done[k])continue;const r=RMAP[plan[k]];if(!r)continue;const fct=((serv&&serv[k])||defServ(k))/(r.base||2);for(const[id,q]of r.i){const e=m[id]||(m[id]={id,q:0,recs:[]});if(typeof q==="number")e.q+=q*fct;const s=short(r);if(!e.recs.includes(s))e.recs.push(s)}}return m}
@@ -2259,8 +2290,8 @@ function renderModal(){
   ${batchCard}<div class="m-actions">${isBatch?"":`<button type="button" class="btn primary" data-act="cook-start">Cuisiner pas à pas, avec minuteurs</button>`}${primary}${r.my?`<button type="button" class="btn ghost" data-act="rec-edit">✏️ Modifier</button><button type="button" class="btn ghost" data-act="rec-del">Supprimer</button>`:`<button type="button" class="btn ghost" data-act="rec-hide">Supprimer</button>`}${L.src?"":L.cr?(RMAP[r.inspi]?`<button type="button" class="btn ghost" data-open="${r.inspi}">Recette d'inspiration</button>`:""):`<a class="btn ghost" href="${esc(L.href)}" target="_blank" rel="noopener noreferrer">${L.direct?"Recette d'origine":L.gen?"Voir sur YouTube":"Chercher sur Marmiton"}</a>`}${r.vid?`<a class="btn ghost" href="${esc(r.vid)}" target="_blank" rel="noopener noreferrer">Voir la vidéo</a>`:""}${r.u2?`<a class="btn ghost" href="${esc(r.u2)}" target="_blank" rel="noopener noreferrer">${esc(r.u2l||"Autre source")}</a>`:""}</div>${picker}
   ${(r.vids||[]).length?`<div class="vids"><h3>${r.vids.some(v=>v.full)?"Vidéo de la recette":"Vidéo de préparation"}</h3>${r.vids.map(v=>HOSTED?`<figure class="vid"><div class="vid-frame"><iframe src="https://www.youtube-nocookie.com/embed/${esc(v.id)}?rel=0&playsinline=1" title="${esc(v.t)}" loading="lazy" allow="encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div><figcaption>${esc(v.t)}</figcaption></figure>`:`<a class="btn ghost" href="https://www.youtube.com/watch?v=${esc(v.id)}" target="_blank" rel="noopener noreferrer">▶ ${esc(v.t)}</a>`).join("")}</div>`:""}
   <div class="m-cols">
-   <div><div class="ing-head"><h3>Ingrédients</h3><span>${r.snack?`pour ${sv*r.yieldN} ${esc(r.yieldU)}`:`pour ${sv} personne${sv>1?"s":""}`}</span></div><ul class="ingx">${fresh.map(([id,q,tx,nm])=>`<li><span class="ico" aria-hidden="true">${icon(id)}</span><span class="ix"><b>${esc(nm||ING[id][0])}</b><span class="qt">${esc(scaledQty(id,q,fct,tx))}${stockPill(id,q)}</span></span></li>`).join("")}</ul>
-   ${pantry.length?`<h4 class="ing-sub">À ajouter vous-même</h4><ul class="ingx small">${pantry.map(([id,q,tx,nm])=>`<li><span class="ico" aria-hidden="true">${icon(id)}</span><span class="ix"><b>${esc(nm||ING[id][0])}</b><span class="qt">${esc(scaledQty(id,q,fct,tx))}${stockPill(id,q)}</span></span></li>`).join("")}</ul>`:""}</div>
+   <div><div class="ing-head"><h3>Ingrédients</h3><span>${r.snack?`pour ${sv*r.yieldN} ${esc(r.yieldU)}`:`pour ${sv} personne${sv>1?"s":""}`}</span></div><ul class="ingx">${fresh.map(([id,q,tx,nm,was])=>`<li><span class="ico" aria-hidden="true">${icon(id)}</span><span class="ix"><b>${esc(nm||ING[id][0])}${was?`<small class="was">au lieu de ${esc(was)}</small>`:""}</b><span class="qt">${esc(scaledQty(id,q,fct,tx))}${stockPill(id,q)}</span></span></li>`).join("")}</ul>
+   ${pantry.length?`<h4 class="ing-sub">À ajouter vous-même</h4><ul class="ingx small">${pantry.map(([id,q,tx,nm,was])=>`<li><span class="ico" aria-hidden="true">${icon(id)}</span><span class="ix"><b>${esc(nm||ING[id][0])}${was?`<small class="was">au lieu de ${esc(was)}</small>`:""}</b><span class="qt">${esc(scaledQty(id,q,fct,tx))}${stockPill(id,q)}</span></span></li>`).join("")}</ul>`:""}</div>
    <div><h3>Préparation</h3><ol class="stepx">${r.st.map((s,i)=>`<li><span class="num" aria-hidden="true">${i+1}</span><p>${richStep(s)}</p></li>`).join("")}</ol>${r.tip?`<p class="tip">${esc(r.tip)}</p>`:""}
    <div class="source">${L.src?`<p><b>Source</b> : ${esc(L.label)}. Ingrédients repris tels quels, les quantités s'ajustent au nombre de portions.</p><p hidden>`:L.cr?`<p><b>Création Claude</b>${RMAP[r.inspi]?`, inspirée de <button type="button" class="link" data-open="${r.inspi}">${esc(RMAP[r.inspi].n)}</button>. Pas de recette d'origine en ligne : variante imaginée à partir de tes recettes.`:`. Pas de recette d'origine en ligne : recette imaginée à ta demande, kcal et protéines estimés.`}</p>`:`<a href="${esc(L.href)}" target="_blank" rel="noopener noreferrer">${esc(L.label)}</a><p>`}${L.cr&&!L.src?"<p hidden>":""}${L.gen?"Recette proposée par Claude"+(r.chef?", inspirée du style de "+esc(r.chef):"")+". Ce n'est pas la recette exacte du chef : le lien lance une recherche YouTube.":L.direct?(r.base?"Ingrédients repris tels quels depuis la recette d'origine (pour "+(r.snack?"1 fournée":r.baseNote?"environ "+r.base+" parts":r.base+" pers.")+"), les quantités s'ajustent au nombre de portions.":"Cette fiche est une version adaptée et allégée : les quantités et certains temps peuvent différer de l'original."):"Pas de lien direct pour cette recette : le lien lance une recherche avec son nom."}</p></div></div>
   </div>
@@ -3387,6 +3418,25 @@ document.addEventListener("click",e=>{const t=e.target.closest("button");if(!t)r
 // ================= v11 : icônes d'épices, pas de « (≈ 240 g) » quand la quantité est déjà en grammes =================
 ICONS.unshift([/cebette|\bciboule\b|echalion/,"🧅"],[/nouille|udon|ramen|vermicelle/,"🍜"],[/paprika|piment|cayenne|harissa|chili/,"🌶️"],[/cumin|curcuma|garam|ras el|cannelle|curry|epice|coriandre moulue|gingembre moulu|cardamome|clou de girofle|quatre epices/,"🫙"],[/lardon|bacon/,"🥓"],[/\bporc\b|filet mignon|echine|cotes? de porc/,"🥩"]);
 scaledQty=(f=>function(id,q,fct,tx){if(typeof tx==="string"&&/\d\s*(g|kg|ml|cl|l)\b|≈/.test(tx))return scaledQty0(id,q,fct,tx);return f(id,q,fct,tx)})(scaledQty);
+
+// ================= v12 : mes remplacements (Courses) =================
+// les étapes parlent aussi de l'ingrédient remplacé
+const SUB_STEP={"@huile":[/\bhuiles? (?:de |d['’] ?)?(?:tournesol|colza|sésame|sesame|arachide|noix|pépins de raisin|coco|neutre|végétale|vegetale)\b/gi,"huile d'olive"],"@vinaigre":[/\bvinaigres? (?:balsamique(?: noir| blanc)?|de (?:xérès|xeres|vin(?: rouge| blanc)?(?: ou de cidre)?|riz|framboise|ton choix|modène|modene)|blanc)\b/gi,"vinaigre de cidre"],"@chapelure":[/\bchapelure panko\b|\bpanko\b/gi,"chapelure crispy"]};
+function subStep(s){const R=(state&&state.subs)||[];for(const r of R){const x=SUB_STEP[r.f];if(x&&ING[r.t]&&(r.f!=="@huile"||r.t==="huile")&&(r.f!=="@vinaigre"||r.t==="vinaigre_cidre")&&(r.f!=="@chapelure"||r.t==="chapelure_crispy"))s=s.replace(x[0],x[1])}return s}
+richStep=(f=>s=>f(subStep(String(s))))(richStep);
+function subLabel(f){return f[0]==="@"?(SUB_FAM[f]||[f])[0]:(ING[f]?ING[f][0]:f)}
+function renderSubs(){const box=document.getElementById("subsBox");if(!box)return;const R=state.subs||[];
+ const used=new Set();RECIPES.forEach(r=>(r.i0||r.i).forEach(x=>{if(ING[x[0]])used.add(x[0])}));
+ const opt=ids=>{const seen=new Set();return ids.filter(id=>ING[id]&&!CANON[id]&&!U_ALIAS[id]&&!/^(b_|x_|p_)/.test(id)).sort((a,b)=>ING[a][0].localeCompare(ING[b][0],"fr")).filter(id=>{const k=nrmS(ING[id][0]);if(seen.has(k))return false;seen.add(k);return true}).map(id=>`<option value="${id}">${esc(ING[id][0])}</option>`).join("")};
+ box.innerHTML=`<summary>🔁 Mes remplacements <small>${R.length}</small></summary><div class="subs-in"><p class="pn-help">Dans toutes les recettes, la liste de courses et le stock, ces ingrédients sont remplacés automatiquement.</p>
+ ${R.length?`<ul class="subs-list">${R.map((r,i)=>`<li><span>${esc(subLabel(r.f))} <b>→ ${esc(ING[r.t][0])}</b></span><button type="button" class="nt-del" data-subdel="${i}" aria-label="Supprimer ce remplacement">×</button></li>`).join("")}</ul>`:`<p class="muted small">Aucun remplacement.</p>`}
+ <div class="subs-add"><label class="fl">Remplacer<select class="pn-in" id="subF"><option value="">Choisir…</option><optgroup label="Familles">${Object.entries(SUB_FAM).map(([k,v])=>`<option value="${k}">${esc(v[0])}</option>`).join("")}</optgroup><optgroup label="Ingrédients des recettes">${opt([...used])}</optgroup></select></label>
+ <label class="fl">par<select class="pn-in" id="subT"><option value="">Choisir…</option>${opt(Object.keys(ING))}</select></label><button type="button" class="btn" data-act="sub-add">Ajouter</button></div></div>`}
+const renderShopV9=renderShop;renderShop=function(){renderShopV9();renderSubs()};
+document.addEventListener("click",e=>{const t=e.target.closest("button");if(!t)return;
+ if(t.dataset.subdel!=null&&t.dataset.subdel!==""){const r=state.subs[Number(t.dataset.subdel)];if(!r)return;state.subs.splice(Number(t.dataset.subdel),1);applySubs(state.subs);commit();renderAll();toast("Remplacement retiré : "+subLabel(r.f));return}
+ if(t.dataset.act==="sub-add"){const f=(document.getElementById("subF")||{}).value,to=(document.getElementById("subT")||{}).value;if(!f||!ING[to]||f===to){toast("Choisis l'ingrédient à remplacer et son remplaçant");return}if(f[0]!=="@"&&!ING[f])return;
+  state.subs=(state.subs||[]).filter(r=>r.f!==f);state.subs.push({f,t:to});state.subs=cleanSubs(state.subs);applySubs(state.subs);commit();renderAll();toast(subLabel(f)+" → "+ING[to][0]);return}});
 
 setTab(ui.tab);renderAll();initDb();sbStart();
 
