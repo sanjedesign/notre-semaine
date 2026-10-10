@@ -2,6 +2,7 @@
 // - action "import" : lit une page (site de recettes, YouTube, Instagram, TikTok…) et renvoie
 //   titre, photo, ingrédients, étapes, portions, temps et valeurs nutritionnelles quand la page les donne.
 // - action "photo"  : range la photo d'une recette dans le stockage Supabase (dossier public « recettes »).
+// - action "prices" : relais vers l'API Open Prices si le navigateur ne peut pas l'appeler directement.
 // - action "meal"   : analyse la photo d'un plateau (cantine, restaurant) et estime aliments, portions et nutriments.
 //   Nécessite un secret GEMINI_API_KEY (clé gratuite Google AI Studio) ou ANTHROPIC_API_KEY.
 // Réservée aux foyers existants : l'en-tête x-foyer doit correspondre à une ligne de la table planner.
@@ -326,6 +327,14 @@ Deno.serve(async (req: Request) => {
   try {
     if (body.action === "photo") return await photo(code, body.id, body.data);
     if (body.action === "meal") return await meal(body.data);
+    if (body.action === "prices") {
+      // relais vers Open Prices (prix relevés en magasin par la communauté Open Food Facts)
+      const u = String(body.url || "");
+      if (!/^https:\/\/prices\.openfoodfacts\.org\/api\/v1\/prices\?[\w%=&.:,-]*$/.test(u)) return json({ error: "url" }, 400);
+      const r = await fetch(u, { headers: { "User-Agent": "NotreSemaine/1.0 (planning repas)", Accept: "application/json" } });
+      if (!r.ok) return json({ error: "fetch", message: `Open Prices ${r.status}` }, 502);
+      return json(await r.json());
+    }
     if (body.action === "import") {
       const u = safeUrl(String(body.url || "").trim());
       if (!u) return json({ error: "url" }, 400);

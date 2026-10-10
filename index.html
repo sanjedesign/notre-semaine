@@ -739,6 +739,28 @@ textarea.pn-in{resize:vertical;line-height:1.45}
 .why-est{font-size:.88rem;margin:10px 0 0;padding:8px 10px;border-radius:var(--r-md);background:var(--accent-soft)}
 .why-tip{font-size:.84rem;color:var(--muted);margin:12px 0 0}
 
+/* ===== v9 : budget ===== */
+.budget{margin:0 0 14px}
+.bud-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:14px 16px}
+.bud-card.ask{background:var(--accent-soft);border-color:transparent}
+.bud-card.ask p{margin:0 0 10px;font-size:.94rem}
+.bud-top{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.bud-top>span{font-size:.8rem;font-weight:700;color:var(--muted)}
+.bud-top .chips{padding-bottom:0}
+.bud-main{display:flex;align-items:flex-end;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:10px}
+.bud-main>div{display:flex;flex-direction:column}
+.bud-l{font-size:.82rem;color:var(--muted);font-weight:700}
+.bud-v{font-family:"Bricolage Grotesque",sans-serif;font-size:1.9rem;font-weight:800;line-height:1.1}
+.bud-sub{font-size:.84rem;color:var(--muted);margin:6px 0 0}
+.bud-sub.err{color:var(--danger)}
+.bud-cmp{font-size:.84rem;margin:8px 0 0}
+.bud-note{font-size:.75rem;color:var(--muted);margin:6px 0 0}
+.item-qty{display:flex;flex-direction:column;align-items:flex-end}
+.item-eur{font-size:.74rem;font-weight:700;color:var(--muted)}
+.item-eur.op{color:var(--accent)}
+@media (max-width:520px){.item>.item-qty{flex-direction:row;align-items:baseline;gap:8px}}
+.bud-card .chips{flex-wrap:wrap;overflow:visible}
+
 </style>
 </head>
 <body>
@@ -793,6 +815,7 @@ textarea.pn-in{resize:vertical;line-height:1.45}
   <div class="sec-head"><div><h1>Courses</h1><p class="sub" id="shopSub"></p></div>
    <div class="head-actions"><button type="button" class="btn" data-act="copy">Copier la liste</button><button type="button" class="btn ghost" data-act="uncheck">Tout décocher</button></div></div>
   <div class="scanbar" id="scanBar" hidden><button type="button" class="btn primary" data-act="scan-open-c">📷 Scanner un produit</button><button type="button" class="btn" data-act="search-open-c">🔎 Chercher un produit</button></div>
+  <div id="budget" class="budget"></div>
   <div id="rangeBox" class="rangebox" hidden></div>
   <textarea id="copyArea" class="copy-area" hidden aria-label="Liste de courses à copier"></textarea>
   <div class="progress-row"><div class="progress"><i id="shopBar"></i></div><span id="shopCount"></span></div>
@@ -2014,7 +2037,7 @@ function normalize(d){const s={v:3,weekStart:"2026-10-05",plan:{},done:{},stock:
  if(d.done&&typeof d.done==="object")for(const k0 in d.done){const k=mig(k0);if(k&&d.done[k0]&&s.plan[k]){const v=Number(d.done[k0]);s.done[k]=v>=1&&v<=6?v:2}}
  if(d.skip&&typeof d.skip==="object")for(const k in d.skip){const m=k.match(/^(\d{8}-(?:midi|soir))-([01])$/);if(m&&SLOTS.includes(m[1])&&typeof d.skip[k]==="boolean")s.skip[k]=d.skip[k]}
  if(Array.isArray(d.people))s.people=cleanPeople(d.people,s.people);
- s.hist=cleanHist(d.hist);
+ s.hist=cleanHist(d.hist);s.store=["lidl","leclerc","carrefour","auchan"].includes(d.store)?d.store:"";
  if(d.log&&typeof d.log==="object"){const min=ymd(new Date(Date.now()-21*864e5));for(const day in d.log){if(!/^\d{8}$/.test(day)||day<min)continue;const L=d.log[day];if(!Array.isArray(L))continue;const out=[[],[]];const nn=(v,max)=>{v=Number(v);return isFinite(v)&&v>=0&&v<=max?Math.round(v*10)/10:0};
   [0,1].forEach(pi=>{(Array.isArray(L[pi])?L[pi]:[]).slice(0,50).forEach(it=>{if(!it||typeof it.n!=="string"||!it.n.trim())return;out[pi].push({n:it.n.trim().slice(0,90),q:typeof it.q==="string"?it.q.slice(0,30):"",k:Math.round(nn(it.k,5000)),p:nn(it.p,500),f:nn(it.f,500),c:nn(it.c,800),fi:nn(it.fi,200),src:it.src==="cant"?"cant":undefined})})});if(out[0].length||out[1].length)s.log[day]=out}}
  if(d.stock&&typeof d.stock==="object"){for(const k in d.stock){const v=Number(d.stock[k]);if(ING[k]&&v>0)s.stock[k]=isStaple(k)?1:v}}
@@ -2835,7 +2858,7 @@ function panelRecForm(){const d=ui.pdata.draft;const snack=d.kind==="encas";cons
 // estimation nutritionnelle (valeurs moyennes pour 100 g : kcal, prot., lip., gluc., fibres, g par pièce, g par boîte/sachet/tranche)
 const NUTDB=[[/blancs? d oeufs?/,48,11,0.2,0.7,0,33],[/jaunes? d oeufs?/,320,16,27,0.6,0,18],[/\boeuf/,143,12.5,10,0.7,0,55],[/poulet|volaille/,121,23,2.5,0,0,150],[/dinde/,110,24,1.5,0,0,120],[/boeuf hache|steak hache|viande hachee|hache de boeuf/,170,20,10,0,0,100],[/boeuf|veau|bavette|rumsteck/,150,22,6,0,0,150],[/jambon/,115,20,3.5,1,0,40,40],[/lardon|bacon/,270,15,23,0.5,0],[/chorizo/,450,24,38,2,0],[/saucisse|merguez/,280,14,24,1,0,60],[/porc/,170,21,9,0,0,150],[/agneau/,230,19,17,0,0,150],[/saumon fume/,180,22,10,0,0,30,30],[/saumon/,200,20,13,0,0,125],[/thon/,115,26,1,0,0,null,112],[/cabillaud|colin|\blieu\b|merlu|eglefin|poisson/,82,18,0.7,0,0,120],[/truite/,150,20,7,0,0,120],[/maquereau/,240,19,18,0,0,100],[/sardine/,210,24,12,0,0,25,100],[/crevette|gambas/,95,20,1.5,0,0,15],[/tofu/,145,15,8.5,2,1.5],[/hache vegetal|hache de soja|proteines? de soja/,200,18,10,5,5],
  [/lait de coco (light|allege)/,80,0.8,7.5,2.5,0,null,200],[/lait de coco|creme de coco/,190,1.8,19,3,0,null,400],[/(lait|boisson)s? (d avoine|de soja|d amande|de riz)/,42,1,1.5,5,0.5],[/beurre de cacahuete|beurre d arachide/,600,25,50,15,6],[/chocolat au lait/,540,7,31,57,2],[/chocolat/,580,8,42,33,11],[/cacao/,360,20,14,14,30],[/proteine|whey|caseine/,380,75,6,8,1],
- [/creme (legere|allegee)|creme .*15/,160,2.6,15,4,0],[/creme/,300,2.2,30,3,0],[/^beurre|\bbeurre (doux|demi|sale)/,745,0.7,82,0.6,0],[/fromage blanc|faisselle|skyr/,55,8.5,0.2,4,0],[/yaourt grec|yogourt grec/,57,10,0.4,3.6,0,null,150],[/yaourt|yogourt/,60,4,3,5,0,125,125],[/^lait\b/,46,3.3,1.6,4.8,0],[/feta/,265,15,22,1,0],[/mozzarella/,250,18,19,1,0,125],[/emmental|gruyere|comte/,390,28,30,0,0],[/parmesan|grana|parmigiano/,400,33,29,0,0],[/chevre/,280,18,22,1,0],[/ricotta/,150,9,11,3,0],[/mascarpone/,430,4.5,44,4,0],[/fromage/,330,22,26,1,0],
+ [/creme (legere|allegee)|creme .*15/,160,2.6,15,4,0],[/\bcremes?\b/,300,2.2,30,3,0],[/^beurre|\bbeurre (doux|demi|sale)/,745,0.7,82,0.6,0],[/fromage blanc|faisselle|skyr/,55,8.5,0.2,4,0],[/yaourt grec|yogourt grec/,57,10,0.4,3.6,0,null,150],[/yaourt|yogourt/,60,4,3,5,0,125,125],[/^lait\b/,46,3.3,1.6,4.8,0],[/feta/,265,15,22,1,0],[/mozzarella/,250,18,19,1,0,125],[/emmental|gruyere|comte/,390,28,30,0,0],[/parmesan|grana|parmigiano/,400,33,29,0,0],[/chevre/,280,18,22,1,0],[/ricotta/,150,9,11,3,0],[/mascarpone/,430,4.5,44,4,0],[/fromage/,330,22,26,1,0],
  [/riz/,355,7.5,0.9,78,1.4],[/pate (brisee|feuilletee|sablee|a pizza)/,400,6,24,40,2,230],[/pates? (completes?|integrales?)/,340,13,2.5,64,8],[/\bpates\b|spaghetti|tagliatelle|penne|fusilli|coquillette|orzo|langue d oiseau|lasagne|nouille|vermicelle/,355,12.5,1.5,71,3],[/semoule|couscous/,360,12.5,1.5,72,3.5],[/boulgour/,350,12,1.5,70,8],[/quinoa/,370,14,6,64,7],[/lentille/,330,24,1.5,50,11],[/pois chiche/,140,7.5,2.5,18,6,null,265],[/haricots? (rouges?|blancs?|noirs?)/,115,8,0.5,15,7,null,250],[/patate douce/,86,1.6,0.1,20,3,300],[/pommes? de terre|grenaille/,80,2,0.1,17,1.8,150],[/flocons? d avoine|avoine/,375,13.5,7,59,10],[/farine/,350,10,1.3,72,4],[/maizena|fecule/,350,0.3,0.1,88,1],[/chapelure|panko/,380,12,3,75,4],[/pain complet|pain de mie complet/,245,9,3,41,7,35,35],[/\bpain\b|baguette/,270,9,1.5,55,3,35,35],[/tortilla|wrap/,300,8.5,7,50,3,40],[/galette/,210,6,1.5,42,3,50],
  [/sucre|cassonade/,400,0,0,100,0],[/miel/,320,0.3,0,80,0],[/sirop/,260,0,0,67,0],[/amande/,600,21,52,6,12],[/noisette/,650,15,61,7,10],[/cacahuete/,590,25,49,12,8],[/noix de cajou/,580,18,46,27,3],[/noix de coco|coco rapee/,660,7,64,7,16],[/\bnoix\b/,680,15,65,7,6],[/chia/,490,17,31,8,34],[/graine|sesame|tahini/,580,20,50,10,10],[/huile/,900,0,100,0,0],[/olive/,145,1,15,0,3],[/avocat/,160,2,15,2,7,150],
  [/tomates? (concassees?|pelees?)|pulpe|passata|coulis|puree de tomates?/,25,1.2,0.2,4,1.2,null,400],[/concentre de tomates?/,85,4.5,0.5,14,4],[/tomates? cerises?/,20,0.9,0.2,3,1.2,15],[/tomate/,18,0.9,0.2,3,1.2,120],[/carotte/,36,0.8,0.3,7,2.7,100],[/oignons? nouveaux?|ciboule/,30,1.5,0.2,5,2,20],[/echalote/,72,2.5,0.1,15,3,25],[/oignon/,40,1.2,0.1,8,1.7,100],[/courgette/,17,1.2,0.3,2,1.2,250],[/aubergine/,25,1,0.2,4,3,300],[/poivron/,30,1,0.3,5,2,170],[/concombre/,13,0.6,0.1,2,0.7,300],[/brocoli|broccolini/,34,2.8,0.4,4,2.6,300,200],[/chou[ -]fleur/,25,2,0.3,3,2.5,800],[/\bchou/,25,1.3,0.1,4,2.5,800],[/champignon/,22,3,0.3,1,1.5,20,250],[/epinard/,23,2.9,0.4,1.5,2.2],[/haricots? verts?/,30,1.8,0.2,4,3],[/petits? pois/,80,5.4,0.4,11,5.5],[/pois gourmands?/,42,3,0.2,7,2.6],[/edamame/,120,11,5,9,5],[/\bmais\b/,90,3,1.5,15,2.5,null,140],[/butternut|courge|potiron|potimarron/,45,1,0.1,10,2,1000],[/poireau/,30,1.5,0.3,5,2.5,150],[/celeri/,16,0.7,0.2,2,1.6,40],[/salade|roquette|mache|pousses|laitue/,15,1.3,0.2,1.5,1.3,null,100],[/citron/,30,1,0.3,3,2,60],[/\bpommes?\b/,52,0.3,0.2,12,2.4,150],[/banane/,90,1.1,0.3,20,2.6,120],[/framboise|myrtille|fruits rouges|fraise/,45,1,0.3,8,4],[/mangue/,60,0.8,0.4,14,1.6,300],[/orange|clementine|mandarine/,47,0.9,0.1,10,2.2,150],[/kiwi/,60,1.1,0.5,10,3,75],[/raisins? secs?|dattes?|figues? seches?/,300,2.5,0.5,70,7,8],[/compote/,70,0.3,0.1,16,1.5,100,100],
@@ -2845,7 +2868,7 @@ function spoonG(txt,n){const t=nrm4(txt);let q=1;let m=t.match(/(\d+)\s?\/\s?(\d
  let g=null;if(/soupe|\bcs\b|\bcas\b|tbsp/.test(t))g=/huile/.test(n)?13.5:/farine|cacao|maizena|sucre/.test(n)?10:15;else if(/cafe|\bcc\b|\bcac\b|tsp/.test(t))g=/huile/.test(n)?4.5:5;else if(/pincee/.test(t))g=0.5;else if(/filet/.test(t))g=5;else if(/noix/.test(t))g=10;else if(/noisette/.test(t))g=5;else if(/verre/.test(t))g=200;else if(/tasse|cup/.test(t))g=240;
  return g==null?null:q*g}
 function nutEstimate(il,div){const T={k:0,p:0,f:0,c:0,fi:0};let known=0,tot=0;const miss=[];
- for(const line of il){const x=parseIngLine(line);if(!x)continue;tot++;const n=nrm4(x.name);const e=NUTDB.find(z=>z[0].test(n));if(e&&e[1]===0){known++;continue}
+ for(const line of il){const x=parseIngLine(line);if(!x)continue;tot++;const n=nrm4(x.name).replace(/['’]/g," ");const e=NUTDB.find(z=>z[0].test(n));if(e&&e[1]===0){known++;continue}
   let g=null;if(x.unit==="g"||x.unit==="ml")g=x.qty;else if(x.unit===null)g=spoonG(x.txt||"",n);else if(x.unit==="")g=e&&e[6]?x.qty*e[6]:null;else g=e&&e[7]?x.qty*e[7]:(x.unit==="tranche"?x.qty*30:null);
   if(e&&g!=null){const m=g/100;T.k+=e[1]*m;T.p+=e[2]*m;T.f+=e[3]*m;T.c+=e[4]*m;T.fi+=e[5]*m;known++}else if(x.unit===null&&g==null)known++;else miss.push(x.name)}
  div=Math.max(1,Number(div)||1);return{k:Math.round(T.k/div),p:r1(T.p/div),f:r1(T.f/div),c:r1(T.c/div),fi:r1(T.fi/div),known,tot,miss}}
@@ -3037,7 +3060,7 @@ document.addEventListener("change",e=>{const t=e.target;if(t&&t.id==="cantPhoto"
 
 // ================= v7 : liste de courses regroupée (même ingrédient = une ligne, quantité totale) =================
 const HERB_G={sachet:10,branche:2,botte:40};
-function gramsOf(id,q){const u=ING[id][2];if(u==="g"||u==="ml")return q;if(u===null)return null;const n=nrm4(ING[id][0]);if(ING[id][1]==="H"&&HERB_G[u])return q*HERB_G[u];
+function gramsOf(id,q){const u=ING[id][2];if(u==="g"||u==="ml")return q;if(u===null)return null;const n=nrm4(ING[id][0]).replace(/['’]/g," ");if(ING[id][1]==="H"&&HERB_G[u])return q*HERB_G[u];
  const e=NUTDB.find(z=>z[0].test(n));if(!e||(e[1]===0&&e[2]===0))return null;if(u===""||u==="pièce"||u==="pavé")return e[6]?q*e[6]:(e[7]?q*e[7]:null);return e[7]?q*e[7]:null}
 function groupName(n){return n.replace(/\s*\([^)]*\)/g,"").split(",")[0].replace(/\s+/g," ").trim()||n}
 function shopGroups(list){const n=list.length,par=list.map((_,i)=>i);const f=i=>par[i]===i?i:(par[i]=f(par[i]));
@@ -3062,11 +3085,11 @@ function renderShop(){
  rb.innerHTML=nCart?`<span><b>${nCart} article${nCart>1?"s":""} dans le panier</b><br>De retour à la maison ? Range-les : ils passent dans le stock.</span><button type="button" class="btn primary" data-act="range">Ranger mes courses</button>`:"";
  const how=groups.length?`<ol class="howto"><li>Coche ce que tu mets dans le panier.</li><li>De retour, touche « Ranger mes courses ».</li><li>Le stock se met à jour, la liste se vide.</li></ol>`:"";
  const row=(g,done)=>{const one=g.items.length===1?g.items[0]:null,id0=g.ids[0];const st=g.items.every(e=>isStaple(e.id));const recs=[...new Set(g.items.flatMap(e=>(e.recs||[]).filter(x=>x!=="__extra")))];
-  const isX=!!(one&&state.extras&&state.extras[one.id]&&!recs.length);const cimg=one&&state.catalog&&state.catalog[one.id]&&state.catalog[one.id].img;const Q=one?{txt:st?"":fmtQty(one.id,one.buy),parts:""}:groupQty(g.items);const names=[...new Set(g.items.map(e=>ING[e.id][0]))];
+  const isX=!!(one&&state.extras&&state.extras[one.id]&&!recs.length);const cimg=one&&state.catalog&&state.catalog[one.id]&&state.catalog[one.id].img;const Q=one?{txt:st?"":fmtQty(one.id,one.buy)+(approxG(one.id,one.buy)?" ("+fmtApprox(approxG(one.id,one.buy))+")":""),parts:""}:groupQty(g.items);const C=state.store?lineCost(g,state.store):null;const names=[...new Set(g.items.map(e=>ING[e.id][0]))];
   const pour=recs.length?`Pour ${recs.length>2?recs.slice(0,2).join(", ")+"…":recs.join(", ")}`:"";
   const detail=one?(st?"Produit de placard":one.partial?`Il en faut ${fmtQty(one.id,one.q)}, tu en as ${fmtQty(one.id,one.hq||0)}`:pour||(isX?"Ajouté à la liste":"")):[names.length>1?"Regroupe : "+names.join(", "):"",Q.parts&&Q.txt!==Q.parts?"("+Q.parts+")":"",pour].filter(Boolean).join(" · ");
   const ids=g.ids.join(","),amts=g.items.map(e=>e.staple?1:e.buy).join(","),need=g.items.map(e=>isStaple(e.id)?1:e.q).join(",");
-  return`<div class="item${done?" done":""}"><label class="check"><input type="checkbox" data-buy="${ids}" data-amt="${amts}" ${done?"checked":""}><span class="box" aria-hidden="true"></span>${cimg?`<img class="item-img" src="${esc(cimg)}" alt="" loading="lazy">`:""}<span class="item-txt"><span class="item-name">${esc(g.name)}</span><span class="item-for">${esc(detail)}</span></span></label><span class="item-qty">${esc(Q.txt)}</span>${done?"":isX?`<button type="button" class="have" data-xrm="${id0}">Retirer</button>`:`<button type="button" class="have" data-have="${ids}" data-amt="${need}" data-name="${esc(g.name)}" title="Je l'ai déjà : l'ajouter au stock">Déjà à la maison</button>`}</div>`};
+  return`<div class="item${done?" done":""}"><label class="check"><input type="checkbox" data-buy="${ids}" data-amt="${amts}" ${done?"checked":""}><span class="box" aria-hidden="true"></span>${cimg?`<img class="item-img" src="${esc(cimg)}" alt="" loading="lazy">`:""}<span class="item-txt"><span class="item-name">${esc(g.name)}</span><span class="item-for">${esc(detail)}</span></span></label><span class="item-qty">${esc(Q.txt)}${C?`<small class="item-eur${C.src==="op"?" op":""}" title="${esc(C.detail)}">≈ ${fmtEur(C.eur)}</small>`:""}</span>${done?"":isX?`<button type="button" class="have" data-xrm="${id0}">Retirer</button>`:`<button type="button" class="have" data-have="${ids}" data-amt="${need}" data-name="${esc(g.name)}" title="Je l'ai déjà : l'ajouter au stock">Déjà à la maison</button>`}</div>`};
  const byName=(a,b)=>a.name.localeCompare(b.name,"fr");
  const sections=AISLE_ORDER.map(a=>[a,toBuy.filter(g=>g.aisle===a).sort(byName)]).filter(x=>x[1].length);
  const cartRows=cartG.concat(orphan.map(id=>({items:[{id,q:state.bought[id],buy:state.bought[id],recs:[]}],ids:[id],name:ING[id][0],aisle:ING[id][1]}))).sort(byName);
@@ -3078,7 +3101,7 @@ function renderShop(){
   return`<div class="item owned-item"><span class="item-txt"><span class="item-name">${esc(g.name)}</span><span class="item-for">${esc(txt)}</span></span></div>`}).join("")}
 function shopText(){const{out}=shopList();const groups=shopGroups(out).filter(g=>!g.ids.every(id=>state.bought[id]));let t="Courses – semaine du "+fmtDate(dateOf(0))+"\n";
  AISLE_ORDER.forEach(a=>{const it=groups.filter(g=>g.aisle===a).sort((x,y)=>x.name.localeCompare(y.name,"fr"));if(!it.length)return;t+="\n"+AISLES[a]+"\n";
-  it.forEach(g=>{const q=g.items.length===1?(isStaple(g.ids[0])?"":fmtQty(g.ids[0],g.items[0].buy)):groupQty(g.items).txt;t+="- "+g.name+(q?" : "+q:"")+"\n"})});return t}
+  it.forEach(g=>{const q=g.items.length===1?(isStaple(g.ids[0])?"":fmtQty(g.ids[0],g.items[0].buy)):groupQty(g.items).txt;t+="- "+g.name+(q?" : "+q:"")+"\n"})});if(state.store&&groups.length){const b=budgetOf(groups,state.store);t+="\nBudget estimé ("+STORES[state.store][0]+") : ≈ "+fmtEur(b.tot)+"\n"}return t}
 
 // ================= v8 : expliquer le score et proposer comment atteindre la cible =================
 function scoreParts(T,t){const kd=Math.abs((T.k||0)-t.k)/t.k;return{k:40*(kd<=0.1?1:Math.max(0,1-(kd-0.1)/0.25)),p:30*Math.min(1,(T.p||0)/t.p),fi:15*Math.min(1,(T.fi||0)/t.fi),f:15*((T.f||0)<=t.f*1.1?1:Math.max(0,1-((T.f||0)-t.f*1.1)/(t.f*0.5)))}}
@@ -3128,6 +3151,87 @@ document.addEventListener("click",e=>{const t=e.target.closest("button");if(!t)r
  if(t.dataset.whyplan){const[k,id]=t.dataset.whyplan.split("|");if(RMAP[id]&&!state.plan[k]){state.plan[k]=id;commit();renderAll();toast("Ajouté : "+slotLabel(k))}return}
  if(t.dataset.whyswap){const[k,id]=t.dataset.whyswap.split("|");if(RMAP[id]&&state.plan[k]&&!state.done[k]){state.plan[k]=id;commit();renderAll();toast("Remplacé : "+short(RMAP[id]))}return}
  if(t.dataset.act==="why-go"){const el=document.getElementById("whyCard");if(el){el.open=true;try{el.scrollIntoView({behavior:"smooth",block:"start"})}catch(err){el.scrollIntoView()}}}});
+
+// ================= v9 : poids approximatifs des pièces, budget des courses par enseigne =================
+// poids moyen d'une unité (pièce, tranche, sachet, boîte…) quand la recette ne donne pas de grammes
+const APPROX_G={hf_filet_poulet:140,hf_jambon:40,jambon:40,hf_broccolini:200,hf_olives_kalamata:40,hf_fromage_grec:100,hf_gouda:50,hf_salade:100,qt_celeri:40,ww_tomates:200,hf_thon:140,thon:140,saumon:125,qt_galettes:50,qt_pain_noir:30,pain:35};
+function approxG(id,q){if(!ING[id]||typeof q!=="number"||!(q>0))return null;const u=ING[id][2];if(u==="g"||u==="ml"||u===null)return null;const n=nrm4(ING[id][0]);if(/oeuf/.test(n))return null;if(APPROX_G[id])return q*APPROX_G[id];const a=ING[id][1];if(a==="H"||a==="E")return null;return gramsOf(id,q)}
+function fmtApprox(g){if(g==null||!(g>0))return"";if(g>=1000)return"≈ "+String(Math.round(g/100)/10).replace(".",",")+" kg";return"≈ "+(g<50?Math.max(5,Math.round(g/5)*5):Math.round(g/10)*10)+" g"}
+const scaledQty0=scaledQty;
+scaledQty=function(id,q,fct,tx){const s=scaledQty0(id,q,fct,tx);const g=typeof q==="number"?approxG(id,q*fct):null;return g?s+" ("+fmtApprox(g)+")":s};
+groupQty=function(items){const byU={};const st=items.some(e=>isStaple(e.id));
+ for(const e of items){if(isStaple(e.id))continue;let u=ING[e.id][2];if(u==="pièce")u="";const miss=Math.max(0,e.q-(e.hq||0));const x=byU[u]||(byU[u]={u,q:0,rep:e.id,parts:[]});x.q+=miss;x.parts.push([e.id,miss])}
+ const us=Object.values(byU);if(!us.length)return{txt:"",parts:""};
+ const fmt=x=>fmtQty(x.rep,buyAmount(x.rep,x.q));const parts=us.map(fmt).join(" + ");let txt=parts;
+ if(us.length>1){const gU=us.find(x=>x.u==="g")||us.find(x=>x.u==="ml");if(gU){let tot=0,ok=true;for(const x of us)for(const[id,q]of x.parts){const g=x.u===gU.u?q:(approxG(id,q)||gramsOf(id,q));if(g==null){ok=false;break}tot+=g}if(ok)txt="≈ "+fmtQty(gU.rep,buyAmount(gU.rep,tot))}}
+ else if(us[0].u!=="g"&&us[0].u!=="ml"){let tot=0;for(const[id,q]of us[0].parts){const g=approxG(id,q);if(g==null){tot=0;break}tot+=g}if(tot)txt+=" ("+fmtApprox(tot)+")"}
+ return{txt:txt+(st?" + un peu":""),parts:us.length>1?parts:""}};
+
+// ---------- budget ----------
+const STORES={lidl:["Lidl",0.92],leclerc:["Leclerc",0.93],carrefour:["Carrefour",1.0],auchan:["Auchan",1.01]};
+// [motif, catégorie Open Food Facts, vente ("kg" au poids, "pack" au paquet de N g/ml, "u" à la pièce par lot de N), prix de référence (€/kg, €/paquet ou €/pièce), taille]
+const PRICE_DB=[[/bouillon|fond de/,"en:broths","pack",1.6,100],[/huile d olive/,"en:olive-oils","pack",9,1000],[/huile/,"en:sunflower-oils","pack",2.5,1000],[/blancs? d oeufs?|jaunes? d oeufs?|\boeuf/,"en:eggs","u",0.32,6],[/beurre de cacahuete|beurre d arachide/,"en:peanut-butters","pack",3,350],[/hache (vegetal|soja)|proteines? de soja/,"en:meat-analogues","pack",3.5,250],[/poulet|volaille/,"en:chicken-breasts","pack",5.5,400],[/dinde/,"en:turkey-cutlets","pack",5.2,400],[/(boeuf|viande) hache|steak hache|hache de boeuf/,"en:ground-beef-meats","pack",7,500],[/boeuf|\bveau\b|rumsteck|bavette/,"en:beef","pack",9,400],[/filet mignon|porc/,"en:pork","pack",6,400],[/jambon/,"en:white-hams","pack",2.6,160],[/lardon/,"en:lardons","pack",2.2,200],[/chorizo/,"en:chorizos","pack",2.5,200],[/saumon fume/,"en:smoked-salmons","pack",4.5,150],[/saumon/,"en:salmon-steaks","pack",6.5,250],[/cabillaud|\bcolin\b|\blieu\b|merlu|poisson/,"en:cods","pack",7,400],[/thon/,"en:tunas-in-brine","pack",1.9,140],[/crevette|gambas/,"en:shrimps","pack",4.5,200],[/tofu/,"en:tofu","pack",2.3,200],
+ [/graines?|sesame|tahini|\bnoix\b|amande|noisette|cajou|cacahuete|pistache/,null,"pack",3,200],[/lait de coco|creme de coco/,"en:coconut-milks","pack",1.3,200],[/\bcremes?\b/,"en:creams","pack",1.3,200],[/^beurre|\bbeurre (doux|demi|sale)/,"en:butters","pack",2.6,250],[/skyr/,"en:skyrs","pack",2.3,450],[/yaourt (grec|a la grecque)|yogourt grec/,"en:greek-style-yogurts","pack",2.3,500],[/fromage blanc|faisselle/,"en:fromage-blanc","pack",1.9,500],[/yaourt/,"en:yogurts","pack",1.6,500],[/^lait\b/,"en:semi-skimmed-milks","pack",1.1,1000],[/feta|fromage a la grecque/,"en:feta","pack",2.6,200],[/mozzarella/,"en:mozzarella","pack",1.3,125],[/emmental/,"en:grated-emmentaler","pack",2.2,200],[/parmesan|grana|parmigiano/,"en:parmigiano-reggiano","pack",2.8,100],[/gouda/,"en:gouda","pack",2.3,150],[/chevre|fromage frais|ricotta|mascarpone|fromage/,"en:cheeses","pack",2.5,200],
+ [/riz/,"en:basmati-rices","pack",2.6,1000],[/lasagne/,"en:lasagna-sheets","pack",1.6,500],[/pate (brisee|feuilletee|sablee|a pizza)/,"en:shortcrust-pastry","pack",1.3,230],[/\bpates\b|spaghetti|tagliatelle|penne|fusilli|orzo|langue d oiseau|nouille|vermicelle/,"en:pastas","pack",1.2,500],[/boulgour/,"en:bulgur","pack",1.9,500],[/semoule|couscous/,"en:durum-wheat-semolinas","pack",1.3,500],[/quinoa/,"en:quinoa","pack",3,400],[/lentille/,"en:green-lentils","pack",1.9,500],[/pois chiche/,"en:chickpeas","pack",1,265],[/haricots? (rouges?|blancs?|noirs?)/,"en:red-beans","pack",1,250],[/concentre de tomate/,"en:tomato-pastes","pack",0.9,140],[/tomates? (concassees?|pelees?)|pulpe/,"en:tomato-pulps","pack",1,400],[/puree de tomates?|coulis|passata/,"en:tomato-purees","pack",1.2,500],
+ [/farine d orge/,"en:barley-flours","pack",2.5,500],[/farine/,"en:wheat-flours","pack",1,1000],[/proteine|whey|caseine/,"en:protein-powders","pack",16,500],[/cacao/,"en:cocoa-powders","pack",3.2,250],[/chocolat/,"en:dark-chocolates","pack",1.8,100],[/sucre|cassonade/,"en:white-sugars","pack",1.4,1000],[/flocons? d avoine|avoine/,"en:rolled-oats","pack",1.3,500],[/levure|bicarbonate/,"en:baking-powder-or-raising-agent","pack",1,50],[/chapelure|panko/,"en:bread-crumbs","pack",1.4,250],[/galette/,"en:plain-buckwheat-crepes","pack",2.6,250],[/tortilla|wrap/,"en:wheat-flatbreads","pack",2,320],[/\bpain\b/,"en:wholemeal-breads","pack",2.2,500],
+ [/patate douce/,"en:sweet-potatoes","kg",3],[/pommes? de terre|grenaille/,"en:potatoes","kg",1.6],[/carotte/,"en:carrots","kg",1.5],[/echalote/,"en:shallots","kg",5],[/oignon/,"en:onions","kg",1.8],[/\bail\b/,"en:garlics","u",0.6,1],[/citron/,"en:lemons","u",0.45,1],[/courgette/,"en:zucchini","kg",2.8],[/aubergine/,"en:aubergines","kg",3.5],[/poivron/,"en:sweet-peppers","kg",4],[/broccolini/,"en:broccoli","pack",2.8,200],[/brocoli|chou[ -]fleur/,"en:broccoli","kg",3.5],[/champignon/,"en:champignon-mushrooms","pack",1.8,250],[/epinard/,"en:spinachs","pack",2.2,300],[/salade|laitue|roquette|mache|pousses|mesclun/,"en:lettuces","pack",1.6,150],[/tomates? cerises?/,"en:cherry-tomatoes","pack",2.2,250],[/tomate/,"en:tomatoes","kg",3.2],[/concombre/,"en:cucumbers","u",0.9,1],[/butternut|courge|potiron|potimarron/,"en:butternut-squashes","kg",2.2],[/poireau/,"en:leeks","kg",3],[/celeri/,"en:celery","pack",1.9,500],[/haricots? verts?/,"en:green-beans","kg",5],[/petits? pois/,"en:green-peas","pack",2.2,1000],[/avocat/,"en:avocados","u",1,1],[/\bpommes?\b/,"en:apples","kg",2.8],[/banane/,"en:bananas","kg",2],[/pois gourmands?/,null,"kg",9],[/gingembre/,null,"kg",8],[/cornichon/,"en:gherkins","pack",1.8,370],[/pesto/,"en:pestos","pack",2.2,190],[/agneau/,null,"pack",9,400],[/truite/,null,"pack",5,250],[/fruits de mer/,null,"pack",5,400],[/maquereau/,null,"pack",2.5,170],[/houmous|hummus/,null,"pack",2,200],[/pain (a burger|pita)|pains (a burger|pita)/,null,"pack",1.8,300],[/\bmais\b/,null,"pack",1.1,285],[/artichaut/,null,"pack",2.5,240],[/asperge/,null,"kg",9],[/fenouil/,null,"kg",3.5],[/betterave/,null,"pack",1.2,500],[/endive/,null,"kg",3],[/\bchou/,null,"kg",2.2],[/ananas/,null,"u",2,1],[/mangue/,null,"u",1.8,1],[/kiwi/,null,"u",0.4,1],[/kaki/,null,"u",0.8,1],[/orange|clementine/,null,"kg",2.5],[/edamame/,null,"pack",3,400],[/halloumi/,null,"pack",3,225],[/harissa/,null,"pack",1.8,135],[/aioli|mayonnaise/,null,"pack",2,235],[/kalamata/,"en:kalamata-olives","pack",2.6,150],[/olive/,"en:black-olives","pack",2.2,150],
+ [/persil|coriandre|aneth|menthe|basilic|ciboulette|estragon|cerfeuil|bouquet garni/,"en:herbs","pack",1.2,30],[/vinaigre/,"en:vinegars","pack",1.6,500],[/moutarde/,"en:mustards","pack",1.5,200],[/sauce soja/,"en:soy-sauces","pack",2.2,250],[/miel/,"en:honeys","pack",4.5,250],[/\bvin\b/,"en:white-wines","pack",4,750],[/herbes|origan|thym|laurier|romarin|paprika|cumin|curry|curcuma|cannelle|muscade|piment|ras el hanout|garam|epice/,"en:herbes-de-provence","pack",1.6,30],[/\bsel\b|poivre/,"en:salts","pack",1,500]];
+const nrmA=x=>nrm4(x).replace(/['’]/g," ");
+function priceEntry(id){if(!ING[id])return null;const n=nrmA(ING[id][0]);if(/^eau\b|ingredients a preciser/.test(n))return null;return PRICE_DB.find(z=>z[0].test(n))||null}
+let OPC=null;
+function opCache(){if(!OPC){try{OPC=JSON.parse(localStorage.getItem(LS+"-op")||"{}")||{}}catch(e){OPC={}}}return OPC}
+function opSave(){try{localStorage.setItem(LS+"-op",JSON.stringify(OPC))}catch(e){}}
+function opGet(store,cat){const c=opCache()[store];const x=c&&c[cat];return x&&x.v&&Date.now()-x.ts<4*864e5?x:null}
+const fmtEur=v=>(Math.round(v*100)/100).toLocaleString("fr-FR",{style:"currency",currency:"EUR"}).replace(/ /g," ");
+function lineCost(g,store,refOnly){const main=g.main||g.items[0];const pe=priceEntry(main.id)||g.items.map(e=>priceEntry(e.id)).find(Boolean);if(!pe)return null;const[,cat,kind,ref,pack]=pe;const idx=STORES[store][1];
+ let grams=0,units=0,stapleOnly=true,unk=false;
+ for(const e of g.items){const id=e.id;if(isStaple(id))continue;stapleOnly=false;const u=ING[id][2],m=Math.max(0,e.q-(e.hq||0));
+  if(kind==="u"){if(u===""||u==="pièce")units+=m;else{const gg=u==="g"||u==="ml"?m:approxG(id,m);const pw=(NUTDB.find(z=>z[0].test(nrmA(ING[id][0])))||[])[6]||100;units+=gg?gg/pw:m}}
+  else{const gg=u==="g"||u==="ml"?m:(approxG(id,m)||gramsOf(id,m));if(gg==null){unk=true;continue}grams+=gg}}
+ const op=refOnly||!cat?null:opGet(store,cat);const src=op?"op":"ref";
+ const unitPrice=op?op.v:(kind==="pack"?ref/pack*1000:ref)*idx; // €/kg (pack, kg) ou €/pièce (u)
+ let eur,detail;
+ if(stapleOnly){eur=kind==="u"?unitPrice:unitPrice*(kind==="pack"?pack:500)/1000;detail="1 "+(kind==="u"?"pièce":"paquet")}
+ else if(kind==="u"){const lot=pack||1;const n=Math.ceil(Math.max(1,Math.ceil(units-0.05))/lot)*lot;eur=n*unitPrice;detail=n+" pièce"+(n>1?"s":"")}
+ else if(kind==="pack"){const np=Math.max(1,Math.ceil(grams/pack-0.08));eur=np*pack/1000*unitPrice;detail=np+" × "+(pack>=1000?(pack/1000)+(cat.includes("milk")||cat.includes("oil")||cat.includes("wine")?" L":" kg"):pack+(cat.includes("milk")||cat.includes("oil")||cat.includes("wine")||cat.includes("coconut")?" ml":" g"))}
+ else{if(!grams)return null;eur=Math.max(0.1,grams/1000*unitPrice);detail=fmtApprox(grams).replace("≈ ","")+" au poids"}
+ return{eur,src,detail,cat,kind,n:op?op.n:0}}
+function budgetOf(groups,store,refOnly){let tot=0,op=0,ref=0,unk=0;const cats=new Set();for(const g of groups){const c=lineCost(g,store,refOnly);if(!c){unk++;continue}tot+=c.eur;if(c.src==="op")op++;else ref++;cats.add(c.cat+"|"+c.kind)}return{tot,op,ref,unk,cats:[...cats]}}
+// Open Prices (Open Food Facts) : prix relevés en magasin par la communauté
+function opValue(items,kind){const vals=[];for(const it of items||[]){const p=Number(it.price_is_discounted&&it.price_without_discount?it.price_without_discount:it.price);if(!(p>0))continue;
+  if(it.type==="CATEGORY"||(!it.product&&it.category_tag)){if(kind==="u"?it.price_per==="UNIT":it.price_per==="KILOGRAM")vals.push(p)}
+  else if(it.product&&kind!=="u"){const q=Number(it.product.product_quantity),u=String(it.product.product_quantity_unit||"g").toLowerCase();if(q>0&&(u==="g"||u==="ml"))vals.push(p/(q/1000))}}
+ const ok=vals.filter(v=>kind==="u"?v>=0.05&&v<=15:v>=0.2&&v<=250).sort((a,b)=>a-b);if(!ok.length)return null;return{v:ok[Math.floor(ok.length/2)],n:ok.length}}
+async function opFetch(url){try{const r=await fetch(url,{headers:{Accept:"application/json"}});if(!r.ok)throw new Error("http"+r.status);return await r.json()}
+ catch(e){if(SYNC_ON&&sb.code){const j=await fnCall({action:"prices",url},20000);return j}throw e}}
+async function opRefresh(store){const B=ui.bud={busy:true,done:0,tot:0,err:""};renderBudget();
+ const{out}=shopList();const groups=shopGroups(out);const todo=[];const seen=new Set();
+ for(const g of groups){const main=g.main||g.items[0];const pe=priceEntry(main.id)||g.items.map(e=>priceEntry(e.id)).find(Boolean);if(!pe||!pe[1])continue;const k=pe[1]+"|"+pe[2];if(seen.has(k))continue;seen.add(k);todo.push([pe[1],pe[2]])}
+ B.tot=todo.length;renderBudget();const since=new Date(Date.now()-365*864e5).toISOString().slice(0,10);const brand=encodeURIComponent(STORES[store][0]);
+ const C=opCache();C[store]=C[store]||{};let fails=0,found=0;
+ const worker=async()=>{while(todo.length){const[cat,kind]=todo.shift();const url=`https://prices.openfoodfacts.org/api/v1/prices?currency=EUR&size=50&order_by=-date&date__gte=${since}&location__osm_name__contains=${brand}&`+(kind==="pack"?`product__categories_tags__contains=${encodeURIComponent(cat)}`:`category_tag=${encodeURIComponent(cat)}`);
+  try{const j=await opFetch(url);const v=opValue(j&&j.items,kind);C[store][cat]={v:v?v.v:0,n:v?v.n:0,ts:Date.now()};if(v)found++}catch(e){fails++}
+  B.done++;if(B.done%4===0)renderBudget()}};
+ await Promise.all([worker(),worker(),worker(),worker()]);opSave();B.busy=false;B.found=found;
+ if(fails&&fails>=B.tot)B.err="Impossible de joindre Open Prices pour le moment : estimation avec les prix de référence.";
+ renderShop()}
+function renderBudget(){const el=document.getElementById("budget");if(!el)return;const st=state.store;
+ const chips=Object.entries(STORES).map(([k,[n]])=>`<button type="button" class="chip" data-store="${k}" aria-pressed="${k===st}">${esc(n)}</button>`).join("");
+ if(!st){el.innerHTML=`<div class="bud-card ask"><p><b>🛒 Où fais-tu tes courses ?</b><br>Choisis ton magasin pour voir le budget estimé de la liste.</p><div class="chips">${chips}</div></div>`;return}
+ const{out}=shopList();const groups=shopGroups(out);if(!groups.length){el.innerHTML=`<div class="bud-card"><div class="bud-top"><span>Magasin</span><div class="chips">${chips}</div></div></div>`;return}
+ const inCart=g=>g.ids.every(id=>state.bought[id]);const toBuy=groups.filter(g=>!inCart(g)),cart=groups.filter(inCart);
+ const A=budgetOf(groups,st),R=budgetOf(toBuy,st),K=budgetOf(cart,st);const B=ui.bud||{};
+ const cmp=Object.keys(STORES).map(k=>[k,budgetOf(groups,k,true).tot]).sort((a,b)=>a[1]-b[1]);
+ el.innerHTML=`<div class="bud-card"><div class="bud-top"><span>Magasin</span><div class="chips">${chips}</div></div>
+  <div class="bud-main"><div><span class="bud-l">Budget estimé chez ${esc(STORES[st][0])}</span><b class="bud-v">≈ ${fmtEur(A.tot)}</b></div>${HOSTED?`<button type="button" class="btn small" data-act="bud-refresh"${B.busy?" disabled":""}>${B.busy?`Prix… ${B.done||0}/${B.tot||"?"}`:"🔄 Prix en magasin"}</button>`:""}</div>
+  <p class="bud-sub">${cart.length?`Reste à prendre ≈ ${fmtEur(R.tot)} · dans le panier ≈ ${fmtEur(K.tot)} · `:""}${A.op?`<b>${A.op}</b> prix relevés chez ${esc(STORES[st][0])} (Open Prices), `:""}${A.ref} prix de référence${A.unk?`, ${A.unk} article${A.unk>1?"s":""} sans prix`:""}.</p>
+  ${B.err?`<p class="bud-sub err">${esc(B.err)}</p>`:""}${!B.busy&&B.found===0&&!B.err&&B.tot?`<p class="bud-sub">Pas encore de relevé de prix chez ${esc(STORES[st][0])} pour ces produits sur Open Prices : estimation avec les prix de référence.</p>`:""}
+  <p class="bud-cmp">Comparaison (prix de référence) : ${cmp.map(([k,v])=>`${esc(STORES[k][0])} ${fmtEur(v)}`).join(" · ")}</p>
+  <p class="bud-note">Quantités arrondies aux paquets du commerce. Prix de référence : moyennes françaises ajustées à l'enseigne ; les prix réels varient selon le magasin et les promotions.</p></div>`}
+const renderShop1=renderShop;renderShop=function(){renderShop1();renderBudget()};
+document.addEventListener("click",e=>{const t=e.target.closest("button");if(!t)return;
+ if(t.dataset.store){state.store=t.dataset.store;commit();ui.bud=null;renderShop();if(HOSTED&&!Object.keys(opCache()[state.store]||{}).length)opRefresh(state.store);return}
+ if(t.dataset.act==="bud-refresh"&&state.store){const c=opCache();c[state.store]={};opRefresh(state.store)}});
 
 setTab(ui.tab);renderAll();initDb();sbStart();
 
