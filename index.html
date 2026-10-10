@@ -760,6 +760,18 @@ textarea.pn-in{resize:vertical;line-height:1.45}
 .item-eur.op{color:var(--accent)}
 @media (max-width:520px){.item>.item-qty{flex-direction:row;align-items:baseline;gap:8px}}
 .bud-card .chips{flex-wrap:wrap;overflow:visible}
+/* v10 : emplacement du stock, encas calculés */
+.stock-row .locbtn{flex:0 0 auto;width:32px;height:32px;border-radius:50%;border:1px solid var(--line);background:var(--surface);color:var(--muted);font-size:.95rem;line-height:1;display:grid;place-items:center;padding:0}
+.stock-row .locbtn[aria-expanded="true"]{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+.locmenu{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:-2px 0 8px;padding:8px 10px 10px;border-radius:10px;background:var(--accent-soft)}
+.locmenu>span{flex:0 0 100%;font-size:.8rem;font-weight:700;color:var(--muted)}
+.locmenu .chip{font-size:.82rem;padding:5px 10px}
+.log-quick{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 12px}
+.log-quick .chip{font-size:.82rem;padding:5px 10px}
+.log-est,.ct-est{min-height:0;margin:2px 0 8px;font-size:.84rem;line-height:1.4}
+.log-est:empty,.ct-est:empty{display:none}
+/* le contenu d'un <details> hérite du slot interne (content-box) : on force border-box */
+details *,details *::before,details *::after{box-sizing:border-box}
 
 </style>
 </head>
@@ -1945,7 +1957,7 @@ function parseIngLine(line){let s=String(line||"").replace(/[‍️]/g,"").repla
  return{name:nm,unit,qty:Math.round(v*mul*1000)/1000,txt,raw:s}}
 // --- rayon, protéine et féculent devinés à partir des noms ---
 const AISLE_KW=[["B",/\b(lait de coco|creme de coco|pois chiche|haricots? (rouge|blanc|noir)|tomates? (concassee|pelee)|pulpe|passata|coulis|concentre|en conserve|au naturel|mais doux|olives?)\b/],["P",/\b(beurre de cacahuete|farine|sucre|cassonade|chocolat|cacao|proteine|whey|levure chimique|bicarbonate|amandes?|noisettes?|noix|graines?|flocons?|avoine|miel|sirop|confiture|biscuits?|maizena|fecule|vanille|pepites?)\b/],["V",/\b(poulet|dinde|boeuf|veau|porc|agneau|canard|jambon|lardons?|bacon|chorizo|saucisses?|merguez|steak|viande|hache|saumon|cabillaud|colin|lieu|merlu|truite|thon frais|maquereau|sardines?|crevettes?|gambas|moules?|calamars?|poisson|escalopes?|magret)\b/],["C",/\b(lait|creme|beurre|fromage|yaourt|yogourt|skyr|oeufs?|feta|mozzarella|emmental|parmesan|comte|ricotta|mascarpone|chevre|cheddar|gruyere|raclette|reblochon|faisselle|tofu|burrata|halloumi)\b/],["H",/\b(persil|coriandre|basilic|aneth|menthe|ciboulette|estragon|cerfeuil)\b/],["S",/\bsurgele/],["F",/\b(riz|pates?|pasta|spaghetti|tagliatelles?|penne|fusilli|nouilles?|semoule|couscous|boulgour|quinoa|lentilles?|pain|tortillas?|wraps?|galettes?|polenta|gnocchis?|lasagnes?|vermicelles?|chapelure|panko)\b/],["B",/\b(thon|conserve|bocal|boite)\b/],["E",/\b(sel|poivre|epices?|cumin|paprika|curry|curcuma|cannelle|muscade|origan|thym|laurier|romarin|piment|huile|vinaigre|moutarde|sauce|soja|bouillon|fond|ketchup|mayonnaise|herbes|ail|levure|eau)\b/]];
-function guessAisle(name,unit){const n=nrm4(name);for(const[a,re]of AISLE_KW)if(re.test(n))return a;return unit===null?"E":"L"}
+function guessAisle(name,unit){return aisleByName(name)||(unit===null?"E":"P")}
 function guessPS(names){const t=nrm4(names.join(" | "));
  const P=[["poulet",/poulet|volaille/],["dinde",/dinde/],["boeuf",/boeuf|veau|steak|bavette/],["porc",/porc|jambon|lardon|chorizo|bacon|saucisse/],["poisson",/saumon|thon|cabillaud|colin|\blieu\b|merlu|truite|maquereau|sardine|poisson|dorade/],["crevettes",/crevette|gambas|fruits de mer|moule|calamar/],["oeufs",/oeuf/]];
  const S=[["riz",/\briz\b/],["wrap",/pate (brisee|feuilletee|a pizza|sablee)|\bpain\b|tortilla|wrap|galette|pita/],["pates",/\bpates\b|spaghetti|tagliatelle|penne|fusilli|nouille|lasagne|orzo|vermicelle|coquillette/],["boulgour",/boulgour|semoule|couscous/],["quinoa",/quinoa/],["patate",/patate douce/],["pdt",/pommes? de terre|grenaille/],["legumineuses",/lentille|pois chiche|haricots? (rouge|blanc|noir)|feve/]];
@@ -2009,6 +2021,14 @@ function cantOf(pi){try{const c=state.people[pi].cant;return Array.isArray(c)?c:
 function atCant(k,pi){const i=String(k).lastIndexOf("-");if(k.slice(i+1)!=="midi")return false;const c=cantOf(pi);if(!c.length)return false;return c.includes(dateFromYmd(k.slice(0,i)).getDay())}
 function defServ(k){try{return Math.max(1,2-[0,1].filter(pi=>atCant(k,pi)).length)}catch(e){return 2}}
 
+// ================= v10 (avant l'état) : rayons plus justes =================
+// PRE : vérifié avant AISLE_KW (sinon « brioche aux pépites de chocolat » partait en pâtisserie, « pain aux noix » aussi)
+const AISLE_PRE=[["E",/\b(fumets?|bouillons?|fonds? (de|blanc|brun)|pates? de (curry|piment)|harissa)\b/],["C",/\bpates? (brisee|feuilletee|sablee|a pizza)\b/],["B",/\b(cornichons?|capres?)\b/],["G",/\b(pate a tartiner|viennoiseries?|croissants?|pains? au chocolat|chocolatines?|brioches?|madeleines?|biscuits?|cookies?|gateaux?|barres? (de cereales|chocolatees?|proteinees?|de proteines?))\b/],["F",/^(pains?|baguettes?|buns?)\b/]];
+const AISLE_STRONG=[["V",/fruits de mer/],["F",/\b(pains?|briochee?s?|buns?|burgers?|toasts?|biscottes?|baguettes?|pitas?|tortillas?|wraps?|crackers?|galettes? de (riz|ble|sarrasin|mais)|cereales?|muesli|granola|flocons?)\b/],
+ ["G",/\b(compotes?|barres?|chips|bonbons?|confiseries?|pate a tartiner|desserts?|cremes? dessert|glaces?)\b/],
+ ["L",/\b(tomates?|carottes?|oignons?|echalotes?|ail|poireaux?|courgettes?|aubergines?|poivrons?|concombres?|salades?|laitues?|roquette|mache|epinards?|choux?|brocolis?|broccolini|haricots? verts?|pois gourmands?|champignons?|celeris?|fenouils?|radis|navets?|panais|betteraves?|potirons?|courges?|butternut|patates?|pommes? de terre|grenailles?|artichauts?|asperges?|endives?|avocats?|citrons?|oranges?|clementines?|mandarines?|pamplemousses?|pommes?|poires?|bananes?|kiwis?|mangues?|ananas|fraises?|framboises?|myrtilles?|cerises?|raisins?|abricots?|peches?|nectarines?|prunes?|melons?|pasteques?|grenades?|figues?|kakis?|gingembre|legumes?|fruits?|jeunes pousses|mesclun|cresson|blettes?|topinambours?|rhubarbe)\b/]];
+function aisleByName(name){const n=nrm4(name).replace(/['’]/g," ");for(const L of [AISLE_PRE,AISLE_KW,AISLE_STRONG])for(const[a,re]of L)if(re.test(n))return a;return null}
+
 // ---------- état ----------
 const dayOf=k=>k.split("-")[0];
 function needsFor(plan,done,serv){const m={};for(const k of SLOTS){if(done&&done[k])continue;const r=RMAP[plan[k]];if(!r)continue;const fct=((serv&&serv[k])||defServ(k))/(r.base||2);for(const[id,q]of r.i){const e=m[id]||(m[id]={id,q:0,recs:[]});if(typeof q==="number")e.q+=q*fct;const s=short(r);if(!e.recs.includes(s))e.recs.push(s)}}return m}
@@ -2018,7 +2038,7 @@ const PEMOJI=["🍎","🍐","🍌","🍓","🍊","🥝","🧃","🥛","🍪","�
 function regProduct(p){PRODUCT_MAP[p.id]=p;ING[p.id]=[p.n,p.aisle||"G",p.unit||"pièce"]}
 SNACK_PRODUCTS.forEach(regProduct);
 const allProducts=()=>[...SNACK_PRODUCTS,...(state.products||[])];
-function normalize(d){const s={v:3,weekStart:"2026-10-05",plan:{},done:{},stock:{},bought:{},servings:{},likes:{},dislikes:{},favs:{},gen:[],snacks:{},products:[],catalog:{},extras:{},skip:{},log:{},myrec:[],hist:{},removed:{},people:[{n:"Moi",t:{k:1800,p:110,f:60,c:200,fi:30}},{n:"Partenaire",t:{k:1800,p:110,f:60,c:200,fi:30}}]};if(!d||typeof d!=="object"){registerGen([]);regMyRecipes([]);applyRemoved({});return s}
+function normalize(d){const s={v:3,weekStart:"2026-10-05",plan:{},done:{},stock:{},bought:{},servings:{},likes:{},dislikes:{},favs:{},gen:[],snacks:{},products:[],catalog:{},extras:{},skip:{},log:{},myrec:[],hist:{},removed:{},loc:{},people:[{n:"Moi",t:{k:1800,p:110,f:60,c:200,fi:30}},{n:"Partenaire",t:{k:1800,p:110,f:60,c:200,fi:30}}]};if(!d||typeof d!=="object"){registerGen([]);regMyRecipes([]);applyRemoved({});return s}
  s.gen=[];registerGen([]);
  if(Array.isArray(d.myrec)){const seen=new Set();for(const x of d.myrec){const c=cleanMyRec(x);if(c&&!seen.has(c.id)&&s.myrec.length<MYREC_MAX){seen.add(c.id);s.myrec.push(c)}}}regMyRecipes(s.myrec);
  if(d.removed&&typeof d.removed==="object")for(const k in d.removed)if(d.removed[k]&&RMAP[k]&&!RMAP[k].my)s.removed[k]=true;applyRemoved(s.removed);
@@ -2043,6 +2063,7 @@ function normalize(d){const s={v:3,weekStart:"2026-10-05",plan:{},done:{},stock:
  if(d.stock&&typeof d.stock==="object"){for(const k in d.stock){const v=Number(d.stock[k]);if(ING[k]&&v>0)s.stock[k]=isStaple(k)?1:v}}
  else if(d.pantry){const need=needsFor(s.plan,null,s.servings);for(const k in d.pantry){if(!ING[k]||!d.pantry[k])continue;s.stock[k]=isStaple(k)?1:(need[k]?buyAmount(k,need[k].q):(ING[k][2]==="g"?200:1))}}
  if(d.bought&&typeof d.bought==="object")for(const k in d.bought){const v=Number(d.bought[k]);if(ING[k]&&v>0)s.bought[k]=v}
+ if(d.loc&&typeof d.loc==="object")for(const k in d.loc)if(ING[k]&&["frigo","legumes","congel","placard","epices"].includes(d.loc[k]))s.loc[k]=d.loc[k];
  return s}
 let state=(()=>{try{const raw=localStorage.getItem(LS);if(raw)return normalize(JSON.parse(raw))}catch(e){}const s=normalize({plan:DEFAULT_PLAN});s.stock={...DEFAULT_STOCK};return s})();
 function saveLocal(){try{localStorage.setItem(LS,JSON.stringify(state))}catch(e){}}
@@ -2356,13 +2377,14 @@ function toProd(p,code){if(!p)return null;const nu=p.nutriments||{};const name=s
   k100:numOf(nu["energy-kcal_100g"]),p100:numOf(nu.proteins_100g),f100:numOf(nu.fat_100g),c100:numOf(nu.carbohydrates_100g),fi100:numOf(nu.fiber_100g),sq:numOf(p.serving_quantity),kServ:numOf(nu["energy-kcal_serving"]),pServ:numOf(nu.proteins_serving),serving:strOf(p.serving_size),cats:Array.isArray(p.categories_tags)?p.categories_tags:[]}}
 function aisleFromCats(c){const t=" "+(c||[]).join(" ")+" ";
  if(/frozen|surgele/.test(t))return"S";
- if(/en:(compotes|apple-compotes|fruit-compotes|biscuits|cookies|snacks|sweet-snacks|cereal-bars|chocolates|confectioneries|fruit-juices|juices|fruit-based-beverages)\b/.test(t))return"G";
- if(/en:(yogurts|cheeses|dairies|milks|butters|creams|eggs|fermented-milk-products|dairy-desserts|fresh-cheeses|skyr)\b/.test(t))return"C";
- if(/en:(meats|poultries|fishes|seafood|hams|sausages|prepared-meats)\b/.test(t))return"V";
- if(/en:(pastas|rices|breads|flours|legumes|pulses|breakfast-cereals|cereal-grains|cereals-and-their-products)\b/.test(t))return"F";
- if(/en:(canned-foods|canned-vegetables|canned-fishes|sauces|soups|tomato-sauces)\b/.test(t))return"B";
- if(/en:(fresh-fruits|fresh-vegetables|fruits|vegetables)\b/.test(t))return"L";
- if(/en:(condiments|spices|vegetable-oils|oils|vinegars|salts|sugars|honeys)\b/.test(t))return"E";
+ if(/en:(breads|sliced-breads|sandwich-breads|wraps|tortillas)(?=\s)/.test(t)&&!/en:(viennoiseries|brioches)(?=\s)/.test(t))return"F";
+ if(/en:(viennoiseries|brioches|pastries|cakes|compotes|apple-compotes|fruit-compotes|biscuits|cookies|snacks|sweet-snacks|cereal-bars|chocolates|confectioneries|fruit-juices|juices|fruit-based-beverages)(?=\s)/.test(t))return"G";
+ if(/en:(yogurts|cheeses|dairies|milks|butters|creams|eggs|fermented-milk-products|dairy-desserts|fresh-cheeses|skyr)(?=\s)/.test(t))return"C";
+ if(/en:(meats|poultries|fishes|seafood|hams|sausages|prepared-meats)(?=\s)/.test(t))return"V";
+ if(/en:(pastas|rices|breads|flours|legumes|pulses|breakfast-cereals|cereal-grains|cereals-and-their-products)(?=\s)/.test(t))return"F";
+ if(/en:(canned-foods|canned-vegetables|canned-fishes|sauces|soups|tomato-sauces)(?=\s)/.test(t))return"B";
+ if(/en:(fresh-fruits|fresh-vegetables|fruits|vegetables)(?=\s)/.test(t))return"L";
+ if(/en:(condiments|spices|vegetable-oils|oils|vinegars|salts|sugars|honeys)(?=\s)/.test(t))return"E";
  return"E"}
 async function offFetch(url){let r;try{r=await fetch(url,{cache:"no-store"})}catch(e){throw new Error("Open Food Facts est injoignable (pas de connexion ?).")}
  if(r.status===429||r.status===503)throw new Error("Open Food Facts limite le nombre de recherches : réessaie dans une minute.");
@@ -2374,7 +2396,7 @@ async function offSearch(q){
  return(j&&Array.isArray(j.products)?j.products:[]).map(p=>toProd(p,p.code)).filter(p=>p&&p.n&&p.code)}
 
 // ---------- catalogue perso (produits déjà scannés ou ajoutés) ----------
-function regCatalog(k,c){ING[k]=[c.n+(c.brand?" · "+c.brand:""),c.aisle||"E","pièce"]}
+function regCatalog(k,c){let a=c.aisle||"E";if(a==="L"||a==="E"){const b=aisleByName(c.n);if(b&&b!==a&&AISLES[b])a=b}ING[k]=[c.n+(c.brand?" · "+c.brand:""),a,"pièce"]}
 function fromOff(p){return{n:p.n.slice(0,80),brand:(p.brand||"").slice(0,60),qty:(p.qty||"").slice(0,30),aisle:aisleFromCats(p.cats),img:p.img||"",k100:p.k100!=null?Math.round(p.k100):null,p100:p.p100!=null?Math.round(p.p100*10)/10:null,f100:p.f100!=null?Math.round(p.f100*10)/10:null,c100:p.c100!=null?Math.round(p.c100*10)/10:null,fi100:p.fi100!=null?Math.round(p.fi100*10)/10:null,sq:p.sq!=null&&p.sq>0?Math.round(p.sq):null,ns:p.ns||"",link:"",code:p.code||""}}
 function ensureCatalog(d){if(d.key&&state.catalog[d.key])return d.key;let k,c;
  if(d.manual){const n=((document.getElementById("mpName")||{}).value||d.n||"").trim();if(!n){toast("Donne un nom au produit");return null}const a=(document.getElementById("mpAisle")||{}).value;k=d.code?"b_"+d.code:"x_"+Date.now().toString(36)+Math.random().toString(36).slice(2,5);c={n:n.slice(0,80),brand:"",qty:"",aisle:AISLES[a]?a:"E",img:"",k100:null,p100:null,ns:"",link:"",code:d.code||""}}
@@ -2514,9 +2536,10 @@ function panelLog(){const c=ui.logCtx||{day:DAYS[0][0],pi:0};const P=state.peopl
  ${HOSTED?`<div class="pf-actions"><button type="button" class="btn primary" data-act="log-scan">📷 Scanner un produit</button><button type="button" class="btn" data-act="log-search">🔎 Chercher un produit</button></div>`:""}
  ${rec.length?`<div class="pn-card"><h3>Récents</h3><div class="off-list">${rec.map((it,i)=>`<button type="button" class="off-row" data-logrec="${i}"><span class="off-noimg" aria-hidden="true">🍽️</span><span class="off-txt"><span class="off-name">${esc(it.n)}</span><span class="off-meta">${it.q?esc(it.q)+" · ":""}${Math.round(it.k)} kcal · ${fmtG(it.p)} g prot.</span></span><span class="off-add" aria-hidden="true">+</span></button>`).join("")}</div></div>`:""}
  ${SNACK_RECIPES.length?`<div class="pn-card"><h3>Mes recettes d'encas</h3>${SNACK_RECIPES.map(r=>`<div class="log-rec"><span>${r.emoji||"🍪"} ${esc(r.n)} <small>${r.k} kcal / ${esc(r.unitS||"pièce")}</small></span><button type="button" class="btn small" data-logsr="${r.id}">+ 1 ${esc(r.unitS||"pièce")}</button></div>`).join("")}</div>`:""}
- <form class="pn-card" id="logForm" autocomplete="off"><h3>Saisie libre</h3>
+ <form class="pn-card" id="logForm" autocomplete="off"><h3>Saisie libre</h3><p class="pn-help">Tape un aliment et sa quantité : calories et nutriments se calculent tout seuls.</p><div class="log-quick">${LOG_QUICK.map(([n,q],i)=>`<button type="button" class="chip" data-lq="${i}">${esc(n)}</button>`).join("")}</div>
   <label class="fl">Quoi ?<input class="pn-in" name="n" required maxlength="60" placeholder="Ex : une pomme, une poignée d'amandes"></label>
-  <label class="fl">Quantité (facultatif)<input class="pn-in" name="q" maxlength="30" placeholder="Ex : 1 pièce, 30 g"></label>
+  <label class="fl">Quantité (facultatif)<input class="pn-in" name="q" maxlength="30" placeholder="Ex : 2, 30 g, 1 poignée"></label>
+  <p class="pn-help log-est" id="logEst" aria-live="polite"></p>
   <div class="pf-row"><label class="fl">kcal<input class="pn-in" name="k" type="number" min="0" max="5000" inputmode="numeric" required></label><label class="fl">Protéines (g)<input class="pn-in" name="p" type="number" min="0" max="500" step="0.1" inputmode="decimal"></label></div>
   <div class="pf-row"><label class="fl">Lipides (g)<input class="pn-in" name="f" type="number" min="0" max="500" step="0.1" inputmode="decimal"></label><label class="fl">Glucides (g)<input class="pn-in" name="c" type="number" min="0" max="800" step="0.1" inputmode="decimal"></label><label class="fl">Fibres (g)<input class="pn-in" name="fi" type="number" min="0" max="200" step="0.1" inputmode="decimal"></label></div>
   <label class="chk"><input type="checkbox" name="both"> Aussi pour ${esc(O.n)}</label>
@@ -2550,7 +2573,7 @@ function logProduct(){const d=ui.pdata,c=ui.logCtx;if(!d||!c)return;const item=p
 
 // ---------- stock rangé par endroit ----------
 const LOCS=[["frigo","🧊 Frigo",["V","C","H"]],["legumes","🥕 Fruits & légumes",["L"]],["congel","❄️ Congélateur",["S"]],["placard","🥫 Placard",["F","B","P","G"]],["epices","🧂 Épices & condiments",["E"]]];
-function locOf(id){const a=ING[id][1];const L=LOCS.find(l=>l[2].includes(a));return L?L[0]:"placard"}
+function locOf(id){const o=state.loc&&state.loc[id];if(o&&LOCS.some(l=>l[0]===o))return o;const a=ING[id][1];const L=LOCS.find(l=>l[2].includes(a));return L?L[0]:"placard"}
 const UNIT_SHORT={"pièce":"pc","":"pc",sachet:"sach.",tranche:"tr.",paquet:"paq.",branche:"br.",portion:"port.",bouteille:"bout.",brique:"briq."};
 const byName=(x,y)=>ING[x][0].localeCompare(ING[y][0],"fr");
 const wordMatch=(name,q)=>{const n=" "+norm(name).replace(/[^a-z0-9]+/g," ");return n.includes(" "+q.replace(/[^a-z0-9]+/g," ").trim())};
@@ -2570,7 +2593,7 @@ function renderStock(){
   if(n){const g=st(id),c=cv(id);const own=s?v>0:v>=n.q-0.01;if(g==="ok"&&!own&&c.via.length){status="✓ Couvert par : "+eqNames(c.via);cls="ok"}else if(s){status=g==="ok"?"✓ OK pour tes repas":"À acheter pour tes repas";cls=g==="ok"?"ok":"miss"}else{const miss=n.q-c.q;status=g==="ok"?"✓ Assez pour tes repas":c.q>0?`Manque ${fmtQty(id,buyAmount(id,miss))} pour tes repas`:`Il en faut ${fmtQty(id,n.q)} pour tes repas`;cls=g==="ok"?"ok":"miss"}}
   const ctrl=s?`<button type="button" class="switchbtn" role="switch" aria-checked="${!!v}" data-tog="${id}" aria-label="${esc(ING[id][0])} à la maison"><span class="sw-lbl">${v?"J'en ai":"Je n'en ai pas"}</span><span class="switch" aria-hidden="true"><span></span></span></button>`
    :`<div class="stepper"><button type="button" data-step="${id}" data-dir="-1" aria-label="Moins de ${esc(ING[id][0])}">−</button><label class="qbox"><input type="text" inputmode="decimal" value="${v?String(Math.round(v*100)/100).replace(".",","):""}" placeholder="0" data-qty="${id}" aria-label="Quantité de ${esc(ING[id][0])} (${esc(ING[id][2]||"pièce")})"><span class="unit">${esc(UNIT_SHORT[ING[id][2]]||ING[id][2]||"pc")}</span></label><button type="button" data-step="${id}" data-dir="1" aria-label="Plus de ${esc(ING[id][0])}">+</button></div>`;
-  return`<div class="stock-row${v?" has":""}"><span class="ico" aria-hidden="true">${icon(id)}</span><span class="item-txt"><span class="item-name">${esc(ING[id][0])}</span>${status?`<span class="status ${cls}">${esc(status)}</span>`:""}</span>${ctrl}</div>`};
+  return`<div class="stock-row${v?" has":""}"><span class="ico" aria-hidden="true">${icon(id)}</span><span class="item-txt"><span class="item-name">${esc(ING[id][0])}</span>${status?`<span class="status ${cls}">${esc(status)}</span>`:""}</span>${ctrl}${sf==="have"?`<button type="button" class="locbtn" data-locmenu="${id}" aria-expanded="${ui.locOpen===id}" aria-label="Ranger ${esc(ING[id][0])} ailleurs" title="Ranger ailleurs">⇄</button>`:""}</div>${sf==="have"&&ui.locOpen===id?locMenu(id):""}`};
  const byLoc=(ids,count)=>LOCS.map(([k,lab])=>{const it=ids.filter(id=>locOf(id)===k).sort(byName);return it.length?`<section class="aisle"><h3>${lab}${count?` <small>${it.length}</small>`:""}</h3>${it.map(row).join("")}</section>`:""}).join("");
  let html="";
  if(sf==="have"){let ids=haveIds;if(q)ids=ids.filter(id=>wordMatch(ING[id][0],q));html=byLoc(ids,true)||`<p class="muted stk-empty">${q?"Rien de ce nom dans le stock.":"Le stock est vide. Range tes courses depuis l'onglet Courses, ou ajoute ce que tu as avec « + Ajouter »."}</p>`}
@@ -3027,8 +3050,9 @@ function panelCant(){const C=ui.cant;if(!C)return"";const P=state.people[C.pi],O
   <div class="pf-actions"><button type="button" class="btn primary" data-act="cant-save"${C.items.length?"":" disabled"}>Noter pour ${esc(P.n)}</button>${C.items.length?`<button type="button" class="btn" data-act="cant-save-both">Pour ${esc(P.n)} et ${esc(O.n)}</button>`:""}</div></div>
  ${rec.length?`<div class="pn-card"><h3>Déjà pris à la cantine</h3><div class="ct-chips">${rec.map((it,i)=>`<button type="button" class="chip" data-crec="${i}">${esc(it.n.replace(/^Cantine : /,""))} <small>${fmtInt(it.k)} kcal</small></button>`).join("")}</div></div>`:""}
  <div class="pn-card"><h3>Ajouter un plat</h3><p class="pn-help">Portions standard de restauration collective : ajuste avec ½ ou « grande ».</p>${CANT_DB.map(([cat,list],ci)=>`<h4 class="ct-cat">${esc(cat)}</h4><div class="ct-chips">${list.map((x,j)=>`<button type="button" class="chip" data-cadd="${ci}:${j}">${esc(x[0])}</button>`).join("")}</div>`).join("")}</div>
- <details class="pn-card ct-man"><summary>Autre chose : saisie libre</summary><div class="pf-row"><label class="fl">Quoi ?<input class="pn-in" id="ctN" maxlength="40" placeholder="Ex : tajine de légumes"></label><label class="fl">kcal<input class="pn-in" id="ctK" type="text" inputmode="numeric"></label></div>
+ <details class="pn-card ct-man"><summary>Autre chose : saisie libre</summary><div class="pf-row"><label class="fl">Quoi ?<input class="pn-in" id="ctN" maxlength="40" placeholder="Ex : 250 g de couscous"></label><label class="fl">kcal<input class="pn-in" id="ctK" type="text" inputmode="numeric"></label></div>
   <div class="pf-row"><label class="fl">Protéines (g)<input class="pn-in" id="ctP" type="text" inputmode="decimal"></label><label class="fl">Lipides (g)<input class="pn-in" id="ctF" type="text" inputmode="decimal"></label></div><div class="pf-row"><label class="fl">Glucides (g)<input class="pn-in" id="ctC" type="text" inputmode="decimal"></label><label class="fl">Fibres (g)<input class="pn-in" id="ctFi" type="text" inputmode="decimal"></label></div>
+  <p class="pn-help ct-est" id="ctEst" aria-live="polite"></p>
   <div class="pf-actions"><button type="button" class="btn" data-act="cant-man">Ajouter au plateau</button></div></details>`}
 async function cantPhoto(file){const C=ui.cant;if(!C||!file)return;C.busy=true;C.err="";C.note="";renderPanel();
  try{const big=await imgData(file,1024,0.75),small=await imgData(file,420,0.6);C.photo=small.url;renderPanel();
@@ -3232,6 +3256,76 @@ const renderShop1=renderShop;renderShop=function(){renderShop1();renderBudget()}
 document.addEventListener("click",e=>{const t=e.target.closest("button");if(!t)return;
  if(t.dataset.store){state.store=t.dataset.store;commit();ui.bud=null;renderShop();if(HOSTED&&!Object.keys(opCache()[state.store]||{}).length)opRefresh(state.store);return}
  if(t.dataset.act==="bud-refresh"&&state.store){const c=opCache();c[state.store]={};opRefresh(state.store)}});
+
+// ================= v10 : icônes justes, emplacement du stock modifiable, encas calculés automatiquement =================
+// ces règles passent avant les anciennes (premier motif trouvé = icône)
+ICONS.unshift([/^huile/,"🫒"],[/^eau\b/,"💧"],[/bouillon|fumet|^fond de/,"🥣"],[/farine|panko|chapelure|maizena|fecule/,"🌾"],
+ [/pain au chocolat|chocolatine|croissant|viennoiserie/,"🥐"],[/proteine|whey|caseine/,"💪"],[/biscuit|cookie|madeleine|gateau|brownie|sables?\b|speculoos/,"🍪"],[/pita|tortilla|wrap|galette/,"🫓"],[/brioch|\bpains?\b|baguette|burger|toast|biscotte/,"🍞"],[/barre/,"🍫"],[/pate a tartiner|nutella|chocolat|cacao/,"🍫"],[/compote/,"🍎"],
+ [/yaourt|yogourt|skyr|fromage blanc|faisselle|petits? suisses?/,"🥛"],[/lait de coco|creme de coco|noix de coco|\bcoco\b/,"🥥"],[/\blait\b|boisson (vegetale|d.avoine|de soja|d.amande|de riz)/,"🥛"],
+ [/tomate/,"🍅"],[/laitue|\bmache\b|mesclun|cresson|endive|salade|roquette|jeunes pousses/,"🥬"],[/courgette|concombre|cornichon/,"🥒"],[/oignons? nouveaux?|oignons? verts?|\bciboule\b/,"🧅"],
+ [/haricots? verts?|pois gourmands?|petits? pois|edamame|feves? de soja/,"🫛"],[/gingembre/,"🫚"],[/sauce|vinaigre|mayonnaise|ketchup|aioli|tahini|nuoc mam/,"🫙"],[/graines|tournesol/,"🌻"],
+ [/\bthon\b|saumon|truite|maquereau|cabillaud|\bcolin\b|poisson|\blieu\b|merlu|sardine|dorade/,"🐟"],[/tofu|houmous|hummus/,"🫘"],
+ [/ananas/,"🍍"],[/orange|clementine|mandarine|pamplemousse|\bkakis?\b/,"🍊"],[/kiwi/,"🥝"],[/mangue/,"🥭"],[/banane/,"🍌"],[/\bpoires?\b/,"🍐"],[/fraise|framboise|myrtille|fruits rouges|\bmures?\b/,"🍓"],[/raisin/,"🍇"],[/cerise/,"🍒"],[/peche|abricot|nectarine/,"🍑"],[/melon|pasteque/,"🍉"],
+ [/harissa|piment|sriracha|pate de curry/,"🌶️"],[/muscade/,"🌰"],[/cacahuete|arachide|amande|noisette|\bnoix\b|cajou|pistache|pecan/,"🥜"],[/\bolives?\b/,"🫒"],[/pesto/,"🌿"],[/^(sucre|cassonade|vergeoise)/,"🍬"],[/\bmais\b/,"🌽"]);
+// ---------- emplacement du stock (Frigo, Placard…) modifiable ----------
+function locMenu(id){return`<div class="locmenu" role="group" aria-label="Ranger ${esc(ING[id][0])}"><span>Ranger dans :</span>${LOCS.map(([k,lab])=>`<button type="button" class="chip" data-setloc="${id}|${k}" aria-pressed="${locOf(id)===k}">${lab}</button>`).join("")}</div>`}
+// ---------- encas : calories et nutriments calculés à partir du nom et de la quantité ----------
+NUTDB.unshift([/pain au chocolat|chocolatine/,410,7.5,21,46,2.5,60],[/croissant/,410,8,21,45,2.5,45],[/brioche/,360,8.5,12,54,2,40],[/barres? (de )?cereales?/,400,6,12,68,5,25],[/barres? (proteinee|de proteines?)/,370,30,12,35,8,55],[/carres? de chocolat/,560,8,40,35,10,6],
+ [/biscuits?|cookies?/,480,6,22,64,2.5,10],[/madeleine/,450,6,24,52,1,25],[/galettes? de riz/,385,8,3,80,3,8],[/granola|muesli/,450,9,18,62,7],[/cereales/,380,8,3,80,5],[/pistache/,600,21,48,17,10],[/noix du bresil/,690,14,68,5,7],[/noix de pecan/,700,9,72,6,9],[/abricots? secs?/,250,3.5,0.5,55,7.5,8],[/pruneaux?/,240,2.5,0.4,57,7,10],
+ [/\bpoires?\b/,58,0.4,0.1,13,3.1,170],[/raisins? secs?/,300,3,0.5,70,4],[/raisin/,70,0.7,0.2,16,0.9],[/cerise/,60,1,0.3,14,1.6,8],[/abricot/,48,1,0.4,10,2,40],[/peche|nectarine/,40,1,0.3,9,1.5,150],[/\bprunes?\b/,46,0.7,0.3,10,1.4,30],[/pasteque/,30,0.6,0.2,7,0.4],[/melon/,35,0.8,0.2,8,0.9],[/ananas/,52,0.5,0.1,12,1.4],[/pamplemousse/,42,0.8,0.1,9,1.6,300],[/grenade/,83,1.7,1.2,19,4,250],[/figue/,74,0.8,0.3,16,2.9,50],[/clementine|mandarine/,47,0.8,0.2,10,1.7,70],
+ [/petits? suisses?/,110,9,3.5,4.5,0,60],[/oeufs? durs?/,143,12.5,10,0.7,0,55],[/smoothie/,55,0.6,0.2,12,1],[/\bjus\b/,45,0.6,0.1,10,0.2],[/chips/,535,6,33,52,4],[/pop ?corn/,380,9,4,74,15],[/crackers?/,470,9,18,66,3],[/glace|creme glacee/,210,3.5,11,24,0.5,70],[/pate a tartiner|nutella/,540,6,31,57,3],[/confiture/,250,0.4,0.1,60,1],[/dattes?/,280,2.5,0.4,67,7,8]);
+const LOG_QUICK=[["Pomme","1"],["Banane","1"],["Kiwi","2"],["Clémentines","2"],["Amandes","30 g"],["Noix","30 g"],["Yaourt grec 0 %","150 g"],["Skyr","150 g"],["Fromage blanc","100 g"],["Compote","100 g"],["Carrés de chocolat noir","2"],["Œuf dur","1"],["Fromage","30 g"],["Barre de céréales","1"]];
+function defPortion(n){return/amande|noix|noisette|cajou|pistache|cacahuete|graine|chocolat|biscuit|cookie|chips|secs?\b|dattes?|pruneau|granola|muesli|cereale|fromage(?! blanc)|emmental|comte|chevre|feta/.test(n)?30:/yaourt|skyr|fromage blanc|compote/.test(n)?125:/lait|jus|smoothie/.test(n)?200:100}
+// name : « Kiwi », « 2 kiwis », « 30 g d'amandes » ; qty : « 2 », « 30 g », « 1 poignée »… ; defG : portion si aucune quantité
+function estimateFood(name,qty,defG){name=String(name||"").trim();if(name.length<2)return null;let txt=String(qty||"").trim(),nm=name;
+ if(!txt){const x=parseIngLine(name);if(x&&x.name&&x.txt&&x.txt!=="selon le goût"&&(x.qty||x.unit===null)){txt=x.txt;nm=x.name}}
+ const nn=nrmA(nm);const e=NUTDB.find(z=>z[0].test(nn));if(!e||(e[1]===0&&e[2]===0))return null;const t=nrmA(txt);let g,m,def=false;
+ if((m=t.match(/(\d+(?:[.,]\d+)?)\s*(kg|grammes?|gr|g|ml|cl|l)(?![a-z])/))){g=parseFloat(m[1].replace(",","."))*({kg:1000,cl:10,l:1000}[m[2]]||1)}
+ else if((m=t.match(/(\d+\s?\/\s?\d+|\d+(?:[.,]\d+)?|[½¼¾]|une?|deux|trois|quatre)/))){const v=qVal(m[1].replace(/\s/g,""))||1;const w=/poignee/.test(t)?30:/soupe|\bcs\b|cas\b/.test(t)?15:/cafe|\bcc\b/.test(t)?5:/tranche/.test(t)?35:/carre/.test(t)?6:/verre/.test(t)?200:/pot/.test(t)?125:(e[6]||defPortion(nn));g=v*w}
+ else{g=e[6]||defG||defPortion(nn);def=true}
+ if(!(g>0))return null;g=Math.min(g,3000);const r=g/100;return{g:Math.round(g),k:Math.round(e[1]*r),p:r1(e[2]*r),f:r1(e[3]*r),c:r1(e[4]*r),fi:r1(e[5]*r),def}}
+function estLine(E,pre){return`🧮 ${pre||"Calculé"} : ${E.def?"portion habituelle, ":""}≈ ${fmtInt(E.g)} g · <b>${fmtInt(E.k)} kcal</b> · protéines ${fmtG(E.p)} g · lipides ${fmtG(E.f)} g · glucides ${fmtG(E.c)} g · fibres ${fmtG(E.fi)} g. Tu peux corriger.`}
+function logEstimate(){const f=document.getElementById("logForm");if(!f)return;const E=estimateFood(f.elements.n.value,f.elements.q.value);const out=document.getElementById("logEst");
+ ["k","p","f","c","fi"].forEach(x=>{const el=f.elements[x];if(!el||el.dataset.man==="1")return;if(E){el.value=E[x];el.dataset.auto="1"}else if(el.dataset.auto==="1"){el.value="";el.dataset.auto=""}});
+ if(!out)return;if(E)out.innerHTML=estLine(E);
+ else out.textContent=f.elements.n.value.trim().length>2?"Aliment non reconnu : indique les kcal à la main"+(HOSTED?", ou passe par « Chercher un produit ».":"."):""}
+// cantine : plats composés (curry, tajine…), puis plats types de collectivité, puis aliments de base — et on additionne
+const CANT_PROT="poulet|boeuf|porc|agneau|veau|dinde|canard|legumes?|crevettes?|poissons?|thon|saumon|cabillaud|lentilles?|pois chiches?|tofu|oeufs?|fromages?|jambon|lardons?|champignons?|epinards?|chevre|merguez|saucisses?|boulettes?";
+const CANT_FREE=[["tajines? (?:de |aux )?legumes?|tajines? vege\\w*","Tajine de légumes",270,7,10,35,9,"300 g"],["tajines?|tagines?","Tajine",420,32,18,30,6,"350 g"],["dh?al|curry de lentilles?","Dahl de lentilles",330,17,9,45,12,"300 g"],["curry|colombo|massala|masala|tikka","Curry",380,30,20,18,4,"300 g"],["paella","Paëlla",520,28,16,64,3,"350 g"],["risotto","Risotto",450,12,15,65,2,"300 g"],["gratin dauphinois","Gratin dauphinois",280,6,17,25,2,"200 g"],
+ ["soupes?|veloutes?|potages?|minestrone|gaspacho","Soupe",90,2.5,3,12,3,"250 ml"],["poelees? (?:de )?legumes?|wok de legumes?|legumes sautes","Poêlée de légumes",150,4,8,15,5,"200 g"],["woks?|nouilles sautees|pad thai|chow mein","Wok de nouilles",480,22,15,62,4,"350 g"],["burgers?|hamburgers?|cheeseburgers?","Burger",520,27,25,45,3,"1 burger"],["kebabs?|tacos|durum","Kebab",650,30,30,60,3,"1 pièce"],["sandwichs?|sandwiches|paninis?|bagels?","Sandwich",450,20,18,50,3,"1 pièce"],["wraps?","Wrap",420,20,16,45,4,"1 pièce"],["croque(?: monsieur| madame)?","Croque-monsieur",380,20,20,30,1.5,"1 pièce"],
+ ["moussaka","Moussaka",480,22,30,28,5,"350 g"],["(?:pates |spaghettis? |tagliatelles? |penne )?(?:a la |a )?(?:bolo|bolognaise)","Pâtes bolognaise",520,25,16,66,5,"350 g"],["(?:pates |spaghettis? |tagliatelles? |penne )?(?:a la )?carbonara","Pâtes carbonara",650,25,30,68,3,"350 g"],["raviolis?","Raviolis",420,16,14,55,4,"300 g"],["gnocchis?","Gnocchis",430,10,12,68,4,"300 g"],["cassoulet","Cassoulet",480,28,24,36,10,"350 g"],["choucroute","Choucroute garnie",600,30,42,20,8,"400 g"],
+ ["basquaise|marengo|fricassee|a la creme|en sauce|mijote","Viande en sauce",380,33,18,18,4,"350 g"],["poke(?: bowl)?","Poke bowl",550,25,18,70,6,"400 g"],["buddha bowl|bowl","Bowl",520,18,20,65,12,"400 g"],["sushis?|makis?|california","Sushis",380,14,6,66,2,"8 pièces"],["tartiflette|croziflette|raclette","Tartiflette",650,25,40,45,3,"350 g"],["falafels?","Falafels",400,15,22,35,8,"5 pièces"],["nems?|rouleaux de printemps|samoussas?","Nems",330,12,18,30,2,"3 pièces"],["bibimbap","Bibimbap",560,22,16,80,6,"400 g"],
+ ["salades? de fruits","Salade de fruits",90,1,0.3,20,2.5,"150 g"],["chili sin carne","Chili sin carne",300,14,8,40,12,"300 g"],["salade cesar","Salade César",420,28,26,18,3,"300 g"],["petit sale","Petit salé aux lentilles",520,34,24,40,12,"350 g"],["parmentier","Parmentier",390,18,18,36,3.5,"300 g"],["gratin de pates|pates au fromage|mac n cheese|macaronis?","Gratin de pâtes",520,20,22,58,3,"300 g"],["couscous(?: royal)?","Couscous",600,30,22,66,6,"400 g"],["boulettes?","Boulettes de viande",330,22,22,10,1,"150 g"]]
+ .map(([core,...it])=>[new RegExp(`(?:\\b(?:${CANT_PROT}) (?:au |a la |sauce |en |facon )?)?\\b(?:${core})\\b(?: (?:de |du |des |au |aux |a la |a l |sauce |et )?(?:${CANT_PROT})\\b)*`),it]);
+const CANT_IDX=CANT_DB.flatMap(([,list])=>list.map(x=>{const w=nrmA(x[0]).replace(/[^a-z0-9]+/g," ").trim().split(" ").map(v=>v.length>3?v.replace(/[sx]$/,""):v);return[new RegExp("\\b"+w.map(v=>v+"[sx]?").join(" ")+"\\b"),x,w.join(" ").length]})).sort((a,b)=>b[2]-a[2]);
+// féculents : la base est en poids cru, à la cantine on parle de poids cuit
+const COOKED=[[/\briz\b/,0.37],[/\bpates\b|spaghetti|tagliatelle|penne|fusilli|coquillette|nouille|vermicelle/,0.42],[/semoule|couscous|boulgour/,0.4],[/quinoa/,0.33],[/lentille/,0.35]];
+function cantCalc(v){v=String(v||"").trim();if(v.length<3)return null;const x=/\d/.test(v)?parseIngLine(v):null;const grams=x&&(x.unit==="g"||x.unit==="ml")&&x.qty>0?x.qty:null;const cnt=x&&x.qty>0&&!grams?x.qty:null;
+ let t=" "+nrmA((x&&x.name)||v).replace(/[^a-z0-9]+/g," ").trim()+" ";const items=[],miss=[];
+ const ex=CANT_IDX.find(([re])=>{const m=t.trim().match(re);return m&&m[0].length===t.trim().length});
+ if(ex){items.push(ex[1]);t=" "}else{for(const[re,it]of CANT_FREE){const m=t.match(re);if(m){items.push(it);t=t.replace(m[0]," | ");break}}
+ for(const[re,it]of CANT_IDX){const m=t.match(re);if(m){items.push(it);t=t.replace(m[0]," | ")}}}
+ const STOPW=/^(?:de|du|des|d|la|le|les|l|un|une|au|aux|en|a|sauce|maison|plat|assiette|frais|fraiche|complete?|lorraine|nature|bio|vapeur|jour|grillee?s?|roties?|rotis?|four|petite?s?|grande?s?|gros|portions?|parts?|demi|vertes?|verts?|chaude?s?|froide?s?|ou)$/;
+ for(let ch of t.split(/\||\bet\b|\bavec\b|\bpuis\b/)){ch=ch.trim().split(" ").filter(w=>w&&!STOPW.test(w)).join(" ");
+  if(!/[a-z]{3}/.test(ch))continue;
+  const y=estimateFood(ch,"",150);if(y){const ck=!/\bcru|\bsec/.test(ch)&&COOKED.find(z=>z[0].test(ch));const k=ck?ck[1]:1;items.push([ch.charAt(0).toUpperCase()+ch.slice(1),Math.round(y.k*k),r1(y.p*k),r1(y.f*k),r1(y.c*k),r1(y.fi*k),y.g+" g"+(ck?" cuits":"")])}else miss.push(ch)}
+ if(!items.length)return null;let f=1;
+ if(items.length===1){const pm=String(items[0][6]).match(/^(\d+)\s*(g|ml)\b/);if(grams&&pm)f=grams/Number(pm[1]);else if(cnt)f=cnt}
+ const T={k:0,p:0,f:0,c:0,fi:0};items.forEach(it=>{T.k+=it[1]*f;T.p+=it[2]*f;T.f+=it[3]*f;T.c+=it[4]*f;T.fi+=it[5]*f});
+ const lab=items.length===1?items[0][0]+", "+(f===1?items[0][6]:grams?fmtInt(grams)+" g":"× "+fmtG(f)):items.map(it=>it[0]+" ("+it[6]+")").join(" + ");
+ return{k:Math.round(T.k),p:r1(T.p),f:r1(T.f),c:r1(T.c),fi:r1(T.fi),lab,miss}}
+function cantEstimate(){const n=document.getElementById("ctN");if(!n)return;const v=n.value;const E=cantCalc(v);
+ const map={ctK:"k",ctP:"p",ctF:"f",ctC:"c",ctFi:"fi"};for(const id in map){const el=document.getElementById(id);if(!el||el.dataset.man==="1")continue;if(E){el.value=String(E[map[id]]).replace(".",",");el.dataset.auto="1"}else if(el.dataset.auto==="1"){el.value="";el.dataset.auto=""}}
+ const out=document.getElementById("ctEst");if(out){if(E)out.innerHTML=`🧮 Calculé (${esc(E.lab)}) : <b>${fmtInt(E.k)} kcal</b> · protéines ${fmtG(E.p)} g · lipides ${fmtG(E.f)} g · glucides ${fmtG(E.c)} g.${E.miss.length?` Pas compté : ${esc(E.miss.join(", "))}.`:""} Tu peux corriger, ou préciser la quantité (ex : « 250 g de couscous »).`;else out.textContent=v.trim().length>2?"Plat non reconnu : indique les kcal à la main, ou compose le plateau avec les plats ci-dessus.":""}}
+document.addEventListener("input",e=>{const t=e.target;if(!t)return;
+ if(t.id==="ctN"){cantEstimate();return}if(/^ct(K|P|F|C|Fi)$/.test(t.id)){t.dataset.man=t.value?"1":"";return}
+ if(t.id==="mpName"){const s=document.getElementById("mpAisle");if(s&&s.dataset.man!=="1"){const a=aisleByName(t.value);if(a&&AISLES[a])s.value=a}return}
+ if(t.form&&t.form.id==="logForm"){if(t.name==="n"||t.name==="q")logEstimate();else if(["k","p","f","c","fi"].includes(t.name))t.dataset.man=t.value?"1":""}});
+document.addEventListener("change",e=>{const t=e.target;if(t&&t.id==="mpAisle")t.dataset.man="1"});
+document.addEventListener("click",e=>{const t=e.target.closest("button");if(!t)return;
+ if(t.dataset.lq!=null&&t.dataset.lq!==""){const f=document.getElementById("logForm");const x=LOG_QUICK[Number(t.dataset.lq)];if(f&&x){f.elements.n.value=x[0];f.elements.q.value=x[1];["k","p","f","c","fi"].forEach(k=>{if(f.elements[k])f.elements[k].dataset.man=""});logEstimate();const b=f.querySelector("[type=submit]");if(b)try{b.scrollIntoView({block:"nearest",behavior:"smooth"})}catch(err){}}return}
+ if(t.dataset.locmenu){ui.locOpen=ui.locOpen===t.dataset.locmenu?null:t.dataset.locmenu;renderStock();return}
+ if(t.dataset.setloc){const[id,k]=t.dataset.setloc.split("|");if(!ING[id])return;if(!state.loc)state.loc={};const a=ING[id][1];const def=(LOCS.find(l=>l[2].includes(a))||["placard"])[0];if(k===def)delete state.loc[id];else state.loc[id]=k;ui.locOpen=null;commit();renderStock();const L=LOCS.find(l=>l[0]===k);toast(ING[id][0]+" : rangé dans « "+(L?L[1].replace(/^\S+\s/,""):k)+" »");return}});
 
 setTab(ui.tab);renderAll();initDb();sbStart();
 
