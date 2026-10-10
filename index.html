@@ -1957,7 +1957,8 @@ function parseIngLine(line){let s=String(line||"").replace(/[‍️]/g,"").repla
  return{name:nm,unit,qty:Math.round(v*mul*1000)/1000,txt,raw:s}}
 // --- rayon, protéine et féculent devinés à partir des noms ---
 const AISLE_KW=[["B",/\b(lait de coco|creme de coco|pois chiche|haricots? (rouge|blanc|noir)|tomates? (concassee|pelee)|pulpe|passata|coulis|concentre|en conserve|au naturel|mais doux|olives?)\b/],["P",/\b(beurre de cacahuete|farine|sucre|cassonade|chocolat|cacao|proteine|whey|levure chimique|bicarbonate|amandes?|noisettes?|noix|graines?|flocons?|avoine|miel|sirop|confiture|biscuits?|maizena|fecule|vanille|pepites?)\b/],["V",/\b(poulet|dinde|boeuf|veau|porc|agneau|canard|jambon|lardons?|bacon|chorizo|saucisses?|merguez|steak|viande|hache|saumon|cabillaud|colin|lieu|merlu|truite|thon frais|maquereau|sardines?|crevettes?|gambas|moules?|calamars?|poisson|escalopes?|magret)\b/],["C",/\b(lait|creme|beurre|fromage|yaourt|yogourt|skyr|oeufs?|feta|mozzarella|emmental|parmesan|comte|ricotta|mascarpone|chevre|cheddar|gruyere|raclette|reblochon|faisselle|tofu|burrata|halloumi)\b/],["H",/\b(persil|coriandre|basilic|aneth|menthe|ciboulette|estragon|cerfeuil)\b/],["S",/\bsurgele/],["F",/\b(riz|pates?|pasta|spaghetti|tagliatelles?|penne|fusilli|nouilles?|semoule|couscous|boulgour|quinoa|lentilles?|pain|tortillas?|wraps?|galettes?|polenta|gnocchis?|lasagnes?|vermicelles?|chapelure|panko)\b/],["B",/\b(thon|conserve|bocal|boite)\b/],["E",/\b(sel|poivre|epices?|cumin|paprika|curry|curcuma|cannelle|muscade|origan|thym|laurier|romarin|piment|huile|vinaigre|moutarde|sauce|soja|bouillon|fond|ketchup|mayonnaise|herbes|ail|levure|eau)\b/]];
-function guessAisle(name,unit){return aisleByName(name)||(unit===null?"E":"P")}
+const FRESH_U=["","pièce","botte","branche","brin","feuille","tête","pied","bouquet","poignée"];
+function guessAisle(name,unit){return aisleByName(name)||(unit===null?"E":FRESH_U.includes(unit)?"L":"P")}
 function guessPS(names){const t=nrm4(names.join(" | "));
  const P=[["poulet",/poulet|volaille/],["dinde",/dinde/],["boeuf",/boeuf|veau|steak|bavette/],["porc",/porc|jambon|lardon|chorizo|bacon|saucisse/],["poisson",/saumon|thon|cabillaud|colin|\blieu\b|merlu|truite|maquereau|sardine|poisson|dorade/],["crevettes",/crevette|gambas|fruits de mer|moule|calamar/],["oeufs",/oeuf/]];
  const S=[["riz",/\briz\b/],["wrap",/pate (brisee|feuilletee|a pizza|sablee)|\bpain\b|tortilla|wrap|galette|pita/],["pates",/\bpates\b|spaghetti|tagliatelle|penne|fusilli|nouille|lasagne|orzo|vermicelle|coquillette/],["boulgour",/boulgour|semoule|couscous/],["quinoa",/quinoa/],["patate",/patate douce/],["pdt",/pommes? de terre|grenaille/],["legumineuses",/lentille|pois chiche|haricots? (rouge|blanc|noir)|feve/]];
@@ -2023,11 +2024,67 @@ function defServ(k){try{return Math.max(1,2-[0,1].filter(pi=>atCant(k,pi)).lengt
 
 // ================= v10 (avant l'état) : rayons plus justes =================
 // PRE : vérifié avant AISLE_KW (sinon « brioche aux pépites de chocolat » partait en pâtisserie, « pain aux noix » aussi)
-const AISLE_PRE=[["E",/\b(fumets?|bouillons?|fonds? (de|blanc|brun)|pates? de (curry|piment)|harissa)\b/],["C",/\bpates? (brisee|feuilletee|sablee|a pizza)\b/],["B",/\b(cornichons?|capres?)\b/],["G",/\b(pate a tartiner|viennoiseries?|croissants?|pains? au chocolat|chocolatines?|brioches?|madeleines?|biscuits?|cookies?|gateaux?|barres? (de cereales|chocolatees?|proteinees?|de proteines?))\b/],["F",/^(pains?|baguettes?|buns?)\b/]];
+const AISLE_PRE=[["E",/\b(ail|oignon|gingembre|basilic|persil|coriandre|menthe|aneth|ciboulette|estragon|thym|romarin|origan|piment) (en poudre|moulue?|sechee?|lyophilisee?|semoule|flocons?)\b|^huiles?\b|\bmuscade\b/],["L",/^(ail|gousses? d ail|tetes? d ail)\b/],["B",/\b(tomates? (concassees?|pelees?)|pulpe|passata|puree de tomates?|coulis|fonds? d artichauts?|en conserve|en boite)\b/],["S",/\bedamames?\b/],["C",/\bhaches? (vegetal|de soja|soja)\b/],["P",/\b(tahini|puree de sesame)\b/],["H",/\b(bouquet garni|sauge|marjolaine|cerfeuil|(thym|romarin|laurier|origan) frais)\b/],["L",/\bpiments? (frais|vert|rouge)s?\b/],["E",/\bpiments?\b|\bcayenne\b/],["E",/\b(fumets?|bouillons?|fonds? (de|blanc|brun)|pates? de (curry|piment)|harissa)\b/],["C",/\bpates? (brisee|feuilletee|sablee|a pizza)\b/],["B",/\b(cornichons?|capres?)\b/],["G",/\b(pate a tartiner|viennoiseries?|croissants?|pains? au chocolat|chocolatines?|brioches?|madeleines?|biscuits?|cookies?|gateaux?|barres? (de cereales|chocolatees?|proteinees?|de proteines?))\b/],["F",/^(pains?|baguettes?|buns?)\b/]];
 const AISLE_STRONG=[["V",/fruits de mer/],["F",/\b(pains?|briochee?s?|buns?|burgers?|toasts?|biscottes?|baguettes?|pitas?|tortillas?|wraps?|crackers?|galettes? de (riz|ble|sarrasin|mais)|cereales?|muesli|granola|flocons?)\b/],
  ["G",/\b(compotes?|barres?|chips|bonbons?|confiseries?|pate a tartiner|desserts?|cremes? dessert|glaces?)\b/],
- ["L",/\b(tomates?|carottes?|oignons?|echalotes?|ail|poireaux?|courgettes?|aubergines?|poivrons?|concombres?|salades?|laitues?|roquette|mache|epinards?|choux?|brocolis?|broccolini|haricots? verts?|pois gourmands?|champignons?|celeris?|fenouils?|radis|navets?|panais|betteraves?|potirons?|courges?|butternut|patates?|pommes? de terre|grenailles?|artichauts?|asperges?|endives?|avocats?|citrons?|oranges?|clementines?|mandarines?|pamplemousses?|pommes?|poires?|bananes?|kiwis?|mangues?|ananas|fraises?|framboises?|myrtilles?|cerises?|raisins?|abricots?|peches?|nectarines?|prunes?|melons?|pasteques?|grenades?|figues?|kakis?|gingembre|legumes?|fruits?|jeunes pousses|mesclun|cresson|blettes?|topinambours?|rhubarbe)\b/]];
+ ["L",/\b(tomates?|carottes?|oignons?|echalotes?|ail|poireaux?|courgettes?|aubergines?|poivrons?|concombres?|salades?|laitues?|roquette|mache|epinards?|choux?|brocolis?|broccolini|haricots? verts?|pois gourmands?|champignons?|celeris?|fenouils?|radis|navets?|panais|betteraves?|potirons?|courges?|butternut|patates?|pommes? de terre|grenailles?|artichauts?|asperges?|endives?|avocats?|citrons?|oranges?|clementines?|mandarines?|pamplemousses?|pommes?|poires?|bananes?|kiwis?|mangues?|ananas|fraises?|framboises?|myrtilles?|cerises?|raisins?|abricots?|peches?|nectarines?|prunes?|melons?|pasteques?|grenades?|figues?|kakis?|gingembre|legumes?|fruits?|jeunes pousses|mesclun|cresson|blettes?|topinambours?|rhubarbe|sucrines?|romaines?|batavias?|iceberg|feuilles? de chene|frisees?|scaroles?|chicorees?|trevises?|lollo|pak ?cho[iy]|bok ?cho[iy]|cebettes?|echalions?|petits? oignons?|ignames?|manioc|gombos?|christophines?|chayottes?|germes? de soja|pousses? d|mange ?tout|haricots? plats?|citronnelle|physalis|litchis?|fruits? de la passion|papayes?|goyaves?|coings?|groseilles?|cassis|mures?|airelles?|potimarrons?|patissons?|rutabagas?|salsifis|celeri rave|chou rave|romanesco|kale|pourpier|oseille|limes?|ail des ours|piments? frais)\b/]];
 function aisleByName(name){const n=nrm4(name).replace(/['’]/g," ");for(const L of [AISLE_PRE,AISLE_KW,AISLE_STRONG])for(const[a,re]of L)if(re.test(n))return a;return null}
+
+// ================= v11 (avant l'état) : un seul identifiant par ingrédient (fin des doublons) =================
+// [id en double, id gardé, facteur] : facteur = conversion ancienne unité → unité gardée ; null = produit de placard
+const CANON_LIST=[["hf_pdt","pdt",1],["hf_thon","thon",1],["qt_thon","thon",1/112],["sj_yaourt","yaourt",1],["hf_echalote","echalote",1],["sj_oeuf","oeufs",1],["qt_jaune","oeufs",1],
+ ["hf_blanc_poulet","poulet",1],["hf_filet_poulet","poulet",140],["qt_saumon","saumon",1/125],["qt_coriandre","coriandre",1/30],["hf_aneth","aneth",1/3],["qt_aneth","aneth",1/30],["qt_butternut","butternut",1/1000],
+ ["hf_concentre","concentre",null],["hf_panko","panko",null],["qt_chapelure","panko",null],["hf_thym","thym",null],["hf_lait","lait",1],["qt_lait","lait",1],["et_beurre","hf_beurre",null],
+ ["hf_oignon","oignon",1],["hf_citron","citron",1],["hf_gousse_ail","ail",null],["hf_tortillas","tortillas",1],["hf_persil","persil",1/3],["ww_persil","persil",1/30],["et_persil","persil",0.1],["hf_origan","origan",null],
+ ["hf_salade","salade",100],["hf_salade_sachet","salade",125],["sj_sel_fin","sel",null],["hf_balsamique","vinaigre",null],["hf_bouillon_volaille","bouillon_volaille",null],["mm_huile_pate","huile",null],
+ ["ff_mozza","mozzarella",1],["hf_mozza_rapee","mozzarella",100],["ww_pois_chiches","pois_chiches",1/265],["qt_feta","feta",1],["et_boeuf","boeuf_hache",1]];
+const CANON={};for(const[a,b,f]of CANON_LIST)if(ING[a]&&ING[b]&&a!==b)CANON[a]={to:b,f:ING[b][2]===null?null:f,fu:ING[a][2]};
+const nrmS=x=>nrm4(x).replace(/['’]/g," ");
+// quantité lue dans un texte (« 1 cs », « quelques noix », « 10 cl ») pour un produit de placard devenu produit compté
+function amtFromTxt(txt,unit){const t=nrmS(String(txt||""));let m=t.match(/(\d+(?:[.,]\d+)?)\s*(kg|grammes?|gr|g|ml|cl|l)(?![a-z])/);
+ if(m&&(unit==="g"||unit==="ml"))return parseFloat(m[1].replace(",","."))*({kg:1000,cl:10,l:1000}[m[2]]||1);
+ m=t.match(/(\d+(?:[.,]\d+)?|[½¼¾])/);const n=m?(qVal(m[1])||1):(/quelques/.test(t)?2.5:1);
+ if(unit==="g"||unit==="ml"){const w=/soupe|\bcs\b|cas\b/.test(t)?15:/cafe|\bcc\b/.test(t)?5:/filet/.test(t)?10:/noix|noisette/.test(t)?10:/verre/.test(t)?200:/tasse|bol\b/.test(t)?250:/pincee/.test(t)?1:null;return w?n*w:(m?n:10)}
+ return n}
+// ingrédients des recettes ajoutées par vous : « Poivre », « Pommes de terre »… rattachés à l'ingrédient existant
+const SP_W=new Set("sel poivre et fin gros fleur de du noir blanc moulu moulin mer guerande en grains grain concasse au gris".split(" "));
+const PIECE_G=[[/pommes? de terre|grenaille/,150],[/patates? douces?/,250],[/carotte/,100],[/courgette/,250],[/aubergine/,250],[/poivron/,150],[/tomate/,120],[/oignon/,100],[/champignon/,20],[/concombre/,300],[/brocoli/,400],[/avocat/,150],[/poireau/,150],[/fenouil/,250],[/citron/,100],[/pomme/,150]];
+const U_ALIAS={};let EQ_IDX=null;
+const eqKey=name=>[...eqTok(name).set].sort().join(" ");
+function uAlias(id){if(id in U_ALIAS)return U_ALIAS[id];const e=ING[id];let r=null;
+ if(e){const w=nrmS(e[0]).replace(/[^a-z ]+/g," ").trim().split(/\s+/).filter(Boolean);
+  if(w.length&&w.every(x=>SP_W.has(x))&&w.some(x=>x==="sel"||x==="poivre"))r={to:"sel",f:null,fu:e[2]};
+  else{if(!EQ_IDX){EQ_IDX={};for(const k in ING){if(/^(b_|x_|p_|u_)/.test(k))continue;const key=eqKey(ING[k][0]);if(key)(EQ_IDX[key]=EQ_IDX[key]||[]).push(k)}}
+   const c=EQ_IDX[eqKey(e[0])];if(c){const nu=u=>u==="pièce"?"":u;const uu=nu(e[2]);let best=null;
+    for(const k of c){const tu=nu(ING[k][2]);if(tu===uu){best={to:k,f:1,fu:e[2]};break}
+     if(best)continue;if(tu===null)best={to:k,f:null,fu:e[2]};else if(uu===null)best={to:k,f:1,fu:null};else if(uu===""&&tu==="g"){const z=PIECE_G.find(p=>p[0].test(nrmS(e[0])));if(z)best={to:k,f:z[1],fu:e[2]}}}
+    if(best&&CANON[best.to]){const C=CANON[best.to],tu=ING[C.to][2];best={to:C.to,f:tu===null?null:(typeof best.f==="number"&&typeof C.f==="number"?best.f*C.f:1),fu:e[2]}}
+    r=best}}}
+ U_ALIAS[id]=r;return r}
+const aliasOf=id=>CANON[id]||(/^u_/.test(id)?uAlias(id):null);
+// [id, quantité, texte, nom affiché] : le nom d'origine reste affiché dans la recette, le stock et les courses n'ont plus qu'une ligne
+function canonT(t){const[id,q,tx,nm]=t;const C=ING[id]?aliasOf(id):null;if(!C||!ING[C.to])return t;const to=C.to,name=nm||ING[id][0];
+ if(ING[to][2]===null){const txt=typeof q==="string"?q:(typeof tx==="string"?tx:fmtQty(id,q));return[to,txt,undefined,name]}
+ if(typeof q!=="number")return[to,Math.max(0.01,amtFromTxt(q,ING[to][2])),q,name];
+ const f=typeof C.f==="number"?C.f:1;let txt=tx;
+ if(typeof txt!=="string"&&f!==1){txt=fmtQty(id,q);if(ING[to][2]==="g"&&ING[id][2]!=="g")txt+=" (≈ "+Math.round(q*f)+" g)"}
+ return[to,q*f,txt,name]}
+function canonI(list){return(list||[]).map(t=>{const x=canonT(t);if(x!==t&&/^u_/.test(t[0]))delete ING[t[0]];return x})}
+RECIPES.forEach(r=>{r.i=canonI(r.i)});
+const buildRecipe0=buildRecipe;buildRecipe=function(d){const r=buildRecipe0(d);r.i=canonI(r.i);return r};
+const registerGen0=registerGen;registerGen=function(list){registerGen0((list||[]).map(g=>({...g,i:canonI(g.i)})))};
+// anciennes données : stock, achats et emplacements reportés sur l'ingrédient gardé
+const normalize0=normalize;
+normalize=function(d){const s=normalize0(d);if(!d||typeof d!=="object")return s;
+ const conv=(v,C)=>{const tu=ING[C.to][2];if(tu===null)return 1;if(C.fu===null)return tu==="g"?250:tu==="ml"?500:1;return typeof C.f==="number"?v*C.f:v};
+ for(const key of ["stock","bought"]){const src=d[key]&&typeof d[key]==="object"?d[key]:{};
+  for(const k in src){const C=CANON[k]||(/^u_/.test(k)?U_ALIAS[k]:null);if(!C||!ING[C.to])continue;delete s[key][k];const v=Number(src[k]);if(!(v>0))continue;
+   s[key][C.to]=ING[C.to][2]===null?1:Math.round(((s[key][C.to]||0)+conv(v,C))*100)/100}}
+ if(d.loc&&typeof d.loc==="object")for(const k in d.loc){const C=CANON[k]||(/^u_/.test(k)?U_ALIAS[k]:null);if(!C)continue;delete s.loc[k];if(!s.loc[C.to]&&["frigo","legumes","congel","placard","epices"].includes(d.loc[k]))s.loc[C.to]=d.loc[k]}
+ for(const k in s.catalog){const c=s.catalog[k];if(c&&c.link&&CANON[c.link])c.link=CANON[c.link].to}
+ return s};
+// rayons corrigés (beurre au frigo, graines et farine au placard, conserves…)
+for(const[id,a]of [["hf_beurre","C"],["miel","P"],["sesame","P"],["graines","P"],["cajou","P"],["beurre_cacahuete","P"],["hf_farine","P"],["panko","P"],["concentre","B"],["cornichons","B"],["olives","B"],["tahini","P"]])if(ING[id])ING[id][1]=a;
 
 // ---------- état ----------
 const dayOf=k=>k.split("-")[0];
@@ -2202,8 +2259,8 @@ function renderModal(){
   ${batchCard}<div class="m-actions">${isBatch?"":`<button type="button" class="btn primary" data-act="cook-start">Cuisiner pas à pas, avec minuteurs</button>`}${primary}${r.my?`<button type="button" class="btn ghost" data-act="rec-edit">✏️ Modifier</button><button type="button" class="btn ghost" data-act="rec-del">Supprimer</button>`:`<button type="button" class="btn ghost" data-act="rec-hide">Supprimer</button>`}${L.src?"":L.cr?(RMAP[r.inspi]?`<button type="button" class="btn ghost" data-open="${r.inspi}">Recette d'inspiration</button>`:""):`<a class="btn ghost" href="${esc(L.href)}" target="_blank" rel="noopener noreferrer">${L.direct?"Recette d'origine":L.gen?"Voir sur YouTube":"Chercher sur Marmiton"}</a>`}${r.vid?`<a class="btn ghost" href="${esc(r.vid)}" target="_blank" rel="noopener noreferrer">Voir la vidéo</a>`:""}${r.u2?`<a class="btn ghost" href="${esc(r.u2)}" target="_blank" rel="noopener noreferrer">${esc(r.u2l||"Autre source")}</a>`:""}</div>${picker}
   ${(r.vids||[]).length?`<div class="vids"><h3>${r.vids.some(v=>v.full)?"Vidéo de la recette":"Vidéo de préparation"}</h3>${r.vids.map(v=>HOSTED?`<figure class="vid"><div class="vid-frame"><iframe src="https://www.youtube-nocookie.com/embed/${esc(v.id)}?rel=0&playsinline=1" title="${esc(v.t)}" loading="lazy" allow="encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div><figcaption>${esc(v.t)}</figcaption></figure>`:`<a class="btn ghost" href="https://www.youtube.com/watch?v=${esc(v.id)}" target="_blank" rel="noopener noreferrer">▶ ${esc(v.t)}</a>`).join("")}</div>`:""}
   <div class="m-cols">
-   <div><div class="ing-head"><h3>Ingrédients</h3><span>${r.snack?`pour ${sv*r.yieldN} ${esc(r.yieldU)}`:`pour ${sv} personne${sv>1?"s":""}`}</span></div><ul class="ingx">${fresh.map(([id,q,tx])=>`<li><span class="ico" aria-hidden="true">${icon(id)}</span><span class="ix"><b>${esc(ING[id][0])}</b><span class="qt">${esc(scaledQty(id,q,fct,tx))}${stockPill(id,q)}</span></span></li>`).join("")}</ul>
-   ${pantry.length?`<h4 class="ing-sub">À ajouter vous-même</h4><ul class="ingx small">${pantry.map(([id,q,tx])=>`<li><span class="ico" aria-hidden="true">${icon(id)}</span><span class="ix"><b>${esc(ING[id][0])}</b><span class="qt">${esc(scaledQty(id,q,fct,tx))}${stockPill(id,q)}</span></span></li>`).join("")}</ul>`:""}</div>
+   <div><div class="ing-head"><h3>Ingrédients</h3><span>${r.snack?`pour ${sv*r.yieldN} ${esc(r.yieldU)}`:`pour ${sv} personne${sv>1?"s":""}`}</span></div><ul class="ingx">${fresh.map(([id,q,tx,nm])=>`<li><span class="ico" aria-hidden="true">${icon(id)}</span><span class="ix"><b>${esc(nm||ING[id][0])}</b><span class="qt">${esc(scaledQty(id,q,fct,tx))}${stockPill(id,q)}</span></span></li>`).join("")}</ul>
+   ${pantry.length?`<h4 class="ing-sub">À ajouter vous-même</h4><ul class="ingx small">${pantry.map(([id,q,tx,nm])=>`<li><span class="ico" aria-hidden="true">${icon(id)}</span><span class="ix"><b>${esc(nm||ING[id][0])}</b><span class="qt">${esc(scaledQty(id,q,fct,tx))}${stockPill(id,q)}</span></span></li>`).join("")}</ul>`:""}</div>
    <div><h3>Préparation</h3><ol class="stepx">${r.st.map((s,i)=>`<li><span class="num" aria-hidden="true">${i+1}</span><p>${richStep(s)}</p></li>`).join("")}</ol>${r.tip?`<p class="tip">${esc(r.tip)}</p>`:""}
    <div class="source">${L.src?`<p><b>Source</b> : ${esc(L.label)}. Ingrédients repris tels quels, les quantités s'ajustent au nombre de portions.</p><p hidden>`:L.cr?`<p><b>Création Claude</b>${RMAP[r.inspi]?`, inspirée de <button type="button" class="link" data-open="${r.inspi}">${esc(RMAP[r.inspi].n)}</button>. Pas de recette d'origine en ligne : variante imaginée à partir de tes recettes.`:`. Pas de recette d'origine en ligne : recette imaginée à ta demande, kcal et protéines estimés.`}</p>`:`<a href="${esc(L.href)}" target="_blank" rel="noopener noreferrer">${esc(L.label)}</a><p>`}${L.cr&&!L.src?"<p hidden>":""}${L.gen?"Recette proposée par Claude"+(r.chef?", inspirée du style de "+esc(r.chef):"")+". Ce n'est pas la recette exacte du chef : le lien lance une recherche YouTube.":L.direct?(r.base?"Ingrédients repris tels quels depuis la recette d'origine (pour "+(r.snack?"1 fournée":r.baseNote?"environ "+r.base+" parts":r.base+" pers.")+"), les quantités s'ajustent au nombre de portions.":"Cette fiche est une version adaptée et allégée : les quantités et certains temps peuvent différer de l'original."):"Pas de lien direct pour cette recette : le lien lance une recherche avec son nom."}</p></div></div>
   </div>
@@ -2600,7 +2657,7 @@ function renderStock(){
  else if(sf==="week"){const grp=[["miss","À acheter"],["part","Il en manque un peu"],["ok","C'est bon"]];
   html=needIds.length?grp.map(([g,lab])=>{const it=needIds.filter(id=>st(id)===g).sort(byName);return it.length?`<section class="aisle"><h3>${lab} <small>${it.length}</small></h3>${it.map(row).join("")}</section>`:""}).join("")+(nMiss?`<div class="pf-actions stk-go"><button type="button" class="btn" data-tab="courses">Voir la liste de courses</button></div>`:"")
   :`<p class="muted stk-empty">Aucun repas prévu : ajoute des recettes au planning.</p>`}
- else{let ids;if(q)ids=Object.keys(ING).filter(id=>wordMatch(ING[id][0],q)).sort(byName).slice(0,60);
+ else{let ids;if(q)ids=Object.keys(ING).filter(id=>!CANON[id]&&!U_ALIAS[id]&&wordMatch(ING[id][0],q)).sort(byName).slice(0,60);
   else{const set=new Set();[...VISIBLE,...SNACK_RECIPES].forEach(r=>r.i.forEach(([id])=>{if(ING[id]&&!have(id)&&id!=="sel")set.add(id)}));ids=[...set]}
   html=ids.length?(q?`<section class="aisle">${ids.map(row).join("")}</section>`:`<p class="pn-help">Ingrédients de tes recettes que tu n'as pas encore :</p>`+byLoc(ids,false)):`<p class="muted stk-empty">Aucun ingrédient trouvé.</p>`}
  document.getElementById("stockList").innerHTML=html}
@@ -3262,7 +3319,7 @@ document.addEventListener("click",e=>{const t=e.target.closest("button");if(!t)r
 ICONS.unshift([/^huile/,"🫒"],[/^eau\b/,"💧"],[/bouillon|fumet|^fond de/,"🥣"],[/farine|panko|chapelure|maizena|fecule/,"🌾"],
  [/pain au chocolat|chocolatine|croissant|viennoiserie/,"🥐"],[/proteine|whey|caseine/,"💪"],[/biscuit|cookie|madeleine|gateau|brownie|sables?\b|speculoos/,"🍪"],[/pita|tortilla|wrap|galette/,"🫓"],[/brioch|\bpains?\b|baguette|burger|toast|biscotte/,"🍞"],[/barre/,"🍫"],[/pate a tartiner|nutella|chocolat|cacao/,"🍫"],[/compote/,"🍎"],
  [/yaourt|yogourt|skyr|fromage blanc|faisselle|petits? suisses?/,"🥛"],[/lait de coco|creme de coco|noix de coco|\bcoco\b/,"🥥"],[/\blait\b|boisson (vegetale|d.avoine|de soja|d.amande|de riz)/,"🥛"],
- [/tomate/,"🍅"],[/laitue|\bmache\b|mesclun|cresson|endive|salade|roquette|jeunes pousses/,"🥬"],[/courgette|concombre|cornichon/,"🥒"],[/oignons? nouveaux?|oignons? verts?|\bciboule\b/,"🧅"],
+ [/tomate/,"🍅"],[/laitue|\bmache\b|mesclun|cresson|endive|salade|roquette|jeunes pousses|sucrine|romaine|batavia|iceberg|feuille de chene|frisee|scarole|chicoree|trevise|lollo|pourpier|oseille|pak ?cho|bok ?cho|blette/,"🥬"],[/courgette|concombre|cornichon/,"🥒"],[/oignons? nouveaux?|oignons? verts?|\bciboule\b/,"🧅"],
  [/haricots? verts?|pois gourmands?|petits? pois|edamame|feves? de soja/,"🫛"],[/gingembre/,"🫚"],[/sauce|vinaigre|mayonnaise|ketchup|aioli|tahini|nuoc mam/,"🫙"],[/graines|tournesol/,"🌻"],
  [/\bthon\b|saumon|truite|maquereau|cabillaud|\bcolin\b|poisson|\blieu\b|merlu|sardine|dorade/,"🐟"],[/tofu|houmous|hummus/,"🫘"],
  [/ananas/,"🍍"],[/orange|clementine|mandarine|pamplemousse|\bkakis?\b/,"🍊"],[/kiwi/,"🥝"],[/mangue/,"🥭"],[/banane/,"🍌"],[/\bpoires?\b/,"🍐"],[/fraise|framboise|myrtille|fruits rouges|\bmures?\b/,"🍓"],[/raisin/,"🍇"],[/cerise/,"🍒"],[/peche|abricot|nectarine/,"🍑"],[/melon|pasteque/,"🍉"],
@@ -3326,6 +3383,10 @@ document.addEventListener("click",e=>{const t=e.target.closest("button");if(!t)r
  if(t.dataset.lq!=null&&t.dataset.lq!==""){const f=document.getElementById("logForm");const x=LOG_QUICK[Number(t.dataset.lq)];if(f&&x){f.elements.n.value=x[0];f.elements.q.value=x[1];["k","p","f","c","fi"].forEach(k=>{if(f.elements[k])f.elements[k].dataset.man=""});logEstimate();const b=f.querySelector("[type=submit]");if(b)try{b.scrollIntoView({block:"nearest",behavior:"smooth"})}catch(err){}}return}
  if(t.dataset.locmenu){ui.locOpen=ui.locOpen===t.dataset.locmenu?null:t.dataset.locmenu;renderStock();return}
  if(t.dataset.setloc){const[id,k]=t.dataset.setloc.split("|");if(!ING[id])return;if(!state.loc)state.loc={};const a=ING[id][1];const def=(LOCS.find(l=>l[2].includes(a))||["placard"])[0];if(k===def)delete state.loc[id];else state.loc[id]=k;ui.locOpen=null;commit();renderStock();const L=LOCS.find(l=>l[0]===k);toast(ING[id][0]+" : rangé dans « "+(L?L[1].replace(/^\S+\s/,""):k)+" »");return}});
+
+// ================= v11 : icônes d'épices, pas de « (≈ 240 g) » quand la quantité est déjà en grammes =================
+ICONS.unshift([/cebette|\bciboule\b|echalion/,"🧅"],[/nouille|udon|ramen|vermicelle/,"🍜"],[/paprika|piment|cayenne|harissa|chili/,"🌶️"],[/cumin|curcuma|garam|ras el|cannelle|curry|epice|coriandre moulue|gingembre moulu|cardamome|clou de girofle|quatre epices/,"🫙"],[/lardon|bacon/,"🥓"],[/\bporc\b|filet mignon|echine|cotes? de porc/,"🥩"]);
+scaledQty=(f=>function(id,q,fct,tx){if(typeof tx==="string"&&/\d\s*(g|kg|ml|cl|l)\b|≈/.test(tx))return scaledQty0(id,q,fct,tx);return f(id,q,fct,tx)})(scaledQty);
 
 setTab(ui.tab);renderAll();initDb();sbStart();
 
