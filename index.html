@@ -837,6 +837,36 @@ details *,details *::before,details *::after{box-sizing:border-box}
 .m-nut small{font-size:.76rem}
 .m-planned:empty{display:none}
 .log-est .muted{color:var(--muted)}
+/* v15 : repas à confirmer, quantités, Ciqual */
+.nt-list li.pend{background:color-mix(in srgb,var(--accent-soft) 45%,transparent);border-radius:10px;padding-left:6px;padding-right:6px}
+.nt-btns{display:flex;gap:6px;flex:0 0 auto}
+.nt-ch{flex:0 0 auto;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:5px 10px;font-size:.78rem;font-weight:700;color:var(--ink)}
+.nt-name.nt-edit{background:none;border:0;padding:0;text-align:left;font:inherit;font-weight:700;color:inherit;cursor:pointer}
+.nt-list li{flex-wrap:wrap}
+.nt-list li .nt-name{flex:1 1 140px}
+.sv-pend{display:block;font-size:.8rem;color:var(--muted);margin-top:2px}
+.rec-list{display:flex;flex-direction:column;gap:8px}
+.rec-row{display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:var(--r-md);padding:6px 8px;background:var(--surface)}
+.rec-add{flex:1;min-width:0;display:flex;flex-direction:column;align-items:flex-start;background:none;border:0;padding:4px 2px;text-align:left;font:inherit;color:inherit;cursor:pointer}
+.rec-add b{font-size:.92rem}
+.rec-add small{color:var(--muted);font-size:.78rem}
+.rec-m{display:flex;align-items:center;gap:4px;flex:0 0 auto}
+.rec-m button{width:30px;height:30px;border-radius:50%;border:1px solid var(--line);background:var(--surface-2);font-size:1rem;font-weight:700;color:var(--ink)}
+.rec-m b{min-width:36px;text-align:center;font-size:.86rem}
+.qty-big{display:flex;align-items:center;justify-content:center;gap:18px;margin:4px 0 12px}
+.qty-big b{font-size:1.6rem;min-width:70px;text-align:center}
+.qty-big .btn{width:48px;height:48px;border-radius:50%;padding:0;font-size:1.3rem}
+.qty-res{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:.86rem;color:var(--muted);margin:12px 0 0}
+.qty-res span{display:inline-flex;align-items:center}
+.qty-res b{color:var(--ink);margin-right:3px}
+.ml-top .seg{margin-bottom:8px;flex-wrap:wrap}
+.ml-opt{display:flex;align-items:center;gap:10px;width:100%;text-align:left;border:1px solid var(--line);background:var(--surface);border-radius:var(--r-md);padding:6px;margin:0 0 8px;font:inherit;color:inherit;cursor:pointer}
+.ml-opt img{flex:0 0 52px;width:52px;height:52px;border-radius:8px;object-fit:cover;background:var(--surface-2)}
+.ml-opt span{display:flex;flex-direction:column;min-width:0}
+.ml-opt b{font-size:.9rem;line-height:1.25}
+.ml-opt small{font-size:.78rem;color:var(--muted)}
+#mealRes{margin-top:8px}
+.cq-n{font-size:.76rem}
 
 </style>
 </head>
@@ -2168,6 +2198,16 @@ function applySubs(rules){rules=rules||[];for(const r of RECIPES){if(!r.i0)r.i0=
 const normalizeV11=normalize;
 normalize=function(d){const s=normalizeV11(d);s.subs=cleanSubs(d&&typeof d==="object"?d.subs:undefined);applySubs(s.subs);return s};
 
+// ================= v15 (avant l'état) : repas confirmés (state.ate) =================
+// state.ate["AAAAMMJJ-midi-0"] = {r:id recette, s:portions} ou {none:true}
+const normalizeV12=normalize;
+normalize=function(d){const s=normalizeV12(d);s.ate={};const min=ymd(new Date(Date.now()-21*864e5)),today=ymd(new Date());
+ if(d&&d.ate&&typeof d.ate==="object")for(const k in d.ate){const m=k.match(/^(\d{8})-(midi|soir)-([01])$/);const v=d.ate[k];if(!m||m[1]<min||!v||typeof v!=="object")continue;
+  if(v.none){s.ate[k]={none:true};continue}if(!RMAP[v.r])continue;const sv=Number(v.s);s.ate[k]={r:v.r,s:isFinite(sv)&&sv>=0.25&&sv<=4?Math.round(sv*4)/4:1}}
+ // ancien « ✓ Mangé » coché à la main : devient un repas confirmé
+ if(d&&d.skip&&typeof d.skip==="object")for(const k in d.skip){const m=k.match(/^((\d{8})-(midi|soir))-([01])$/);if(!m||m[2]>today||d.skip[k]!==false||s.ate[k])continue;const r=s.plan[m[1]];if(RMAP[r])s.ate[k]={r,s:1}}
+ return s};
+
 // ---------- état ----------
 const dayOf=k=>k.split("-")[0];
 function needsFor(plan,done,serv){const m={};for(const k of SLOTS){if(done&&done[k])continue;const r=RMAP[plan[k]];if(!r)continue;const fct=((serv&&serv[k])||defServ(k))/(r.base||2);for(const[id,q]of r.i){const e=m[id]||(m[id]={id,q:0,recs:[]});if(typeof q==="number")e.q+=q*fct;const s=short(r);if(!e.recs.includes(s))e.recs.push(s)}}return m}
@@ -2673,7 +2713,7 @@ function afterLog(c,name,both){closePanel();ui.ntDay=c.day;ui.ntP=c.pi;setTab("s
 function panelLog(){const c=ui.logCtx||{day:DAYS[0][0],pi:0};const P=state.people[c.pi],O=state.people[1-c.pi];const rec=recentItems();
  return`<h2 class="pn-title">Ajouter un encas</h2><p class="pn-help">Pour <b>${esc(P.n)}</b>, ${dayLabel(c.day)}.</p>
  ${HOSTED?`<div class="pf-actions"><button type="button" class="btn primary" data-act="log-scan">📷 Scanner un produit</button><button type="button" class="btn" data-act="log-search">🔎 Chercher un produit</button></div>`:""}
- ${rec.length?`<div class="pn-card"><h3>Récents</h3><div class="off-list">${rec.map((it,i)=>`<button type="button" class="off-row" data-logrec="${i}"><span class="off-noimg" aria-hidden="true">🍽️</span><span class="off-txt"><span class="off-name">${esc(it.n)}</span><span class="off-meta">${it.q?esc(it.q)+" · ":""}${Math.round(it.k)} kcal · ${fmtG(it.p)} g prot.</span></span><span class="off-add" aria-hidden="true">+</span></button>`).join("")}</div></div>`:""}
+ ${recentHtml(rec)}
  ${SNACK_RECIPES.length?`<div class="pn-card"><h3>Mes recettes d'encas</h3>${SNACK_RECIPES.map(r=>`<div class="log-rec"><span>${r.emoji||"🍪"} ${esc(r.n)} <small>${r.k} kcal / ${esc(r.unitS||"pièce")}</small></span><button type="button" class="btn small" data-logsr="${r.id}">+ 1 ${esc(r.unitS||"pièce")}</button></div>`).join("")}</div>`:""}
  <form class="pn-card" id="logForm" autocomplete="off"><h3>Saisie libre</h3><p class="pn-help">Ex : « pomme + 30 g d'amandes ». Les valeurs se calculent seules.</p><div class="log-quick">${LOG_QUICK.map(([n,q],i)=>`<button type="button" class="chip" data-lq="${i}">${esc(n)}</button>`).join("")}</div>
   <label class="fl">Quoi ?<input class="pn-in" name="n" required maxlength="60" placeholder="Ex : une pomme, une poignée d'amandes"></label>
@@ -2753,7 +2793,7 @@ document.addEventListener("click",e=>{const t=e.target.closest("button");if(!t)r
  if(t.dataset.ntp!=null&&t.dataset.ntp!==""){ui.ntP=Number(t.dataset.ntp)?1:0;renderNutri();return}
  if(t.dataset.nttog){const k=t.dataset.nttog,pi=ui.ntP||0;state.skip[k+"-"+pi]=eats(k,pi);commit();renderNutri();return}
  if(t.dataset.ntdel!=null&&t.dataset.ntdel!==""){const L=state.log[ui.ntDay];const pi=ui.ntP||0;if(L&&L[pi]){L[pi].splice(Number(t.dataset.ntdel),1);if(!L[0].length&&!L[1].length)delete state.log[ui.ntDay]}commit();renderNutri();toast("Encas retiré");return}
- if(t.dataset.logrec!=null){const it=recentItems()[Number(t.dataset.logrec)];const c=ui.logCtx;if(it&&c){logItem(c.day,[c.pi],it);afterLog(c,it.n,false)}return}
+ if(t.dataset.logrec!=null){const it=recentItems()[Number(t.dataset.logrec)];const c=ui.logCtx;if(it&&c){const M=ui.recM||{};const x=scaleItem(it,M[t.dataset.logrec]||it.m||1);logItem(c.day,[c.pi],x);afterLog(c,it.n+(x.q?" ("+x.q+")":""),false)}return}
  if(t.dataset.logsr){const r=RMAP[t.dataset.logsr];const c=ui.logCtx;if(r&&c){const n=rNut(r);logItem(c.day,[c.pi],{n:short(r),q:"1 "+(r.unitS||"pièce"),k:Math.round(n.k||0),p:n.p||0,f:n.f||0,c:n.c||0,fi:n.fi||0});afterLog(c,short(r),false)}return}
  if(t.dataset.pg){const d=ui.pdata;if(!d)return;const item=prodItem(d);ui.logBoth=!!(document.getElementById("logBoth")||{}).checked;ui.pgram=Math.max(10,Math.min(2000,(ui.pgram||defGrams(item,d))+Number(t.dataset.pg)));renderPanel();return}
  if(t.dataset.pgset){ui.logBoth=!!(document.getElementById("logBoth")||{}).checked;ui.pgram=Number(t.dataset.pgset)||100;renderPanel();return}
@@ -3605,18 +3645,18 @@ function chartM(items,m,tgt){const W=320,H=170,L=6,R=6,T=22,B=36,n=items.length,
 const shortDay=d=>dateFromYmd(d).toLocaleDateString("fr-FR",{weekday:"short",day:"numeric",month:"short"}).replace(/\./g,"");
 renderSuivi=function(){const el=document.getElementById("suivi");if(!el)return;
  if(!ui.ntDay||!DAYS.some(d=>d[0]===ui.ntDay))ui.ntDay=DAYS[0][0];const pi=ui.ntP||0,P=state.people[pi],t=P.t,O=state.people[1-pi],today=DAYS[0][0];
- const{rows,tot}=dayData(ui.ntDay,pi);const sc=dayScore(tot,t),fut=ui.ntDay>today;const oT=dayData(ui.ntDay,1-pi).tot,osc=dayScore(oT,O.t);const G=gameOf(pi);
+ const{rows,tot}=dayData(ui.ntDay,pi);const sc=dayScore(tot,t),fut=ui.ntDay>today;const pendK=Math.round(pendTot(rows).k);const oT=dayData(ui.ntDay,1-pi).tot,osc=dayScore(oT,O.t);const G=gameOf(pi);
  const nSt=sc==null?0:sc>=85?3:sc>=70?2:sc>=50?1:0;const stars=sc==null?"":"★".repeat(nSt)+"☆".repeat(3-nSt);const left=t.k-tot.k;
  const head=`<div class="sv-top"><div class="seg" role="group" aria-label="Personne">${state.people.map((p,i)=>`<button type="button" data-ntp="${i}" aria-pressed="${i===pi}">${esc(p.n)}</button>`).join("")}</div><button type="button" class="btn small" data-act="sv-profile">⚙️ Profil</button></div>`;
  const cta=P.prof?"":`<div class="sv-card sv-cta"><p><b>🎯 Complète le profil de ${esc(P.n)}</b> pour calculer ses besoins.</p><button type="button" class="btn primary" data-act="sv-profile">Compléter</button></div>`;
  const day=`<div class="sv-card"><div class="chips nt-days" role="group" aria-label="Jour">${DAYS.map(([d,l],i)=>`<button type="button" class="chip" data-ntday="${d}" aria-pressed="${d===ui.ntDay}">${i===0?"Aujourd'hui":i===1?"Demain":l.slice(0,3)+". "+dateFromYmd(d).getDate()}</button>`).join("")}</div>
   <div class="sv-hero"><div class="sv-ring">${ringK(t.k?tot.k/t.k:0)}<div class="sv-ring-c"><b>${fmtInt(tot.k)}</b><span>/ ${fmtInt(t.k)} kcal</span></div></div>
-   <div class="sv-hero-txt"><p class="sv-left">${left>=0?`Reste <b>${fmtInt(left)}</b> kcal`:`<b>+${fmtInt(-left)}</b> kcal ↑`}</p>
+   <div class="sv-hero-txt"><p class="sv-left">${left>=0?`Reste <b>${fmtInt(left)}</b> kcal`:`<b>+${fmtInt(-left)}</b> kcal ↑`}${pendK?`<span class="sv-pend">⏳ +${fmtInt(pendK)} kcal prévues à confirmer</span>`:""}</p>
     <button type="button" class="sv-sc" data-act="why-go" aria-label="Score ${sc==null?"non calculé":sc} sur 100, voir pourquoi"><b>${sc==null?"–":sc}</b><span>${fut?"score prévu":"score"}<em>${stars}</em></span></button>
     ${G.cur?`<span class="sv-chip">🔥 ${G.cur} j</span>`:""}</div></div>
   <div class="sv-gauges">${["p","f","c","fi"].map(x=>gaugeRow(x,tot[x],t[x])).join("")}</div>
   ${cantPrompt(ui.ntDay,pi)}
-  <ul class="nt-list">${rows.length?rows.map(row=>row.type==="meal"?`<li class="${row.on?"":"off"}"><span class="nt-tag">${row.ml}</span><span class="nt-name">${esc(short(row.r))}<small>${!row.on&&atCant(row.k,pi)&&state.skip[row.k+"-"+pi]===undefined?"Cantine":`${Math.round(row.n.k)} kcal · ${Math.round(row.n.p)} g prot.`}</small></span><button type="button" class="nt-tog" data-nttog="${row.k}" aria-pressed="${row.on}">${row.on?"✓ Mangé":"Pas mangé"}</button></li>`:`<li><span class="nt-tag enc${row.it.src==="cant"?" cant":""}">${row.it.src==="cant"?"Cantine":"Encas"}</span><span class="nt-name">${esc(row.it.n)}<small>${row.it.q?esc(row.it.q)+" · ":""}${Math.round(row.it.k)} kcal</small></span><button type="button" class="nt-del" data-ntdel="${row.i}" aria-label="Retirer ${esc(row.it.n)}">×</button></li>`).join(""):`<li class="nt-empty">Rien de prévu ${dayLabel(ui.ntDay)}.</li>`}</ul>
+  <ul class="nt-list">${dayRowsHtml(rows,pi)}</ul>
   <div class="sv-acts"><button type="button" class="btn primary" data-act="nt-add">+ Encas</button><button type="button" class="btn" data-act="cant-open">🍽️ Cantine</button></div>
   <p class="nt-other">🤝 ${esc(O.n)} : ${fmtInt(oT.k)} / ${fmtInt(O.t.k)} kcal${osc!=null?` · score ${osc}`:""}</p></div>`;
  // tendance
@@ -3648,7 +3688,7 @@ renderSuivi=function(){const el=document.getElementById("suivi");if(!el)return;
   <div class="sv-need">${[["k",fmtInt(t.k)],["p",t.p+" g"],["f",t.f+" g"],["c",t.c+" g"],["fi",t.fi+" g"]].map(([x,v])=>`<div><span>${mdot(x)}${MC[x][0]}</span><b>${v}</b></div>`).join("")}</div>
   <p class="sv-mini">${pr&&pr.auto&&calc?`Dépense ${fmtInt(calc.tdee)} kcal/j · ${esc(GOALS[pr.goal].l.toLowerCase())} → ${fmtInt(t.k)} kcal`:pr?"Réglé à la main.":"Valeurs par défaut."}</p>
   ${pr&&goalKg&&pr.cm&&goalKg/((pr.cm/100)**2)<18.5?`<p class="sv-warn">Poids visé sous un IMC de 18,5 : demande l'avis d'un professionnel de santé.</p>`:""}</div>`;
- el.innerHTML=head+cta+day+whyCard(ui.ntDay,pi)+trendC+weightC+gameC+needC+`<p class="sv-disc">Estimations, pas un avis médical.</p>`};
+ el.innerHTML=head+cta+day+whyCard(ui.ntDay,pi)+trendC+weightC+gameC+needC+`<p class="sv-disc">Valeurs : Anses, table Ciqual 2025, et estimations. Pas un avis médical.</p>`};
 // ---------- « Pourquoi ce score ? » en version courte ----------
 whyCard=function(d,pi){const P=state.people[pi],t=P.t,today=DAYS[0][0],fut=d>today;const{rows,tot}=dayData(d,pi);const T={k:tot.k||0,p:tot.p||0,f:tot.f||0,c:tot.c||0,fi:tot.fi||0};
  const sc=dayScore(T,t),S=scoreParts(T,t),goal=(P.prof&&P.prof.goal)||goalNow();const lim=Math.round(t.f*1.1);
@@ -3658,8 +3698,8 @@ whyCard=function(d,pi){const P=state.people[pi],t=P.t,today=DAYS[0][0],fut=d>tod
  const pTxt=T.p<t.p?`−${fmtG(r1(t.p-T.p))} g`:"✓",fiTxt=T.fi<t.fi?`−${fmtG(r1(t.fi-T.fi))} g`:"✓";
  const fTxt=T.f>lim?`+${fmtG(r1(T.f-lim))} g${fatTop?` · ${esc(fatTop.n)}`:""}`:"✓";
  const L=(state.log[d]&&state.log[d][pi])||[];const notes=[];
- if(atCant(d+"-midi",pi)&&!L.some(it=>it.src==="cant"))notes.push("Plateau de cantine non noté.");
- const sug=[];ui.why={d,pi,picks:[]};const slots=slotSuggest(d,pi,T,t);let T2=T;
+ if(atCant(d+"-midi",pi)&&!L.some(it=>it.src==="cant"))notes.push("Plateau de cantine non noté.");{const PT=pendTot(rows);if(PT.k>0)notes.push("Repas prévus à confirmer : +"+fmtInt(PT.k)+" kcal.")}
+ const sug=[];ui.why={d,pi,picks:[]};const slots=slotSuggest(d,pi,T,t);let T2=addT(T,pendTot(rows));
  slots.forEach(x=>{const n=nutOr(rNut(x.r));T2=addT(T2,n);sug.push(`<li><span class="why-t">🍽️ <b>${x.ml}</b> · ${esc(short(x.r))} <small>${Math.round(n.k)} kcal</small></span><button type="button" class="btn small" data-whyplan="${x.k}|${x.r.id}">Ajouter</button></li>`)});
  const sw=swapSuggest(d,pi,T,t);if(sw)sug.push(`<li><span class="why-t">🔁 <b>${sw.ml}</b> · ${esc(short(sw.r))} <small>${sw.dk<0?"−":"+"}${fmtInt(Math.abs(sw.dk))} kcal</small></span><button type="button" class="btn small" data-whyswap="${sw.k}|${sw.r.id}">Remplacer</button></li>`);
  const B=boostPlan(T2,t,goal);ui.why.picks=B.picks;
@@ -3680,6 +3720,158 @@ function factsV13(r){const n=(r.k||r.nut)?rNut(r):null;const per=r.snack?(r.unit
 const PACK_G=[[/yaourt.*grec|grecque/,"pot",100],[/yaourt|skyr|fromage blanc|faisselle/,"pot",125],[/aioli|mayonnaise|sauce|ketchup/,"sachet",25],[/pesto|houmous|tzatziki/,"pot",100],[/rape|gouda|emmental/,"sachet",50]];
 approxG=(f=>function(id,q){if(!ING[id]||typeof q!=="number"||!(q>0))return f(id,q);const u=ING[id][2],n=nrmS(ING[id][0]);
  if(ING[id][1]==="H"&&HERB_G[u])return q*HERB_G[u];const z=PACK_G.find(p=>p[1]===u&&p[0].test(n));if(z)return q*z[2];return f(id,q)})(approxG);
+
+// ================= v15 : repas à confirmer, quantités modifiables, base Ciqual (Anses) pour la saisie libre =================
+// ---------- base Ciqual 2025 (Anses) : ~3 400 aliments, chargée à la demande ----------
+let CQ=null,cqP=null;const CQ_WAIT=[];
+const CQ_STOP=new Set("de d du des la le les l au aux a en et ou un une avec sans pour sur par ex type moyen aliment".split(" "));
+const cqTok=s=>nrmS(s).replace(/[^a-z0-9 ]+/g," ").split(/\s+/).filter(w=>w&&!CQ_STOP.has(w)).map(w=>w.length>3?w.replace(/(s|x)$/,""):w);
+function cqLoad(){if(CQ)return Promise.resolve(CQ);if(cqP)return cqP;
+ cqP=fetch("ciqual.json").then(r=>{if(!r.ok)throw new Error("ciqual");return r.json()}).then(d=>{CQ=(d.f||[]).map(x=>{const t=cqTok(x[0]);return{n:x[0],k:x[1],p:x[2],f:x[3],c:x[4],fi:x[5],g:x[6],mt:cqTok(x[0].split(",")[0]),t,ts:" "+t.join(" ")+" "}});
+  CQ_WAIT.splice(0).forEach(f=>{try{f()}catch(e){}});return CQ}).catch(()=>{cqP=null;return null});return cqP}
+const cqReady=f=>{if(CQ)f();else{CQ_WAIT.push(f);cqLoad()}};
+const CQ_PROC=/\b(appertisee?s?|conserves?|semi conserve|surgelee?s?|deshydratee?s?|poudre|lyophilisee?s?|sirop|sechee?s?|preemballee?s?|confite?s?|reconstituee?s?|rehydratee?s?|fumee?s?|allegee?s?|enrichie?s?|uht|moulu|soluble|feuille|instantane|a pâtisser|a patisser|fourree?|edulcorant)\b/;
+const CQ_PREF=[[/^oeufs?$/,"oeuf dur"],[/^lait$/,"lait demi"],[/^cafe$/,"cafe, non instantane"],[/^(the|the noir)$/,"the infuse"],[/^chocolat noir$/,"chocolat noir 70"],[/^beurre$/,"beurre a 80% mg minimum, doux"],[/^tomates?$/,"tomate sans precision, crue"],[/^thon$/,"thon, au naturel"],[/^saucisson$/,"saucisson sec"],[/^surimi$/,"surimi, batonnets"],[/^amandes?$/,"amande, avec peau"],[/^saumon$/,"saumon, cuit, sans precision"],[/^(coca|cola)$/,"cola, sucre"],[/^cerises?$/,"cerise, chair"]];
+const CQ_COOK=/\b(cuit|cuite|rotie?|grillee?|poelee?|vapeur|bouillie?|braisee?|four|frit|frite|sautee?)\b/;
+const CQ_CACHE={};
+function cqFind(q){if(!CQ)return null;const key=nrmS(q);if(key in CQ_CACHE)return CQ_CACHE[key];const qt=cqTok(q);if(!qt.length)return null;const qs=new Set(qt),qn=" "+qt.join(" ")+" ";
+ const qCook=CQ_COOK.test(qn)||/\b(cru|crue)\b/.test(qn),qProc=CQ_PROC.test(qn);const pref=(CQ_PREF.find(([re])=>re.test(qt.join(" ")))||[])[1];let best=null,bs=-1e9;
+ for(const F of CQ){let sc=0,miss=0;for(const w of qt){if(F.mt.includes(w)){sc+=3;continue}if(F.t.includes(w)){sc+=1;continue}if(w.length>=6&&F.t.some(x=>x.startsWith(w))){sc+=0.5;continue}miss++}
+  if(miss&&(miss>=qt.length||!F.mt.includes(qt[0])))continue;sc-=2.5*miss;if(F.mt[0]===qt[0])sc+=4;else if(!F.mt.includes(qt[0]))sc-=3;
+  sc-=3*F.mt.filter(x=>!qs.has(x)).length;if(pref&&nrmS(F.n).startsWith(pref))sc+=10;sc-=0.4*F.t.filter(x=>!qs.has(x)&&!F.mt.includes(x)).length;
+  if(!qCook){if(/^(0301|0202|0203|040[1-9])$/.test(F.g)){if(CQ_COOK.test(F.ts))sc+=2;if(/\b(cru|crue)\b/.test(F.ts))sc-=2.5}else if(/^020[14]$/.test(F.g)&&/\b(cru|crue)\b/.test(F.ts))sc+=1.5}
+  if(!qProc&&CQ_PROC.test(F.ts))sc-=1.5;if(/aliment moyen|sans precision/.test(nrmS(F.n)))sc+=1.5;
+  if(sc>bs){bs=sc;best=F}}
+ const R=best&&bs>=2?{...best,score:bs}:null;CQ_CACHE[key]=R;return R}
+// portion habituelle par famille Ciqual (g)
+const GRP_PORTION={"0101":200,"0102":250,"0103":300,"0104":150,"0105":200,"0106":100,"0201":150,"0202":180,"0203":180,"0204":150,"0205":30,"0301":180,"0302":50,"0303":30,"0304":30,"0305":50,"0401":120,"0402":120,"0403":50,"0404":60,"0405":130,"0406":130,"0407":100,"0408":100,"0409":100,"0410":55,"0501":200,"0502":125,"0503":30,"0504":30,"0601":250,"0602":250,"0603":125,"0701":10,"0702":20,"0703":20,"0704":20,"0705":60,"0706":30,"0707":40,"0708":25,"0709":80,"0801":70,"0802":70,"0803":70,"0901":10,"0902":10,"0903":10,"0904":5,"0905":10,"1001":20,"1002":10,"1003":10,"1004":1,"1005":1,"1006":5,"1007":5,"1008":30,"1009":100,"1010":30};
+// aliment + quantité → valeurs : Ciqual quand l'aliment y est bien reconnu, sinon la base maison
+estimateFood=function(name,qty,defG){name=String(name||"").trim();if(name.length<2)return null;let txt=String(qty||"").trim(),nm=name;
+ if(!txt){const x=parseIngLine(name);if(x&&x.name&&x.txt&&x.txt!=="selon le goût"&&(x.qty||x.unit===null)){txt=x.txt;nm=x.name}}
+ const nn=nrmS(nm).replace(/\s+/g," ").trim();let e=NUTDB.find(z=>z[0].test(nn));if(e&&e[1]===0&&e[2]===0&&!ZERO_OK.test(nn))e=null;
+ const C=cqFind(nn.replace(/^(bol|mug|tasse|verre|assiette|canette|bouteille|pot|sachet|boule|morceau|poignee|carre|tranche|part|barre|portion)s? (de |d )?/,""));
+ const ePos=e?nn.search(e[0]):-1;const useC=!!(C&&(C.score>=5||!e||ePos>0));if(!e&&!useC)return null;
+ const t=nrmS(txt);const both=nn+" "+t;const size=/\bpetite?s?\b/.test(both)?0.7:/\b(grosse?s?|grande?s?|gros)\b/.test(both)?1.3:1;let g,m,def=false;
+ const dp0=defPortion(nn),dp=dp0===defPortion(nn.split(" ").slice(0,2).join(" "))?dp0:100,e6=e&&!(useC&&ePos>0)?e[6]:null,base=dp!==100?dp:(e6&&e6>=40?e6:((useC&&GRP_PORTION[C.g])||e6||defG||100));
+ if((m=t.match(/(\d+(?:[.,]\d+)?)\s*(kg|grammes?|gr|g|ml|cl|l)(?![a-z])/)))g=parseFloat(m[1].replace(",","."))*({kg:1000,cl:10,l:1000}[m[2]]||1);
+ else{m=t.match(/(\d+\s?\/\s?\d+|\d+(?:[.,]\d+)?|[½¼¾]|une?|deux|trois|quatre|cinq|demie?)/);const n=m?(/demi/.test(m[1])?0.5:(qVal(m[1].replace(/\s/g,""))||1)):1;let w=null;
+  const ut=t+" "+nn.replace(/^(bol|mug|tasse|verre|assiette|canette|bouteille|pot|sachet|boule|morceau|poignee|carre)s? (de |d )?/,"$1 ");
+  if(/\bverres?\b/.test(ut)&&/\bvin\b|champagne/.test(nn))w=125;else for(const[re,v]of UNIT_W)if(re.test(ut)){w=v;break}
+  if(w===15&&/huile/.test(nn))w=13.5;if(w===250&&/cereale|muesli|granola|flocon|corn ?flakes|chocapic|special k/.test(nn))w=50;
+  if(w==null){if(/\btranches?\b/.test(ut))w=(e&&e[7])||35;else if(/\bparts?\b/.test(ut))w=(e&&e[6])||150;else if(/\bbarres?\b/.test(ut))w=(e&&e[6])||25}
+  if(w==null){w=(m?(e6||base):base)*size;if(!m)def=true}
+  g=n*w}
+ if(!(g>0))return null;g=Math.min(g,3000);
+ if(useC){const r=g/100;return{g:Math.round(g),k:Math.round(C.k*r),p:r1(C.p*r),f:r1(C.f*r),c:r1(C.c*r),fi:r1(C.fi*r),def,src:"ciqual",cq:C.n}}
+ let cf=1;if(e[1]>250&&!/\b(crus?|crues?|secs?|seches?)\b|galette|gateau|lait|farine|biscuit|barre|cracker|souffle/.test(nn)){const ck=COOKED.find(z=>z[0].test(nn));if(ck)cf=ck[1]}
+ const r=g/100*cf;return{g:Math.round(g),k:Math.round(e[1]*r),p:r1(e[2]*r),f:r1(e[3]*r),c:r1(e[4]*r),fi:r1(e[5]*r),def,cooked:cf!==1}};
+partCalc=function(p,defG){if(dishCover(p)>=0.6){const C=cantCalcV10(p);if(C)return C}
+ const E=estimateFood(p,"",defG);if(E)return{k:E.k,p:E.p,f:E.f,c:E.c,fi:E.fi,lab:capF(p.trim())+" · "+fmtInt(E.g)+" g"+(E.cooked?" cuits":""),cq:E.cq,miss:[]};
+ return cantCalcV10(p)};
+cantCalc=function(v,defG){const parts=String(v||"").split(PART_SEP).map(x=>x.trim()).filter(x=>/[a-zà-ÿ]{2}/i.test(x));if(!parts.length)return null;
+ const T={k:0,p:0,f:0,c:0,fi:0},labs=[],miss=[],cqs=[];for(const p of parts){const E=partCalc(p,defG);if(!E){miss.push(p);continue}for(const k in T)T[k]+=E[k];labs.push(E.lab);if(E.cq)cqs.push(E.cq);miss.push(...(E.miss||[]))}
+ if(!labs.length)return null;return{k:Math.round(T.k),p:r1(T.p),f:r1(T.f),c:r1(T.c),fi:r1(T.fi),lab:labs.join(" + "),miss,cqs}};
+foodCalc=function(n,q){n=String(n||"").trim();q=String(q||"").trim();if(n.length<2)return null;
+ if(q){const E=estimateFood(n,q);if(E)return{...E,lab:fmtInt(E.g)+" g"+(E.cooked?" cuits":""),miss:[],cqs:E.cq?[E.cq]:[]}}
+ return cantCalc(n)};
+const cqNote=E=>E&&E.cqs&&E.cqs.length===1?`<span class="muted cq-n">≈ ${esc(E.cqs[0].length>46?E.cqs[0].slice(0,45)+"…":E.cqs[0])}</span>`:"";
+const logEstimateV13=logEstimate;
+logEstimate=function(){const f=document.getElementById("logForm");if(!f)return;if(!CQ)cqReady(()=>{if(document.getElementById("logForm"))logEstimate()});
+ const n=f.elements.n.value,q=f.elements.q.value;const E=foodCalc(n,q);if(!E){logEstimateV13();return}
+ ["k","p","f","c","fi"].forEach(x=>{const el=f.elements[x];if(!el||el.dataset.man==="1")return;el.value=E[x];el.dataset.auto="1"});
+ const out=document.getElementById("logEst");if(out)out.innerHTML=estShort(E)+(E.miss&&E.miss.length?` · <span class="muted">non compté : ${esc(E.miss.join(", "))}</span>`:"")+(cqNote(E)?"<br>"+cqNote(E):"")};
+const cantEstimateV13=cantEstimate;cantEstimate=function(){if(!CQ)cqReady(()=>{if(document.getElementById("ctN"))cantEstimate()});cantEstimateV13()};
+// recettes : un ingrédient inconnu de la base maison est cherché dans Ciqual
+recipeNutCalc=function(r){const T={k:0,p:0,f:0,c:0,fi:0};let unk=0;
+ for(const[id,q]of r.i){if(!ING[id])continue;const n=nrmS(ING[id][0]);let e=NUTDB.find(z=>z[0].test(n));const g=ingGrams(id,q);
+  if(!e&&CQ){const C=cqFind(n);if(C&&C.score>=4)e=[null,C.k,C.p,C.f,C.c,C.fi]}
+  if(!e||g==null){if(ING[id][2]!==null)unk++;continue}const m=g/100;T.k+=e[1]*m;T.p+=e[2]*m;T.f+=e[3]*m;T.c+=e[4]*m;T.fi+=e[5]*m}
+ const div=r.snack?(r.yieldN||1):(r.base||2);for(const x in T)T[x]/=div;return{T,unk}};
+cqReady(()=>{let n=0;for(const r of RECIPES){if(RECIPE_MACROS[r.id]||r.my||r.snack||!r.nut||!r.nut.est)continue;const{unk}=recipeNutCalc(r);if(unk>0){r.nut=null;recipeNutFill(r);n++}}if(n&&ui.tab==="suivi")renderSuivi()});
+setTimeout(()=>cqLoad(),2500);
+
+// ---------- encas : quantités modifiables (récents et déjà notés) ----------
+const Q_STEPS=[0.25,0.5,0.75,1,1.25,1.5,2,2.5,3,4,5];
+const stepM=(m,d)=>{const i=Q_STEPS.findIndex(x=>x>=m-1e-9);const j=Math.max(0,Math.min(Q_STEPS.length-1,(i<0?3:i)+d));return Q_STEPS[j]};
+const fmtM=m=>m===0.25?"¼":m===0.5?"½":m===0.75?"¾":m===1.25?"1¼":m===1.5?"1½":m===2.5?"2½":String(m);
+function scaleItem(it,m){const b=it.b||{q:it.q,k:it.k,p:it.p,f:it.f,c:it.c,fi:it.fi};const q=m===1?b.q:(b.q&&/\d|[½¼¾]/.test(b.q)?scaleText(b.q,m):(b.q?fmtM(m)+" × "+b.q:"× "+fmtM(m)));
+ return{n:it.n,q:String(q||"").slice(0,30),k:Math.round(b.k*m),p:r1(b.p*m),f:r1(b.f*m),c:r1(b.c*m),fi:r1(b.fi*m),b,m,src:it.src}}
+recentItems=function(){const seen=new Set(),out=[];for(const d of Object.keys(state.log).sort().reverse())for(const L of state.log[d])for(const it of [...L].reverse()){const key=nrmS(it.n);if(seen.has(key))continue;seen.add(key);out.push(it);if(out.length>=8)return out}return out};
+function recentHtml(rec){if(!rec.length)return"";const M=ui.recM||(ui.recM={});
+ return`<div class="pn-card"><h3>Récents</h3><div class="rec-list">${rec.map((it,i)=>{const m=M[i]||(M[i]=it.m||1),x=scaleItem(it,m);return`<div class="rec-row" data-reci="${i}"><button type="button" class="rec-add" data-logrec="${i}"><b>${esc(it.n)}</b><small class="rec-q">${esc(x.q||"")}${x.q?" · ":""}${fmtInt(x.k)} kcal · ${fmtG(x.p)} g prot.</small></button><span class="rec-m"><button type="button" data-recm="${i}|-1" aria-label="Moins">−</button><b>×${fmtM(m)}</b><button type="button" data-recm="${i}|1" aria-label="Plus">+</button></span></div>`}).join("")}</div><p class="pn-help">Ajuste avec − / + puis touche l'aliment pour l'ajouter.</p></div>`}
+function parseAmt(q){const t=nrmS(String(q||""));let m=t.match(/(\d+(?:[.,]\d+)?)\s*(kg|g|gr|grammes?|ml|cl|l)(?![a-z])/);if(m)return{v:parseFloat(m[1].replace(",","."))*({kg:1000,cl:10,l:1000}[m[2]]||1),u:/l$/.test(m[2])&&m[2]!=="gr"?"ml":"g"};
+ m=t.match(/(\d+\s?\/\s?\d+|\d+(?:[.,]\d+)?|[½¼¾])/);if(m){const v=qVal(m[1].replace(/\s/g,""));if(v)return{v,u:""}}return null}
+function panelQty(){const d=ui.pdata||{};const L=state.log[d.day]&&state.log[d.day][d.pi];const it=L&&L[d.i];if(!it)return`<p class="pn-help">Élément introuvable.</p>`;const m=ui.qm||1,x=scaleItem(it,m);const b=x.b;
+ return`<h2 class="pn-title">${esc(it.n)}</h2><p class="pn-help">Quantité de départ : ${esc(b.q||"1 portion")} · ${fmtInt(b.k)} kcal</p>
+ <div class="pn-card"><div class="qty-big"><button type="button" class="btn" data-qm="-1" aria-label="Moins">−</button><b>×${fmtM(m)}</b><button type="button" class="btn" data-qm="1" aria-label="Plus">+</button></div>
+  <label class="fl">Ou quantité exacte<input class="pn-in" id="qtyTxt" maxlength="30" value="${esc(x.q||"")}" placeholder="Ex : 45 g, 3"></label>
+  <p class="qty-res" id="qtyRes">${qtyResHtml(x)}</p></div>
+ <div class="pf-actions"><button type="button" class="btn primary" data-act="qty-save">Enregistrer</button><button type="button" class="btn ghost" data-act="qty-del">Retirer</button></div>`}
+const qtyResHtml=x=>["k","p","f","c","fi"].map(k=>`<span>${mdot(k)}<b>${k==="k"?fmtInt(x[k]):fmtG(x[k])+" g"}</b> ${NUT_SH[k]}</span>`).join("");
+
+// ---------- repas : rien n'est compté sans confirmation ; on choisit parmi les repas de la semaine ----------
+dayData=function(day,pi){const rows=[],tot={k:0,p:0,f:0,c:0,fi:0};let partial=false;const fc=day>DAYS[0][0];const add=n=>{tot.k+=n.k||0;tot.p+=n.p||0;["f","c","fi"].forEach(x=>{if(n[x]==null)partial=true;else tot[x]+=n[x]})};
+ MEALS.forEach(([m,ml])=>{const k=day+"-"+m,pr=RMAP[state.plan[k]];const A=state.ate&&state.ate[k+"-"+pi];
+  if(A&&!fc){if(A.none){rows.push({type:"meal",k,ml,none:true,on:false});return}const r=RMAP[A.r];if(!r)return;const b=rNut(r),s=A.s||1;
+   const n={k:(b.k||0)*s,p:(b.p||0)*s,f:b.f==null?null:b.f*s,c:b.c==null?null:b.c*s,fi:b.fi==null?null:b.fi*s};rows.push({type:"meal",k,ml,r,on:true,n,s,conf:true});add(n);return}
+  if(!pr){if(!fc)rows.push({type:"meal",k,ml,empty:true,on:false});return}
+  const n=rNut(pr);
+  if(fc){const on=eats(k,pi);rows.push({type:"meal",k,ml,r:pr,on,n,fc:true});if(on)add(n);return}
+  if(atCant(k,pi)&&state.skip[k+"-"+pi]===undefined){rows.push({type:"meal",k,ml,r:pr,on:false,n,cant:true});return}
+  rows.push({type:"meal",k,ml,r:pr,on:false,n,pend:true})});
+ const L=(state.log[day]&&state.log[day][pi])||[];L.forEach((it,i)=>{rows.push({type:"log",i,it});tot.k+=it.k;tot.p+=it.p;tot.f+=it.f;tot.c+=it.c;tot.fi+=it.fi});
+ return{rows,tot,partial}};
+function pendTot(rows){const T={k:0,p:0,f:0,c:0,fi:0};rows.filter(r=>r.pend).forEach(r=>{T.k+=r.n.k||0;T.p+=r.n.p||0;T.f+=r.n.f||0;T.c+=r.n.c||0;T.fi+=r.n.fi||0});return T}
+function dayRowsHtml(rows,pi){if(!rows.length)return`<li class="nt-empty">Rien de prévu.</li>`;return rows.map(row=>{
+ if(row.type==="log"){const it=row.it;return`<li><span class="nt-tag enc${it.src==="cant"?" cant":""}">${it.src==="cant"?"Cantine":"Encas"}</span><button type="button" class="nt-name nt-edit" data-logedit="${row.i}">${esc(it.n)}<small>${it.q?esc(it.q)+" · ":""}${Math.round(it.k)} kcal ✎</small></button><button type="button" class="nt-del" data-ntdel="${row.i}" aria-label="Retirer ${esc(it.n)}">×</button></li>`}
+ const tag=`<span class="nt-tag">${row.ml}</span>`;
+ if(row.empty)return`<li class="pend">${tag}<span class="nt-name"><small>Rien de prévu</small></span><button type="button" class="nt-ch" data-mealpick="${row.k}">+ Ajouter</button></li>`;
+ if(row.none)return`<li class="off">${tag}<span class="nt-name">Pas de repas<small>non compté</small></span><button type="button" class="nt-ch" data-mealpick="${row.k}">Modifier</button></li>`;
+ if(row.fc)return`<li class="${row.on?"":"off"}">${tag}<span class="nt-name">${esc(short(row.r))}<small>prévu · ${Math.round(row.n.k)} kcal</small></span><button type="button" class="nt-tog" data-nttog="${row.k}" aria-pressed="${row.on}">${row.on?"✓ Prévu":"Pas prévu"}</button></li>`;
+ if(row.cant)return`<li class="off">${tag}<span class="nt-name">${esc(short(row.r))}<small>cantine : non compté</small></span><button type="button" class="nt-ch" data-mealpick="${row.k}">Changer</button></li>`;
+ if(row.pend)return`<li class="pend">${tag}<span class="nt-name">${esc(short(row.r))}<small>prévu · ${Math.round(row.n.k)} kcal · pas encore compté</small></span><span class="nt-btns"><button type="button" class="nt-tog" data-mealok="${row.k}">✓ Mangé</button><button type="button" class="nt-ch" data-mealpick="${row.k}">Changer</button></span></li>`;
+ return`<li>${tag}<span class="nt-name">${esc(short(row.r))}<small>${row.s!==1?"× "+fmtM(row.s)+" · ":""}${Math.round(row.n.k)} kcal · ${Math.round(row.n.p)} g prot.</small></span><span class="nt-btns"><button type="button" class="nt-ch" data-mealpick="${row.k}">Modifier</button><button type="button" class="nt-del" data-mealundo="${row.k}" aria-label="Annuler ce repas">×</button></span></li>`}).join("")}
+function mealOpt(r,from,s){const n=rNut(r);return`<button type="button" class="ml-opt" data-mealset="${r.id}|${from||""}"><img src="${imgSrc(r)}" alt="" loading="lazy"><span><b>${esc(short(r))}</b><small>${from?esc(slotLabel(from))+" · ":""}${Math.round((n.k||0)*s)} kcal · ${Math.round((n.p||0)*s)} g prot.</small></span></button>`}
+function mealSearchHtml(s){const q=nrmS(ui.mealQ||"").trim();if(q.length<2)return"";const res=RECIPES.filter(r=>!r.snack&&!(state.removed&&state.removed[r.id])&&nrmS(r.n).includes(q)).slice(0,8);return res.length?res.map(r=>mealOpt(r,null,s)).join(""):`<p class="pn-help">Aucune recette trouvée.</p>`}
+function panelMeal(){const d=ui.pdata||{},k=d.k,pi=ui.ntP||0;const[day,m]=k.split("-");const ml=(MEALS.find(x=>x[0]===m)||[])[1]||"";const P=state.people[pi],O=state.people[1-pi];const s=ui.mealS||1;
+ const planned=RMAP[state.plan[k]];const seen=new Set(planned?[planned.id]:[]);const week=SLOTS.filter(x=>x!==k&&RMAP[state.plan[x]]&&!state.done[x]).filter(x=>{const id=state.plan[x];if(seen.has(id))return false;seen.add(id);return true});
+ return`<h2 class="pn-title">${ml} · ${esc(dayLabel(day))}</h2><p class="pn-help">Qu'a mangé <b>${esc(P.n)}</b> ? Choisis la portion, puis le plat.</p>
+ <div class="pn-card ml-top"><div class="seg sm" role="group" aria-label="Portion">${[0.5,1,1.5,2].map(v=>`<button type="button" data-meals="${v}" aria-pressed="${v===s}">${fmtM(v)} portion${v>1?"s":""}</button>`).join("")}</div>
+  <label class="chk"><input type="checkbox" id="mealBoth"${ui.mealBoth?" checked":""}> Aussi pour ${esc(O.n)}</label></div>
+ ${planned?`<div class="pn-card"><h3>Prévu</h3>${mealOpt(planned,null,s)}</div>`:""}
+ ${week.length?`<div class="pn-card"><h3>Autres repas de la semaine</h3>${week.map(x=>mealOpt(RMAP[state.plan[x]],x,s)).join("")}<label class="chk"><input type="checkbox" id="mealSwap"${ui.mealSwap===false?"":" checked"}> Échanger aussi dans le planning</label></div>`:""}
+ <div class="pn-card"><h3>Autre recette</h3><input class="pn-in" id="mealQ" placeholder="Chercher une recette" value="${esc(ui.mealQ||"")}" autocomplete="off"><div id="mealRes">${mealSearchHtml(s)}</div></div>
+ <div class="pf-actions"><button type="button" class="btn" data-mealnone="${k}">Pas de repas</button><button type="button" class="btn" data-act="cant-open">🍽️ Cantine / dehors</button></div>`}
+const renderPanelV13=renderPanel;
+renderPanel=function(){const b=document.getElementById("panelBody");if(b&&ui.panel==="meal"){b.innerHTML=panelMeal();return}if(b&&ui.panel==="qty"){b.innerHTML=panelQty();return}renderPanelV13();if(ui.panel==="log")cqLoad()};
+function mealConfirm(k,pis,val){if(!state.ate)state.ate={};pis.forEach(p=>{if(val)state.ate[k+"-"+p]=val;else delete state.ate[k+"-"+p]})}
+document.addEventListener("input",e=>{const t=e.target;if(!t)return;
+ if(t.id==="mealQ"){ui.mealQ=t.value;const r=document.getElementById("mealRes");if(r)r.innerHTML=mealSearchHtml(ui.mealS||1);return}
+ if(t.id==="qtyTxt"){const d=ui.pdata||{};const L=state.log[d.day]&&state.log[d.day][d.pi];const it=L&&L[d.i];if(!it)return;const b=it.b||it;const A=parseAmt(t.value),B=parseAmt(b.q);
+  if(A&&B&&A.u===B.u&&B.v>0){ui.qm=Math.max(0.05,Math.min(20,A.v/B.v));ui.qtxt=t.value.trim();const x=scaleItem(it,ui.qm);const r=document.getElementById("qtyRes");if(r)r.innerHTML=qtyResHtml(x);const lb=document.querySelector(".qty-big b");if(lb)lb.textContent="×"+(Q_STEPS.includes(Math.round(ui.qm*100)/100)?fmtM(Math.round(ui.qm*100)/100):fmtG(r1(ui.qm)))}}});
+document.addEventListener("change",e=>{const t=e.target;if(!t)return;if(t.id==="mealBoth")ui.mealBoth=t.checked;if(t.id==="mealSwap")ui.mealSwap=t.checked});
+document.addEventListener("click",e=>{const t=e.target.closest("button");if(!t)return;const pi=ui.ntP||0;
+ if(t.dataset.recm){const[i,dd]=t.dataset.recm.split("|");const M=ui.recM||(ui.recM={});M[i]=stepM(M[i]||1,Number(dd));const it=recentItems()[Number(i)];const row=document.querySelector(`[data-reci="${i}"]`);
+  if(it&&row){const x=scaleItem(it,M[i]);row.querySelector(".rec-m b").textContent="×"+fmtM(M[i]);row.querySelector(".rec-q").textContent=(x.q?x.q+" · ":"")+fmtInt(x.k)+" kcal · "+fmtG(x.p)+" g prot."}return}
+ if(t.dataset.logedit!=null&&t.dataset.logedit!==""){const day=ui.ntDay||DAYS[0][0];const L=state.log[day]&&state.log[day][pi];const it=L&&L[Number(t.dataset.logedit)];if(!it)return;ui.qm=it.m||1;ui.qtxt=null;openPanel("qty",{day,pi,i:Number(t.dataset.logedit)});return}
+ if(t.dataset.qm){ui.qm=stepM(ui.qm||1,Number(t.dataset.qm));ui.qtxt=null;renderPanel();return}
+ if(t.dataset.act==="qty-save"||t.dataset.act==="qty-del"){const d=ui.pdata||{};const L=state.log[d.day]&&state.log[d.day][d.pi];if(!L||!L[d.i])return;
+  if(t.dataset.act==="qty-del"){L.splice(d.i,1);if(state.log[d.day].every(x=>!x.length))delete state.log[d.day];commit();closePanel();renderSuivi();toast("Retiré");return}
+  const x=scaleItem(L[d.i],ui.qm||1);if(ui.qtxt)x.q=ui.qtxt.slice(0,30);L[d.i]=x;commit();closePanel();renderSuivi();toast(x.n+" : "+fmtInt(x.k)+" kcal");return}
+ if(t.dataset.mealok){const k=t.dataset.mealok,r=state.plan[k];if(!RMAP[r])return;mealConfirm(k,[pi],{r,s:1});commit();renderSuivi();toast(short(RMAP[r])+" compté");return}
+ if(t.dataset.mealpick){const k=t.dataset.mealpick;const A=state.ate&&state.ate[k+"-"+pi];ui.mealS=A&&A.s?A.s:1;ui.mealQ="";ui.mealSwap=true;
+  ui.mealBoth=!!(state.plan[k]&&eats(k,1-pi)&&!atCant(k,1-pi)&&!(state.ate&&state.ate[k+"-"+(1-pi)]));openPanel("meal",{k});return}
+ if(t.dataset.meals){ui.mealS=Number(t.dataset.meals)||1;renderPanel();return}
+ if(t.dataset.mealset){const[rid,from]=t.dataset.mealset.split("|");const k=(ui.pdata||{}).k;if(!k||!RMAP[rid])return;const both=!!(document.getElementById("mealBoth")||{}).checked;const pis=both?[pi,1-pi]:[pi];
+  const sw=!!(document.getElementById("mealSwap")||{}).checked;let moved=false;
+  if(from&&sw&&state.plan[from]===rid&&!state.done[k]&&!state.done[from]){const a=state.plan[k];state.plan[k]=rid;if(a)state.plan[from]=a;else delete state.plan[from];const sa=state.servings[k],sb2=state.servings[from];if(sb2!=null)state.servings[k]=sb2;else delete state.servings[k];if(sa!=null)state.servings[from]=sa;else delete state.servings[from];moved=true}
+  mealConfirm(k,pis,{r:rid,s:ui.mealS||1});commit();closePanel();renderAll();toast(short(RMAP[rid])+" compté"+(both?" pour vous deux":"")+(moved?" · planning échangé":""));return}
+ if(t.dataset.mealnone){const k=t.dataset.mealnone;const both=!!(document.getElementById("mealBoth")||{}).checked;mealConfirm(k,both?[pi,1-pi]:[pi],{none:true});commit();closePanel();renderSuivi();toast("Repas non compté");return}
+ if(t.dataset.mealundo){mealConfirm(t.dataset.mealundo,[pi],null);commit();renderSuivi();toast("Repas retiré du compte");return}});
+
+const closePanelV13=closePanel;closePanel=function(){ui.recM={};closePanelV13()};
+
+const defPortionV13=defPortion;defPortion=function(n){if(/\b(beurre|margarine)\b(?! de)/.test(n))return 10;if(/^huile/.test(n))return 10;if(/creme (fraiche|epaisse|liquide)|^creme$/.test(n))return 30;if(/nutella|pate a tartiner|confiture/.test(n))return 20;if(/mayonnaise|ketchup|moutarde|vinaigrette|^sauce/.test(n))return 15;if(/^sucre/.test(n))return 5;if(/olive|cornichon/.test(n))return 30;if(/baguette/.test(n))return 60;return defPortionV13(n)};
 
 setTab(ui.tab);renderAll();initDb();sbStart();
 
