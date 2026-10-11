@@ -867,6 +867,9 @@ details *,details *::before,details *::after{box-sizing:border-box}
 .ml-opt small{font-size:.78rem;color:var(--muted)}
 #mealRes{margin-top:8px}
 .cq-n{font-size:.76rem}
+/* v16 */
+.ver-bar{position:fixed;left:12px;right:12px;bottom:calc(76px + env(safe-area-inset-bottom,0px));z-index:60;display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--ink);color:var(--bg);border-radius:14px;padding:10px 12px 10px 16px;box-shadow:0 8px 24px rgba(0,0,0,.25);font-weight:700;font-size:.9rem;max-width:520px;margin:0 auto}
+.rec-ed{font-size:.85rem!important}
 
 </style>
 </head>
@@ -958,7 +961,7 @@ details *,details *::before,details *::after{box-sizing:border-box}
 </div>
 <div id="timers" class="timers" hidden aria-live="polite"></div>
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
-<script>window.NS_CONFIG={"hosted": true, "sbUrl": "https://zjsawjudrdneeptxbskd.supabase.co", "sbKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpqc2F3anVkcmRuZWVwdHhic2tkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1NjUxMjcsImV4cCI6MjEwNzE0MTEyN30.Wn1bUy--5O78gGICTOyEGbnT6B-SdoNCG_XxBBaaUIY"}</script>
+<script>window.NS_CONFIG={"hosted": true, "sbUrl": "https://zjsawjudrdneeptxbskd.supabase.co", "sbKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpqc2F3anVkcmRuZWVwdHhic2tkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1NjUxMjcsImV4cCI6MjEwNzE0MTEyN30.Wn1bUy--5O78gGICTOyEGbnT6B-SdoNCG_XxBBaaUIY", "build": "20261011201610"}</script>
 <script>
 const AISLES={L:"Fruits & légumes",H:"Herbes fraîches",V:"Viandes & poissons",C:"Crèmerie & œufs",S:"Surgelés",F:"Féculents",B:"Conserves",E:"Épices & condiments"};
 const AISLE_ORDER=["L","H","V","C","S","F","B","E"];
@@ -3872,6 +3875,30 @@ document.addEventListener("click",e=>{const t=e.target.closest("button");if(!t)r
 const closePanelV13=closePanel;closePanel=function(){ui.recM={};closePanelV13()};
 
 const defPortionV13=defPortion;defPortion=function(n){if(/\b(beurre|margarine)\b(?! de)/.test(n))return 10;if(/^huile/.test(n))return 10;if(/creme (fraiche|epaisse|liquide)|^creme$/.test(n))return 30;if(/nutella|pate a tartiner|confiture/.test(n))return 20;if(/mayonnaise|ketchup|moutarde|vinaigrette|^sauce/.test(n))return 15;if(/^sucre/.test(n))return 5;if(/olive|cornichon/.test(n))return 30;if(/baguette/.test(n))return 60;return defPortionV13(n)};
+
+// ================= v16 : mise à jour automatique du site, récents modifiables à la quantité près =================
+// le navigateur garde l'ancienne page en cache quelques minutes : on vérifie la version en ligne et on propose de recharger
+function verCheck(){if(!HOSTED||!NS.build)return;fetch("version.json?t="+Date.now(),{cache:"no-store"}).then(r=>r.ok?r.json():null).then(j=>{if(j&&j.build&&j.build!==NS.build)verBanner()}).catch(()=>{})}
+function verBanner(){if(document.getElementById("verBar"))return;const d=document.createElement("div");d.id="verBar";d.className="ver-bar";d.setAttribute("role","status");
+ d.innerHTML=`<span>✨ Nouvelle version du site</span><button type="button" class="btn small primary" data-act="ver-reload">Mettre à jour</button>`;document.body.appendChild(d)}
+setTimeout(verCheck,4000);setInterval(verCheck,5*60*1000);document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible")verCheck()});
+// récents : − / + et ✎ pour taper la quantité exacte avant d'ajouter
+recentHtml=function(rec){if(!rec.length)return"";const M=ui.recM||(ui.recM={});
+ return`<div class="pn-card"><h3>Récents</h3><div class="rec-list">${rec.map((it,i)=>{const m=M[i]||(M[i]=it.m||1),x=scaleItem(it,m);return`<div class="rec-row" data-reci="${i}"><button type="button" class="rec-add" data-logrec="${i}" aria-label="Ajouter ${esc(it.n)}"><b>${esc(it.n)}</b><small class="rec-q">${esc(x.q||"")}${x.q?" · ":""}${fmtInt(x.k)} kcal · ${fmtG(x.p)} g prot.</small></button><span class="rec-m"><button type="button" data-recm="${i}|-1" aria-label="Moins">−</button><b>×${fmtM(m)}</b><button type="button" data-recm="${i}|1" aria-label="Plus">+</button><button type="button" class="rec-ed" data-recedit="${i}" aria-label="Quantité exacte">✎</button></span></div>`}).join("")}</div><p class="pn-help">− / + ou ✎ pour la quantité, puis touche l'aliment pour l'ajouter.</p></div>`};
+const qtyItem=d=>{if(d.rec!=null)return recentItems()[d.rec]||null;const L=state.log[d.day]&&state.log[d.day][d.pi];return L&&L[d.i]||null};
+panelQty=function(){const d=ui.pdata||{};const it=qtyItem(d);if(!it)return`<p class="pn-help">Élément introuvable.</p>`;const m=ui.qm||1,x=scaleItem(it,m);const b=x.b;const add=d.rec!=null;
+ return`<h2 class="pn-title">${esc(it.n)}</h2><p class="pn-help">${add?"Choisis la quantité, puis ajoute.":"Quantité de départ : "+esc(b.q||"1 portion")+" · "+fmtInt(b.k)+" kcal"}</p>
+ <div class="pn-card"><div class="qty-big"><button type="button" class="btn" data-qm="-1" aria-label="Moins">−</button><b>×${fmtM(m)}</b><button type="button" class="btn" data-qm="1" aria-label="Plus">+</button></div>
+  <label class="fl">Quantité exacte<input class="pn-in" id="qtyTxt" maxlength="30" value="${esc(ui.qtxt||x.q||"")}" placeholder="Ex : 45 g, 3"></label>
+  <p class="qty-res" id="qtyRes">${qtyResHtml(x)}</p></div>
+ <div class="pf-actions"><button type="button" class="btn primary" data-act="qty-save">${add?"Ajouter":"Enregistrer"}</button>${add?`<button type="button" class="btn ghost" data-act="qty-back">Retour</button>`:`<button type="button" class="btn ghost" data-act="qty-del">Retirer</button>`}</div>`};
+document.addEventListener("input",e=>{const t=e.target;if(!t||t.id!=="qtyTxt")return;const d=ui.pdata||{};if(d.rec==null)return;const it=qtyItem(d);if(!it)return;const b=it.b||it;const A=parseAmt(t.value),B=parseAmt(b.q);
+ if(A&&B&&A.u===B.u&&B.v>0){ui.qm=Math.max(0.05,Math.min(20,A.v/B.v));ui.qtxt=t.value.trim();const x=scaleItem(it,ui.qm);const r=document.getElementById("qtyRes");if(r)r.innerHTML=qtyResHtml(x);const lb=document.querySelector(".qty-big b");if(lb)lb.textContent="×"+fmtG(r1(ui.qm))}});
+document.addEventListener("click",e=>{const t=e.target.closest("button");if(!t)return;
+ if(t.dataset.act==="ver-reload"){location.reload();return}
+ if(t.dataset.recedit!=null&&t.dataset.recedit!==""){const i=Number(t.dataset.recedit);const it=recentItems()[i];if(!it)return;ui.qm=(ui.recM&&ui.recM[i])||it.m||1;ui.qtxt=null;ui.qBack=ui.logCtx;ui.pdata={rec:i};ui.panel="qty";renderPanel();try{window.scrollTo(0,0)}catch(err){}return}
+ if(t.dataset.act==="qty-back"){ui.panel="log";ui.pdata={};renderPanel();return}
+ if(t.dataset.act==="qty-save"&&(ui.pdata||{}).rec!=null){e.stopImmediatePropagation();const it=qtyItem(ui.pdata);const c=ui.logCtx||ui.qBack||{day:DAYS[0][0],pi:ui.ntP||0};if(!it)return;const x=scaleItem(it,ui.qm||1);if(ui.qtxt)x.q=ui.qtxt.slice(0,30);logItem(c.day,[c.pi],x);afterLog(c,it.n+(x.q?" ("+x.q+")":""),false);return}},true);
 
 setTab(ui.tab);renderAll();initDb();sbStart();
 
