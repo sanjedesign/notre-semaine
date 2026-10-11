@@ -1169,11 +1169,38 @@ body.lock .timers{bottom:calc(env(safe-area-inset-bottom,0px) + 96px)}
 }
 @media (prefers-reduced-motion:reduce){.card,.btn,.bottombar button,.toptabs button,.side-cta{transition:none}}
 
+/* ===== v18 : animations ===== */
+.toptabs.has-ind{position:relative}
+.nav-ind{position:absolute;left:0;top:0;z-index:0;pointer-events:none;border-radius:var(--leaf);background:var(--side-on);transition:transform .45s cubic-bezier(.3,1.25,.45,1),width .3s ease,height .3s ease,opacity .2s}
+.has-ind>button{position:relative;z-index:1}
+.bottombar.has-ind button[aria-current="page"],.toptabs.has-ind button[aria-current="page"],.toptabs.has-ind button[aria-current="page"]:hover{background:transparent}
+:is(.btn,.chip,.slot-done,.nt-ch,.nt-tog,.serv button,.stepper button,.rec-m button,.have,.side-cta,.slot-rm,.nt-del,.pc,.seg button,.m-close,.locbtn,.sv-sc,.ml-opt,.rec-add,.cook,.off-row){transition-property:transform,background-color,border-color,color,box-shadow;transition-duration:.14s,.16s,.16s,.16s,.2s;transition-timing-function:ease}
+:is(.btn,.chip,.slot-done,.nt-ch,.nt-tog,.serv button,.stepper button,.rec-m button,.have,.side-cta,.slot-rm,.nt-del,.pc,.seg button,.m-close,.locbtn,.sv-sc):active:not(:disabled){transform:scale(.95)}
+:is(.ml-opt,.rec-add,.cook,.off-row):active{transform:scale(.985)}
+.card{transition:border-color .2s,box-shadow .2s,transform .15s}
+.card:active{transform:scale(.985)}
+.bottombar button,.toptabs button{transition:color .25s,background-color .2s,transform .14s}
+.bottombar button:active,.toptabs button:active{transform:scale(.93)}
+.toast{transition:opacity .22s ease,transform .38s cubic-bezier(.3,1.4,.5,1)}
+.logo .lg-ring{transform-box:view-box;transform-origin:24px 24px}
+.logo .lg-cal{transform-box:view-box;transform-origin:24px 26px}
+.logo .lg-leaf{transform-box:view-box;transform-origin:27px 14.6px}
+.logo .lg-arw{transform-box:view-box;transform-origin:40px 18.2px}
+.chart .bar{transform-box:fill-box;transform-origin:50% 100%}
+.chart .wdot{transform-box:fill-box;transform-origin:center}
+.vt-on .appbar{view-transition-name:np-bar}
+.vt-on .bottombar{view-transition-name:np-dock}
+::view-transition-old(root),::view-transition-new(root){animation-duration:.3s}
+::view-transition-group(np-photo){animation-duration:.46s;animation-timing-function:cubic-bezier(.2,.8,.2,1)}
+::view-transition-image-pair(np-photo){overflow:hidden;border-radius:16px}
+::view-transition-old(np-photo),::view-transition-new(np-photo){width:100%;height:100%;object-fit:cover;animation-duration:.46s}
+@media (prefers-reduced-motion:reduce){.nav-ind,.toast{transition:none}:is(.btn,.chip,.slot-done,.nt-ch,.serv button,.card,.bottombar button,.toptabs button):active{transform:none}}
+
 </style>
 </head>
 <body>
 <header class="appbar"><div class="wrap">
- <div class="brand"><svg class="logo" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 7.3A17 17 0 1 0 40 18.2"/><path d="M44.8 20.9 40 18.2 38 23.4"/><rect x="16.5" y="20" width="15" height="12.5" rx="2.8" stroke-width="2.5"/><path d="M16.5 24.6h15M20.6 17.6v4M27.4 17.6v4" stroke-width="2.5"/><path d="M27 14.6C27.4 8.3 32.4 4.7 40.6 4.4 40.3 11.8 35 15.2 27 14.6Z" fill="#B8892D" stroke="none"/><path d="M29.4 12.6 35.4 8.4" stroke="var(--leaf-rib)" stroke-width="1.3"/></svg><span class="brand-txt">NutriPlan<small>Vos repas de la semaine, votre équilibre au quotidien.</small></span></div>
+ <div class="brand"><svg class="logo" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><g class="lg-ring"><path class="lg-arc" pathLength="1" d="M21 7.3A17 17 0 1 0 40 18.2"/><path class="lg-arw" d="M44.8 20.9 40 18.2 38 23.4"/></g><g class="lg-cal"><rect x="16.5" y="20" width="15" height="12.5" rx="2.8" stroke-width="2.5"/><path d="M16.5 24.6h15M20.6 17.6v4M27.4 17.6v4" stroke-width="2.5"/></g><g class="lg-leaf"><path d="M27 14.6C27.4 8.3 32.4 4.7 40.6 4.4 40.3 11.8 35 15.2 27 14.6Z" fill="#B8892D" stroke="none"/><path d="M29.4 12.6 35.4 8.4" stroke="var(--leaf-rib)" stroke-width="1.3"/></g></svg><span class="brand-txt">NutriPlan<small>Vos repas de la semaine, votre équilibre au quotidien.</small></span></div>
  <nav class="toptabs" aria-label="Sections">
   <button type="button" data-tab="recettes"><svg class="ni" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 3.5v5.2a1.8 1.8 0 0 0 3.6 0V3.5M5.8 3.5v17"/><circle cx="13" cy="12" r="4.3"/><path d="M20.5 20.5v-17c-1.6.8-2.4 2.8-2.4 5.4V13h2.4"/></svg><span>Recettes</span></button>
   <button type="button" data-tab="semaine"><svg class="ni" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4"/><path d="M8 14.5h.01M12 14.5h.01M16 14.5h.01M8 17.5h.01M12 17.5h.01" stroke-width="2.4"/></svg><span>Semaine</span></button>
@@ -1260,7 +1287,7 @@ body.lock .timers{bottom:calc(env(safe-area-inset-bottom,0px) + 96px)}
 </div>
 <div id="timers" class="timers" hidden aria-live="polite"></div>
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
-<script>window.NS_CONFIG={"hosted": true, "sbUrl": "https://zjsawjudrdneeptxbskd.supabase.co", "sbKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpqc2F3anVkcmRuZWVwdHhic2tkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1NjUxMjcsImV4cCI6MjEwNzE0MTEyN30.Wn1bUy--5O78gGICTOyEGbnT6B-SdoNCG_XxBBaaUIY", "build": "20261011204404"}</script>
+<script>window.NS_CONFIG={"hosted": true, "sbUrl": "https://zjsawjudrdneeptxbskd.supabase.co", "sbKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpqc2F3anVkcmRuZWVwdHhic2tkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1NjUxMjcsImV4cCI6MjEwNzE0MTEyN30.Wn1bUy--5O78gGICTOyEGbnT6B-SdoNCG_XxBBaaUIY", "build": "20261011210233"}</script>
 <script>
 const AISLES={L:"Fruits & légumes",H:"Herbes fraîches",V:"Viandes & poissons",C:"Crèmerie & œufs",S:"Surgelés",F:"Féculents",B:"Conserves",E:"Épices & condiments"};
 const AISLE_ORDER=["L","H","V","C","S","F","B","E"];
@@ -4198,6 +4225,128 @@ document.addEventListener("click",e=>{const t=e.target.closest("button");if(!t)r
  if(t.dataset.recedit!=null&&t.dataset.recedit!==""){const i=Number(t.dataset.recedit);const it=recentItems()[i];if(!it)return;ui.qm=(ui.recM&&ui.recM[i])||it.m||1;ui.qtxt=null;ui.qBack=ui.logCtx;ui.pdata={rec:i};ui.panel="qty";renderPanel();try{window.scrollTo(0,0)}catch(err){}return}
  if(t.dataset.act==="qty-back"){ui.panel="log";ui.pdata={};renderPanel();return}
  if(t.dataset.act==="qty-save"&&(ui.pdata||{}).rec!=null){e.stopImmediatePropagation();const it=qtyItem(ui.pdata);const c=ui.logCtx||ui.qBack||{day:DAYS[0][0],pi:ui.ntP||0};if(!it)return;const x=scaleItem(it,ui.qm||1);if(ui.qtxt)x.q=ui.qtxt.slice(0,30);logItem(c.day,[c.pi],x);afterLog(c,it.n+(x.q?" ("+x.q+")":""),false);return}},true);
+
+// ================= v18 : animations (aucun changement de fonctionnement) =================
+const NPA={E:"cubic-bezier(.2,.8,.2,1)",POP:"cubic-bezier(.34,1.56,.64,1)",tab:null,act:0,shop:null,badges:{}};
+const npRM=()=>{try{return matchMedia("(prefers-reduced-motion: reduce)").matches}catch(e){return false}};
+const npOK=()=>!npRM()&&!!(document.body&&document.body.animate);
+function npAnim(el,kf,o){try{return el&&el.animate?el.animate(kf,o):null}catch(e){return null}}
+function npAfter(fn){requestAnimationFrame(()=>{try{fn()}catch(e){}})}
+function npSel(el){const ds=el&&el.dataset;if(!ds)return null;const ks=Object.keys(ds);if(!ks.length)return null;
+ return el.tagName.toLowerCase()+ks.map(k=>`[data-${k.replace(/[A-Z]/g,m=>"-"+m.toLowerCase())}="${CSS.escape(ds[k])}"]`).join("")}
+// --- arrivée en cascade
+function npStagger(list,o){o=o||{};[...list].slice(0,o.max||12).forEach((el,i)=>npAnim(el,[{opacity:0,transform:`translateY(${o.y||14}px)`},{opacity:1,transform:"none"}],{duration:o.d||440,delay:(o.delay||0)+i*(o.step||45),easing:NPA.E,fill:"backwards"}))}
+function npEnter(t){if(!npOK())return;const sec=document.getElementById("tab-"+t);if(!sec)return;
+ npAnim(sec,[{opacity:0},{opacity:1}],{duration:220,easing:"ease-out"});
+ const q=s=>sec.querySelectorAll(s);
+ if(t==="recettes"){npStagger(q("#suggest .hscroll .cardw"),{max:6,delay:60});npStagger(q("#grid .cardw"),{max:12,delay:140,step:40})}
+ else if(t==="semaine"){npStagger(q(".tt>.day"),{max:7,delay:40,step:50});npStagger(q("#cookList .cook"),{max:8,delay:260,step:30,y:10})}
+ else if(t==="suivi"){npStagger(q("#suivi>.sv-card"),{max:8,delay:40,step:60});npSuivi()}
+ else if(t==="courses"){npStagger(q("#budget,#subsBox,#shopList>.aisle"),{max:10,delay:40,step:45})}
+ else if(t==="stock"){npStagger(q("#stockList>.aisle"),{max:10,delay:40,step:45})}
+ if(t==="courses"||t==="suivi")setTimeout(()=>npConfettiLib().catch(()=>{}),1500)}
+// --- pastille du menu qui glisse
+function npNav(instant){for(const nav of document.querySelectorAll(".toptabs,.bottombar")){let ind=nav.querySelector(".nav-ind");
+  if(!ind){ind=document.createElement("span");ind.className="nav-ind";ind.setAttribute("aria-hidden","true");nav.prepend(ind);nav.classList.add("has-ind");instant=true}
+  const b=nav.querySelector('button[aria-current="page"]');if(!b||!nav.getClientRects().length||!b.offsetWidth){ind.style.opacity="0";continue}
+  if(instant||npRM())ind.style.transition="none";
+  ind.style.opacity="1";ind.style.width=b.offsetWidth+"px";ind.style.height=b.offsetHeight+"px";ind.style.transform=`translate(${b.offsetLeft}px,${b.offsetTop}px)`;
+  if(instant){void ind.offsetWidth;ind.style.transition=""}}}
+{let rt=null;window.addEventListener("resize",()=>{clearTimeout(rt);rt=setTimeout(()=>npNav(true),80)});try{document.fonts&&document.fonts.ready.then(()=>npNav(true))}catch(e){}}
+const setTabV18=setTab;
+setTab=function(t){setTabV18(t);const changed=NPA.tab!==t;NPA.tab=t;npAfter(()=>{npNav(false);if(changed)npEnter(t)})};
+// --- suivi : anneau, jauges, chiffres, graphiques
+function npCount(el,dur){if(!el)return;const txt=el.textContent,m=txt.match(/^([+−-]?)(\d[\d\s  ]*)$/);if(!m)return;
+ const to=parseInt(m[2].replace(/\D/g,""),10);if(!(to>0))return;const sep=(m[2].match(/[\s  ]/)||[" "])[0],t0=performance.now();
+ const fmt=v=>m[1]+String(v).replace(/\B(?=(\d{3})+(?!\d))/g,sep);
+ const step=now=>{if(!el.isConnected)return;const p=Math.min(1,(now-t0)/dur);if(p<1){el.textContent=fmt(Math.round(to*(1-Math.pow(1-p,3))));requestAnimationFrame(step)}else el.textContent=txt};
+ el.textContent=fmt(0);requestAnimationFrame(step)}
+function npWhenSeen(el,fn){if(!el)return;if(!("IntersectionObserver" in window)){fn();return}
+ const io=new IntersectionObserver(es=>{if(es.some(x=>x.isIntersecting)){io.disconnect();fn()}},{threshold:.3});io.observe(el)}
+function npSuivi(){if(!npOK())return;const root=document.getElementById("suivi");if(!root)return;
+ root.querySelectorAll(".sv-ring circle[stroke-dasharray]").forEach((c,i)=>{const da=c.getAttribute("stroke-dasharray")||"";const C=da.split(/\s+/)[1];if(!C)return;
+  npAnim(c,[{strokeDasharray:"0 "+C},{strokeDasharray:da}],{duration:950,delay:150+i*700,easing:NPA.E,fill:"backwards"})});
+ npCount(root.querySelector(".sv-ring-c b"),950);npCount(root.querySelector(".sv-sc b"),800);npCount(root.querySelector(".sv-left b"),950);
+ root.querySelectorAll(".sv-gauges .mg-bar i").forEach((i,k)=>{if(i.style.width)npAnim(i,[{width:"0%"},{width:i.style.width}],{duration:750,delay:250+k*80,easing:NPA.E,fill:"backwards"})});
+ root.querySelectorAll(".sv-bar i").forEach(i=>{if(i.style.width)npAnim(i,[{width:"0%"},{width:i.style.width}],{duration:800,delay:300,easing:NPA.E,fill:"backwards"})});
+ const why=root.querySelector(".sv-why");npWhenSeen(why,()=>why.querySelectorAll(".mg-bar i").forEach((i,k)=>{if(i.style.width)npAnim(i,[{width:"0%"},{width:i.style.width}],{duration:650,delay:k*70,easing:NPA.E,fill:"backwards"})}));
+ root.querySelectorAll("svg.chart").forEach(ch=>{
+  const bars=ch.querySelectorAll(".bar:not(.none)"),line=ch.querySelector(".wline");
+  if(bars.length)npWhenSeen(ch,()=>bars.forEach((b,k)=>npAnim(b,[{transform:"scaleY(0)"},{transform:"scaleY(1)"}],{duration:520,delay:k*35,easing:NPA.E,fill:"backwards"})));
+  if(line)npWhenSeen(ch,()=>{let L=0;try{L=line.getTotalLength()}catch(e){}if(!L)return;
+   npAnim(line,[{strokeDasharray:`${L} ${L}`,strokeDashoffset:L},{strokeDasharray:`${L} ${L}`,strokeDashoffset:0}],{duration:1000,easing:"cubic-bezier(.45,0,.2,1)",fill:"backwards"});
+   ch.querySelectorAll(".wdot").forEach((d,k,a)=>npAnim(d,[{opacity:0,transform:"scale(0)"},{opacity:1,transform:"scale(1)"}],{duration:300,delay:1000*(a.length>1?k/(a.length-1):1)*.9,easing:NPA.POP,fill:"backwards"}));
+   ch.querySelectorAll(".proj,.tgt,.tgl").forEach(x=>npAnim(x,[{opacity:0},{opacity:getComputedStyle(x).opacity||1}],{duration:500,delay:900,fill:"backwards"}))})})}
+// --- micro-réactions : pop, chiffre qui roule, coche qui se trace
+function npPop(el,s){npAnim(el,[{transform:"scale(1)"},{transform:`scale(${s||1.08})`},{transform:"scale(1)"}],{duration:300,easing:"ease-out"})}
+function npRoll(el,dir){npAnim(el,[{transform:`translateY(${dir>0?8:-8}px)`,opacity:0},{transform:"none",opacity:1}],{duration:240,easing:NPA.E})}
+document.addEventListener("click",e=>{NPA.act=Date.now();if(!npOK())return;const t=e.target.closest&&e.target.closest("button");if(!t||t.disabled)return;
+ if(t.dataset.serv&&t.dataset.dir){const sel=`button[data-serv="${CSS.escape(t.dataset.serv)}"]`,d=Number(t.dataset.dir);npAfter(()=>{const b=document.querySelector(sel);const n=b&&b.parentElement.querySelector(".serv-n");if(n)npRoll(n,d)});return}
+ if(t.dataset.mserv){const d=Number(t.dataset.mserv);npAfter(()=>{const n=document.querySelector(".m-serv .serv-n");if(n)npRoll(n,d)});return}
+ if(t.dataset.recm){const[i,d]=t.dataset.recm.split("|");npAfter(()=>{const b=document.querySelector(`[data-recm="${CSS.escape(i+"|"+d)}"]`);const n=b&&b.parentElement.querySelector("b");if(n)npRoll(n,Number(d))});return}
+ if(t.matches(".slot-done,.chip,.pc,.nt-tog,.seg button,.cday,.why-sugg .btn,.sv-sc")){const sel=npSel(t);npAfter(()=>{const n=(sel&&document.querySelector(sel))||(t.isConnected?t:null);if(n)npPop(n,t.matches(".slot-done")?1.12:1.07)})}},true);
+document.addEventListener("change",e=>{NPA.act=Date.now();const t=e.target;if(!npOK()||!t||!t.dataset||!t.dataset.buy)return;
+ const sel=`input[data-buy="${CSS.escape(t.dataset.buy)}"]`,on=t.checked;
+ npAfter(()=>{const i=document.querySelector(sel),box=i&&i.nextElementSibling;if(!box)return;
+  npAnim(box,[{transform:"scale(.75)"},{transform:"scale(1.15)"},{transform:"scale(1)"}],{duration:320,easing:"ease-out"});
+  if(on&&window.KeyframeEffect&&"pseudoElement" in KeyframeEffect.prototype)npAnim(box,[{transform:"rotate(45deg) translate(-1px,-1px) scale(0)"},{transform:"rotate(45deg) translate(-1px,-1px) scale(1)"}],{duration:260,delay:60,easing:NPA.POP,fill:"backwards",pseudoElement:"::after"})})},true);
+// --- célébrations (canvas-confetti, chargé seulement quand il sert)
+let npCfP=null;
+function npConfettiLib(){if(window.confetti)return Promise.resolve(window.confetti);
+ const load=src=>new Promise((res,rej)=>{const s=document.createElement("script");s.src=src;s.async=true;s.onload=()=>window.confetti?res(window.confetti):rej();s.onerror=()=>{s.remove();rej()};document.head.appendChild(s)});
+ if(!npCfP)npCfP=load("confetti.js").catch(()=>load("https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.js")).catch(e=>{npCfP=null;throw e});
+ return npCfP}
+function npCelebrate(big){if(npRM())return;npConfettiLib().then(cf=>{let leaf=null;try{leaf=cf.shapeFromPath({path:"M0 12C0 5 5 0 13 0C13 7 8 12 0 12Z"})}catch(e){}
+ const o={colors:["#4F5B2A","#B8892D","#D8C9A8","#8A9A4B","#E2C27A"],shapes:leaf?[leaf,"circle"]:["circle","square"],zIndex:90,scalar:1.05,ticks:220,disableForReducedMotion:true};
+ cf({...o,particleCount:big?110:70,spread:big?110:80,startVelocity:big?46:38,origin:{y:.7}});
+ if(big){setTimeout(()=>cf({...o,particleCount:60,angle:60,spread:65,origin:{x:0,y:.8}}),220);setTimeout(()=>cf({...o,particleCount:60,angle:120,spread:65,origin:{x:1,y:.8}}),340)}}).catch(()=>{})}
+const renderShopV18=renderShop;
+renderShop=function(){renderShopV18.apply(this,arguments);const m=(document.getElementById("shopCount").textContent||"").match(/(\d+)\s*\/\s*(\d+)/);
+ const done=!!(m&&+m[2]>0&&+m[1]===+m[2]);if(done&&NPA.shop===false&&Date.now()-NPA.act<2000){npCelebrate(true);setTimeout(()=>toast("🎉 Liste de courses terminée !"),300)}NPA.shop=m?done:NPA.shop};
+const renderSuiviV18=renderSuivi;
+renderSuivi=function(){renderSuiviV18.apply(this,arguments);try{const root=document.getElementById("suivi");if(!root)return;
+ const who=String(ui.ntP||0),names=[...root.querySelectorAll(".badge-c.on b")].map(b=>b.textContent);if(!root.querySelector(".badges"))return;
+ const prev=NPA.badges[who];NPA.badges[who]=names;if(!prev||ui.tab!=="suivi"||Date.now()-NPA.act>2500)return;const nw=names.filter(n=>!prev.includes(n));
+ if(nw.length){npCelebrate(false);setTimeout(()=>toast("🏅 Nouveau badge : "+nw[0]),1400);
+  npAfter(()=>root.querySelectorAll(".sv-got .sv-chip2").forEach(c=>{if(nw.some(n=>c.textContent.includes(n)))npPop(c,1.15)}))}}catch(e){}};
+document.addEventListener("submit",e=>{const f=e.target;if(!f||f.id!=="wForm")return;const pi=ui.ntP||0,p=state.people[pi];if(!p)return;
+ const w0=(p.w||[]).slice(),prev=w0.length?w0[w0.length-1][1]:null;
+ setTimeout(()=>{const w=p.w||[];if(!w.length||prev==null)return;const now=w[w.length-1][1];if(!(now<prev))return;
+  const start=(p.prof&&p.prof.startKg)||w0[0][1],goal=p.prof&&p.prof.goalKg;
+  if(goal&&now<=goal&&prev>goal){npCelebrate(true);setTimeout(()=>toast("🎯 Objectif atteint, bravo !"),1600)}
+  else if(Math.floor(start-now+1e-9)>Math.floor(start-prev+1e-9)&&start-now>=1){npCelebrate(false);setTimeout(()=>toast("🌿 −"+Math.floor(start-now+1e-9)+" kg depuis le départ !"),1600)}},80)},true);
+// --- fiche recette : la photo s'agrandit (View Transitions API), repli en fondu
+const NPV={arm:null,closeArm:false,src:null};
+const npVT=()=>!npRM()&&typeof document.startViewTransition==="function";
+document.addEventListener("click",e=>{const t=e.target.closest&&e.target.closest("button");if(!t)return;
+ if((t.dataset.rid||t.dataset.open)&&!t.dataset.act&&!t.dataset.tab){NPV.arm=Date.now();NPV.src=t.querySelector("img")}
+ else if(t.dataset.act==="close")NPV.closeArm=true},true);
+function npRun(update,before,after){const root=document.documentElement;root.classList.add("vt-on");before&&before();
+ let vt;try{vt=document.startViewTransition(()=>{update();after&&after()})}catch(e){root.classList.remove("vt-on");update();after&&after();return}
+ const clean=()=>{root.classList.remove("vt-on");document.querySelectorAll(".vt-photo").forEach(x=>{x.style.viewTransitionName="";x.classList.remove("vt-photo")})};
+ vt.finished.then(clean,clean)}
+function npName(img){if(img){img.style.viewTransitionName="np-photo";img.classList.add("vt-photo")}}
+const openModalV18=openModal;
+openModal=function(id,opt){const armed=NPV.arm&&Date.now()-NPV.arm<600;NPV.arm=null;const src=NPV.src;NPV.src=null;
+ if(armed&&npVT()&&!ui.modal){npRun(()=>openModalV18(id,opt),()=>npName(src&&src.isConnected&&src.offsetWidth?src:null),()=>{if(src){src.style.viewTransitionName="";src.classList.remove("vt-photo")}npName(document.querySelector(".m-hero img"))});return}
+ openModalV18(id,opt);if(armed&&npOK()){const sh=document.querySelector(".sheet");npAnim(sh,[{opacity:0,transform:"translateY(18px)"},{opacity:1,transform:"none"}],{duration:320,easing:NPA.E})}};
+const closeModalV18=closeModal;
+closeModal=function(){const armed=NPV.closeArm;NPV.closeArm=false;const id=ui.modal;
+ if(armed&&id&&ui.cook==null&&npVT()){npRun(()=>closeModalV18(),()=>npName(document.querySelector(".m-hero img")),()=>{const h=document.querySelector(".m-hero img.vt-photo");if(h){h.style.viewTransitionName="";h.classList.remove("vt-photo")}
+  const sec=document.getElementById("tab-"+ui.tab);const c=sec&&[...sec.querySelectorAll(`[data-rid="${CSS.escape(id)}"] img,[data-open="${CSS.escape(id)}"] img`)].find(x=>x.offsetWidth);npName(c)});return}
+ closeModalV18()};
+// --- panneaux : arrivée douce
+const openPanelV18=openPanel;
+openPanel=function(kind,data){const was=!!ui.panel;openPanelV18(kind,data);if(!was&&npOK())npAfter(()=>npAnim(document.getElementById("panelBody"),[{opacity:0,transform:"translateY(14px)"},{opacity:1,transform:"none"}],{duration:320,easing:NPA.E}))};
+// --- logo animé à l'ouverture (une fois par session)
+function npIntro(){let seen=false;try{seen=sessionStorage.getItem("np-intro")==="1";sessionStorage.setItem("np-intro","1")}catch(e){}
+ if(seen||!npOK())return;const L=document.querySelector(".brand svg.logo");if(!L)return;const g=s=>L.querySelector(s);
+ npAnim(g(".lg-ring"),[{transform:"rotate(-200deg)"},{transform:"rotate(0deg)"}],{duration:1100,easing:NPA.E,fill:"backwards"});
+ npAnim(g(".lg-arc"),[{strokeDasharray:"1 1",strokeDashoffset:1,opacity:0},{opacity:1,offset:.08},{strokeDasharray:"1 1",strokeDashoffset:0,opacity:1}],{duration:1000,easing:NPA.E,fill:"backwards"});
+ npAnim(g(".lg-arw"),[{opacity:0,transform:"scale(.4)"},{opacity:1,transform:"scale(1)"}],{duration:280,delay:850,easing:NPA.POP,fill:"backwards"});
+ npAnim(g(".lg-cal"),[{opacity:0,transform:"scale(.5)"},{opacity:1,transform:"scale(1)"}],{duration:480,delay:200,easing:NPA.POP,fill:"backwards"});
+ npAnim(g(".lg-leaf"),[{opacity:0,transform:"scale(0) rotate(-45deg)"},{opacity:1,transform:"scale(1) rotate(0deg)"}],{duration:620,delay:780,easing:NPA.POP,fill:"backwards"})}
+npIntro();
 
 setTab(ui.tab);renderAll();initDb();sbStart();
 
