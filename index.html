@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="theme-color" content="#4F5B2A">
+<meta name="theme-color" content="#FFF3F0">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <title>NutriPlan – repas & courses</title>
@@ -1196,6 +1196,210 @@ body.lock .timers{bottom:calc(env(safe-area-inset-bottom,0px) + 96px)}
 ::view-transition-old(np-photo),::view-transition-new(np-photo){width:100%;height:100%;object-fit:cover;animation-duration:.46s}
 @media (prefers-reduced-motion:reduce){.nav-ind,.toast{transition:none}:is(.btn,.chip,.slot-done,.nt-ch,.serv button,.card,.bottombar button,.toptabs button):active{transform:none}}
 
+/* ================= v19 : thème rose poudré & corail (inspiré du mockup) + découvrir ================= */
+:root{
+ --bg:#FFF3F0;--surface:#FFFFFF;--surface-2:#FBF4F3;--ink:#2F2A2B;--muted:#76696B;--line:#F4E4E1;--line-2:#ECD4CF;
+ --accent:#EB6456;--accent-ink:#FFFFFF;--accent-soft:#FFEDE9;--danger:#C8453A;
+ --title:#2F2A2B;--olive:#EB6456;--ochre:#EB6456;--ochre-hover:#DD5547;--ochre-ink:#FFFFFF;--ochre-txt:#C0453A;--ochre-soft:#FFE6E1;
+ --coral:#EB6456;--coral-ink:#C0453A;--pink:#FFDCD5;--pink-2:#FDEAE6;--leaf-c:#8CC63F;
+ --side:#FFFFFF;--side-ink:#2F2A2B;--side-muted:#76696B;--side-hover:#FFF1EE;--side-on:#FFE3DD;--side-on-ink:#C0453A;--leaf-rib:#FFFFFF;--dock-line:rgba(235,100,86,.14);
+ --ok:#3F9A5B;--low:#E09A2D;--high:#D8503F;
+ --r-lg:24px;--r-md:16px;--r-sm:12px;--leaf:18px;
+ --sh-1:0 10px 26px -18px rgba(196,82,68,.45),0 1px 2px rgba(120,60,50,.05);
+ --sh-2:0 24px 48px -22px rgba(186,74,60,.5);
+ --sh-btn:0 12px 22px -12px rgba(235,100,86,.75);
+}
+/* fond : grande forme organique rose, une courbe corail et une bulle verte */
+body{background:var(--bg)}
+body::before,body::after{content:"";position:fixed;z-index:-1;pointer-events:none;background-repeat:no-repeat;background-size:contain}
+body::before{top:-140px;right:-160px;width:min(620px,95vw);height:min(620px,95vw);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 600'%3E%3Cpath d='M418 46c94 12 162 96 150 196s-74 150-154 168-172-12-212-84-28-160 32-218 90-74 184-62z' fill='%23FFDCD5'/%3E%3Cpath d='M70 560C170 400 290 500 372 340S548 196 600 120' fill='none' stroke='%23F1A094' stroke-width='2' opacity='.55'/%3E%3Ccircle cx='170' cy='150' r='15' fill='%238CC63F' opacity='.85'/%3E%3C/svg%3E")}
+body::after{bottom:-180px;left:-200px;width:min(520px,90vw);height:min(520px,90vw);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 500 500'%3E%3Cpath d='M240 60c100-10 190 60 200 150s-50 190-150 220-210-20-240-110 90-250 190-260z' fill='%23FDE6E1'/%3E%3C/svg%3E")}
+@media (min-width:900px){body::after{left:calc(var(--side-w) - 200px)}}
+
+/* typo et titres */
+h1,h2,.sec-head h1,.block-title,.row-head h2,.m-body h2,.pn-title{color:var(--title)}
+.sec-head h1{letter-spacing:-.035em}
+.link,.seg button[aria-pressed="true"],.tt>.day:first-child .day-name,.slot-batch,.subs-list li b,.pill.ok,.tbtn,.bc-title,.snk-res-t,.source a,.pf-manual summary,.ct-man summary,.sv-wlist summary,.nt-tag,.nt-tog[aria-pressed="true"]{color:var(--coral-ink)}
+@media (max-width:520px){.item>.item-qty{color:var(--coral-ink)}}
+.tbtn{border-color:var(--coral)}
+
+/* boutons : pilule corail pleine, ombre douce */
+.btn{border-color:var(--line-2);border-radius:999px}
+.btn.primary,.sec-head .head-actions .btn.primary{background:var(--coral);border-color:var(--coral);color:#fff;box-shadow:var(--sh-btn)}
+.btn.primary:hover{background:var(--ochre-hover);border-color:var(--ochre-hover)}
+.btn.primary:disabled{box-shadow:none}
+.chip{border-color:var(--line-2);box-shadow:0 1px 2px rgba(120,60,50,.05)}
+.chip[aria-pressed="true"]{background:var(--coral);border-color:var(--coral);color:#fff}
+.seg{background:#F6ECEA}
+.search{border-color:var(--line-2);box-shadow:0 6px 18px -14px rgba(190,76,62,.4)}
+.search:focus,.pn-in:focus,.fl input:focus,.fl select:focus,.fl textarea:focus{border-color:var(--coral);box-shadow:0 0 0 3px rgba(235,100,86,.18)}
+:focus-visible{outline-color:var(--coral)}
+
+/* surfaces : cartes blanches sans bordure, ombre rosée */
+.day,.aisle,.sv-card,.nt-card,.bud-card,.genbox,.fp-day,.snk,.pform,.subs,.owned,.pn-card,.cook,.rec-row,.ml-opt,.off-row,.howto,.card{border-color:transparent;box-shadow:var(--sh-1)}
+.card:hover{border-color:transparent;box-shadow:var(--sh-2)}
+.card{border-radius:22px;padding:7px 7px 13px}
+.card-img{border-radius:17px}
+.pending,.rangebox,.tip,.batch-card,.cm-batch,.snk-reserve,.sv-cta,.bud-card.ask,.why-est,.locmenu{background:var(--accent-soft)}
+.aisle.cart{background:var(--pink-2)}
+
+/* barre du haut, dock et barre latérale */
+.appbar{background:color-mix(in srgb,var(--bg) 82%,transparent);border-bottom-color:transparent}
+.brand svg.logo{color:var(--coral);--leaf-rib:#fff}
+.logo .lg-leaf path:first-child{fill:var(--leaf-c)}
+.bottombar{box-shadow:0 18px 40px -16px rgba(186,74,60,.45),0 2px 6px rgba(120,60,50,.06)}
+@media (min-width:900px){
+ .appbar{box-shadow:1px 0 0 var(--line),18px 0 46px -34px rgba(186,74,60,.55)}
+ .brand,.brand svg.logo{color:var(--coral)}
+ .brand{color:var(--title)}
+ .brand svg.logo{--leaf-rib:#fff}
+ .side-cta{box-shadow:var(--sh-btn);color:#fff}
+ .appbar .sync[data-on="1"]::before{background:var(--ok);box-shadow:0 0 0 4px rgba(63,154,91,.18)}
+}
+
+/* semaine */
+.tt>.day:first-child{border-color:transparent;box-shadow:inset 0 4px 0 var(--coral),var(--sh-1)}
+.slot{background:var(--surface-2)}
+.slot.empty,.slot.empty:is(button){border-color:var(--line-2)}
+.slot.empty:hover{border-color:var(--coral);background:var(--pink-2)}
+
+/* fiche recette : en-tête arrondi, titre centré, ingrédients en lignes alternées, gros bouton */
+.sheet{background:var(--surface)}
+.m-hero img{border-radius:0 0 34px 34px}
+@media (min-width:760px){.m-hero img{border-radius:22px}}
+.m-body h2{text-align:center;font-size:clamp(1.55rem,5.4vw,2.1rem)}
+.m-body .facts,.m-body .m-facts,.m-body .m-nut{justify-content:center}
+.facts li,.mf{background:#F6F1F0;border-color:transparent}
+.m-actions .btn.primary{flex:1 1 100%;padding:14px 20px;font-size:1rem}
+.ingx li{padding:9px 12px;border-radius:14px;gap:12px}
+.ingx li:nth-child(odd){background:#F8F3F2}
+.ingx .ico{flex-basis:40px;height:40px;font-size:1.3rem;background:#fff;border-color:transparent;box-shadow:0 2px 6px rgba(120,60,50,.08)}
+.ingx .ix{flex:1;flex-direction:row;align-items:center;justify-content:space-between;gap:10px}
+.ingx .ix b{font-weight:500;font-size:.98rem}
+.ingx .ix .qt{margin:0;text-align:right;font-size:.92rem;white-space:nowrap}
+.ingx.small .ico{flex-basis:34px;height:34px;font-size:1.05rem}
+.stepx .num{background:var(--coral)}
+.stepx b,.steps.plain b,.cm-step b,.step-txt b{background:var(--ochre-soft)}
+/* mode cuisine : étape en pastille, flèches rondes */
+.cm-count{display:inline-flex;align-items:center;gap:6px;background:#F6F1F0;border-radius:999px;padding:5px 14px;font-family:var(--f-sub);font-weight:600;font-size:.86rem;color:var(--ink)}
+.cm-progress span{background:#F3E6E3}
+.cm-progress span.cur,.cm-progress span.past{background:var(--coral)}
+.cm-progress span.past{opacity:.45}
+.cook-mode .cm-nav .btn[data-act="cook-prev"]{flex:0 0 56px;height:56px;border-radius:50%;padding:0;border:2px solid var(--coral);color:var(--coral);background:#fff}
+.cook-mode .cm-nav .btn.primary{min-height:56px}
+.tbtn.big{background:var(--coral);border-color:var(--coral);color:#fff}
+.timer{background:#fff;color:var(--ink);box-shadow:var(--sh-2);border:1px solid var(--line)}
+.timer .t-time{color:var(--coral)}
+.timer button{color:var(--ink);border-color:var(--line-2)}
+.timer.done{background:var(--coral);color:#fff}
+.timer.done .t-time,.timer.done button{color:#fff;border-color:rgba(255,255,255,.6)}
+
+/* suivi et courses */
+.rg-bg{stroke:#F6EDEB}
+.sv-sc b,.sv-sc-n{background:#fff;border-color:var(--line-2);color:var(--ink)}
+.lvl{background:var(--coral);color:#fff}
+.sv-bar.xp i{background:var(--coral)}
+.progress i{background:var(--coral)}
+.box{border-color:#D9B9B3}
+.chart .tdy{fill:var(--coral)}
+.chart .wline{stroke:var(--coral)}
+.chart .wdot{stroke:var(--coral)}
+.chart .wdot.last{fill:var(--coral);stroke:var(--coral)}
+.chart .proj{stroke:var(--coral)}
+.chart .cb.sel .bar{stroke:var(--coral)}
+.toast{background:var(--ink);color:#fff}
+.ver-bar{border:1px solid var(--line);box-shadow:var(--sh-2)}
+.ver-bar .btn.primary{color:#fff}
+
+/* ---------- découvrir ---------- */
+#discBanner{margin:0 0 22px}
+.dc-banner{position:relative;overflow:hidden;display:grid;grid-template-columns:1fr;gap:6px;background:var(--surface);border-radius:28px;box-shadow:var(--sh-1);padding:20px 20px 22px}
+.dc-banner::before{content:"";position:absolute;right:-70px;top:-80px;width:260px;height:260px;border-radius:46% 54% 60% 40%/50% 42% 58% 50%;background:var(--pink);z-index:0}
+.dc-b-txt{position:relative;z-index:1;order:2}
+.dc-kick{display:flex;align-items:center;gap:6px;margin:0;font-family:var(--f-sub);font-weight:600;font-size:.8rem;color:var(--coral-ink)}
+.dc-kick svg{width:16px;height:16px}
+.dc-banner h2{font-family:var(--f-title);font-weight:700;font-size:clamp(1.3rem,4.6vw,1.65rem);letter-spacing:-.025em;line-height:1.15;margin:6px 0 8px}
+.dc-banner p{margin:0 0 14px;color:var(--muted);font-size:.92rem;max-width:52ch}
+.dc-go{padding:12px 26px;font-size:.95rem}
+.dc-b-art{position:relative;z-index:1;order:1;height:92px;display:flex;justify-content:flex-end;align-items:center;padding-right:6px}
+.dc-b-ph{width:84px;height:84px;border-radius:50%;overflow:hidden;border:4px solid #fff;box-shadow:0 10px 22px -12px rgba(120,50,40,.55);margin-left:-18px;background:var(--pink-2)}
+.dc-b-ph img{width:100%;height:100%;object-fit:cover}
+.dc-b-ph.p1{width:96px;height:96px;z-index:2}
+@media (min-width:700px){.dc-banner{grid-template-columns:1.3fr 1fr;align-items:center;padding:26px 30px}.dc-b-txt{order:1}.dc-b-art{order:2;height:150px;justify-content:center}.dc-b-ph{width:120px;height:120px;margin-left:-26px}.dc-b-ph.p1{width:140px;height:140px}.dc-banner::before{right:-40px;top:-60px;width:360px;height:360px}}
+.dc-tags{flex-wrap:wrap;overflow:visible;margin:4px 0 14px}
+.dc-tags .chip small{font-weight:500;opacity:.75;margin-left:2px}
+.dc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px}
+.dc-card{background:var(--surface);border-radius:24px;box-shadow:var(--sh-1);overflow:hidden;display:flex;flex-direction:column}
+.dc-ph{position:relative;display:block;width:100%;aspect-ratio:16/10;border:0;padding:0;background:var(--pink-2);cursor:pointer}
+.dc-ph img,.dc-ph .dc-noimg{width:100%;height:100%;object-fit:cover;display:block}
+.dc-noimg{display:grid!important;place-items:center;font-size:3rem;background:radial-gradient(circle at 50% 55%,#fff 0 34%,var(--pink) 35%)}
+.dc-src{position:absolute;top:10px;left:10px;background:rgba(255,255,255,.95);color:var(--ink);font-family:var(--f-sub);font-weight:600;font-size:.72rem;border-radius:999px;padding:4px 10px;box-shadow:0 2px 8px rgba(0,0,0,.12)}
+.dc-vid{position:absolute;bottom:10px;left:10px;display:inline-flex;align-items:center;gap:4px;background:var(--coral);color:#fff;font-family:var(--f-sub);font-weight:600;font-size:.72rem;border-radius:999px;padding:4px 10px 4px 8px}
+.dc-vid svg{width:12px;height:12px}
+.dc-body{display:flex;flex-direction:column;gap:6px;padding:14px 16px 16px;flex:1}
+.dc-t{border:0;background:none;padding:0;text-align:left;font-family:var(--f-title);font-weight:600;font-size:1.02rem;line-height:1.3;color:var(--ink);cursor:pointer;letter-spacing:-.01em}
+.dc-by{margin:0;font-size:.8rem;color:var(--muted);display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px}
+.dc-r{display:inline-flex;align-items:center;gap:3px;color:var(--ink);font-weight:600}
+.dc-r svg{width:13px;height:13px;color:#F2B33D}
+.dc-facts,.dc-pills{display:flex;flex-wrap:wrap;gap:6px;margin:2px 0 4px}
+.dc-f{display:inline-flex;align-items:center;gap:5px;background:#F6F1F0;border-radius:999px;padding:4px 10px;font-size:.78rem;font-weight:500;color:var(--ink);white-space:nowrap}
+.dc-f svg{width:14px;height:14px;color:var(--coral)}
+.dc-act{display:flex;align-items:center;gap:8px;margin-top:auto;padding-top:8px}
+.dc-act .btn{padding:9px 16px}
+.dc-act .btn.primary{flex:1}
+.dc-no{margin-left:auto;flex:0 0 auto;width:38px;height:38px;border-radius:50%;border:1px solid var(--line-2);background:#fff;color:var(--muted);display:grid;place-items:center;padding:0}
+.dc-no svg{width:16px;height:16px}
+.dc-no:hover{color:var(--coral-ink);border-color:var(--coral)}
+.dc-more{display:block;margin:18px auto 0}
+.dc-foot{text-align:center;font-size:.84rem;color:var(--muted);margin:16px 0 0}
+.dc-empty{background:var(--surface);border-radius:20px;padding:18px;color:var(--muted);box-shadow:var(--sh-1)}
+/* aperçu d'une recette proposée */
+.dc-back{display:inline-flex;align-items:center;gap:4px;border:0;background:none;padding:4px 0;margin:0 0 10px;font-family:var(--f-sub);font-weight:600;font-size:.88rem;color:var(--coral-ink);cursor:pointer}
+.dc-back svg{width:18px;height:18px}
+.dc-hero{position:relative;background:var(--pink);border-radius:30px;padding:10px;margin:0 0 16px}
+.dc-hero-img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:22px;display:block}
+.dc-hero .dc-noimg{aspect-ratio:4/3;border-radius:22px;font-size:4rem}
+.dc-hero .dc-vid{left:22px;bottom:22px}
+.dc-kicker{text-align:center;margin:0;font-size:.82rem;color:var(--muted);font-family:var(--f-sub);font-weight:500}
+.dc-title{text-align:center;margin:4px 0 6px!important}
+.dc-rate{display:flex;justify-content:center;align-items:center;gap:2px;margin:0 0 6px;color:#F2B33D}
+.dc-rate svg{width:15px;height:15px}
+.dc-rate span{margin-left:6px;font-size:.82rem;color:var(--muted);font-weight:500}
+.dc-pills{justify-content:center;margin-bottom:16px}
+.dc-tabs{display:flex;justify-content:center;gap:28px;border-bottom:1px solid var(--line);margin:0 0 12px}
+.dc-tabs button{border:0;background:none;padding:10px 2px;font-family:var(--f-sub);font-weight:600;font-size:.92rem;color:var(--muted);border-bottom:2.5px solid transparent;margin-bottom:-1px;cursor:pointer}
+.dc-tabs button[aria-selected="true"]{color:var(--coral-ink);border-bottom-color:var(--coral)}
+.dc-for{font-size:.8rem;color:var(--muted);margin:0 0 8px;text-align:center}
+.dc-ing,.dc-nut{list-style:none;margin:0;padding:0}
+.dc-ing li{display:flex;align-items:center;gap:12px;padding:8px 12px;border-radius:14px}
+.dc-ing li:nth-child(odd),.dc-nut li:nth-child(odd){background:#F8F3F2}
+.dc-ico{flex:0 0 36px;height:36px;border-radius:50%;background:#fff;display:grid;place-items:center;font-size:1.15rem;box-shadow:0 2px 6px rgba(120,60,50,.08)}
+.dc-in{flex:1;min-width:0;font-size:.94rem}
+.dc-q{font-size:.9rem;color:var(--muted);text-align:right;white-space:nowrap;padding-left:6px}
+.dc-nut li{display:grid;grid-template-columns:110px 1fr auto;align-items:center;gap:12px;padding:10px 12px;border-radius:14px}
+.dc-nl{display:flex;align-items:center;font-size:.9rem;font-weight:500}
+.dc-nb{position:relative;height:8px;border-radius:99px;background:#F1E6E3;overflow:hidden}
+.dc-nb i{position:absolute;left:0;top:0;bottom:0;border-radius:99px;background:var(--c)}
+.dc-nut b{font-variant-numeric:tabular-nums;font-size:.95rem;text-align:right;min-width:68px}
+.dc-nut b small{font-weight:500;color:var(--muted)}
+.dc-note{font-size:.8rem;color:var(--muted);margin:10px 0 0;text-align:center}
+.dc-vbox{margin:20px 0 6px}
+.dc-vbox h3{font-size:1rem;margin:0 0 10px}
+.dc-video{border-radius:20px}
+.dc-vlink{display:inline-flex;align-items:center;gap:6px}
+.dc-vlink svg{width:14px;height:14px;color:var(--coral)}
+.dc-link{display:flex;align-items:center;justify-content:center;gap:6px;margin:16px 0 4px;font-family:var(--f-sub);font-weight:600;font-size:.9rem;color:var(--coral-ink);text-decoration:none}
+.dc-link svg{width:16px;height:16px}
+.dc-cta{position:sticky;bottom:calc(84px + env(safe-area-inset-bottom,0px));margin:14px -4px 0;padding:16px 4px 4px;background:linear-gradient(to bottom,rgba(255,243,240,0),var(--bg) 26%);z-index:4}
+@media (min-width:900px){.dc-cta{bottom:0}}
+.dc-big{width:100%;padding:15px 20px!important;font-size:1.02rem!important}
+.dc-cta2{display:flex;justify-content:center;flex-wrap:wrap;gap:4px;margin-top:6px}
+.dc-cta2 .btn{border-color:transparent;color:var(--muted)}
+.dc-cta .dc-note{margin-top:4px}
+@media (max-width:380px){.dc-nut li{grid-template-columns:92px 1fr auto;gap:8px}}
+
+@media (min-width:700px){.dc-hero-img,.dc-hero .dc-noimg{aspect-ratio:16/9;max-height:360px}}
+
 </style>
 </head>
 <body>
@@ -1217,6 +1421,7 @@ body.lock .timers{bottom:calc(env(safe-area-inset-bottom,0px) + 96px)}
   <div class="sec-head"><div><h1>Recettes</h1><p class="sub">Vos recettes, ajoutées une par une avec leurs ingrédients d'origine. Touche une recette pour la voir, choisir les portions et l'ajouter au planning.</p></div>
    <div class="head-actions"><button type="button" class="btn primary" data-act="rec-add">+ Ajouter une recette</button><button type="button" class="btn" data-tab="semaine" id="planCount">0 / 14 repas planifiés</button></div></div>
   <div id="pending" class="pending" hidden></div>
+    <div id="discBanner" hidden></div>
     <div id="suggest" class="suggest"></div>
 
   <h2 class="block-title all-title">Toutes les recettes</h2>
@@ -1230,7 +1435,6 @@ body.lock .timers{bottom:calc(env(safe-area-inset-bottom,0px) + 96px)}
   <p class="sub">Tes recettes d'encas (cookies healthy…), cuisinées par fournée. Ce que tu grignotes se note dans l'onglet Suivi.</p>
   <div class="grid" id="snkGrid"></div>
   <p id="snkEmpty" class="muted" hidden>Aucune recette d'encas pour l'instant : ajoute-en une avec « + Ajouter une recette ».</p>
-  <details class="removed" id="removedBox" hidden></details>
  </section>
 
  <section id="tab-semaine" class="tab" hidden>
@@ -1287,7 +1491,7 @@ body.lock .timers{bottom:calc(env(safe-area-inset-bottom,0px) + 96px)}
 </div>
 <div id="timers" class="timers" hidden aria-live="polite"></div>
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
-<script>window.NS_CONFIG={"hosted": true, "sbUrl": "https://zjsawjudrdneeptxbskd.supabase.co", "sbKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpqc2F3anVkcmRuZWVwdHhic2tkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1NjUxMjcsImV4cCI6MjEwNzE0MTEyN30.Wn1bUy--5O78gGICTOyEGbnT6B-SdoNCG_XxBBaaUIY", "build": "20261011210233"}</script>
+<script>window.NS_CONFIG={"hosted": true, "sbUrl": "https://zjsawjudrdneeptxbskd.supabase.co", "sbKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpqc2F3anVkcmRuZWVwdHhic2tkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1NjUxMjcsImV4cCI6MjEwNzE0MTEyN30.Wn1bUy--5O78gGICTOyEGbnT6B-SdoNCG_XxBBaaUIY", "build": "20261012192517"}</script>
 <script>
 const AISLES={L:"Fruits & légumes",H:"Herbes fraîches",V:"Viandes & poissons",C:"Crèmerie & œufs",S:"Surgelés",F:"Féculents",B:"Conserves",E:"Épices & condiments"};
 const AISLE_ORDER=["L","H","V","C","S","F","B","E"];
@@ -2537,6 +2741,96 @@ normalize=function(d){const s=normalizeV12(d);s.ate={};const min=ymd(new Date(Da
  if(d&&d.skip&&typeof d.skip==="object")for(const k in d.skip){const m=k.match(/^((\d{8})-(midi|soir))-([01])$/);if(!m||m[2]>today||d.skip[k]!==false||s.ate[k])continue;const r=s.plan[m[1]];if(RMAP[r])s.ate[k]={r,s:1}}
  return s};
 
+// ================= v19 (avant l'état) : vraies recettes à valider =================
+// Recettes publiées par des chefs et des cuisiniers (HelloFresh, 750g, Philippe Etchebest, Cyril Lignac).
+// y = nombre de portions des quantités ; n = valeurs par portion données par le site (sinon estimées) ;
+// v = identifiant YouTube, "page" = vidéo visible sur la page d'origine. Les étapes sont lues sur le site à l'ajout.
+const HFI="https://img.hellofresh.com/hellofresh_s3/image/",HFM="https://media.hellofresh.com/q_100,w_1200,f_auto,c_limit,fl_lossy/recipes/image/",HFU="https://www.hellofresh.fr/recipes/",G7I="https://static.750g.com/images/",G7U="https://www.750g.com/";
+const DISC=[
+{id:"hf_curry_brocoli",t:"Poulet au curry et riz de brocoli",src:"HelloFresh",a:"Chefs HelloFresh",u:HFU+"poulet-au-curry-et-riz-de-brocoli-5cd56954786c94000e1a5b77",img:HFM+"5cd56954786c94000e1a5b77-073deac3.jpg",min:30,y:1,
+ ing:["½ Courgette","½ pièce(s) Concombre","½ pièce(s) Gousse d'ail","Gingembre frais : 1 cm","40 g Riz cargo","100 g Riz de brocoli","100 g Dés de filet de poulet","10 ml Sauce poisson","75 ml Lait de coco","½ cs Huile d'olive","1 cs Vinaigre de vin blanc","1 cc Sucre","Poivre et sel selon le goût"],n:{k:600,p:33,f:28,c:52,fi:7}},
+{id:"hf_poulet_estival",t:"Filet de poulet & poêlée de légumes estivaux",src:"HelloFresh",a:"Chefs HelloFresh",u:HFU+"filet-de-poulet-and-poelee-de-legumes-estivale-65eb3b958912df9b4c164877",img:HFM+"HF_Y24_R223_W38_FR_RFR23609-1_Main_remove_courgette_edit_high-63723af7.jpg",min:40,y:1,
+ ing:["½ sachet(s) Haricots verts","½ pièce(s) Tête d'ail","½ pièce(s) Oignon","½ sachet(s) Estragon, persil et ciboulette","1 pièce(s) Poivron","1 pièce(s) Filet de poulet","½ paquet(s) Crème liquide","1 cs Huile d'olive","½ cs Beurre","½ cc Vinaigre de vin rouge ou de cidre","½ cc Moutarde","Poivre et sel selon le goût"],n:{k:534,p:33.7,f:34.9,c:20.9,fi:12}},
+{id:"hf_wok_dinde",t:"Wok léger de dinde & légumes sautés",src:"HelloFresh",a:"Mathilde M.",u:HFU+"wok-leger-de-dinde-and-legumes-sautes-67289089d49f300fd6162fb1",img:HFI+"HF_Y24_R224_W45_FR_RFR16570-2_Main_high-af0900d9.jpg",min:40,y:1,
+ ing:["½ pièce(s) Tête d'ail","Gingembre frais : 1 cm","1 pièce(s) Portobello","½ pièce(s) Brocoli","1 pièce(s) Carotte","½ pièce(s) Oignon","1 pièce(s) Escalope de dinde","25 g Sauce umami à l'huître","½ sachet(s) Huile de sésame","1 cs Huile de tournesol","1 pièce(s) Œuf","Poivre et sel selon le goût"],n:{k:580,p:43.9,f:29.9,c:30.6,fi:12.2}},
+{id:"hf_poulet_citronnelle",t:"Poulet mariné & riz à la citronnelle",src:"HelloFresh",a:"Chefs HelloFresh",u:HFU+"poulet-marine-and-riz-a-la-citronnelle-65817887dd4edadd70bf333f",img:HFM+"HF_Y24_R218_W32_FR_QFR21516-1_Main_high-208a7409.jpg",min:25,y:1,
+ ing:["75 g Riz","½ pièce(s) Tête d'ail","½ pièce(s) Oignon","1 pièce(s) Poivron","½ pièce(s) Citronnelle fraîche","⅓ sachet(s) Purée de gingembre","1 pièce(s) Filet de poulet","1 sachet(s) Sauce asiatique sucrée","½ sachet(s) Sauce soja","⅓ sachet(s) Coriandre et basilic thaï","1 cs Huile de tournesol","Poivre et sel selon le goût"],n:{k:635,p:35.6,f:17.9,c:84.4,fi:6.7}},
+{id:"hf_poulet_sauce_blanche",t:"Poulet poêlé & sa sauce blanche aux herbes",src:"HelloFresh",a:"Chefs HelloFresh",u:HFU+"poulet-poele-and-sa-sauce-blanche-aux-herbes-686d1babfa13aea4b9887084",img:HFI+"HF_Y25_R238_W17_FR_RNL0524-37_Main_R_swap_chicken_brest_edit_high-9cf3aba0.jpg",min:40,y:1,
+ ing:["1 pièce(s) Carotte","½ pièce(s) Oignon","250 g Pommes de terre","¼ sachet(s) Assaisonnement ail et herbes","¼ sachet(s) Persil plat et ciboulette","½ pot(s) Yaourt à la grecque","½ sachet(s) Aïoli","1 pièce(s) Filet de poulet","1 cs Huile d'olive","½ cc Miel","½ cc Moutarde","½ cc Beurre","Poivre et sel selon le goût"],n:{k:710,p:37.3,f:28.1,c:70.3,fi:11.7}},
+{id:"hf_poulet_provencale",t:"Filet de poulet & tomates à la provençale",src:"HelloFresh",a:"Mathilde M.",u:HFU+"pave-de-boeuf-and-tomates-a-la-provencale-67c1b47183714633cfd16240",img:HFM+"HF_Y24_R224_W31_FR_RFR20740-2_Main_high-85b52b92.jpg",min:35,y:1,
+ ing:["½ sachet(s) Haricots verts","1 pièce(s) Filet de poulet","1 pièce(s) Gousse d'ail","1 pièce(s) Échalote","1.5 pièce(s) Tomate","¼ sachet(s) Herbes de Provence","½ paquet(s) Crème liquide","1 cs Huile d'olive","½ cc Vinaigre de vin rouge ou de cidre","½ cc Moutarde","¼ pièce(s) Cube de bouillon de volaille","Poivre et sel selon le goût"],n:{k:468,p:33.3,f:28.8,c:19.4,fi:6.9}},
+{id:"hf_cabillaud_papillote",t:"Cabillaud en papillote à la provençale",src:"HelloFresh",a:"Chefs HelloFresh",u:HFU+"cabillaud-en-papillote-a-la-provencale-64074022df6297bb5beef30c",img:HFI+"HF210722_R210_W36_FR_RFR29803796-1_MB_Main_remove_the_flaked_almonds_high-f6ee1d74.jpg",min:35,y:1,
+ ing:["½ pièce(s) Tête d'ail","25 g Mayonnaise","⅓ sachet(s) Thym séché","¼ pièce(s) Citron vert","½ pièce(s) Oignon","½ pièce(s) Poivron","1 pièce(s) Filet de cabillaud sans peau","1 pièce(s) Feuille de laurier","60 g Riz","½ cs Huile d'olive","200 ml Bouillon de légumes","1 cc Beurre","Poivre et sel selon le goût"],n:{k:619,p:28.3,f:31.6,c:54.5,fi:3.5}},
+{id:"hf_cabillaud_ciboulette",t:"Filet de cabillaud sauce ciboulette",src:"HelloFresh",a:"Chefs HelloFresh",u:HFU+"filet-de-cabillaud-sauce-ciboulette-632b3892f68cbd3b120293ba",img:HFI+"HF220829_R211_W42_FR_RNL0524-17_KB_Main_5_low-1815c934.jpg",min:45,y:1,
+ ing:["2 pièce(s) Carotte","250 g Grenailles rouges","¼ sachet(s) Épices italiennes","1.25 g Ciboulette","¾ pot(s) Yaourt à la grecque","1 pièce(s) Filet de cabillaud sans peau","1 cs Huile d'olive","1 cs Beurre","½ cc Miel","½ cc Moutarde","Poivre et sel selon le goût"],n:{k:685,p:32.7,f:22.2,c:72.2,fi:12.9}},
+{id:"hf_onepot_dinde",t:"One pot de dinde & haricots mijotés",src:"HelloFresh",a:"Chefs HelloFresh",u:HFU+"one-pot-de-dinde-and-haricots-mijotes-62e111c4b40f6bc7bf03658b",img:HFM+"HF220708_R215_W34_FR_RFR29804224-1_KB_Main_High-3e28f537.jpg",min:40,y:1,
+ ing:["½ paquet(s) Haricots blancs","½ pièce(s) Oignon","1 pièce(s) Tête d'ail","Céleri-branche : ⅘ tige","½ pièce(s) Poivron","½ pièce(s) Tomate","1 pièce(s) Escalope de dinde","¼ pot(s) Concentré de tomates","2.5 g Basilic","1 cs Huile d'olive","½ cc Sucre","150 ml Bouillon de volaille","Poivre et sel selon le goût"],n:{k:476,p:50.4,f:15.9,c:30.2,fi:11}},
+{id:"hf_courgette_farcie",t:"Courgette farcie au bœuf haché & riz",src:"HelloFresh",a:"François-Xavier C.",u:HFU+"courgette-farcie-au-boeuf-hache-and-riz-62a75cee498967ddf7014e30",img:HFI+"HF220520_R206_W28_FR_RFR29804131-1_KB_Main__low-a7517c51.jpg",min:50,y:1,
+ ing:["½ pièce(s) Tête d'ail","½ pièce(s) Oignon","1 pièce(s) Courgette","½ pot(s) Concentré de tomates","100 g Viande hachée au bœuf","⅓ sachet(s) Épices mexicaines","25 g Cheddar râpé","75 g Riz","20 g Salade en sachet","125 ml Bouillon de légumes","1 cs Huile d'olive","½ cs Vinaigre balsamique noir","½ cc Moutarde","Poivre et sel selon le goût"],n:{k:559,p:34.1,f:36.9,c:23,fi:4.7}},
+{id:"hf_poulet_laque",t:"Poulet laqué à l'asiatique",src:"HelloFresh",a:"Chefs HelloFresh",u:HFU+"poulet-laque-a-lasiatique-and-salade-66ab959ef66002bbd100b895",img:HFM+"HF_Y24_R231_W22_FR_QFR19216-1_remove_onions_edit_Main__4high-f9692751.jpg",min:15,y:1,
+ ing:["1 pièce(s) Filet de poulet","½ sachet(s) Sauce asiatique sucrée","⅓ sachet(s) Citronnelle moulue","½ pièce(s) Mini concombre","½ sachet(s) Huile de sésame","½ sachet(s) Mayonnaise","½ sachet(s) Sauce soja","½ sachet(s) Mélange de carotte et choux","½ sachet(s) Cacahuètes non salées","1 cs Huile de tournesol","1 cs Vinaigre balsamique blanc / riz","Poivre et sel selon le goût"],n:{k:582,p:32.3,f:40.1,c:21.9,fi:4.8}},
+{id:"hf_ajiaco",t:"Ajiaco : soupe colombienne au poulet & maïs",src:"HelloFresh",a:"Eloi K.",u:HFU+"ajiaco-soupe-colombienne-au-poulet-and-mais-61f94a2698a9410e1f1bd3b5",img:HFM+"HF211101_R214_W09_FR_RFR29803907-1_MB_Main_low-09edafad.jpg",min:35,y:1,
+ ing:["½ pièce(s) Tête d'ail","¼ pièce(s) Oignon","200 g Grenailles rouges","2.5 g Coriandre","¼ sachet(s) Origan séché","1 pièce(s) Filet de poulet","¼ boîte(s) Maïs en conserve","⅓ pièce(s) Avocat","½ pot(s) Crème épaisse","350 ml Bouillon de volaille","¼ cs Huile d'olive","½ cc Vinaigre de vin blanc","Poivre et sel selon le goût"],n:{k:587,p:34,f:26.4,c:49.9,fi:9.2}},
+{id:"hf_cabillaud_citron",t:"Cabillaud crème au citron",src:"HelloFresh",a:"Chefs HelloFresh",u:HFU+"cabillaud-creme-au-citron-640b585ccda96bb6528b9011",img:HFM+"HelloFresh_Y25_R213_W25_FR_RFR16631734-11_Main__5high-05db464a.jpg",min:35,y:1,
+ ing:["½ pièce(s) Oignon","½ pièce(s) Tête d'ail","½ pièce(s) Carotte","100 g Brocoli","75 g Riz","50 ml Crème liquide","¼ pièce(s) Citron","1 pièce(s) Filet de cabillaud sans peau","175 ml Bouillon de légumes","½ cc Huile d'olive","½ cs Beurre","Poivre et sel selon le goût"],n:{k:657,p:31.9,f:23.5,c:80,fi:8.3}},
+{id:"hf_poulet_tomates_sechees",t:"Poulet, sauce aux tomates séchées & ail",src:"HelloFresh",a:"Eloi K.",u:HFU+"poulet-sauce-aux-tomates-sechees-and-ail-64073e7a683721c9a32b0896",img:HFI+"HF221018_R213_W49_FR_RFR29804068-2_KB_Main_low-fea54ef8.jpg",min:40,y:1,
+ ing:["250 g Grenailles","½ pièce(s) Carotte","½ pièce(s) Tête d'ail","½ pièce(s) Échalote","½ sachet(s) Épices italiennes","50 g Broccolini","30 g Tomates semi-séchées","1 pièce(s) Filet de poulet","1 cs Huile d'olive","75 ml Bouillon de volaille","½ cs Farine","½ cc Vinaigre de vin blanc","Poivre et sel selon le goût"],n:{k:580,p:35.3,f:17.2,c:64.4,fi:11.2}},
+{id:"hf_udon_poulet",t:"Nouilles udon sautées au poulet",src:"HelloFresh",a:"Chefs HelloFresh",u:HFU+"nouilles-udon-sautees-au-poulet-64073e349c6d10cd16eab78d",img:HFI+"HF220511_R213_W26_FR_QNL2029-9_KB_Main_remove_bowl_of_sauce_remove_cashew_high-c8a3bcec.jpg",min:20,y:1,
+ ing:["2 pièce(s) Oignon nouveau","Gingembre frais : 1 cm","1 pièce(s) Tête d'ail","½ pièce(s) Poivron","100 g Blanc de poulet","1 sachet(s) Sauce asiatique sucrée","200 g Nouilles udon fraîches","5 g Cacahuètes non salées","½ cs Huile de tournesol","50 ml Bouillon de volaille","Poivre et sel selon le goût"],n:{k:589,p:35.5,f:11.5,c:86,fi:5.3}},
+{id:"hf_soupe_orientale",t:"Soupe orientale au poulet effiloché",src:"HelloFresh",a:"Chefs HelloFresh",u:HFU+"soupe-orientale-au-poulet-effiloche-63cf9fb426cc6234ea04f66d",img:HFI+"HF220120_R214_W10_FR_RFR29804015-1_MB_Main_low-45fd8d86.jpg",min:30,y:1,
+ ing:["1 pièce(s) Tête d'ail","40 g Épinards","½ pièce(s) Carotte","½ Concentré de tomates","½ boîte(s) Pois chiches","¼ sachet(s) Cumin en poudre","¼ sachet(s) Épices du Moyen-Orient","1 pièce(s) Filet de poulet","25 g Fromage à la grecque","300 ml Bouillon de volaille","1 cs Huile d'olive","½ cc Cassonade","Poivre et sel selon le goût"],n:{k:522,p:40.6,f:24.2,c:31.4,fi:12.5}},
+{id:"hf_poulet_mexicaine",t:"Filet de poulet et salade de légumes à la mexicaine",src:"HelloFresh",a:"Chefs HelloFresh",u:HFU+"kipfilet-met-mexicaanse-groentesalade-5cebf6dc1ce852000d23a4ba",img:HFI+"5cebf6dc1ce852000d23a4ba-af139b8f.jpg",min:35,y:1,
+ ing:["½ pièce(s) Oignon rouge","75 g Patate douce","1 pièce(s) Poireau","½ sachet(s) Épices mexicaines","75 g Haricots verts","1 pièce(s) Filet de poulet","½ paquet(s) Haricots noirs","25 g Feta","15 g Mélange de jeunes pousses","1 cs Huile d'olive","½ cc Huile d'olive vierge extra","½ cs Vinaigre balsamique noir","½ cc Miel","Poivre et sel selon le goût"],n:{k:591,p:40,f:24,c:43,fi:19}},
+{id:"hf_lentilles_saumon",t:"Salade de lentilles express & saumon fumé",src:"HelloFresh",a:"Chefs HelloFresh",u:HFU+"salade-de-lentilles-express-au-saumon-fume-653fd76d2fab1d7bab10e547",img:HFM+"HF_Y24_R230_W23_FR_QFR20153-1_Main_high-12e15e8a.jpg",min:15,y:1,
+ ing:["¼ sachet(s) Aneth","½ pièce(s) Mini concombre","¼ pièce(s) Citron","½ paquet(s) Lentilles précuites","½ pièce(s) Fromage de chèvre frais","½ sachet(s) Salade en sachet","½ paquet(s) Miettes de saumon fumé à chaud","½ cc Moutarde","½ cs Vinaigre balsamique noir","1 cs Huile d'olive","Poivre et sel selon le goût"],n:{k:530,p:39.9,f:27.2,c:32,fi:11.1}},
+{id:"hf_dahl_crevettes",t:"Dahl léger aux crevettes & lentilles corail",src:"HelloFresh",a:"Chefs HelloFresh",u:HFU+"crevettes-and-lentilles-corail-facon-dahl-686fd8b25a587f17f45821c7",img:HFI+"HF_Y25_R221_W42_FR_QFR29804496-23_Main_high-d2f65ef5.jpg",min:25,y:1,
+ ing:["½ pièce(s) Oignon","½ pièce(s) Gousse d'ail","Gingembre frais : 1 cm","75 g Lentilles corail","½ sachet(s) Curry en poudre","¼ sachet(s) Concentré de tomates","½ paquet(s) Crevettes","½ pièce(s) Carotte","½ paquet(s) Lait de coco","½ sachet(s) Noix de cajou concassées","200 ml Bouillon de légumes","1 cs Huile d'olive","½ cs Farine","Poivre et sel selon le goût"],n:{k:733,p:33.7,f:37.9,c:54.9,fi:19.2}},
+{id:"hf_lieu_dahl",t:"Filet de lieu & dahl de lentilles corail",src:"HelloFresh",a:"François-Xavier C.",u:HFU+"filet-de-lieu-and-dahl-de-lentilles-corail-65806401bd1df37bfc8685f4",img:HFI+"HF_Y24_R222_W18_FR_QFR21483-1_Main_high-6a4b1c99.jpg",min:25,y:1,
+ ing:["½ pièce(s) Oignon","½ pièce(s) Courgette","¼ sachet(s) Concentré de tomates","⅓ sachet(s) Purée de gingembre","½ sachet(s) Curry rouge","½ pièce(s) Tête d'ail","75 g Lentilles corail","125 ml Lait de coco","1 pièce(s) Filet de lieu noir","½ sachet(s) Noix de cajou concassées","100 ml Bouillon de légumes","½ cs Huile de tournesol","1 cc Vinaigre balsamique blanc / riz","½ cs Beurre","Poivre et sel selon le goût"],n:{k:750,p:39.2,f:40,c:51.4,fi:17}},
+// 750g : recettes de cuisiniers, notées par la communauté, vidéo sur la page
+{id:"g_chich_taouk",t:"Chich taouk ou brochettes de poulet marinées",src:"750g",a:"Chef Christophe",r:[4.7,16],u:G7U+"chich-taouk-ou-brochettes-de-poulet-marinees-r98068.htm",img:G7I+"640-400/7be8f4dd0df0437144ff56f3388827a3/chich-taouk-ou-brochettes-de-poulet-marinees.png",min:25,y:4,v:"page",
+ ing:["4 blancs de poulet", "Carré de poivron", "Oignon nouveau ou Cébette", "2 gousses d'ail", "3 c. à s. d'huile d'olive", "1 quatre épices", "Sumac ou 1 citron", "Sel ou sel fin", "Poivre"]},
+{id:"g_paella_legere",t:"Paella légère",src:"750g",a:"Délice Céleste",r:[4.8,16],u:G7U+"paella-r95416.htm",img:G7I+"1200-630/21d4a1a1a07cfae0ab7ffe0838cc3e88/paella-legere.jpg",min:50,y:6,v:"page",
+ ing:["600g de riz", "300g de poulet (émincé d'escalope, cuisses, etc)", "1 kg moules", "12 gambas", "12 crevettes", "1 poivron vert + rouge", "1 chorizo", "1 petite boite de petits pois", "Safran / Paellero"]},
+{id:"g_poke_teriyaki",t:"Poke bowl au poulet teriyaki",src:"750g",a:"Leriz.fr",r:[5,8],u:G7U+"poke-bowl-au-poulet-teriyaki-r206832.htm",img:G7I+"1200-630/03a9e54427b42015150af7e4e38eb591/337611.jpg",min:70,y:4,v:"page",
+ ing:["200 g de riz long","4 blancs de poulet","120 g de carottes râpées","80 g de pousses d'épinards","100 g de pousses de soja","30 g de fécule de maïs","4 c. à s. d'huile de tournesol","20 g de graines de sésame","24 cl d'eau","2 c. à s. de vinaigre de riz","1 c. à c. d'huile de sésame","5 c. à s. de sauce soja","1 c. à s. d'ail haché","1 c. à c. de gingembre haché","25 g de sucre","3 c. à s. de miel","2 c. à s. de fécule de maïs","2 c. à s. d'huile de sésame","1 c. à s. de sauce soja","½ citron vert","1 pincée de poivre"]},
+{id:"g_power_bowl",t:"Power bowl au poulet mariné et aux œufs",src:"750g",a:"Œufs Label Rouge et Bio",r:[4.8,16],u:G7U+"power-bowl-au-poulet-marine-et-aux-oeufs-r202186.htm",img:G7I+"1200-630/58b8b1632bdfec88ffa7a1d9f60281e6/power-bowl-rety-01-1.jpg",min:40,y:1,v:"page",
+ ing:["1 oeuf Label Rouge", "40g de quinoa noir", "½ avocat", "1 filet de poulet fermier Label Rouge/Bio", "1 citron jaune", "1 c à c d'huile d'olive", "Une petite poignée de graines germées rouges", "1 bouquet de coriandre fraîche", "1 c à s de graines de sésame", "2 c à s d'huile de sésame", "1 c à s de sauce soja", "½ citron vert", "Sel", "Poivre du moulin"]},
+{id:"g_bowl_quinoa",t:"Salade bowl au quinoa, poulet grillé, haricots rouges et avocat",src:"750g",a:"Pascale Weeks",r:[4.8,16],u:G7U+"salade-bowl-au-quinoa-poulet-grille-haricots-rouges-avocat-et-legumes-verts-r206979.htm",img:G7I+"640-400/f98b939acebd7ffc7c82aa407131bbaa/adobestock-190895226.jpeg",min:40,y:4,v:"page",
+ ing:["300 g de quinoa", "2 filets de poulet", "2 avocats", "1 brocoli", "20 choux de Bruxelles", "1 sachet de pousse d'épinard", "200 g d'haricots rouges", "Epice mexicaine", "Graine de sésame", "Huile d'olive", "Vinaigre de cidre", "Sel ou sel fin", "Poivre"]},
+{id:"g_papillote_cabillaud",t:"Papillote de cabillaud, gingembre, agrumes et patates douces",src:"750g",a:"Carmencita",r:[4.8,15],u:G7U+"papillote-de-cabillaud-gingembre-agrumes-et-patate-douces-r67003.htm",img:G7I+"640-400/9242938a70a8642e765dbb5637a7fb7b/papillote-de-cabillaud-gingembre-agrumes-et-patate-douces.png",min:43,y:4,v:"page",
+ ing:["4 filets de cabillaud", "2 patates douces", "2 branches de céleri émincées", "1 orange", "Le jus et le zeste de 1 citron vert", "Le jus et le zeste d'un citron jaune", "1 c à café de gingembre moulu", "1/2 c à café de pulpe de coriandre", "1 c à soupe d'huile d'olive", "Sel", "Poivre"]},
+{id:"g_saumon_papillote",t:"Saumon en papillote maison",src:"750g",a:"Laura",r:[4.7,16],u:G7U+"saumon-en-papillote-r92328.htm",img:G7I+"640-400/054ea2a5a169cfa68c7f08fb3fc64707/saumon-en-papillote-maison.png",min:30,y:2,v:"page",
+ ing:["2 filets de saumon", "1 carotte", "1 petite courgette", "50g de bettes", "1/2 jus de citron", "1 filet huile d'olive", "Sel", "Poivre"]},
+{id:"g_dinde_moutarde",t:"Escalopes de dinde grillées à la moutarde",src:"750g",a:"Elisabeth, Saveurs Lozériennes",r:[4.1,31],u:G7U+"escalopes-de-dinde-grillees-a-la-moutarde-r54352.htm",img:G7I+"640-400/4ebc91ddc259d576b4e6e4cc92589c9d/escalopes-de-dinde-grillees-a-la-moutarde.png",min:20,y:6,v:"page",
+ ing:["6 escalopes de dinde", "1 oignon doux petit", "2 c. à s. d'huile d'olive", "2 c. à c. de moutarde douce", "Curry", "Paprika", "Sel ou sel fin"]},
+{id:"g_dinde_italienne",t:"Escalope de dinde à l'italienne",src:"750g",a:"Chef Damien",r:[4.8,16],u:G7U+"escalope-de-dinde-a-l-italienne-r204277.htm",img:G7I+"640-400/3bcccb0d0ad69a8a85914a63fbcda8d4/italienne.jpg",min:30,y:4,v:"page",
+ ing:["8 escalopes de dinde", "20 cl de sauce tomate", "1 oignon", "2 gousses d'ail", "50 g d'olives noires", "12 feuilles de basilic", "Huile d'olive", "Thym", "Sauge", "Sarriette", "Poivre du moulin", "Sel ou sel fin"]},
+{id:"g_wok_crevettes",t:"Wok de légumes croquants et crevettes, saveur cacahuète",src:"750g",a:"Juliette, Les recettes de Juliette",r:[4.1,41],u:G7U+"wok-de-legumes-croquants-et-crevettes-a-lasiatique-saveur-cacahuete-r76452.htm",img:G7I+"640-400/8013558fae9918ecbc07747139d096ac/wok-de-legumes-croquants-et-crevettes-a-l-asiatique-saveur-cacahuete.jpeg",min:60,y:2,v:"page",
+ ing:["250 g de crevettes roses cuites", "500 g d'haricots plats", "400 g de champignons de Paris", "3 carottes", "1 oignon", "1 grosse poignée de cacahuète grillée", "0,33 verre d'eau filtrée", "2 c. à s. de sauce soja", "1 c. à s. de gingembre en poudre (bombée)", "Coriandre fraîche, quelques brins", "Huile d'olive", "Sel ou sel fin", "Poivre"]},
+{id:"g_oeufs_cocotte",t:"Œufs cocotte à la fondue de courgettes",src:"750g",a:"Babeth De Lille",r:[4.8,16],u:G7U+"oeufs-cocotte-a-la-fondue-de-courgettes-r92943.htm",img:G7I+"640-400/27cbaa318bed7b0f7e3d40b913588b7f/oeufs-cocotte-a-la-fondue-de-courgettes.jpg",min:55,y:2,v:"page",
+ ing:["2 oeufs", "3 courgettes (petites)", "1 oignon rouge", "Huile d'olive", "Sel ou sel fin", "Poivre"]},
+{id:"g_crevettes_curry",t:"Crevettes au curry et lait de coco",src:"750g",a:"Jennifer",r:[4.3,47],u:G7U+"crevettes-au-curry-et-lait-de-coco-r21112.htm",img:G7I+"1200-630/870b312ca29100f2bb9876a37ab2456b/crevettes-au-curry-et-lait-de-coco.png",min:25,y:2,v:"page",
+ ing:["16 crevettes", "1 courgette", "1 carotte", "1 oignon", "20 cl de lait de coco", "3 champignons de Paris", "Gingembre (en poudre) (facultatif)", "Curry", "Poivre", "Sel ou sel fin"]},
+// chefs : Philippe Etchebest (vidéos YouTube), Cyril Lignac
+{id:"c_etchebest_poulet_roti",t:"Poulet rôti express, patate douce et sauce yaourt tandoori",src:"750g",a:"Philippe Etchebest",u:G7U+"vous-etes-presse-moi-aussi-philippe-etchebest-partage-sa-recette-express-de-poulet-roti-en-15-minutes-a39999.htm",img:"https://i.ytimg.com/vi/UCGTx8EQi2o/hqdefault.jpg",min:15,y:6,v:"UCGTx8EQi2o",
+ ing:["1 poulet", "1 feuille de laurier", "1 gousse d'ail", "3 branches de thym", "12 carottes (fanes)", "1 grosse patate douce, ou 2 petites", "De l'huile d'olive", "250 gr de yaourt grec", "10 gr d'épices Tandoori", "1/2 citron vert", "Sel", "Poivre"]},
+{id:"c_etchebest_poulet_legumes",t:"Poulet et légumes au four",src:"philippe-etchebest.com",a:"Philippe Etchebest",u:"https://philippe-etchebest.com/poulet-legumes-au-four/",img:"https://philippe-etchebest.com/wp-content/uploads/2025/05/poulet-fenouil-orange-thumb.jpg",min:60,y:6,v:"Ku5aj50iFYs",
+ ing:["6 cuisses de poulet", "2 oranges", "3 fenouils", "6 pommes de terre de taille moyenne", "Mélange d'épices"]},
+{id:"c_etchebest_poisson",t:"Poisson, riz et brocolis aux agrumes",src:"750g",a:"Philippe Etchebest",u:G7U+"parfaitement-adaptee-a-vos-contraintes-de-temps-philippe-etchebest-partage-une-recette-a-base-de-poisson-parfaite-pour-le-quotidien-a40478.htm",img:"https://i.ytimg.com/vi/lTs-PwwGXfQ/hqdefault.jpg",min:40,y:6,v:"lTs-PwwGXfQ",
+ ing:["600 gr de poisson", "360 g de riz long", "2 petits brocolis", "1 oignon", "1 orange", "1 citron jaune", "500 mL d'eau", "Aneth", "Thym", "Laurier", "Basilic", "Piment d'Espelette", "Vinaigre de Xérès", "Huile d'olive", "Sel", "Poivre"]},
+{id:"c_lignac_indienne",t:"Poulet à l'indienne",src:"750g",a:"Cyril Lignac",u:G7U+"cyril-lignac-devoile-sa-recette-de-poulet-a-l-indienne-facile-et-gourmande-a33880.htm",img:"",min:40,y:4,
+ ing:["4 filets de poulet en morceaux", "500 g de concassée de tomate", "2 pots de yaourt à la grecque de 200g", "50 g de concentré de tomate", "1 oignon épluché et ciselé", "2 gousses d'ail épluchées, dégermées et hachées", "1 petit morceau de gingembre épluché et râpé", "1 jus de citron jaune", "1 cuillère à soupe de tandoori masala", "1 cuillère à soupe de garam masala", "1 cuillère à café de cumin en poudre", "1 cuillère à café de cannelle en poudre", "1 cuillère à café de curcuma", "1 cuillère à soupe de moutarde", "25 g de beurre clarifié", "10 g de noix de cajou en poudre", "1 botte de radis", "¼ de botte de coriandre fraîche", "Sel fin"]},
+{id:"c_lignac_brochettes",t:"Brochettes de poulet épicé et salade de concombre",src:"750g",a:"Cyril Lignac",u:G7U+"tous-en-cuisine-cyril-lignac-partage-sa-recette-de-brochettes-de-poulet-epice-et-sa-salade-de-concombre-a34577.htm",img:"",min:35,y:4,
+ ing:["4 filets de poulet de belle taille", "1 cuil. à soupe de harissa", "2 gousses d'ail épluchées, dégermées et hachées", "2 cuil. à soupe de miel liquide", "1 cuil. à soupe de graines de coriandre moulues", "Le jus d'un citron jaune", "1 cuil. à soupe de concentré de tomates", "½ cuil. à café de flocons de piment rouge", "4 pains pitas", "2 belles poignées de pousses d'épinards", "1 concombre", "50 g de parmesan râpé", "Huile d'olive", "Le jus d'un citron jaune", "1 tête d'ail épluchée et dégermée", "Le jus d'un citron jaune", "3 cuill. à soupe de fromage frais crémeux type labneh ou yaourt grec", "Fleur de sel"]}
+];
+DISC.forEach(e=>{e.ing=e.ing.map(l=>l.replace(/\((?:s|x|es)\)/g,"").replace(/\s{2,}/g," ").trim())});
+const DISC_MAP={};DISC.forEach(e=>DISC_MAP[e.id]=e);
+// choix gardés (et synchronisés) : state.disc[id] = "ok" (ajoutée) ou "no" (pas pour nous)
+const normalizeV19=normalize;
+normalize=function(d){const s=normalizeV19(d);s.disc={};const src=d&&typeof d==="object"&&d.disc&&typeof d.disc==="object"?d.disc:{};
+ for(const k in src)if(DISC_MAP[k]&&(src[k]==="ok"||src[k]==="no"))s.disc[k]=src[k];return s};
+
 // ---------- état ----------
 const dayOf=k=>k.split("-")[0];
 function needsFor(plan,done,serv){const m={};for(const k of SLOTS){if(done&&done[k])continue;const r=RMAP[plan[k]];if(!r)continue;const fct=((serv&&serv[k])||defServ(k))/(r.base||2);for(const[id,q]of r.i){const e=m[id]||(m[id]={id,q:0,recs:[]});if(typeof q==="number")e.q+=q*fct;const s=short(r);if(!e.recs.includes(s))e.recs.push(s)}}return m}
@@ -2605,7 +2899,7 @@ const have=id=>state.stock[id]||0;
 function stockScore(r){let tot=0,ok=0;const miss=[];for(const[id,q]of r.i){if(id==="sel")continue;const w=isStaple(id)?0.25:(ING[id][1]==="V"||["oeufs","tofu","thon"].includes(id)?2:1);tot+=w;const got=eqCover(id,isStaple(id)||typeof q!=="number"?null:q*(2/(r.base||2))*0.8).ok;if(got)ok+=w;else if(!isStaple(id))miss.push(ING[id][0])}
  const fresh=r.i.filter(x=>!isStaple(x[0]));const freshOk=fresh.filter(([id,q])=>eqCover(id,q*(2/(r.base||2))*0.8).ok).length;return{score:tot?ok/tot:0,miss,freshOk,freshTot:fresh.length}}
 
-function card(r,extra){const n=usage(r.id).length,f=!!state.favs[r.id];return`<div class="cardw"><button type="button" class="card" data-rid="${r.id}"><span class="card-img"><img src="${imgSrc(r)}" alt="" loading="lazy" decoding="async">${n?`<span class="badge">${n}×</span>`:""}${r.gen?`<span class="newb">Idée de chef</span>`:r.cr?`<span class="newb">Création</span>`:r.my?`<span class="newb">Ajoutée</span>`:(r.vids||[]).some(v=>v.full)?`<span class="newb">▶ Vidéo</span>`:""}</span><span class="card-name">${esc(r.n)}</span>${extra||""}</button></div>`}
+function card(r,extra){const n=usage(r.id).length,f=!!state.favs[r.id];return`<div class="cardw"><button type="button" class="card" data-rid="${r.id}"><span class="card-img"><img src="${imgSrc(r)}" alt="" loading="lazy" decoding="async">${n?`<span class="badge">${n}×</span>`:""}${r.gen?`<span class="newb">Idée de chef</span>`:r.cr?`<span class="newb">Création</span>`:(r.vids||[]).some(v=>v.full)?`<span class="newb">▶ Vidéo</span>`:""}</span><span class="card-name">${esc(r.n)}</span>${extra||""}</button></div>`}
 function renderRecipes(){
  document.getElementById("planCount").textContent=filled()+" / 14 repas planifiés";
  const pb=document.getElementById("pending");
@@ -4347,6 +4641,107 @@ function npIntro(){let seen=false;try{seen=sessionStorage.getItem("np-intro")===
  npAnim(g(".lg-cal"),[{opacity:0,transform:"scale(.5)"},{opacity:1,transform:"scale(1)"}],{duration:480,delay:200,easing:NPA.POP,fill:"backwards"});
  npAnim(g(".lg-leaf"),[{opacity:0,transform:"scale(0) rotate(-45deg)"},{opacity:1,transform:"scale(1) rotate(0deg)"}],{duration:620,delay:780,easing:NPA.POP,fill:"backwards"})}
 npIntro();
+
+// ================= v19 : découvrir de vraies recettes et les valider =================
+if(!state.disc||typeof state.disc!=="object")state.disc={};
+// estimations plus justes : choux de Bruxelles, patates douces, poulet entier, céleri en branches, « c. à s. »
+NUTDB.unshift([/chou\w* de bruxelles/,43,3.4,0.3,9,3.8,15],[/patates douces/,86,1.6,0.1,20,3,300],[/^poulets?( entiers?| fermiers?)?$/,190,18.6,12.5,0,0,1000],[/^celeri(?! rave)/,16,0.7,0.2,2,1.6,40,40]);
+const spoonGV19=spoonG;spoonG=function(txt,n){const t=String(txt||"").replace(/\bc\.?\s*(?:à|a)\s*s\.?(?=\s|$)/gi,"cs").replace(/\bc\.?\s*(?:à|a)\s*c\.?(?=\s|$)/gi,"cc").replace(/cuill?(?:\.|ère|ere)?\s*(?:à|a)\s*(soupe|café|cafe)/gi,(m,x)=>/soupe/i.test(x)?"cs":"cc");return spoonGV19(t,n)};
+const DI={
+ clock:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>',
+ flame:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21c-3.6 0-6-2.4-6-5.6 0-3.8 3.4-5.4 3.9-9.4 2.6 1.6 4 3.9 4.2 6.2.8-.6 1.3-1.6 1.5-2.6 1.6 1.4 2.4 3.4 2.4 5.6 0 3.4-2.4 5.8-6 5.8z"/></svg>',
+ prot:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.5 8v8M17.5 8v8M3.5 10v4M20.5 10v4M6.5 12h11"/></svg>',
+ ppl:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 21v-1.5a4.5 4.5 0 0 1 9 0V21"/><circle cx="9.5" cy="8" r="3.5"/><path d="M16 4.6a3.5 3.5 0 0 1 0 6.8M19 21v-1.5a4.5 4.5 0 0 0-3-4.2"/></svg>',
+ star:'<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3.5l2.6 5.4 5.9.8-4.3 4.1 1 5.9L12 16.9l-5.2 2.8 1-5.9-4.3-4.1 5.9-.8z"/></svg>',
+ play:'<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"/></svg>',
+ ext:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>',
+ back:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>',
+ x:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>',
+ spark:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 3.5l1.8 4.9 4.9 1.8-4.9 1.8L11 16.9l-1.8-4.9-4.9-1.8 4.9-1.8z"/><path d="M18.5 14.5l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8z"/></svg>'};
+const D_EMO={poulet:"🍗",dinde:"🍗",boeuf:"🥩",porc:"🥓",poisson:"🐟",crevettes:"🦐",oeufs:"🥚",vege:"🥗"};
+const DTAGS=[["all","Toutes"],["poulet","Poulet"],["dinde","Dinde"],["poisson","Poisson"],["crevettes","Crevettes"],["boeuf","Bœuf"],["oeufs","Œufs"]];
+function discNut(e){if(e.n)return{...e.n,est:false};if(e._est!==undefined)return e._est;let E=null;try{E=nutEstimate(e.ing,e.y||2)}catch(x){}
+ e._est=E&&E.known&&E.k>0?{k:E.k,p:E.p,f:E.f,c:E.c,fi:E.fi,est:true,known:E.known,tot:E.tot}:null;return e._est}
+function discTag(e){if(!e._ps){try{const a=guessPS([e.t]),b=guessPS([e.t,...e.ing]);e._ps={p:a.p!=="vege"?a.p:b.p,s:a.s||b.s}}catch(x){e._ps={p:"vege",s:""}}}return e._ps}
+function discLeft(){const mine=new Set((state.myrec||[]).map(x=>x.u).filter(Boolean)),dz=state.disc||{};return DISC.filter(e=>!dz[e.id]&&!mine.has(e.u))}
+function discScore(e){const n=discNut(e);if(!n||!n.k)return-1;const dens=Math.min(0.4,n.p*4/n.k),fit=1-Math.min(1,Math.abs(n.k-560)/400);return dens+fit*0.4-(n.est?0.05:0)+(e.v?0.03:0)+(e.r?0.02:0)}
+// classement : les plus adaptées à l'objectif d'abord, en alternant HelloFresh, 750g et les chefs
+function discSorted(tag){let L=discLeft();if(tag&&tag!=="all")L=L.filter(e=>discTag(e).p===tag);L.sort((a,b)=>discScore(b)-discScore(a));
+ const G=[L.filter(e=>/^hf_/.test(e.id)),L.filter(e=>/^g_/.test(e.id)),L.filter(e=>/^c_/.test(e.id))],out=[];
+ for(let i=0;out.length<L.length;i++)for(const g of G)if(g[i])out.push(g[i]);return out}
+const fmtRate=r=>r?`${String(r[0]).replace(".",",")} (${r[1]} avis)`:"";
+function discImg(e,cls){return e.img?`<img class="${cls||""}" src="${esc(e.img)}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer">`:`<span class="dc-noimg ${cls||""}" aria-hidden="true">${D_EMO[discTag(e).p]||"🍽️"}</span>`}
+function discFacts(e,big){const n=discNut(e);return`<span class="dc-f">${DI.clock}${e.min?e.min+" min":"–"}</span><span class="dc-f">${DI.flame}${n?(n.est?"≈ ":"")+fmtInt(n.k)+" kcal":"–"}</span><span class="dc-f">${DI.prot}${n?fmtG(n.p)+" g prot.":"–"}</span>${big?`<span class="dc-f">${DI.ppl}${e.y} pers.</span>`:""}`}
+function discBy(e){return e.a&&e.a.includes(e.src)?esc(e.a):`${esc(e.src)}${e.a?` · ${esc(e.a)}`:""}`}
+// --- bannière dans l'onglet Recettes
+function renderDiscBanner(){const el=document.getElementById("discBanner");if(!el)return;const L=discSorted("all");if(!L.length){el.innerHTML="";el.hidden=true;return}
+ el.hidden=false;const th=L.filter(e=>e.img).slice(0,3);
+ el.innerHTML=`<div class="dc-banner"><div class="dc-b-txt"><p class="dc-kick">${DI.spark}Recettes de chefs à valider</p><h2>De vraies recettes, testées par d'autres</h2><p>${L.length} recette${L.length>1?"s":""} de HelloFresh, 750g, Philippe Etchebest, Cyril Lignac… avec le lien, la nutrition et la vidéo quand il y en a une. Tu choisis lesquelles ajouter.</p><button type="button" class="btn primary dc-go" data-dsc="open">Découvrir</button></div>
+ <div class="dc-b-art" aria-hidden="true">${th.map((e,i)=>`<span class="dc-b-ph p${i}"><img src="${esc(e.img)}" alt="" loading="lazy" referrerpolicy="no-referrer"></span>`).join("")}</div></div>`}
+const renderRecipesV19=renderRecipes;
+renderRecipes=function(){renderRecipesV19.apply(this,arguments);try{renderDiscBanner()}catch(e){}};
+// --- panneau « Découvrir »
+function panelDisc(){const e=ui.dsel&&DISC_MAP[ui.dsel];if(e)return panelDiscOne(e);
+ const tag=ui.dtag||"all",all=discSorted("all"),L=discSorted(tag),per=12,shown=L.slice(0,per*((ui.dpage||0)+1));const dz=state.disc||{},nOk=Object.values(dz).filter(v=>v==="ok").length,nNo=Object.values(dz).filter(v=>v==="no").length;
+ const cnt=t=>t==="all"?all.length:all.filter(e=>discTag(e).p===t).length;
+ return`<h2 class="pn-title">Découvrir des recettes</h2><p class="pn-help">Des recettes publiées par des chefs et des cuisiniers, notées par leur communauté quand le site le permet. Regarde, puis ajoute celles qui vous tentent : elles rejoignent tes recettes avec leur lien d'origine.</p>
+ <div class="chips dc-tags" role="group" aria-label="Filtrer par protéine">${DTAGS.filter(([t])=>t==="all"||cnt(t)).map(([t,l])=>`<button type="button" class="chip" data-dsc="tag|${t}" aria-pressed="${t===tag}">${l} <small>${cnt(t)}</small></button>`).join("")}</div>
+ ${shown.length?`<div class="dc-grid">${shown.map(discCard).join("")}</div>`:`<p class="dc-empty">${all.length?"Rien dans cette catégorie pour l'instant.":"Tu as fait le tour de la sélection. De nouvelles recettes arriveront avec les prochaines mises à jour."}</p>`}
+ ${L.length>shown.length?`<button type="button" class="btn dc-more" data-dsc="more">Voir ${Math.min(per,L.length-shown.length)} autres recettes</button>`:""}
+ <p class="dc-foot">${nOk?`${nOk} ajoutée${nOk>1?"s":""}`:""}${nOk&&nNo?" · ":""}${nNo?`${nNo} écartée${nNo>1?"s":""} <button type="button" class="link" data-dsc="reset">Les revoir</button>`:""}</p>`}
+function discCard(e){const busy=ui.dbusy===e.id;return`<article class="dc-card"><button type="button" class="dc-ph" data-dsc="see|${e.id}" aria-label="Voir ${esc(e.t)}">${discImg(e)}<span class="dc-src">${esc(e.src)}</span>${e.v?`<span class="dc-vid">${DI.play}Vidéo</span>`:""}</button>
+ <div class="dc-body"><button type="button" class="dc-t" data-dsc="see|${e.id}">${esc(e.t)}</button><p class="dc-by">${e.a?esc(e.a):esc(e.src)}${e.r?` <span class="dc-r">${DI.star}${fmtRate(e.r)}</span>`:""}</p>
+ <p class="dc-facts">${discFacts(e)}</p>
+ <div class="dc-act"><button type="button" class="btn primary" data-dsc="add|${e.id}"${busy?" disabled":""}>${busy?"Ajout…":"Ajouter"}</button><button type="button" class="btn" data-dsc="see|${e.id}">Voir</button><button type="button" class="dc-no" data-dsc="no|${e.id}" aria-label="Pas pour nous : ${esc(e.t)}" title="Pas pour nous">${DI.x}</button></div></div></article>`}
+function discIco(name){const n=nrm(name);for(const[re,em]of ICONS)if(re.test(n))return em;return"🍽️"}
+function panelDiscOne(e){const n=discNut(e),tab=ui.dtab||"ing",busy=ui.dbusy===e.id,T=(state.people[0]&&state.people[0].t)||{};
+ const rows=e.ing.map(l=>{const x=parseIngLine(l);const nm=x&&x.name?x.name:l,q=x&&x.txt&&x.txt!=="selon le goût"&&x.name?x.txt:(x&&x.txt==="selon le goût"?"selon le goût":"");return`<li><span class="dc-ico" aria-hidden="true">${discIco(nm)}</span><span class="dc-in">${esc(nm.charAt(0).toUpperCase()+nm.slice(1))}</span><span class="dc-q">${esc(q)}</span></li>`}).join("");
+ const nut=n?[["k","Calories","kcal",T.k],["p","Protéines","g",T.p],["f","Lipides","g",T.f],["c","Glucides","g",T.c],["fi","Fibres","g",T.fi]].map(([k,l,u,t])=>{const v=n[k];const pct=t&&v!=null?Math.min(100,Math.round(v/t*100)):0;return`<li><span class="dc-nl"><i class="mdot" style="--c:var(--m-${k})"></i>${l}</span><span class="dc-nb"><i style="width:${pct}%;--c:var(--m-${k})"></i></span><b>${v==null?"–":(k==="k"?fmtInt(v):fmtG(v))} <small>${u}</small></b></li>`}).join(""):"";
+ const vid=/^[A-Za-z0-9_-]{11}$/.test(e.v||"")?(HOSTED?`<div class="vid-frame dc-video"><iframe src="https://www.youtube-nocookie.com/embed/${esc(e.v)}?rel=0&playsinline=1" title="Vidéo : ${esc(e.t)}" loading="lazy" allow="encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>`:`<a class="btn dc-vlink" href="https://www.youtube.com/watch?v=${esc(e.v)}" target="_blank" rel="noopener noreferrer">${DI.play}Voir la vidéo de ${esc(e.a||"la recette")}</a>`)
+  :e.v==="page"?`<a class="btn dc-vlink" href="${esc(e.u)}" target="_blank" rel="noopener noreferrer">${DI.play}Voir la vidéo sur ${esc(e.src)}</a>`:"";
+ return`<button type="button" class="dc-back" data-dsc="back">${DI.back}Toutes les propositions</button>
+ <div class="dc-hero">${discImg(e,"dc-hero-img")}${e.v?`<span class="dc-vid">${DI.play}Vidéo</span>`:""}</div>
+ <p class="dc-kicker">${discBy(e)}</p><h2 class="pn-title dc-title">${esc(e.t)}</h2>
+ ${e.r?`<p class="dc-rate">${DI.star}${DI.star}${DI.star}${DI.star}${DI.star}<span>${fmtRate(e.r)}</span></p>`:""}
+ <p class="dc-pills">${discFacts(e,true)}</p>
+ <div class="dc-tabs" role="tablist"><button type="button" role="tab" aria-selected="${tab==="ing"}" data-dsc="tab|ing">Ingrédients</button><button type="button" role="tab" aria-selected="${tab==="nut"}" data-dsc="tab|nut">Nutrition</button></div>
+ ${tab==="ing"?`<p class="dc-for">Pour ${e.y} personne${e.y>1?"s":""}, comme sur le site</p><ul class="dc-ing">${rows}</ul>`
+  :n?`<p class="dc-for">Par portion · ${n.est?`estimé à partir des ingrédients (${n.known}/${n.tot} reconnus)`:`valeurs données par ${esc(e.src)}`}</p><ul class="dc-nut">${nut}</ul><p class="dc-note">La barre compare à l'objectif du jour de ${esc(state.people[0].n)}.</p>`:`<p class="dc-note">Pas assez d'ingrédients reconnus pour estimer les valeurs.</p>`}
+ ${vid?`<div class="dc-vbox"><h3>Vidéo</h3>${vid}</div>`:""}
+ <a class="dc-link" href="${esc(e.u)}" target="_blank" rel="noopener noreferrer">Voir la recette complète sur ${esc(siteName(e.u))}${DI.ext}</a>
+ <div class="dc-cta"><button type="button" class="btn primary dc-big" data-dsc="add|${e.id}"${busy?" disabled":""}>${busy?"Ajout en cours…":"Ajouter à mes recettes"}</button></div>
+  <div class="dc-cta2"><button type="button" class="btn ghost" data-dsc="edit|${e.id}">Vérifier avant d'ajouter</button><button type="button" class="btn ghost" data-dsc="no|${e.id}">Pas pour nous</button></div>
+  <p class="dc-note">Les étapes sont lues sur le site au moment de l'ajout${SYNC_ON?"":" (si la synchro est active)"}.</p>`}
+const renderPanelV19=renderPanel;
+renderPanel=function(){if(ui.panel==="decouvrir"){const b=document.getElementById("panelBody");if(b)b.innerHTML=panelDisc();return}return renderPanelV19.apply(this,arguments)};
+// --- ajout après validation
+function discDraft(e,j){const d=blankDraft();d.n=e.t;d.u=e.u;d.img=e.img||"";d.vid=/^[A-Za-z0-9_-]{11}$/.test(e.v||"")?e.v:"";d.base=e.y||2;d.t=e.min||"";d.il=e.ing.slice();
+ const ps=discTag(e);d.p=ps.p;d.s=ps.s;const n=discNut(e);if(n)d.nut={k:n.k,p:n.p,f:n.f,c:n.c,fi:n.fi,est:!!n.est};
+ if(j&&j.kind==="recipe"&&Array.isArray(j.steps)&&j.steps.length)d.st=mergeSteps(j.steps.map(x=>String(x).trim())).slice(0,25);
+ if(j&&!d.vid){const v=ytId(j.video||"");if(v)d.vid=v}
+ if(!d.img&&j&&/^https:\/\/[^\s"'<>]+$/.test(j.image||""))d.img=j.image;
+ d.tip=`Recette ${e.a?"de "+e.a+", ":""}publiée sur ${siteName(e.u)}${e.r?` (note ${fmtRate(e.r)})`:""}.`;return d}
+async function discAdd(id,edit){const e=DISC_MAP[id];if(!e||ui.dbusy)return;ui.dbusy=id;if(ui.panel==="decouvrir")renderPanel();
+ let j=null;if(SYNC_ON&&sb.code){try{j=await fnCall({action:"import",url:e.u},15000)}catch(x){j=null}}
+ ui.dbusy=null;const d=discDraft(e,j);
+ if(edit){d.note=`Recette ${e.a?"de "+esc(e.a)+" ":""}(${esc(e.src)}) : vérifie puis enregistre.${d.st.length?"":" Les étapes n'ont pas pu être lues : colle-les depuis le site si tu veux."}`;openPanel("recform",{draft:d});return}
+ const rid="u_"+Date.now().toString(36)+Math.random().toString(36).slice(2,6);const rec=cleanMyRec({...d,id:rid,ad:ymd(new Date())});
+ if(!rec){toast("Impossible d'ajouter cette recette");if(ui.panel==="decouvrir")renderPanel();return}
+ const list=(state.myrec||[]).slice();if(list.length>=MYREC_MAX){toast("Nombre maximum de recettes atteint");if(ui.panel==="decouvrir")renderPanel();return}
+ list.unshift(rec);state.myrec=list;regMyRecipes(list);state.disc={...(state.disc||{}),[e.id]:"ok"};commit();
+ if(ui.dsel===id)ui.dsel=null;renderAll();if(ui.panel==="decouvrir")renderPanel();
+ toast(d.st.length?"Ajoutée à tes recettes ✓":"Ajoutée ✓ · étapes sur le site d'origine")}
+document.addEventListener("click",ev=>{const t=ev.target.closest&&ev.target.closest("[data-dsc]");if(!t||t.disabled)return;const[a,id]=t.dataset.dsc.split("|");
+ if(a==="open"){ui.dsel=null;ui.dtab="ing";ui.dpage=0;if(!ui.dtag)ui.dtag="all";openPanel("decouvrir");return}
+ if(a==="see"){ui.dsel=id;ui.dtab="ing";renderPanel();try{window.scrollTo(0,0)}catch(x){}return}
+ if(a==="back"){ui.dsel=null;renderPanel();return}
+ if(a==="tab"){ui.dtab=id==="nut"?"nut":"ing";renderPanel();return}
+ if(a==="tag"){ui.dtag=id;ui.dpage=0;renderPanel();return}
+ if(a==="more"){ui.dpage=(ui.dpage||0)+1;renderPanel();return}
+ if(a==="add"){discAdd(id,false);return}
+ if(a==="edit"){discAdd(id,true);return}
+ if(a==="no"){if(!DISC_MAP[id])return;state.disc={...(state.disc||{}),[id]:"no"};commit();if(ui.dsel===id)ui.dsel=null;if(ui.panel==="decouvrir")renderPanel();renderDiscBanner();toast("Retirée des propositions");return}
+ if(a==="reset"){const dz={...(state.disc||{})};for(const k in dz)if(dz[k]==="no")delete dz[k];state.disc=dz;commit();renderPanel();renderDiscBanner();return}});
 
 setTab(ui.tab);renderAll();initDb();sbStart();
 
