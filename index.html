@@ -1507,6 +1507,74 @@ h1,h2,.sec-head h1,.block-title,.row-head h2,.m-body h2,.pn-title{color:var(--ti
 @media (max-width:699.98px){.sec-head .head-actions{display:flex;flex-direction:row;flex-wrap:wrap;align-items:center;gap:8px}.sec-head .head-actions .btn{flex:0 1 auto;width:auto;min-width:0}
  .dc-banner p:not(.dc-kick){display:none}.dc-banner h2{margin-bottom:10px}}
 
+/* ================= v22 : Découvrir en cartes à glisser ================= */
+.sw-head .pn-title{margin-bottom:2px}
+.sw-head .pn-help{margin:0 0 10px}
+.sw-tags{flex-wrap:nowrap!important;overflow-x:auto;scrollbar-width:none;margin:0 -18px 2px;padding:2px 18px 6px}
+.sw-tags::-webkit-scrollbar{display:none}
+.sw-tags .chip{flex:0 0 auto}
+.sw-bar{display:flex;align-items:center;gap:10px;margin:6px 0 12px}
+@media (max-width:520px){.sw-view span{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}.sw-view button{padding-left:12px;padding-right:12px}}
+.sw-view{display:inline-flex}
+.sw-view button{display:inline-flex;align-items:center;gap:6px}
+.sw-view svg{width:16px;height:16px}
+.sw-ref{display:inline-flex;align-items:center;gap:7px}
+.sw-ref svg{width:18px;height:18px;transition:transform .45s cubic-bezier(.2,.8,.2,1)}
+.sw-ref:hover svg{transform:rotate(-90deg)}
+.sw{display:flex;flex-direction:column;align-items:center}
+.sw-prog{font-family:var(--f-sub);font-weight:600;font-size:.85rem;color:var(--muted);margin-left:auto;white-space:nowrap}
+.sw-stack{position:relative;width:100%;max-width:420px;height:clamp(340px,calc(100svh - 440px),560px)}
+@media (min-width:900px){.sw-stack{height:clamp(380px,calc(100vh - 330px),580px)}}
+.sw-card{position:absolute;inset:0;border-radius:28px;overflow:hidden;background:var(--surface);box-shadow:0 24px 46px -26px rgba(120,40,30,.6),0 2px 6px rgba(120,60,50,.08);
+ touch-action:pan-y;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;cursor:grab;--yes:0;--no:0}
+.sw-card.drag{cursor:grabbing;transition:none!important}
+.sw-next{transform:scale(.94) translateY(10px);pointer-events:none;transition:transform .25s}
+.sw-top:focus-visible{outline:3px solid var(--focus)!important;outline-offset:4px!important;border-radius:28px}
+.sw-ph{position:absolute;inset:0;background:var(--pink-2)}
+.sw-ph img{width:100%;height:100%;object-fit:cover;pointer-events:none;-webkit-user-drag:none}
+.sw-card::after{content:"";position:absolute;left:0;right:0;bottom:0;height:80%;z-index:1;pointer-events:none;
+ background:linear-gradient(to top,rgba(26,14,12,.95) 0%,rgba(26,14,12,.9) 48%,rgba(26,14,12,.74) 66%,rgba(26,14,12,0) 100%)}
+.sw-info{position:absolute;left:0;right:0;bottom:0;z-index:2;padding:18px 20px 20px;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.45)}
+.sw-tag{text-shadow:none}
+.sw-src{background:rgba(26,14,12,.62);border-radius:999px;padding:3px 10px;text-shadow:none}
+@media (min-width:700px){.sw-tags{flex-wrap:wrap!important;overflow:visible;margin:0 0 2px;padding:2px 0 6px}}
+.sw-kick{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin:0 0 8px;font-size:.8rem;font-weight:600;color:#fff}
+.sw-tag{background:#fff;color:var(--coral-ink);border-radius:999px;padding:3px 10px;font-family:var(--f-sub);font-weight:700;font-size:.76rem}
+.sw-tag.snack{background:#E6F5EC;color:#1D6B39}
+.sw-t{font-family:var(--f-title);font-weight:700;font-size:clamp(1.3rem,5.4vw,1.62rem);line-height:1.12;letter-spacing:-.02em;margin:0 0 4px;color:#fff}
+.sw-by{margin:0 0 10px;font-size:.84rem;color:#fff;display:flex;align-items:center;gap:4px;min-height:1em}
+.sw-by svg{width:13px;height:13px;color:#FFC94D}
+.sw-facts{margin:0;font-family:var(--f-sub);font-weight:600;font-size:.98rem;color:#fff}
+.sw-facts small{display:block;margin-top:2px;font-weight:500;font-size:.8rem;color:#fff}
+.sw-card.noimg .sw-ph{background:radial-gradient(120% 90% at 30% 10%,#FFE8E2 0%,var(--pink) 60%,#F9C9BF 100%)}
+.sw-emo{position:absolute;left:50%;top:34%;transform:translate(-50%,-50%);font-size:6.5rem;line-height:1;filter:drop-shadow(0 14px 20px rgba(150,60,40,.25))}
+.sw-card.noimg::after{background:linear-gradient(to top,rgba(26,14,12,.9) 0%,rgba(26,14,12,.72) 40%,rgba(26,14,12,0) 82%)}
+.sw-stamp{position:absolute;top:22px;z-index:3;display:inline-flex;align-items:center;gap:6px;padding:7px 14px 7px 10px;border-radius:14px;border:3px solid;background:#fff;
+ font-family:var(--f-sub);font-weight:700;font-size:1.05rem;pointer-events:none}
+.sw-stamp svg{width:20px;height:20px}
+.sw-stamp.yes{left:18px;color:#1D6B39;border-color:#1D6B39;opacity:var(--yes);transform:rotate(-9deg)}
+.sw-stamp.no{right:18px;color:#B03A2E;border-color:#B03A2E;opacity:var(--no);transform:rotate(9deg)}
+.sw-vid{position:absolute;top:16px;right:16px;z-index:2;display:inline-flex;align-items:center;gap:4px;background:var(--cta);color:#fff;border-radius:999px;padding:4px 10px;font-family:var(--f-sub);font-weight:600;font-size:.74rem}
+.sw-vid svg{width:12px;height:12px}
+.sw-btns{display:flex;align-items:center;justify-content:center;gap:18px;margin:16px 0 4px}
+.sw-b{display:grid;place-items:center;border-radius:50%;border:0;padding:0;cursor:pointer;box-shadow:0 14px 26px -16px rgba(120,40,30,.7);transition:transform .15s}
+.sw-b svg{width:30px;height:30px}
+.sw-b:active{transform:scale(.92)}
+.sw-b.no{width:66px;height:66px;background:#fff;color:#B03A2E;border:2px solid #D99A91}
+.sw-b.yes{width:74px;height:74px;background:var(--cta);color:#fff}
+.sw-b.yes:hover{background:var(--cta-hover)}
+.sw-b.sm{width:48px;height:48px;background:#fff;color:var(--ink);border:1px solid var(--ctl-line);box-shadow:none}
+.sw-b.sm svg{width:21px;height:21px}
+.sw-b:disabled{opacity:.38;cursor:default;transform:none}
+.sw-hint{margin:6px 0 0;font-size:.8rem;color:var(--muted);text-align:center}
+.sw-end{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:6px;padding:28px 24px;border-radius:28px;background:var(--surface);box-shadow:var(--sh-1)}
+.sw-stack .sw-end{position:absolute;inset:0}
+.sw-end-t{font-family:var(--f-title);font-weight:700;font-size:1.25rem;margin:0;color:var(--title)}
+.sw-end-s{margin:0 0 12px;color:var(--muted);max-width:34ch;font-size:.92rem}
+.sw-end .btn svg{width:18px;height:18px;margin-right:6px}
+@media (max-width:380px){.sw-stack{min-height:400px}.sw-btns{gap:12px}.sw-b.no{width:60px;height:60px}.sw-b.yes{width:66px;height:66px}}
+@media (prefers-reduced-motion:reduce){.sw-card,.sw-next,.sw-ref svg{transition:none!important}}
+
 </style>
 </head>
 <body>
@@ -1604,7 +1672,7 @@ h1,h2,.sec-head h1,.block-title,.row-head h2,.m-body h2,.pn-title{color:var(--ti
 </div>
 <div id="timers" class="timers" hidden aria-live="polite"></div>
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
-<script>window.NS_CONFIG={"hosted": true, "sbUrl": "https://zjsawjudrdneeptxbskd.supabase.co", "sbKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpqc2F3anVkcmRuZWVwdHhic2tkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1NjUxMjcsImV4cCI6MjEwNzE0MTEyN30.Wn1bUy--5O78gGICTOyEGbnT6B-SdoNCG_XxBBaaUIY", "build": "20261012204321"}</script>
+<script>window.NS_CONFIG={"hosted": true, "sbUrl": "https://zjsawjudrdneeptxbskd.supabase.co", "sbKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpqc2F3anVkcmRuZWVwdHhic2tkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1NjUxMjcsImV4cCI6MjEwNzE0MTEyN30.Wn1bUy--5O78gGICTOyEGbnT6B-SdoNCG_XxBBaaUIY", "build": "20261012213444"}</script>
 <script>
 const AISLES={L:"Fruits & légumes",H:"Herbes fraîches",V:"Viandes & poissons",C:"Crèmerie & œufs",S:"Surgelés",F:"Féculents",B:"Conserves",E:"Épices & condiments"};
 const AISLE_ORDER=["L","H","V","C","S","F","B","E"];
@@ -2970,12 +3038,100 @@ normalize=function(d){const s=normalizeV20(d);s.edits={};const src=d&&typeof d==
 // Les recettes dont le site d'origine publie les cinq valeurs les gardent ; toutes les autres sont recalculées ingrédient par ingrédient.
 const SRC_NUT={};for(const r of RECIPES)if(r.nut&&!r.nut.est&&r.nut.k>0&&r.nut.f!=null&&r.nut.c!=null&&r.nut.fi!=null)SRC_NUT[r.id]={k:r.nut.k,p:r.nut.p,f:r.nut.f,c:r.nut.c,fi:r.nut.fi};
 
+// ================= v22 (avant l'état) : plus de vraies recettes à découvrir, dont des encas protéinés =================
+// Recettes publiées (HelloFresh, Ontario terre nourricière, Santé Canada, Manger Bouger, WW, Decathlon).
+// k:"encas" = encas cuisiné par fournée : y = nombre de pièces ou de portions, yU / uS = leur nom au pluriel / singulier.
+const ONU="https://www.ontario.ca/fr/terre-nourriciere/recette/",MBU="https://www.mangerbouger.fr/manger-mieux/la-fabrique-a-menus/recettes/",WWU="https://www.weightwatchers.com/";
+DISC.push(
+// --- HelloFresh (valeurs par portion données par le site, quantités pour 1 personne)
+{id:"hf_teriyaki",t:"Aiguillettes de poulet façon teriyaki",src:"HelloFresh",a:"Chefs HelloFresh",u:HFU+"aiguillettes-de-poulet-facon-teriyaki-64d3b20ec6d2a3702a70fd91",img:HFM+"HF211116_R204_W01_FR_QFR20161831-6_KB_Main_low-8acf8a3f.jpg",min:25,y:1,
+ ing:["65 g Riz","½ pièce Oignon","½ pièce Carotte","½ pièce Poireau","¼ sachet Ciboulette","1 pièce Tête d'ail","1 cm Gingembre frais","20 ml Sauce soja","5 ml Huile de sésame","1 pièce Filet de poulet","3 g Graines de sésame","½ cs Huile d'olive","1 cs Sucre","Poivre et sel selon le goût"],n:{k:628,p:36.8,f:15.8,c:83.5,fi:6.7}},
+{id:"hf_curry_vert",t:"Curry vert thaï au poulet",src:"HelloFresh",a:"Miléna M.",u:HFU+"curry-vert-thai-au-poulet-648b677d25862a444bdb62d9",img:HFI+"HF220927_R217_W46_FR_RFR29803858-1_KB_Main_4_low-f2c26e4d.jpg",min:35,y:1,
+ ing:["½ pièce Échalote","1 pièce Tête d'ail","½ cm Gingembre frais","½ pièce Poireau","½ sachet Coriandre","¼ pièce Citron vert","½ sachet Cacahuètes non salées","75 g Riz","100 g Blanc de poulet","⅓ sachet Curry vert","125 ml Lait de coco","5 ml Sauce poisson","1 cs Huile de tournesol","Poivre et sel selon le goût"],n:{k:627,p:34.6,f:24.7,c:69.3,fi:5}},
+{id:"hf_merlu_curcuma",t:"Merlu & sauce curcuma-citron façon bistrot",src:"HelloFresh",a:"François-Xavier C.",u:HFU+"merlu-and-sauce-curcuma-citron-facon-bistrot-64d28aae317ec2bf51928014",img:HFI+"HF_Y23_R213_W45_FR_RFR17305-2__Main_high-9806e859.jpg",min:35,y:1,
+ ing:["100 g Pommes de terre","1 pièce Carotte","¼ pièce Citron","¼ sachet Persil","½ pièce Tête d'ail","50 ml Crème liquide","1 pièce Filet de merlu avec peau","¼ sachet Cumin en poudre","¼ sachet Curcuma en poudre","¼ pièce Bouillon cube légumes","½ cs Huile d'olive","1 cs Beurre","½ cs Farine","Poivre et sel selon le goût"],n:{k:632,p:31.6,f:32.1,c:50.3,fi:8.1}},
+{id:"hf_saumon_soja",t:"Saumon mariné au soja & au gingembre",src:"HelloFresh",a:"Mathilde M.",u:HFU+"saumon-marine-au-soja-and-au-gingembre-645e3002d8259131b372d8de",img:HFI+"HF_Y23_R292_W34_FR_PFR16539-1_Main_low-b1b9dd26.jpg",min:35,y:1,
+ ing:["250 g Brocoli","½ pièce Tête d'ail","1 cm Gingembre frais","¼ pièce Piment","¼ pièce Citron vert","20 ml Sauce soja","5 ml Huile de sésame","1 pièce Filet de saumon","75 g Riz","½ sachet Amandes effilées","1,5 cc Cassonade","Poivre et sel selon le goût"],n:{k:719,p:37.5,f:27.5,c:77.1,fi:9.8}},
+{id:"hf_poke_thon",t:"Poké bowl : thon, spicy sriracha & edamame",src:"HelloFresh",a:"Luce G.",u:HFU+"poke-bowl-thon-spicy-sriracha-and-edamame-6a5de2346b1eaecd2e30e081",img:HFI+"HF_Y26_R224_W20_FR_RFR49716-7_main_edit3_edit3_high-7e2f1fe1.jpg",min:25,y:1,
+ ing:["75 g Riz","½ pièce (Mini) Concombre","¼ pièce Oignon","½ pièce Carotte","½ sachet Mayonnaise","½ sachet Sauce sriracha","½ boîte Thon au naturel","40 g Edamame","½ sachet Cacahuètes non salées","10 ml Sauce soja réduite en sel","1 cc Vinaigre balsamique blanc / riz","Poivre et sel selon le goût"],n:{k:596,p:25.6,f:23.2,c:76.1,fi:5.7}},
+{id:"hf_nicoise",t:"Salade de riz à la niçoise : thon & olives",src:"HelloFresh",a:"Chefs HelloFresh",u:HFU+"salade-de-riz-facon-nicoise-au-thon-and-poivron-64fb2d7a786cce2df0e01725",img:HFI+"HF_Y24_R226_W17_FR_RFR29804669-2_MAIN_high-2d705f78.jpg",min:30,y:1,
+ ing:["½ pièce Poivron","½ pièce Tête d'ail","½ pièce Échalote","75 g Riz","¼ sachet Thym séché","¼ sachet Basilic","10 g Olives Kalamata","½ sachet Salade en sachet","2 pièce Tomate","½ boîte Thon à l'huile d'olive","1,5 cs Huile d'olive","½ cc Moutarde","1 pièce Œuf","Poivre et sel selon le goût"],n:{k:719,p:25.7,f:37.2,c:69.6,fi:6}},
+{id:"hf_curry_crevettes",t:"Curry thaï léger aux crevettes & coco",src:"HelloFresh",a:"Chefs HelloFresh",u:HFU+"curry-thai-leger-aux-crevettes-and-coco-659fa2ebcbafa858007ae93e",img:HFI+"HF_Y24_R216_W08_FR_RFR19041_1_edit_color_Main_high-96149b30.jpg",min:35,y:1,
+ ing:["75 g Riz","½ pièce Échalote","½ pièce Tête d'ail","1 cm Gingembre frais","½ pièce Carotte","¼ sachet Coriandre et basilic thaï","¼ pièce Citron","80 g Crevettes","½ sachet Curry vert","90 ml Lait de coco","5 ml Sauce poisson","1 cs Huile de tournesol","Poivre et sel selon le goût"],n:{k:635,p:20.5,f:27.3,c:75.9,fi:5.7}},
+{id:"hf_crevettes_indo",t:"Crevettes & brocoli poêlés à l'indonésienne",src:"HelloFresh",a:"Mathilde M.",u:HFU+"crevettes-and-brocoli-poeles-a-lindonesienne-6a5de253788d6aebbf5cc0b3",img:HFI+"HF_Y25_R218_W50_FR_RFR45567-4_Main_high-e8adab53.jpg",min:35,y:1,
+ ing:["½ pièce Brocoli","½ pièce Carotte","½ pièce Gousse d'ail","1 cm Gingembre frais","½ pièce Oignon","75 g Riz","½ sachet Huile de sésame","½ paquet Crevettes","½ sachet Pâte épicée javanaise","10 ml Sauce soja réduite en sel","½ sachet Cacahuètes non salées","1 cc Beurre","½ cs Huile d'olive","Poivre et sel selon le goût"],n:{k:632,p:27.8,f:21.9,c:79.1}},
+{id:"hf_bobun",t:"Bò bún vietnamien au bœuf sauté",src:"HelloFresh",a:"Chefs HelloFresh",u:HFU+"bo-bun-vietnamien-au-boeuf-saute-6a5de24275e3b6f4db5c467a",img:HFI+"HF_Y25_R238_W13_FR_RFR20161717-31_Main_high-a47fa3e5.jpg",min:45,y:1,
+ ing:["1 pièce Tête d'ail","½ pièce Échalote","½ paquet Émincés de bœuf","¼ sachet Citronnelle moulue","½ sachet Sauce poisson","50 g Nouilles plates de riz","½ pièce Carotte","½ pièce (Mini) Concombre","¼ sachet Menthe","½ sachet Cacahuètes non salées","½ sachet Huile de sésame","1,5 cc Cassonade","2 cc Vinaigre de vin blanc","1 cs Huile de tournesol","Poivre et sel selon le goût"],n:{k:586,p:28.4,f:22.9,c:62.7,fi:5.5}},
+{id:"hf_keftas",t:"Keftas de bœuf & semoule aux épices",src:"HelloFresh",a:"François-Xavier C.",u:HFU+"keftas-de-boeuf-and-semoule-aux-epices-6a5de2556b1eaecd2e30e0de",img:HFM+"HF_Y24_R232_W49_FR_RFR32965-1_Main_high-3d919a2c.jpg",min:40,y:1,
+ ing:["½ pièce Carotte","½ pièce Oignon","½ pièce Tête d'ail","¼ sachet Menthe","¼ pièce Citron","½ paquet Viande hachée au bœuf","½ sachet Épices du Moyen-Orient","½ sachet Épinards","75 g Semoule","½ pot Yaourt à la grecque","1 cc Huile d'olive","1 filet Lait","100 ml Bouillon de bœuf","Poivre et sel selon le goût"],n:{k:572,p:31.7,f:24,c:54.3,fi:9.1}},
+{id:"hf_dinde_miso",t:"Mijoté de dinde & champis sauce miso-soja",src:"HelloFresh",a:"Hania L.",u:HFU+"mijote-de-dinde-and-champis-sauce-miso-soja-6a5de25975e3b6f4db5c46c4",img:HFI+"HF_Y26_R220_W04_FR_RFR44075-3_Main_edit_high-5c5a692e.jpg",min:40,y:1,
+ ing:["½ pièce Gousse d'ail","½ pièce Oignon","½ pièce Carotte","65 g Champignons de Paris","15 g Oignon nouveau","75 g Riz","½ sachet Miso blanc","5 ml Sauce soja réduite en sel","½ paquet Dés de filet de dinde","½ pot Crème épaisse","100 ml Bouillon de volaille","½ cs Huile d'olive","½ cc Vinaigre balsamique blanc / riz","Poivre et sel selon le goût"],n:{k:622,p:35.8,f:15.6,c:80.2,fi:6.2}},
+{id:"hf_porc_paprika",t:"Mijoté de porc aux petits pois & paprika fumé",src:"HelloFresh",a:"Chefs HelloFresh",u:HFU+"mijote-de-porc-aux-petits-pois-and-paprika-fume-6a5de25c788d6aebbf5cc0d6",img:HFI+"HF_Y24_R226_W50_FR_QFR29958-1_MAINhigh-2e58e62b.jpg",min:25,y:1,
+ ing:["75 g Riz au jasmin","½ pièce Oignon","½ pièce Gousse d'ail","½ pièce Carotte","½ pièce Petits pois en conserve","¼ sachet Paprika fumé en poudre","¼ sachet Herbes de Provence","¼ sachet Persil","½ paquet Concentré de tomates","½ paquet Crème liquide","½ paquet Émincés de porc marinés à la mexicaine","1 cs Huile d'olive","½ cc Cassonade","¼ pièce Bouillon cube volaille","Poivre et sel selon le goût"],n:{k:784,p:38.7,f:34.3,c:90.2,fi:10.4}},
+{id:"hf_lentilles_piquant",t:"Mijoté piquant de lentilles aux tomates séchées",src:"HelloFresh",a:"Luce G.",u:HFU+"mijote-piquant-de-lentilles-aux-tomates-sechees-6a5de23675e3b6f4db5c464c",img:HFI+"HF_Y26_R218_W36_FR_RFR58749-3main_high-55e78da4.jpg",min:40,y:1,
+ ing:["60 g Lentilles vertes","½ pièce Oignon","½ pièce Gousse d'ail","½ paquet Tomates semi-séchées","⅓ sachet Concentré de tomates","⅓ paquet Crème liquide","½ sachet Épinards","⅓ sachet Piri-piri","½ sachet Copeaux de grana padano AOP","200 ml Bouillon de légumes","½ cc Beurre","½ cs Vinaigre balsamique blanc / riz","Poivre et sel selon le goût"],n:{k:457,p:25,f:16,c:49.8,fi:16.9}},
+// --- Ontario terre nourricière (Foodland Ontario) : valeurs par portion données par le site
+{id:"on_poulet_poelee",t:"Poêlée de poulet aux légumes",src:"Ontario terre nourricière",a:"Foodland Ontario",u:ONU+"poelee-de-poulet-aux-legumes",img:"https://www.ontario.ca/files/s3fs-public/foodland/2024-11/quick-skillet-chicken-with-vegetables_0.jpg",min:29,y:4,
+ ing:["4 blancs de poulet sans peau","2 cs de beurre","Sel et poivre","4 carottes, tranchées finement","6 gros champignons, coupés en quatre","2 cs d'oignon émincé","1 gousse d'ail émincée","¼ cc de romarin séché","¼ cc de thym séché","250 ml de bouillon de poulet","1 cs de fécule de maïs","125 ml de yaourt nature allégé","150 g de petits pois surgelés (250 ml)"],n:{k:268,p:31,f:9,c:17,fi:4}},
+{id:"on_salade_poulet",t:"Salade de poulet et de légumes à l'orientale",src:"Ontario terre nourricière",a:"Foodland Ontario",u:ONU+"salade-de-poulet-et-de-legumes-lorientale",img:"https://www.ontario.ca/files/s3fs-public/foodland/2024-11/asian-chicken-veggie-salad.jpg",min:20,y:4,
+ ing:["1 laitue Boston, feuilles détachées","2 carottes","2 blancs de poulet cuits, en minces lanières","1 poivron rouge, en minces lanières","90 g de petits bouquets de brocoli (375 ml)","80 g de pois mange-tout, en lanières (250 ml)","3 oignons verts, en tranches minces","40 g de noix de cajou grillées (75 ml)","3 cs de coriandre fraîche hachée","2,5 cm de gingembre frais pelé","3 cs de vinaigre de riz","2 cs de jus de citron vert","2 cs de sauce soja","2 cc de cassonade","¼ cc de sel, de poivre noir et de piment de Cayenne","75 ml d'huile végétale"],n:{k:330,p:30,f:16,c:16,fi:3}},
+{id:"on_steak_legumes",t:"Plat familial de steak aux légumes",src:"Ontario terre nourricière",a:"Foodland Ontario",u:ONU+"plat-familial-de-steak-aux-legumes",img:"https://www.ontario.ca/files/s3fs-public/foodland/2024-09/family-steak-and-vegetable-platter.jpg",min:40,y:4,
+ ing:["500 g de bifteck de haut de surlonge (ou autre steak à griller)","500 g de petites pommes de terre","250 g de haricots verts","2 tomates, en quartiers","2 oignons verts, en tranches fines","100 g de salades vertes mélangées (1 L)","50 ml d'huile d'olive extra-vierge","2 cs de vinaigre balsamique","2 gousses d'ail pressées","1 cs de thym frais haché","2 cc de moutarde de Dijon","1 cc de miel liquide","¼ cc de gros sel et de poivre"],n:{k:420,p:30,f:18,c:33,fi:5}},
+{id:"on_porc_moutarde",t:"Légumes grillés et filet de porc à la moutarde",src:"Ontario terre nourricière",a:"Foodland Ontario",u:ONU+"legumes-de-lontario-grilles-et-filet-de-porc-la-moutarde",img:"https://www.ontario.ca/files/s3fs-public/foodland/2024-09/grilled-ontario-vegetables-and-mustardy-pork-tenderloin.jpg",min:270,y:4,
+ ing:["3 cs de moutarde en grains","500 g de filet de porc","3 poivrons (vert, rouge et jaune), en lanières","2 courgettes (verte et jaune), en rondelles","12 gros champignons","12 tomates cerises","2 cs d'huile végétale","1 cc de thym séché","1 pincée de sel et de poivre","½ citron"]},
+{id:"on_truite_oignons",t:"Filets de truite aux champignons et oignons caramélisés",src:"Ontario terre nourricière",a:"Foodland Ontario",u:ONU+"filets-de-poisson-aux-champignons-et-aux-oignons-caramelises",img:"https://www.ontario.ca/files/s3fs-public/foodland/2024-09/trout-topped-with-caramelized-onions-and-mushrooms.jpg",min:30,y:4,
+ ing:["2 cs de beurre","1 oignon haché grossièrement","150 g de champignons tranchés (500 ml)","1 cs de sauce Worcestershire","500 g de filets de truite arc-en-ciel avec la peau (2 filets)"],n:{k:261,p:28,f:14,c:5,fi:1}},
+{id:"on_truite_erable",t:"Filets de truite grillés et glacés à l'érable",src:"Ontario terre nourricière",a:"Foodland Ontario",u:ONU+"filets-de-truite-arc-en-ciel-grilles-et-glaces-lerable",img:"https://www.ontario.ca/files/s3fs-public/foodland/2024-09/grilled-maple-glazed-rainbow-trout.jpg",min:35,y:4,
+ ing:["500 g de filets de truite arc-en-ciel avec la peau (2 filets)","50 ml de sirop d'érable","2 cs de sauce soja à teneur réduite en sodium","2 cs de vinaigre de riz","1 cs d'huile végétale"],n:{k:243,p:26,f:11,c:9,fi:0}},
+{id:"on_frittata",pt:"oeufs",t:"Frittata potagère",src:"Ontario terre nourricière",a:"Foodland Ontario",u:ONU+"frittata-potagere",img:"https://www.ontario.ca/files/s3fs-public/foodland/2024-09/farmhouse-frittata.jpg",min:41,y:6,
+ ing:["1 cs d'huile végétale","1 poireau (blanc et vert pâle), en tranches fines","150 g de petits bouquets de brocoli ou de chou-fleur (500 ml)","70 g de courgette en dés (125 ml)","70 g de poivron rouge en dés (125 ml)","8 œufs","70 g de cheddar ou d'emmental râpé (175 ml)","70 g de jambon en dés (125 ml)","2 cc de moutarde de Dijon à l'ancienne","3 gouttes de sauce piquante","Sel et poivre"],n:{k:220,p:16,f:15,c:5,fi:1}},
+// --- Santé Canada (Guide alimentaire canadien)
+{id:"sc_shakshouka",t:"Shakshouka (œufs pochés)",src:"Santé Canada",a:"Guide alimentaire canadien",u:"https://www.canada.ca/fr/sante-canada/services/guide-alimentaire/manger-favoriser/cuisine/recettes/shakshouka-oeufs-poches.html",img:"https://www.canada.ca/content/dam/hc-sc/images/services/food-guide/eating-support/kitchen/recipes/shakshouka-poached-eggs/shakshouka-poached-eggs-1170x420.jpg",min:45,y:4,
+ ing:["1 oignon jaune, en dés","1 poivron, en dés","4 gousses d'ail, émincées","796 ml de tomates en dés sans sel ajouté (1 boîte)","1 cc de cumin","2 cc de paprika","½ cc de coriandre moulue","¼ cc de flocons de piment rouge","4 œufs","Persil (facultatif)"]},
+{id:"sc_papillotes_saumon",t:"Papillotes de légumes et de saumon aux herbes",src:"Santé Canada",a:"Guide alimentaire canadien",u:"https://www.canada.ca/fr/sante-canada/services/guide-alimentaire/manger-favoriser/cuisine/recettes/papillotes-legumes-poisson-herbes.html",img:"https://www.canada.ca/content/dam/hc-sc/images/services/food-guide/eating-support/kitchen/recipes/fish-herb-vegetable-packets/fish-herb-vegetable-packets-1170x420.jpg",min:25,y:4,
+ ing:["500 g d'asperges fraîches, parées (1 botte)","2 poivrons rouges, en lanières","2 petites courgettes jaunes, tranchées","4 cs de basilic frais haché","2 cs de persil ou de ciboulette frais, haché","2 gousses d'ail, émincées","4 pak choï miniatures, coupés en deux","1 cs de moutarde de Dijon","2 cc d'huile végétale","1 cs de thym frais haché","¼ cc de poivre moulu","4 filets de saumon sans peau (environ 125 g chacun)"]},
+// --- Manger Bouger (Santé publique France, la fabrique à menus)
+{id:"mb_curry_cabillaud",t:"Curry de cabillaud aux poivrons",src:"Manger Bouger",a:"Santé publique France",u:MBU+"495-curry-de-cabillaud-aux-poivrons",img:"",min:35,y:4,
+ ing:["400 g de cabillaud","2 poivrons","500 g de courgettes","1 échalote","1 gousse d'ail","20 cl de lait de coco","2 cc de curry","1 cs d'huile de colza","1 pincée de sel","1 pincée de poivre"]},
+{id:"mb_cabillaud_papillotes",t:"Cabillaud en papillotes",src:"Manger Bouger",a:"Santé publique France",u:MBU+"170-cabillaud-en-papillotes",img:"",min:20,y:4,
+ ing:["400 g de cabillaud","15 cl de jus de citron","1 bouquet de thym","1 oignon","1 cs d'huile d'olive","4 cc de persil"]},
+{id:"mb_oeuf_lentilles",t:"Œuf mollet aux lentilles corail et aux épices",src:"Manger Bouger",a:"Santé publique France",u:MBU+"200000133-oeuf-mollet-aux-lentilles-corail-et-aux-epices",img:"",min:30,y:4,
+ ing:["4 œufs","200 g de lentilles corail","500 g d'épinards frais","4 champignons de Paris","1 oignon","1 gousse d'ail","1 brin de coriandre fraîche","1 cs de cumin","1 cc de curry","2 cs d'huile d'olive","2 pincées de poivre","2 pincées de sel"]},
+{id:"mb_curry_oeufs",t:"Curry aux œufs et riz complet",src:"Manger Bouger",a:"Santé publique France",u:MBU+"200000153-curry-aux-oeufs-et-riz-complet",img:"",min:30,y:4,
+ ing:["150 g de riz complet","5 œufs","200 g d'épinards surgelés","50 cl de lait de coco","2 cs de curry"]},
+// --- WW
+{id:"ww_d_shakshuka",t:"Shakshuka (œufs à la sauce tomate)",src:"WW",a:"WW (Weight Watchers)",u:WWU+"be/fr/recette/shakshuka-oeufs-sauce-tomate/579a3c4674bb3c1a12f9e9d5",img:"https://v.cdn.ww.com/media/system/wine/57f2fd503a343dc113b1c1ce/9ff1ee26-681c-4ce3-827f-e9df8a8494b9/rtzcxagplaus1pmuqwfe.jpg?fit=crop&height=800&width=800&enable=upscale&quality=80",min:60,y:6,
+ ing:["2 petits oignons","2 gousses d'ail","1 à 2 petits piments rouges","2 cc d'huile","750 g de dés de tomates en conserve","4 cc de concentré de tomate","½ cc de paprika","½ cc de cumin","6 œufs","1 tomate moyenne","1 botte de persil","6 morceaux de baguette blanche","Sel et poivre"]},
+// --- encas protéinés (sains, adaptés à la perte de poids)
+{id:"ww_s_oeufs_muffins",k:"encas",t:"Œufs-muffins aux légumes",src:"WW",a:"WW (Weight Watchers)",u:WWU+"ca/fr/recette/ufs-muffins-aux-lgumes/6021a4f92aaf424f264fed23",img:"https://v.cdn.ww.com/media/system/wine/6019c4b5a28ef90012860e68/2e87cd2c-a771-4ef7-82c5-ff7e41bef391/z5pxjunu3d7glbzrxcnu.jpg?fit=crop&height=800&width=800&enable=upscale&quality=80",min:30,y:6,yU:"muffins",uS:"muffin",emo:"🥚",
+ ing:["Enduit de cuisson (6 jets)","180 g de tomates hachées (1 tasse)","6 cs de feta émiettée","1 cs d'aneth frais haché","5 gros œufs","2 cs de lait écrémé","¼ cc de sel","¼ cc de poivre noir"]},
+{id:"ww_s_amuse_oeufs",k:"encas",t:"Amuse-bouches aux œufs",src:"WW",a:"WW (Weight Watchers)",u:WWU+"be/fr/recette/amuse-bouches-aux-ufs/64ff2c719d9e4671c5673488",img:"https://v.cdn.ww.com/media/system/wine/64fb1073a327710498734374/97a0f30f-a5e8-43c1-b453-3344fa8956a9/adwciwv6jxuuawxqflej.jpg?width=800&height=800&fit=crop&auto=webp&optimize=medium&format=pjpg",min:30,y:4,yU:"portions",uS:"portion",emo:"🥚",
+ ing:["4 œufs","2 cs de cottage cheese 1,5 % MG","1 cc d'huile","30 g de tomate en dés","30 g de poivron en dés","30 g d'oignon rouge en dés","8 gouttes de Tabasco (facultatif)","Sel et poivre"]},
+{id:"ww_s_muffins_jambon",k:"encas",t:"Muffins aux œufs & jambon",src:"WW",a:"WW (Weight Watchers)",u:WWU+"be/fr/recipe/muffins-aux-oeufs-jambon/5a17f63b195af9662fc583e4",img:"https://v.cdn.ww.com/media/system/wine/5a17f636ccc3cd37460031fd/511e1846-d835-455b-bde2-c74db5204346/xx6h9xg8oki3fmvdrxih.jpg?fit=crop&height=800&width=800&enable=upscale&quality=80",min:25,y:2,yU:"muffins",uS:"muffin",emo:"🧁",
+ ing:["2 tranches de pain de mie complet (50 g)","2 œufs","30 g de jambon cuit","5 radis","½ concombre moyen","Sel et poivre"]},
+{id:"ww_s_roules",k:"encas",t:"Roulés de jambon à l'espagnole",src:"WW",a:"WW (Weight Watchers)",u:WWU+"ch/fr/recette/rouls-de-jambon-lespagnole/61c1c5e18e0ef2031e1ea200",img:"https://v.cdn.ww.com/media/system/wine/619e481ea745690077852a0c/4a76789b-ce2f-4a80-8bf5-ec0c4889db4c/ftwwc8jpevvbhxpjrfcg.jpg?fit=crop&height=800&width=800&enable=upscale&quality=80",min:15,y:4,yU:"portions",uS:"portion",emo:"🥒",
+ ing:["1 grand concombre","4 tiges d'origan","100 g de fromage frais nature (max. 5 % MG)","1 pincée de sel","1 pincée de poivre","90 g de jambon serrano (6 tranches)","40 g de pecorino"]},
+{id:"ww_s_trempette_saumon",k:"encas",t:"Trempette au saumon fumé",src:"WW",a:"Chef Eric Greenspan",u:WWU+"ca/fr/recette/trempette-au-saumon-fum-chef-ericgreenspan/64b73c56bf67780020eaa666",img:"https://v.cdn.ww.com/media/system/wine/649f3de922842f00187cd835/e158318a-89ad-4d28-8814-006af4de4686/ahqulscdfwyawlkecbp7.jpg?width=800&height=800&fit=crop&auto=webp&optimize=medium&format=pjpg",min:10,y:12,yU:"portions",uS:"portion",emo:"🐟",
+ ing:["480 g de yaourt grec nature 0 % (2 tasses)","½ concombre moyen, haché finement","½ oignon rouge moyen, émincé","115 g de saumon fumé, haché finement","2,5 cs de câpres égouttées","3 cs d'assaisonnement à bagel « tout garni », divisé"]},
+{id:"ww_s_fb_fraises",k:"encas",t:"Fromage blanc aux fraises et au chocolat",src:"WW",a:"WW (Weight Watchers)",u:WWU+"be/fr/recette/fromage-blanc-aux-fraises-au-chocolat/5faa7db76a6c91407ab79334",img:"https://v.cdn.ww.com/media/system/wine/5f97f8721a6fb2037afe135d/52ea3c62-847b-46ea-8894-11f2e9005c8d/pq4hzlsqcp8wtkngzoi4.jpg?width=800&height=800&fit=crop&auto=webp&optimize=medium&format=pjpg",min:10,y:1,yU:"portion",uS:"portion",emo:"🍓",
+ ing:["150 g de fromage blanc maigre nature","2 cs d'eau minérale","200 g de fraises","1 bâtonnet de chocolat noisette WW"]},
+{id:"ww_s_cheesecake",k:"encas",t:"Cheese-cake en verrine",src:"WW",a:"WW (Weight Watchers)",u:WWU+"be/fr/recette/cheese-cake-en-verrine/5aaa494fa2f4bc2cb223c470",img:"https://v.cdn.ww.com/media/system/wine/585991181e753c4f8b35529e/74d5909e-a1e5-4bc3-bc2d-d3a924d7fb92/xlsnnet0bug4iwrddmjw.jpg?width=800&height=800&fit=crop&auto=webp&optimize=medium&format=pjpg",min:10,y:1,yU:"verrine",uS:"verrine",emo:"🫐",
+ ing:["15 g de biscuit sec","1 pincée de cannelle","75 g de fromage blanc 0 %","15 g de yaourt maigre","1 cc de sucre vanillé","50 g de fruits des bois surgelés","1 cc de confiture light"]},
+{id:"ww_s_plateau",k:"encas",t:"Plateau de collations protéinées",src:"WW",a:"WW (Weight Watchers)",u:WWU+"ca/fr/recette/plateau-collations-amateurs-protines/6283f15b4d5967375f0405e6",img:"https://v.cdn.ww.com/media/system/wine/627d5393d6034c014b10aca9/31992147-b8f6-4676-ac73-bc7f04d0c23d/oqaxglhcumoiijs0dftz.jpg?fit=crop&height=800&width=800&enable=upscale&quality=80",min:5,y:1,yU:"plateau",uS:"plateau",emo:"🧀",
+ ing:["1 branche de céleri, coupée en 2","1 cs de fromage à la crème allégé, fouetté","¼ cc d'assaisonnement à bagel « tout garni »","8 amandes entières","4 petites fraises","30 g de fromage suisse allégé, en cubes"]},
+{id:"sp_muffins_oeufs",k:"encas",t:"Muffins aux œufs",src:"Santé Canada",a:"Agence de la santé publique du Canada",u:"https://www.canada.ca/fr/sante-publique/services/recettes-nord/muffins-oeufs.html",img:"https://www.canada.ca/content/dam/phac-aspc/images/services/northern-recipes/eggmuffin450-fra.jpg",min:60,y:12,yU:"muffins",uS:"muffin",emo:"🧁",
+ ing:["1 petite pomme de terre","1 pincée de sel","6 gros œufs","284 ml de crème de champignons en conserve (1 petite boîte)","1 poivron rouge ou vert, en dés","1 petit oignon, en dés","½ cc de thym séché","2 cc de persil frais haché","100 g de cheddar râpé (250 ml), divisé"]},
+{id:"dk_muffins_carotte",k:"encas",t:"Muffins protéinés carottes-cannelle",src:"Decathlon",a:"Marie Fauchille",u:"https://conseilsport.decathlon.fr/nutrition-recette-proteinee-muffins-proteines-carottes-cannelle",img:"https://contents.mediadecathlon.com/s836442/k$b025bdb45dfe0cf4c385aff63d03ed7e/1200x0/1.91cr1/muffins-proteines-carottes-cannelle.jpg?format=auto",min:25,y:10,yU:"muffins",uS:"muffin",emo:"🥕",
+ ing:["30 g de préparation en poudre riche en protéines (1 dose)","40 g de flocons d'avoine","60 g de farine complète","2 carottes","3 blancs d'œufs","100 ml de lait d'amande","2 cs de miel","2 cs de sirop d'agave","1 cc de levure","½ cc de cannelle"]}
+);
+for(const e of DISC){if(!DISC_MAP[e.id]){e.ing=e.ing.map(l=>l.replace(/\((?:s|x|es)\)/g,"").replace(/\s{2,}/g," ").trim());DISC_MAP[e.id]=e}}
+
 // ---------- état ----------
 const dayOf=k=>k.split("-")[0];
 function needsFor(plan,done,serv){const m={};for(const k of SLOTS){if(done&&done[k])continue;const r=RMAP[plan[k]];if(!r)continue;const fct=((serv&&serv[k])||defServ(k))/(r.base||2);for(const[id,q]of r.i){const e=m[id]||(m[id]={id,q:0,recs:[]});if(typeof q==="number")e.q+=q*fct;const s=short(r);if(!e.recs.includes(s))e.recs.push(s)}}return m}
 const PRODUCT_MAP={};
 const PUNITS=["pot","gourde","pièce","sachet","barre","paquet","bouteille","portion"];
-const PEMOJI=["🍎","🍐","🍌","🍓","🍊","🥝","🧃","🥛","🍪","🥜","🍫","🥣","🧀","🥨","🍯","🥕"];
+const PEMOJI=["🍎","🍐","🍌","🍓","🍊","🥝","🧃","🥛","🍪","🥜","🍫","🥣","🧀","🥨","🍯","🥕","🥚","🧁","🥒","🐟","🫐"];
 function regProduct(p){PRODUCT_MAP[p.id]=p;ING[p.id]=[p.n,p.aisle||"G",p.unit||"pièce"]}
 SNACK_PRODUCTS.forEach(regProduct);
 const allProducts=()=>[...SNACK_PRODUCTS,...(state.products||[])];
@@ -5241,6 +5397,146 @@ function syncJumpVis(){document.querySelectorAll(".jump [data-jump]").forEach(b=
 renderAll=(f=>function(){f.apply(this,arguments);try{syncJumpVis()}catch(e){}})(renderAll);
 const abhSet=()=>{const a=document.querySelector(".appbar");document.documentElement.style.setProperty("--abh",(innerWidth<900&&a?a.offsetHeight:0)+"px")};
 addEventListener("resize",abhSet,{passive:true});abhSet();
+
+
+// ================= v22 : Découvrir en cartes à glisser, bouton « Actualiser », encas protéinés =================
+// --- aliments utiles aux nouvelles recettes
+Object.assign(NUTX,{_veloute:[65,1.3,3.8,6.3,0.5],_cottage:[98,11,4.3,3.4,0],_bagel:[520,18,42,20,15],_pecorino:[392,28,31,0.5,0]});
+NXN.unshift([/creme de champignons|veloute/,"_veloute"],[/cottage/,"_cottage"],[/assaisonnement a bagel|tout garni/,"_bagel"],[/fromage a la creme|fromage frais/,"fromage_frais"],
+ [/fromage suisse/,"emmental"],[/pecorino/,"_pecorino"],[/fruits des bois/,"_fruits_rouges"],[/(poudre|preparation) .*proteines?|proteines? en poudre/,"sj_proteine"]);
+Object.assign(NXP,{_amande:1.2,_fruits_rouges:12,ff_blancs:33});
+for(const k in NX_CACHE)delete NX_CACHE[k];
+// --- catégories, nutrition, classement
+DTAGS.splice(0,DTAGS.length,["all","Tout"],["poulet","Poulet"],["dinde","Dinde"],["boeuf","Bœuf"],["porc","Porc"],["poisson","Poisson"],["crevettes","Crevettes"],["oeufs","Œufs"],["vege","Végé"],["encas","Encas protéinés"]);
+Object.assign(D_EMO,{encas:"🥚"});
+const discTagV22=discTag;discTag=function(e){if(e.k==="encas")return e._ps||(e._ps={p:"encas",s:""});if(e.pt)return e._ps||(e._ps={p:e.pt,s:""});return discTagV22(e)};
+discNut=function(e){if(e._nx!==undefined)return e._nx;let E=null;try{E=nutEstimate(e.ing,e.y||2)}catch(x){}
+ const est=E&&E.known&&E.k>0?{k:E.k,p:E.p,f:E.f,c:E.c,fi:E.fi,est:true,known:E.known,tot:E.tot}:null;
+ let n=est;if(e.n){n={...e.n,est:false};if(n.fi==null&&est)n.fi=est.fi}
+ if(typeof CQ!=="undefined"&&CQ)e._nx=n;return n};
+discScore=function(e){const n=discNut(e);if(!n||!n.k)return-1;const dens=Math.min(0.45,n.p*4/n.k);
+ if(e.k==="encas")return dens*1.4+(1-Math.min(1,Math.abs(n.k-140)/200))*0.3-(n.est?0.03:0);
+ const fit=1-Math.min(1,Math.abs(n.k-540)/400);return dens+fit*0.4-(n.est?0.05:0)+(e.v?0.03:0)+(e.r?0.02:0)};
+// liste : les mieux adaptées d'abord, en alternant les sites
+discSorted=function(tag){let L=discLeft();if(tag&&tag!=="all")L=L.filter(e=>discTag(e).p===tag);L.sort((a,b)=>discScore(b)-discScore(a));
+ const G={};for(const e of L)(G[e.src]=G[e.src]||[]).push(e);const gs=Object.values(G),out=[];for(let i=0;out.length<L.length;i++)for(const g of gs)if(g[i])out.push(g[i]);return out};
+// --- ajout d'un encas : il rejoint les encas (cuisinés par fournée)
+discDraft=(f=>function(e,j){const d=f(e,j);if(e.k==="encas"){d.kind="encas";d.base=1;d.yieldN=e.y||1;d.yieldU=e.yU||"pièces";d.unitS=e.uS||"pièce";d.emoji=PEMOJI.includes(e.emo)?e.emo:"🍪";d.p="vege";d.s=""}return d})(discDraft);
+
+// --- séries de 10 propositions, renouvelées avec « Actualiser »
+const D_N=10;
+const dShuffle=a=>{for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+function discPool(tag){return discLeft().filter(e=>!(ui.dpend&&ui.dpend.has(e.id))&&(tag==="all"||discTag(e).p===tag))}
+function discMakeBatch(tag){const seen=ui.dseen||(ui.dseen=new Set());const pool=discPool(tag);let fresh=pool.filter(e=>!seen.has(e.id)),cycled=false;
+ if(!fresh.length&&pool.length){pool.forEach(e=>seen.delete(e.id));fresh=pool.slice();cycled=true}
+ const G={};for(const e of fresh){const p=discTag(e).p;(G[p]=G[p]||[]).push(e)}
+ for(const p in G){G[p].forEach(e=>e._r=discScore(e)+Math.random()*0.3);G[p].sort((a,b)=>b._r-a._r)}
+ const out=[];
+ if(tag==="all"){const cats=dShuffle(Object.keys(G).filter(p=>p!=="encas")),nM=D_N-2;
+  for(let i=0;out.length<nM;i++){let any=false;for(const p of cats){const g=G[p];if(g&&g[i]){out.push(g[i]);any=true;if(out.length>=nM)break}}if(!any)break}
+  (G.encas||[]).slice(0,D_N-out.length).forEach((e,k)=>out.splice(Math.min(out.length,3+k*4),0,e))}
+ else for(const p in G)out.push(...G[p].slice(0,D_N));
+ ui.dbatch=out.slice(0,D_N).map(e=>e.id);ui.dbatch.forEach(id=>seen.add(id));ui.dbatchTag=tag;ui.dstats={ok:0,no:0};ui.dlast=null;return cycled}
+function discDeck(){const dz=state.disc||{},mine=new Set((state.myrec||[]).map(x=>x.u).filter(Boolean));
+ return(ui.dbatch||[]).filter(id=>{const e=DISC_MAP[id];return e&&!dz[id]&&!mine.has(e.u)&&!(ui.dpend&&ui.dpend.has(id))})}
+const SW_I={x:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M6.5 6.5l11 11M17.5 6.5l-11 11"/></svg>',
+ ok:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12.5l5 5 10-11"/></svg>',
+ undo:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 7H4.5V2.5"/><path d="M4.8 7A8 8 0 1 1 4 13"/></svg>',
+ info:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.01"/></svg>',
+ ref:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11.5A8 8 0 0 0 6.3 6.3L4 8.5"/><path d="M4 4v4.5h4.5"/><path d="M4 12.5a8 8 0 0 0 13.7 5.2l2.3-2.2"/><path d="M20 20v-4.5h-4.5"/></svg>',
+ cards:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="3.5" width="12" height="17" rx="2.5"/><path d="M3.5 6.5v11M20.5 6.5v11"/></svg>',
+ list:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="3.5" y="4" width="7" height="7" rx="1.5"/><rect x="13.5" y="4" width="7" height="7" rx="1.5"/><rect x="3.5" y="13" width="7" height="7" rx="1.5"/><rect x="13.5" y="13" width="7" height="7" rx="1.5"/></svg>'};
+const tagLabel=e=>{const p=discTag(e).p;const t=DTAGS.find(x=>x[0]===p);return p==="encas"?"Encas":t?t[1]:"Plat"};
+function swCard(e,cls){const n=discNut(e),sn=e.k==="encas",per=sn?(e.uS||"pièce"):"portion";
+ const facts=[e.min?`${e.min} min`:"",n?`${n.est?"≈ ":""}${fmtInt(n.k)} kcal`:"",n?`${fmtG(r1(n.p))} g prot.`:""].filter(Boolean).join(" · ");
+ return`<article class="sw-card ${cls}${e.img?"":" noimg"}" data-id="${e.id}"${cls==="sw-top"?` tabindex="0" aria-label="${esc(e.t)} : ${esc(discBy(e))}. ${esc(facts)} par ${esc(per)}. Entrée pour les détails, flèche droite pour ajouter, flèche gauche pour écarter."`:` aria-hidden="true"`}>
+ <div class="sw-ph">${e.img?`<img src="${esc(e.img)}" alt="" draggable="false" loading="${cls==="sw-top"?"eager":"lazy"}" decoding="async" referrerpolicy="no-referrer">`:`<span class="sw-emo" aria-hidden="true">${sn?(e.emo||"🥚"):(D_EMO[discTag(e).p]||"🍽️")}</span>`}</div>
+ <span class="sw-stamp yes" aria-hidden="true">${SW_I.ok}Ajouter</span><span class="sw-stamp no" aria-hidden="true">${SW_I.x}Écarter</span>
+ ${e.v?`<span class="sw-vid">${DI.play}Vidéo</span>`:""}
+ <div class="sw-info"><p class="sw-kick"><span class="sw-tag${sn?" snack":""}">${esc(tagLabel(e))}</span><span class="sw-src">${esc(e.src)}</span></p>
+  <h3 class="sw-t">${esc(e.t)}</h3><p class="sw-by">${esc(e.a&&e.a!==e.src?e.a:"")}${e.r?` · ${DI.star}${fmtRate(e.r)}`:""}</p>
+  <p class="sw-facts">${facts}<small> par ${esc(per)}${sn&&e.y>1?` · ${e.y} ${esc(e.yU||"pièces")} par fournée`:""}</small></p></div></article>`}
+panelDisc=function(){const e=ui.dsel&&DISC_MAP[ui.dsel];if(e)return panelDiscOne(e);
+ const tag=ui.dtag||"all";if(!ui.dbatch||ui.dbatchTag!==tag)discMakeBatch(tag);
+ const all=discLeft(),cnt=t=>t==="all"?all.length:all.filter(x=>discTag(x).p===t).length,view=ui.dview||"swipe";
+ const deck=discDeck(),cur=deck[0]&&DISC_MAP[deck[0]],nxt=deck[1]&&DISC_MAP[deck[1]],st=ui.dstats||{ok:0,no:0},done=(ui.dbatch||[]).length-deck.length;
+ const dz=state.disc||{},nNo=Object.values(dz).filter(v=>v==="no").length,more=discPool(tag).filter(x=>!(ui.dseen&&ui.dseen.has(x.id))).length;
+ const nB=(ui.dbatch||[]).length,pos=Math.min(done+1,nB);
+ const head=`<div class="sw-head"><h2 class="pn-title">Découvrir</h2><p class="pn-help">De vraies recettes publiées, avec leur lien. Glisse à droite pour ajouter, à gauche pour écarter.</p>
+ <div class="chips dc-tags sw-tags" role="group" aria-label="Filtrer">${DTAGS.filter(([t])=>t==="all"||cnt(t)).map(([t,l])=>`<button type="button" class="chip" data-sw="tag|${t}" aria-pressed="${t===tag}">${l} <small>${cnt(t)}</small></button>`).join("")}</div>
+ <div class="sw-bar"><div class="seg sw-view" role="group" aria-label="Affichage"><button type="button" data-sw="view|swipe" aria-pressed="${view==="swipe"}" aria-label="Cartes">${SW_I.cards}<span>Cartes</span></button><button type="button" data-sw="view|list" aria-pressed="${view==="list"}" aria-label="Liste">${SW_I.list}<span>Liste</span></button></div>
+ <span class="sw-prog" aria-live="polite">${view==="swipe"&&cur?`${pos} sur ${nB}`:""}</span>
+ <button type="button" class="btn sw-ref" data-sw="refresh">${SW_I.ref}Actualiser</button></div></div>`;
+ const foot=`<p class="dc-foot">${st.ok||st.no?`Cette série : ${st.ok} ajoutée${st.ok>1?"s":""}, ${st.no} écartée${st.no>1?"s":""}. `:""}${nNo?`<button type="button" class="link" data-dsc="reset">Revoir les ${nNo} recette${nNo>1?"s":""} écartée${nNo>1?"s":""}</button>`:""}</p>`;
+ if(!all.length)return head+`<p class="dc-empty">Tu as trié toutes les recettes proposées. Les nouvelles arriveront avec les prochaines mises à jour.</p>`+foot;
+ if(view==="list")return head+(deck.length?`<div class="dc-grid">${deck.map(id=>discCard(DISC_MAP[id])).join("")}</div>`:swEnd(st,more))+foot;
+ return head+`<div class="sw" ${cur?"":"data-end=\"1\""}>
+ <div class="sw-stack">${cur?(nxt?swCard(nxt,"sw-next"):"")+swCard(cur,"sw-top"):swEnd(st,more)}</div>
+ ${cur?`<div class="sw-btns"><button type="button" class="sw-b sm" data-sw="undo"${ui.dlast&&!(ui.dpend&&ui.dpend.size)?"":" disabled"} aria-label="Annuler le dernier choix">${SW_I.undo}</button>
+ <button type="button" class="sw-b no" data-sw="no" aria-label="Écarter cette recette">${SW_I.x}</button>
+ <button type="button" class="sw-b yes" data-sw="yes" aria-label="Ajouter cette recette">${SW_I.ok}</button>
+ <button type="button" class="sw-b sm" data-sw="info" aria-label="Voir les ingrédients et la nutrition">${SW_I.info}</button></div>
+`:""}</div>`+foot};
+function swEnd(st,more){return`<div class="sw-end"><p class="sw-end-t">${st.ok||st.no?`Série terminée : ${st.ok} ajoutée${st.ok>1?"s":""}, ${st.no} écartée${st.no>1?"s":""}.`:"Plus rien dans cette série."}</p>
+ <p class="sw-end-s">${more?`Encore ${more} recette${more>1?"s":""} jamais vue${more>1?"s":""} dans cette catégorie.`:"Tu as vu toutes les propositions de cette catégorie : « Actualiser » reprend celles que tu n'as pas triées."}</p>
+ <button type="button" class="btn primary dc-big" data-sw="refresh">${SW_I.ref}Actualiser : nouvelles recettes</button></div>`}
+// --- décision (bouton, glissement ou clavier)
+let swQ=Promise.resolve();// les ajouts se font l'un après l'autre (lecture des étapes sur le site)
+const swReduced=()=>window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
+function swDecide(act,el){const deck=discDeck(),id=deck[0];if(!id)return;const e=DISC_MAP[id];el=el||document.querySelector(".sw-top");
+ const go=()=>{ui.dstats=ui.dstats||{ok:0,no:0};
+  if(act==="yes"){ui.dstats.ok++;ui.dlast={id,act};(ui.dpend=ui.dpend||new Set()).add(id);renderPanel();
+   const p=swQ.then(()=>discAdd(id,false));swQ=p.catch(()=>{});p.catch(()=>{}).finally(()=>{ui.dpend.delete(id);if(ui.panel==="decouvrir"&&!ui.dsel)renderPanel()})}
+  else{ui.dstats.no++;ui.dlast={id,act};state.disc={...(state.disc||{}),[id]:"no"};commit();renderPanel();try{renderDiscBanner()}catch(x){}toast("Écartée · ↺ pour annuler")}
+  const t=document.querySelector(".sw-top");if(t)try{t.focus({preventScroll:true})}catch(x){}};
+ if(el&&!swReduced()){const w=Math.max(innerWidth,600);el.style.transition="transform .3s cubic-bezier(.4,0,.9,.6), opacity .3s";
+  el.style.transform=`translate(${act==="yes"?w:-w}px,40px) rotate(${act==="yes"?22:-22}deg)`;el.style.opacity="0";el.style.setProperty("--"+act,1);setTimeout(go,260)}else go()}
+function swUndo(){const L=ui.dlast;if(!L)return;const e=DISC_MAP[L.id];ui.dlast=null;
+ if(L.act==="yes"&&e){const rec=(state.myrec||[]).find(x=>x.u===e.u);if(rec){state.myrec=state.myrec.filter(x=>x!==rec);regMyRecipes(state.myrec);for(const s of SLOTS)if(state.plan[s]===rec.id){delete state.plan[s];delete state.done[s]}delete state.snacks[rec.id]}if(ui.dstats)ui.dstats.ok=Math.max(0,ui.dstats.ok-1)}
+ else if(ui.dstats)ui.dstats.no=Math.max(0,ui.dstats.no-1);
+ const dz={...(state.disc||{})};delete dz[L.id];state.disc=dz;
+ if(ui.dbatch){ui.dbatch=ui.dbatch.filter(x=>x!==L.id);const deck=discDeck(),i=deck.length?ui.dbatch.indexOf(deck[0]):ui.dbatch.length;ui.dbatch.splice(i<0?ui.dbatch.length:i,0,L.id)}
+ commit();renderAll();renderPanel();toast(L.act==="yes"?"Ajout annulé":"Recette remise dans la pile")}
+document.addEventListener("click",ev=>{const t=ev.target.closest&&ev.target.closest("[data-sw]");if(!t||t.disabled)return;const[a,v]=t.dataset.sw.split("|");
+ if(a==="tag"){ui.dtag=v;ui.dbatch=null;renderPanel();return}
+ if(a==="view"){ui.dview=v==="list"?"list":"swipe";renderPanel();return}
+ if(a==="refresh"){const tag=ui.dtag||"all";const c=discMakeBatch(tag);renderPanel();const n=(ui.dbatch||[]).length;
+  toast(!n?"Rien de nouveau dans cette catégorie":c?"Tu as tout vu : voici celles que tu n'as pas encore triées":`${n} nouvelle${n>1?"s":""} proposition${n>1?"s":""}`);
+  const s=document.querySelector(".sw-stack,.dc-grid");if(s&&!swReduced())try{s.animate([{opacity:0,transform:"translateY(14px) scale(.98)"},{opacity:1,transform:"none"}],{duration:320,easing:"cubic-bezier(.2,.8,.2,1)"})}catch(x){}return}
+ if(a==="yes"||a==="no"){swDecide(a);return}
+ if(a==="undo"){swUndo();return}
+ if(a==="info"){const id=discDeck()[0];if(id){ui.dsel=id;ui.dtab="ing";renderPanel();try{window.scrollTo(0,0)}catch(x){}}return}});
+// la croix « Pas pour nous » et l'ajout depuis la fiche détaillée gardent la série à jour
+document.addEventListener("click",ev=>{const t=ev.target.closest&&ev.target.closest('[data-dsc^="add|"],[data-dsc^="no|"]');if(!t||t.disabled)return;const[a,id]=t.dataset.dsc.split("|");if(!DISC_MAP[id])return;
+ ui.dstats=ui.dstats||{ok:0,no:0};if(a==="add")ui.dstats.ok++;else ui.dstats.no++;ui.dlast={id,act:a==="add"?"yes":"no"}},true);
+// --- glisser la carte
+let SW=null;
+document.addEventListener("pointerdown",ev=>{const c=ev.target.closest&&ev.target.closest(".sw-top");if(!c||(ev.button!=null&&ev.button>0))return;
+ SW={el:c,x0:ev.clientX,y0:ev.clientY,t0:performance.now(),dx:0,dy:0,pid:ev.pointerId,moved:false};try{c.setPointerCapture(ev.pointerId)}catch(x){}});
+document.addEventListener("pointermove",ev=>{if(!SW||ev.pointerId!==SW.pid)return;SW.dx=ev.clientX-SW.x0;SW.dy=ev.clientY-SW.y0;
+ if(!SW.moved&&Math.hypot(SW.dx,SW.dy)>7){SW.moved=true;SW.el.classList.add("drag")}if(!SW.moved)return;
+ const r=Math.max(-1,Math.min(1,SW.dx/110));SW.el.style.transform=`translate(${SW.dx}px,${SW.dy*0.25}px) rotate(${swReduced()?0:SW.dx/18}deg)`;
+ SW.el.style.setProperty("--yes",Math.max(0,r).toFixed(2));SW.el.style.setProperty("--no",Math.max(0,-r).toFixed(2));
+ const n=document.querySelector(".sw-next");if(n)n.style.transform=`scale(${(0.94+0.06*Math.abs(r)).toFixed(3)}) translateY(${(10-10*Math.abs(r)).toFixed(1)}px)`});
+let swDragged=0;
+function swEndDrag(ev){if(!SW||ev.pointerId!==SW.pid)return;const s=SW;SW=null;s.el.classList.remove("drag");
+ if(!s.moved)return;swDragged=Date.now();
+ const v=s.dx/Math.max(1,performance.now()-s.t0);
+ if(s.dx>100||(v>0.55&&s.dx>40))swDecide("yes",s.el);else if(s.dx<-100||(v<-0.55&&s.dx<-40))swDecide("no",s.el);
+ else{s.el.style.transition="transform .28s cubic-bezier(.2,.9,.3,1.2)";s.el.style.transform="";s.el.style.setProperty("--yes",0);s.el.style.setProperty("--no",0);
+  const n=document.querySelector(".sw-next");if(n)n.style.transform="";setTimeout(()=>{s.el.style.transition=""},300)}}
+// toucher la carte (sans la faire glisser) ouvre les détails
+document.addEventListener("click",ev=>{const c=ev.target.closest&&ev.target.closest(".sw-top");if(!c)return;if(Date.now()-swDragged<450)return;
+ ui.dsel=c.dataset.id;ui.dtab="ing";renderPanel();try{window.scrollTo(0,0)}catch(x){}});
+document.addEventListener("pointerup",swEndDrag);document.addEventListener("pointercancel",swEndDrag);
+document.addEventListener("keydown",ev=>{if(ui.panel!=="decouvrir"||ui.dsel||(ui.dview||"swipe")!=="swipe")return;const t=ev.target;if(t&&/^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName))return;
+ if(ev.key==="ArrowRight"){ev.preventDefault();swDecide("yes")}else if(ev.key==="ArrowLeft"){ev.preventDefault();swDecide("no")}
+ else if((ev.key==="Enter"||ev.key===" ")&&t&&t.classList&&t.classList.contains("sw-top")){ev.preventDefault();ui.dsel=t.dataset.id;ui.dtab="ing";renderPanel()}});
+// --- bannière : recettes et encas
+renderDiscBanner=(f=>function(){f.apply(this,arguments);const el=document.getElementById("discBanner");if(!el||el.hidden)return;const L=discLeft(),nS=L.filter(e=>e.k==="encas").length;
+ const h=el.querySelector(".dc-banner h2"),p=el.querySelector(".dc-banner .dc-b-txt>p:not(.dc-kick)");
+ if(h)h.textContent=`${L.length-nS} recettes et ${nS} encas protéinés à découvrir`;if(p)p.textContent="HelloFresh, chefs, Santé Canada, Manger Bouger, WW… Glisse la carte pour ajouter ou écarter, « Actualiser » pour d'autres idées."})(renderDiscBanner);
+try{renderDiscBanner()}catch(e){}
 
 setTab(ui.tab);renderAll();initDb();sbStart();
 
