@@ -1417,6 +1417,96 @@ h1,h2,.sec-head h1,.block-title,.row-head h2,.m-body h2,.pn-title{color:var(--ti
 .sa-list li::before{content:"";position:absolute;left:13px;top:15px;width:9px;height:9px;border-radius:50%;background:var(--coral)}
 .sa-list b{display:block;font-family:var(--f-sub);font-weight:600}
 
+/* ================= v21 : contrastes AA, navigation par sections, encas de la semaine ================= */
+:root{
+ --cta:#C9473A;--cta-hover:#B23C30;--accent:#C9473A;--olive:#C9473A;--ochre:#C9473A;--ochre-hover:#B23C30;
+ --muted:#675A5C;--side-muted:#675A5C;--coral-ink:#B03A2E;--ochre-txt:#B03A2E;--side-on-ink:#A3362B;--danger:#B23A2E;
+ --ok:#2E7D46;--low:#9A5800;--high:#BF3A2C;--line-2:#E6C9C3;
+ --focus:#2F2A2B;
+}
+/* boutons et puces actives : texte blanc sur corail foncé (contraste ≥ 4,5:1) */
+.btn.primary,.sec-head .head-actions .btn.primary,.dc-go{background:var(--cta)!important;border-color:var(--cta)!important;color:#fff!important}
+.btn.primary:hover,.dc-go:hover{background:var(--cta-hover)!important;border-color:var(--cta-hover)!important}
+.chip[aria-pressed="true"],.seg button[aria-pressed="true"].on,.np-day.on,.sv-days button[aria-pressed="true"]{background:var(--cta);border-color:var(--cta);color:#fff}
+.btn{color:var(--ink)}
+.tbtn.big,.timer.done,.lvl,.dc-vid,.slot-done[aria-pressed="true"],.stepx .num,.fav[aria-pressed="true"]{background:var(--cta);border-color:var(--cta);color:#fff}
+.btn.ghost{color:var(--ink)}
+/* focus clavier bien visible partout */
+:focus-visible{outline:3px solid var(--focus)!important;outline-offset:2px!important;border-radius:10px}
+.btn:focus-visible,.chip:focus-visible{outline-offset:3px!important}
+[tabindex="-1"]:focus{outline:none}
+/* textes secondaires lisibles */
+.sub,.muted,.grid-meta,.day-date,.day-foot,.slot-meal,.cook-meta,.pn-help,.m-planned,.sv-mini{color:var(--muted)}
+/* barre du bas : libellés plus grands, onglet actif marqué */
+.bottombar button{font-size:.74rem!important;color:var(--side-muted)!important;min-height:54px}
+.bottombar button[aria-current="page"],.bottombar button.on,.bottombar button[aria-pressed="true"]{color:var(--side-on-ink)!important;font-weight:700}
+.toptabs button{color:var(--side-muted)}
+.toptabs button[aria-current="page"],.toptabs button.on{color:var(--side-on-ink)}
+
+/* bouton Réglages (en haut à droite, en bas du rail sur ordinateur) */
+.sync{display:inline-flex!important;align-items:center;gap:7px;border:1px solid var(--line-2)!important;background:var(--surface)!important;border-radius:999px;padding:7px 12px 7px 10px!important;color:var(--ink)!important;font-family:var(--f-sub);font-weight:600;font-size:.82rem!important;cursor:pointer;position:relative}
+.sync::before{display:none!important}
+.sync .sy-ic{width:18px;height:18px;flex:0 0 auto}
+.sync .sy-dot{width:8px;height:8px;border-radius:50%;background:#9C8F91;flex:0 0 auto}
+.sync[data-on="1"] .sy-dot{background:#2E9B57}
+@media (min-width:900px) and (max-width:1279.98px){.sync{width:52px;height:52px;padding:0!important;justify-content:center;margin:auto auto 6px!important}.sync .sy-t{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}.sync .sy-dot{position:absolute;top:10px;right:10px}}
+@media (min-width:1280px){.sync{margin:auto 16px 6px!important;justify-content:flex-start}}
+
+/* barre « Aller à » sous le titre de l'onglet */
+.jump{position:sticky;top:var(--abh,0px);z-index:15;display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;margin:2px -16px 6px;padding:10px 16px;background:color-mix(in srgb,var(--bg) 94%,transparent);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.jump::-webkit-scrollbar{display:none}
+.jump button{flex:0 0 auto;border:1px solid var(--line-2);background:var(--surface);color:var(--ink);border-radius:999px;padding:7px 14px;font-family:var(--f-sub);font-weight:600;font-size:.84rem;cursor:pointer;min-height:36px}
+.jump button:hover{border-color:var(--coral)}
+.jump button.go{background:var(--accent-soft);border-color:transparent;color:var(--coral-ink)}
+@media (min-width:900px){.jump{position:static;margin:4px 0 8px;padding:6px 0;background:none;backdrop-filter:none;-webkit-backdrop-filter:none}}
+.block-title,#tt,#suivi>*,#grid{scroll-margin-top:calc(var(--abh,0px) + 70px)}
+
+/* titres d'onglet plus courts */
+.sec-head .sub{max-width:62ch}
+
+/* fiche recette : origine des valeurs */
+.m-nsrc{margin:6px 0 0;font-size:.8rem;line-height:1.4;color:var(--muted)}
+
+/* encas de la semaine */
+.wk-snk{margin-top:10px}
+.ws-list{display:grid;gap:10px}
+@media (min-width:700px){.ws-list{grid-template-columns:repeat(auto-fill,minmax(320px,1fr))}}
+.ws-row{display:flex;flex-direction:column;gap:8px;background:var(--surface);border-radius:20px;box-shadow:var(--sh-1);padding:10px 12px 12px}
+.ws-open{display:flex;align-items:center;gap:12px;border:0;background:none;padding:0;text-align:left;color:inherit;cursor:pointer;font:inherit}
+.ws-open img,.ws-emo{width:52px;height:52px;border-radius:14px;object-fit:cover;flex:0 0 auto;background:var(--pink-2);display:grid;place-items:center;font-size:1.6rem}
+.ws-txt{display:flex;flex-direction:column;gap:2px;min-width:0}
+.ws-name{font-family:var(--f-sub);font-weight:600;font-size:.95rem;line-height:1.25}
+.ws-meta{font-size:.8rem;color:var(--muted)}
+.ws-bar{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.ws-bar .serv{margin:0;width:auto;gap:8px}
+.ws-bar .serv b{min-width:1.4em;text-align:center;font-variant-numeric:tabular-nums}
+.ws-bar .serv button{width:34px;height:34px}
+.ws-bar .btn{flex:0 0 auto;padding:7px 16px;font-size:.84rem}
+.ws-add{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:12px 0 0}
+.ws-add-l{font-size:.85rem;color:var(--muted);font-weight:600}
+.ws-empty{margin:4px 0 0}
+
+/* bannière Découvrir compacte sur téléphone */
+@media (max-width:699.98px){
+ .dc-banner{grid-template-columns:1fr auto;align-items:center;gap:4px 10px;padding:16px 16px 16px 18px;border-radius:22px}
+ .dc-banner::before{width:150px;height:150px;right:-56px;top:-64px}
+ .dc-b-txt{order:1}
+ .dc-b-art{order:2;height:auto;padding:0 2px 0 0;align-self:start}
+ .dc-b-ph{width:40px;height:40px;border-width:3px;margin-left:-16px}
+ .dc-b-ph.p1{width:46px;height:46px}
+ .dc-banner h2{font-size:1.08rem;margin:2px 0 4px}
+ .dc-banner p:not(.dc-kick){font-size:.84rem;margin:0 0 10px}
+ .dc-banner .dc-go{padding:8px 18px;font-size:.88rem}
+}
+/* contours des commandes visibles (≥ 3:1 sur le fond) */
+:root{--ctl-line:#B5857D}
+.btn:not(.primary):not(.dc-go),.chip:not([aria-pressed="true"]),.search,.pn-in,.fl input,.fl select,.fl textarea,.serv button,.jump button,.sync,.slot-done:not([aria-pressed="true"]){border-color:var(--ctl-line)!important}
+.dc-cta2 .btn{border-color:transparent!important}
+.search::placeholder,.pn-in::placeholder,.fl input::placeholder,.fl textarea::placeholder{color:var(--muted)}
+/* boutons d'en-tête côte à côte sur téléphone */
+@media (max-width:699.98px){.sec-head .head-actions{display:flex;flex-direction:row;flex-wrap:wrap;align-items:center;gap:8px}.sec-head .head-actions .btn{flex:0 1 auto;width:auto;min-width:0}
+ .dc-banner p:not(.dc-kick){display:none}.dc-banner h2{margin-bottom:10px}}
+
 </style>
 </head>
 <body>
@@ -1435,21 +1525,22 @@ h1,h2,.sec-head h1,.block-title,.row-head h2,.m-body h2,.pn-title{color:var(--ti
 
 <main class="wrap">
  <section id="tab-recettes" class="tab" hidden>
-  <div class="sec-head"><div><h1>Recettes</h1><p class="sub">Vos recettes, ajoutées une par une avec leurs ingrédients d'origine. Touche une recette pour la voir, choisir les portions et l'ajouter au planning.</p></div>
+  <div class="sec-head"><div><h1>Recettes</h1><p class="sub">Touche une recette pour la voir, choisir les portions et la planifier.</p></div>
    <div class="head-actions"><button type="button" class="btn primary" data-act="rec-add">+ Ajouter une recette</button><button type="button" class="btn" data-tab="semaine" id="planCount">0 / 14 repas planifiés</button></div></div>
+  <nav class="jump" aria-label="Aller à une partie de l'onglet"><button type="button" data-jump="allT">Toutes</button><button type="button" data-jump="suggest">Idées</button><button type="button" data-jump="snkT">Encas</button><button type="button" class="go" data-dsc="open">Découvrir</button></nav>
   <div id="pending" class="pending" hidden></div>
     <div id="discBanner" hidden></div>
     <div id="suggest" class="suggest"></div>
 
-  <h2 class="block-title all-title">Toutes les recettes</h2>
+  <h2 class="block-title all-title" id="allT">Toutes les recettes</h2>
   <div class="tools"><input id="q" class="search" type="search" placeholder="Rechercher une recette ou un ingrédient" aria-label="Rechercher une recette ou un ingrédient"></div>
   <div class="chips" id="chipsP" role="group" aria-label="Filtrer par protéine"></div>
   <div class="chips" id="chipsS" role="group" aria-label="Filtrer par féculent"></div>
   <div class="grid-meta"><span id="countR"></span></div>
   <div class="grid" id="grid"></div>
   <p id="emptyR" class="muted" hidden>Aucune recette ne correspond à ces filtres. Choisis « Toutes » ou change la recherche.</p>
-  <h2 class="block-title">Encas</h2>
-  <p class="sub">Tes recettes d'encas (cookies healthy…), cuisinées par fournée. Ce que tu grignotes se note dans l'onglet Suivi.</p>
+  <h2 class="block-title" id="snkT">Encas</h2>
+  <p class="sub">Cuisinés par fournée. Prévois-les dans l'onglet Semaine ; ce que tu grignotes se note dans Suivi.</p>
   <div class="grid" id="snkGrid"></div>
   <p id="snkEmpty" class="muted" hidden>Aucune recette d'encas pour l'instant : ajoute-en une avec « + Ajouter une recette ».</p>
  </section>
@@ -1457,14 +1548,19 @@ h1,h2,.sec-head h1,.block-title,.row-head h2,.m-body h2,.pn-title{color:var(--ti
  <section id="tab-semaine" class="tab" hidden>
   <div class="sec-head"><div><h1 id="weekTitle">Semaine</h1><p class="sub" id="weekSub"></p></div>
    <div class="head-actions"><button type="button" class="btn primary" data-act="fill-goal"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 3.5l1.8 4.9 4.9 1.8-4.9 1.8L11 16.9l-1.8-4.9-4.9-1.8 4.9-1.8z"/><path d="M18.5 14.5l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8z"/></svg>Compléter selon nos objectifs</button><button type="button" class="btn ghost" data-act="new-week">Vider le planning</button></div></div>
+  <nav class="jump" aria-label="Aller à une partie de l'onglet"><button type="button" data-jump="tt">Planning</button><button type="button" data-jump="wkSnkT">Encas</button><button type="button" data-jump="cookT">À cuisiner</button></nav>
   <div class="tt" id="tt"></div>
-  <h2 class="block-title">À cuisiner</h2>
-  <p class="sub">Les repas pas encore cuisinés, regroupés par recette. Une recette prévue plusieurs fois se cuisine en une fois : touche-la pour lancer le batch.</p>
+  <h2 class="block-title" id="wkSnkT">Encas de la semaine</h2>
+  <p class="sub">Les fournées à préparer cette semaine : leurs ingrédients s'ajoutent à la liste de courses.</p>
+  <div class="wk-snk" id="wkSnk"></div>
+  <h2 class="block-title" id="cookT">À cuisiner</h2>
+  <p class="sub">Regroupés par recette : une recette prévue plusieurs fois se cuisine en une fois.</p>
   <div class="cooklist" id="cookList"></div>
  </section>
 
  <section id="tab-suivi" class="tab" hidden>
   <div class="sec-head"><div><h1>Suivi</h1></div></div>
+  <nav class="jump" aria-label="Aller à une partie de l'onglet"><button type="button" data-jump="suivi">Aujourd'hui</button><button type="button" data-jump="whyCard">Score</button><button type="button" data-jump="h:Tendance">Tendance</button><button type="button" data-jump="h:Poids">Poids</button><button type="button" data-jump="h:Progression">Progression</button><button type="button" data-jump="h:Besoins">Besoins</button></nav>
   <div id="suivi"></div>
  </section>
 
@@ -1508,7 +1604,7 @@ h1,h2,.sec-head h1,.block-title,.row-head h2,.m-body h2,.pn-title{color:var(--ti
 </div>
 <div id="timers" class="timers" hidden aria-live="polite"></div>
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
-<script>window.NS_CONFIG={"hosted": true, "sbUrl": "https://zjsawjudrdneeptxbskd.supabase.co", "sbKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpqc2F3anVkcmRuZWVwdHhic2tkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1NjUxMjcsImV4cCI6MjEwNzE0MTEyN30.Wn1bUy--5O78gGICTOyEGbnT6B-SdoNCG_XxBBaaUIY", "build": "20261012195111"}</script>
+<script>window.NS_CONFIG={"hosted": true, "sbUrl": "https://zjsawjudrdneeptxbskd.supabase.co", "sbKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpqc2F3anVkcmRuZWVwdHhic2tkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1NjUxMjcsImV4cCI6MjEwNzE0MTEyN30.Wn1bUy--5O78gGICTOyEGbnT6B-SdoNCG_XxBBaaUIY", "build": "20261012204321"}</script>
 <script>
 const AISLES={L:"Fruits & légumes",H:"Herbes fraîches",V:"Viandes & poissons",C:"Crèmerie & œufs",S:"Surgelés",F:"Féculents",B:"Conserves",E:"Épices & condiments"};
 const AISLE_ORDER=["L","H","V","C","S","F","B","E"];
@@ -2870,6 +2966,10 @@ normalize=function(d){const s=normalizeV20(d);s.edits={};const src=d&&typeof d==
  for(const id in src){if(!RMAP[id]||RMAP[id].my)continue;const c=cleanEdit(src[id]);if(c)s.edits[id]=c}
  applyEdits(s.edits,s.subs);return s};
 
+// ================= v21 (avant l'état) : valeurs nutritionnelles données par la source =================
+// Les recettes dont le site d'origine publie les cinq valeurs les gardent ; toutes les autres sont recalculées ingrédient par ingrédient.
+const SRC_NUT={};for(const r of RECIPES)if(r.nut&&!r.nut.est&&r.nut.k>0&&r.nut.f!=null&&r.nut.c!=null&&r.nut.fi!=null)SRC_NUT[r.id]={k:r.nut.k,p:r.nut.p,f:r.nut.f,c:r.nut.c,fi:r.nut.fi};
+
 // ---------- état ----------
 const dayOf=k=>k.split("-")[0];
 function needsFor(plan,done,serv){const m={};for(const k of SLOTS){if(done&&done[k])continue;const r=RMAP[plan[k]];if(!r)continue;const fct=((serv&&serv[k])||defServ(k))/(r.base||2);for(const[id,q]of r.i){const e=m[id]||(m[id]={id,q:0,recs:[]});if(typeof q==="number")e.q+=q*fct;const s=short(r);if(!e.recs.includes(s))e.recs.push(s)}}return m}
@@ -2965,7 +3065,7 @@ function renderWeek(){
    const sv=servOf(key);return`<div class="slot${dn?" is-done":""}${sv!==defServ(key)?" custom":""}"><button type="button" class="slot-open" data-open="${rid}" data-key="${key}"><img src="${imgSrc(r)}" alt="" loading="lazy"><span class="slot-txt"><span class="slot-meal">${ml}${cantLabel(key)}</span><span class="slot-name">${esc(short(r))}</span>${cnt[rid]>1?`<span class="slot-batch">Batch ×${cnt[rid]}</span>`:""}</span></button><div class="slot-bar"><span class="serv" role="group" aria-label="Portions pour le ${esc(slotLabel(key))}"><button type="button" data-serv="${key}" data-dir="-1" aria-label="Une portion de moins" ${sv<=1?"disabled":""}>−</button><span class="serv-n" title="${sv} portion${sv>1?"s":""}">${sv} p.</span><button type="button" data-serv="${key}" data-dir="1" aria-label="Une portion de plus" ${sv>=6?"disabled":""}>+</button></span><button type="button" class="slot-done" data-done="${key}" aria-pressed="${dn}" title="${dn?"Annuler : remettre les ingrédients dans le stock":"Marquer comme cuisiné : retire les ingrédients du stock"}">${dn?"✓ Cuisiné":"Cuisiné ?"}</button></div><button type="button" class="slot-rm" data-rm="${key}" aria-label="Retirer ${esc(short(r))} du ${esc(slotLabel(key))}">×</button></div>`}).join("")}
   <div class="day-foot">${rs.length?`≈ ${k} kcal, ${p} g de protéines`:"Rien de prévu"}</div></div>`}).join("");
  const n=filled();
- document.getElementById("weekSub").textContent=`Du ${fmtDate(dateOf(0))} au ${fmtDate(dateOf(6))}. ${n} repas sur 14 planifiés`+(days?`, environ ${Math.round(tot/days)} kcal par jour et par personne.`:".")+` Règle les portions de chaque repas avec − et + : les courses et le stock s'adaptent. Après chaque repas, touche « Cuisiné ? » pour retirer ses ingrédients du stock.`;
+ document.getElementById("weekSub").textContent=`Du ${fmtDate(dateOf(0))} au ${fmtDate(dateOf(6))} · ${n} repas sur 14`+(days?` · ≈ ${fmtInt(Math.round(tot/days))} kcal par jour et par personne.`:".");
  const by={};SLOTS.forEach(k=>{const id=state.plan[k];if(id&&!state.done[k])(by[id]=by[id]||[]).push(k)});
  const ids=Object.keys(by);
  document.getElementById("cookList").innerHTML=ids.length?ids.map(id=>{const r=RMAP[id],ks=by[id];return`<button type="button" class="cook" data-open="${id}" data-batch="${ks.reduce((n,k)=>n+servOf(k),0)}"><img src="${imgSrc(r)}" alt=""><span class="cook-txt"><span class="cook-name">${esc(short(r))}</span><span class="cook-meta">${ks.map(k=>slotLabel(k)+(servOf(k)!==2?" ("+servOf(k)+")":"")).join(", ")}</span></span><span class="cook-qty">${ks.reduce((n,k)=>n+servOf(k),0)} portions${ks.length>1?`<small>batch · ${ks.length} repas</small>`:""}</span></button>`}).join(""):`<p class="muted">${filled()?"Tout est cuisiné pour cette semaine.":"Ajoute des recettes au planning pour les voir ici."}</p>`;
@@ -3027,8 +3127,8 @@ function renderModal(){
  keepAwake(false);
  const used=usage(r.id),fresh=r.i.filter(x=>!isStaple(x[0])),pantry=r.i.filter(x=>isStaple(x[0]));const L=linkOf(r);const B=batchOf(r.id),isBatch=B.ks.length>1,one=ui.modalSlot?servOf(ui.modalSlot):(ui.modalBatch?2:sv);
  const batchCard=isBatch?`<div class="batch-card"><p class="bc-title">Batch cooking : ${B.ks.length} repas cette semaine</p><p class="bc-txt">${B.ks.map(k=>`${esc(slotLabel(k))} <b>${servOf(k)} p.</b>`).join(" · ")}</p><div class="bc-actions"><button type="button" class="btn primary" data-act="cook-batch">Tout cuisiner : ${B.n} portions</button><button type="button" class="btn ghost" data-act="cook-one">Juste ${one} portion${one>1?"s":""}</button></div><p class="bc-note">Les quantités et les étapes passent à ${B.n} portions, puis tu répartis en ${B.ks.length} boîtes. À la fin, les ${B.ks.length} repas sont marqués cuisinés.</p></div>`:"";
- const snackPlanned=r.snack?`<p class="m-planned">${state.snacks[r.id]?`Dans ta réserve de la semaine : ${state.snacks[r.id]} fournée${state.snacks[r.id]>1?"s":""}.`:"Pas encore dans ta réserve de la semaine."}</p>`:"";
- const primary=r.snack?((state.snacks[r.id]||0)===sv?`<button type="button" class="btn" data-act="snk-unset">✓ Dans ma réserve · retirer</button>`:`<button type="button" class="btn" data-act="snk-set">Mettre ${sv} fournée${sv>1?"s":""} dans ma réserve</button>`):ui.pending?`<button type="button" class="btn primary" data-act="put-pending">Mettre au menu ${esc(slotLabel(ui.pending))}</button><button type="button" class="btn ghost" data-act="toggle-picker">Autre créneau</button>`:`<button type="button" class="btn" data-act="toggle-picker" aria-expanded="${ui.picker}">${ui.picker?"Fermer le planning":"Ajouter au planning"}</button>`;
+ const snackPlanned=r.snack?`<p class="m-planned">${state.snacks[r.id]?`Prévu cette semaine : ${state.snacks[r.id]} fournée${state.snacks[r.id]>1?"s":""}, ingrédients ajoutés aux courses.`:"Pas encore prévu cette semaine."}</p>`:"";
+ const primary=r.snack?((state.snacks[r.id]||0)===sv?`<button type="button" class="btn" data-act="snk-unset">✓ Prévu cette semaine · retirer</button>`:`<button type="button" class="btn" data-act="snk-set">Prévoir ${sv} fournée${sv>1?"s":""} cette semaine</button>`):ui.pending?`<button type="button" class="btn primary" data-act="put-pending">Mettre au menu ${esc(slotLabel(ui.pending))}</button><button type="button" class="btn ghost" data-act="toggle-picker">Autre créneau</button>`:`<button type="button" class="btn" data-act="toggle-picker" aria-expanded="${ui.picker}">${ui.picker?"Fermer le planning":"Ajouter au planning"}</button>`;
  const picker=ui.picker?`<div class="picker"><p class="picker-help">Touche un créneau pour y mettre cette recette, touche-le à nouveau pour l'enlever.</p><div class="picker-grid"><span></span><span class="ph">Midi</span><span class="ph">Soir</span>${DAYS.map(([d,l],di)=>`<span class="pd">${di===0?"Aujourd'hui":di===1?"Demain":l+" "+dateFromYmd(d).getDate()}</span>`+MEALS.map(([m])=>{const k=d+"-"+m,cur=state.plan[k];const mine=cur===r.id;return`<button type="button" class="pc${mine?" mine":cur?" taken":""}" data-slot="${k}" aria-pressed="${mine}">${mine?"Prévu":cur?esc(short(RMAP[cur])):"Libre"}</button>`}).join("")).join("")}</div></div>`:"";
  const stockPill=(id,q)=>{const c=eqCover(id,isStaple(id)||typeof q!=="number"?null:q*fct*0.8);return c.ok?` <span class="pill ok">${c.via.length?"en stock : "+esc(eqNames(c.via)):"en stock"}</span>`:""};
  const servNote=r.snack?"Fournées":ui.modalSlot?`Portions du ${esc(slotLabel(ui.modalSlot))}`:ui.modalBatch?"Total des repas prévus":"Portions";
@@ -3109,8 +3209,8 @@ document.addEventListener("click",e=>{
  else if(a==="cook-finish"){const r=RMAP[ui.modal];const ks=(ui.cookKeys||[]).filter(k=>state.plan[k]===ui.modal&&!state.done[k]);ks.forEach(k=>{const v=servOf(k);state.done[k]=v;applyRecipe(r,-1,v)});ui.cook=null;ui.cookKeys=[];commit();renderAll();window.scrollTo(0,0);toast(ks.length>1?"Batch terminé : "+ks.length+" repas cuisinés, ingrédients retirés du stock":"Bon appétit ! Ingrédients retirés du stock")}
  else if(a==="cook-next"){ui.cook++;renderModal();window.scrollTo(0,0)}
  else if(a==="cook-prev"){ui.cook=Math.max(0,ui.cook-1);renderModal();window.scrollTo(0,0)}
- else if(a==="snk-set"){state.snacks[ui.modal]=curServ();commit();renderAll();toast("Ajouté à ta réserve d'encas")}
- else if(a==="snk-unset"){delete state.snacks[ui.modal];commit();renderAll();toast("Retiré de ta réserve")}
+ else if(a==="snk-set"){state.snacks[ui.modal]=curServ();commit();renderAll();toast("Prévu cette semaine : ingrédients ajoutés aux courses")}
+ else if(a==="snk-unset"){delete state.snacks[ui.modal];commit();renderAll();toast("Retiré de la semaine")}
  else if(a==="cook-finish-snack"){const r=RMAP[ui.modal],sv=curServ();applyRecipe(r,-1,sv);if(state.snacks[r.id]){const v=state.snacks[r.id]-sv;if(v>0)state.snacks[r.id]=v;else delete state.snacks[r.id]}ui.cook=null;commit();renderAll();window.scrollTo(0,0);toast("Fournée prête ! Ingrédients retirés du stock")}
  else if(a==="pform-open"){ui.pform=true;renderSnacks();const f=document.querySelector('#pform input[name="n"]');if(f)try{f.focus()}catch(e){}}
  else if(a==="pform-cancel"){ui.pform=false;renderSnacks()}
@@ -3425,7 +3525,7 @@ function renderStock(){
  const cov={};const cv=id=>cov[id]||(cov[id]=eqCover(id,isStaple(id)?null:m[id].q));const st=id=>{const n=m[id];if(!n)return"";const c=cv(id);if(c.ok)return"ok";return c.q>0?"part":"miss"};
  const nMiss=needIds.filter(id=>st(id)!=="ok").length;
  document.querySelectorAll("[data-sf]").forEach(b=>{b.setAttribute("aria-pressed",b.dataset.sf===sf);if(b.dataset.sf==="have")b.textContent=`🏠 Maison · ${haveIds.length}`;if(b.dataset.sf==="week")b.textContent=nMiss?`🍽️ Repas · ${nMiss}`:"🍽️ Repas ✓"});
- document.getElementById("stockSub").textContent=sf==="have"?"Ce que vous avez à la maison, rangé par endroit. Ajuste avec − et + ; « Cuisiné ? » retire automatiquement ce que vous utilisez."
+ document.getElementById("stockSub").textContent=sf==="have"?"Ce que vous avez à la maison, rangé par endroit."
   :sf==="week"?"Tout ce qu'il faut pour les repas prévus ces 7 prochains jours, et où vous en êtes."
   :"Ajoute ce que tu as à la maison : cherche un ingrédient"+(HOSTED?" ou scanne un produit.":".");
  const qi=document.getElementById("stockQ");if(qi){qi.hidden=sf==="week";qi.placeholder=sf==="add"?"Chercher un ingrédient à ajouter":"Chercher dans le stock"}
@@ -4821,6 +4921,326 @@ const SANO_ABOUT=`<div class="pn-card sano-about"><div class="sa-head"><img clas
  <ul class="sa-list"><li><b>Recettes & inspiration</b> Des idées de plats adaptés à vos objectifs.</li><li><b>Planning de la semaine</b> Vos menus organisés en quelques clics.</li><li><b>Stock & liste de courses</b> Ne gâchez plus rien : la liste s'adapte à ce qu'il vous reste.</li><li><b>Suivi nutrition & poids</b> Un œil sur vos apports et votre progression, en toute bienveillance.</li></ul></div>`;
 const panelDataV20=panelData;
 panelData=function(){return panelDataV20.apply(this,arguments)+SANO_ABOUT};
+
+// ================= v21 : calcul nutritionnel précis, ingrédient par ingrédient =================
+// Valeurs pour 100 g de la partie comestible, aliment cru sauf conserves (égouttées) et produits prêts à l'emploi :
+// [kcal, protéines, lipides, glucides, fibres]. Source : Anses, table Ciqual 2025 ; à défaut, moyenne des étiquettes du commerce (marquées *).
+const NUTX={
+ // viandes, poissons
+ poulet:[110,23.4,1.5,0,0],hf_filet_poulet:[110,23.4,1.5,0,0],hf_blanc_poulet:[110,23.4,1.5,0,0],dinde_esc:[108,23.7,1.5,0,0],dinde_hachee:[125,21,4.5,0,0]/* */,
+ boeuf_hache:[130,21.9,4.6,0.3,0],boeuf_emince:[118,23.5,2.5,0.4,0],et_boeuf:[215,20.2,14.8,0.5,0],porc:[123,21.2,4.1,0.4,0],agneau:[128,20,5.1,0.5,0],
+ jambon:[115,20.3,3.7,0.1,0.3],hf_jambon:[115,20.3,3.7,0.1,0.3],hf_chorizo:[425,23.5,36.1,1.2,0.9],
+ saumon:[193,20.5,12.4,0,0.1],qt_saumon:[193,20.5,12.4,0,0.1],saumon_fume:[184,22.2,10.5,0.1,0.3],truite:[133,19.3,6.2,0,0],maquereau:[198,18.1,13.5,0.9,0],
+ cabillaud:[77,18.1,0.6,0,0.1],thon_frais:[112,25,0.9,0,0],crevettes:[92,18.3,1,2.6,0.1],fruits_mer:[103,19.5,1.7,2.5,0],
+ thon:[115,26,1.2,0,0]/* */,hf_thon:[115,26,1.2,0,0],qt_thon:[115,26,1.2,0,0],
+ // œufs, laitiers, tofu
+ oeufs:[140,12.8,9.8,0.1,0],sj_oeuf:[140,12.8,9.8,0.1,0],ff_blancs:[48,10.9,0.2,0.7,0],qt_jaune:[307,15.5,26.7,1.1,0],
+ tofu:[147,13.4,8.5,2.9,0.2],qt_hache_soja:[143,11.5,5.8,7,5.2],
+ yaourt:[54,10.3,0.1,3,0]/* */,sj_yaourt:[60,9.8,1,3.2,0]/* */,hf_yaourt_grec:[103,3,8.2,3.7,0.1],fromage_blanc:[48,7.3,0.1,4.2,0],
+ fromage_frais:[133,10.8,7.5,5.1,0.2],lait:[47,3.4,1.5,4.8,0],hf_lait:[47,3.4,1.5,4.8,0],qt_lait:[47,3.4,1.5,4.8,0],
+ feta:[180,17,12,1,0]/* feta allégée */,qt_feta:[280,16.3,21.8,0.8,0],hf_fromage_grec:[273,15.4,22.6,1.2,0],
+ parmesan:[411,31.1,31,1.1,0],hf_parmigiano:[411,31.1,31,1.1,0],mm_parmesan:[411,31.1,31,1.1,0],
+ mozzarella:[165,18.5,9.5,1,0]/* light */,hf_mozza_rapee:[290,23,21.5,1.5,0]/* */,ff_mozza:[230,25,14,1.5,0]/* */,
+ emmental:[368,27.6,28.2,0.6,0],hf_gouda:[369,24.7,30.2,0,0],chevre:[194,12,15.2,2.5,0],halloumi:[321,21.5,25,1.8,0]/* */,hf_ricotta:[165,8.1,10.7,4.1,0],
+ houmous:[258,8.1,19.9,9,5.2],hf_beurre:[753,0.6,83,0.7,0],et_beurre:[753,0.6,83,0.7,0],
+ // féculents
+ riz:[351,7.1,0.6,78.4,1.1],riz_complet:[350,7,2.8,71.4,5],pates:[353,11.8,2.2,67.6,6.1],orzo:[364,12,1.6,72.7,2.9],hf_orzo:[364,12,1.6,72.7,2.9],
+ lasagnes:[364,12,1.6,72.7,2.9],ff_lasagnes:[364,12,1.6,72.7,2.9],hf_lasagne_fraiche:[280,11,2.5,52,2.2]/* */,
+ boulgour:[347,11.7,1.4,65.8,10.5],semoule:[342,12,2,64,7.5]/* complète */,quinoa:[358,13.2,6.1,58.1,7],nouilles:[365,7.4,1,80.5,1.2],
+ lentilles:[327,25.1,1.8,44.5,16.4],lentilles_corail:[328,27.7,0.8,44.9,15.4],
+ tortillas:[305,9,7,48,6]/* complètes */,hf_tortillas:[320,8,7.5,53,2.9],pain:[234,8.7,1.7,41.2,7.3],qt_pain_noir:[213,5.7,0.9,39.5,8.2],
+ pain_burger:[296,8.6,6.2,48.2,5.2],pita:[245,9,1.7,45,6]/* complet */,galettes_riz:[340,3,0.5,80,1]/* feuilles de riz */,qt_galettes:[161,5.3,1.7,30.5,0.5],
+ qt_pate_brisee:[390,5.9,20,45,2],panko:[365,9.4,1.6,74.3,5.4],hf_panko:[365,9.4,1.6,74.3,5.4],qt_chapelure:[365,9.4,1.6,74.3,5.4],chapelure_crispy:[365,9.4,1.6,74.3,5.4],
+ hf_farine:[350,9,1,73.7,3.2],sj_farine_orge:[337,10.5,1.6,64.4,10.1],sj_sucre:[399,0,0,99.7,0],sj_cacao:[387,22.4,20.6,11.6,29.5],sj_chocolat:[591,10.4,46.3,26.9,12.8],
+ sj_proteine:[380,74,6,8,2]/* */,sj_levure:[108,0.1,0,26.9,0],
+ pdt:[80,2,0.1,16.2,2.2],hf_pdt:[80,2,0.1,16.2,2.2],hf_grenailles:[80,2,0.1,16.2,2.2],patate:[81,1.6,0.1,17.1,3],
+ // légumes, fruits
+ oignon:[36,1.2,0.2,6.4,2.6],hf_oignon:[36,1.2,0.2,6.4,2.6],oignon_rouge:[35,1.3,0.4,5.6,2.5],echalote:[62,1.8,0.2,12.2,2.6],hf_echalote:[62,1.8,0.2,12.2,2.6],
+ oignon_nouveau:[28,1.1,0.3,3.6,3.1],ail:[109,5.3,0.2,18.6,5.8],hf_gousse_ail:[109,5.3,0.2,18.6,5.8],hf_tete_ail:[109,5.3,0.2,18.6,5.8],gingembre:[33,1.1,1.1,3.4,2.7],
+ citron:[29,0.3,0.2,2.5,0.3],hf_citron:[29,0.3,0.2,2.5,0.3],citron_vert:[25,0.4,0.1,1.7,0.4],
+ carotte:[30,0.8,0.2,5.2,2.9],courgette:[17,1.2,0.3,1.8,1],aubergine:[23,1,0.2,2.7,3],poivron:[34,1.1,0.2,6,3.2],hf_poivrons_grilles:[30,1,0.5,4.5,1.8],
+ brocoli:[32,2.9,0.4,2.1,2.6],hf_broccolini:[32,2.9,0.4,2.1,2.6],haricots_verts:[32,1.8,0.2,4.1,2.7],epinards:[28,2.7,0.4,2,2.5],hf_epinards:[28,2.7,0.4,2,2.5],
+ champignons:[21,2.1,0.4,1.8,1],tomates_cerises:[32,1.3,0.2,5.6,1.2],tomate:[19,0.6,0.2,3.7,1],concombre:[13,0.7,0.1,1.9,0.6],hf_mini_concombre:[13,0.7,0.1,1.9,0.6],
+ salade:[17,1.5,0.2,1.6,1.4],hf_salade:[14,1,0.1,1.5,1.3],hf_salade_sachet:[17,1.5,0.2,1.6,1.4],roquette:[28,2.6,0.7,2.1,1.6],
+ avocat:[203,1.6,20.6,0,3.6],poireau:[30,1.5,0.3,4.5,1.8],pois_gourmands:[43,2.8,0.2,6.2,2.6],petits_pois:[78,5.9,0.4,9.5,6.5],edamame:[121,11.9,5.2,3.7,5.2],
+ chou_fleur:[25,1.8,0.7,2.1,2.2],chou:[30,1.4,0.4,3.7,3],chou_rouge:[26,1.1,0.2,4.3,2.8],chou_rave:[25,1.7,0.1,2.4,3.6],choux_bruxelles:[44,3.4,0.3,4.6,3.8],hf_carotte_choux:[28,1,0.2,4.6,2.9],
+ asperges:[25,2.5,0.3,2,2.1],fenouil:[18,1,0.2,2.6,2.6],betterave:[42,1.4,0.4,7.1,2.5],butternut:[30,1,0.1,5.4,2],qt_butternut:[30,1,0.1,5.4,2],endive:[17,1.2,0.2,2.8,1.1],
+ celeri:[26,1.4,0.2,4,4.5],qt_celeri:[15,0.6,0.2,2.4,2.2],artichauts:[23,1.2,0.2,3,2.6],mais:[105,2.7,1.7,18.3,3.1],
+ ananas:[52,0.2,0.2,11.7,1.2],kaki:[66,0.9,0.1,14.3,3.4],pomme:[54,0.2,0.2,11.6,1.4],orange:[42,0.8,0.2,8,2.7],kiwi:[61,0.9,0.6,11,2.4],mangue:[71,0.6,0.2,14.3,1.6],
+ // herbes fraîches
+ persil:[42,3,0.6,4.1,4.3],ww_persil:[42,3,0.6,4.1,4.3],hf_persil:[42,3,0.6,4.1,4.3],et_persil:[42,3,0.6,4.1,4.3],coriandre:[22,2.1,0.5,0.9,2.8],qt_coriandre:[22,2.1,0.5,0.9,2.8],
+ aneth:[48,3.9,1.1,3.9,3.5],hf_aneth:[48,3.9,1.1,3.9,3.5],qt_aneth:[48,3.9,1.1,3.9,3.5],menthe:[58,3.5,0.8,5.3,7.4],ciboulette:[31,2.5,0.5,2.9,2.5],basilic:[35,3.1,0.6,3.4,1.6],
+ et_estragon:[44,3.8,0,4.1,6.2],et_thym:[107,5.6,1.7,10.5,14],qt_bouquet_garni:[0,0,0,0,0],
+ // conserves
+ pois_chiches:[122,6.7,2.7,15,5.5],ww_pois_chiches:[122,6.7,2.7,15,5.5],haricots_rouges:[108,8.3,1,13,7],haricots_blancs:[86,5.9,0.5,10.9,7],
+ tomates_concassees:[22,0.8,0.2,3.1,1.9],ww_tomates:[22,0.8,0.2,3.1,1.9],ff_pulpe:[23,1.2,0.2,3.6,1.8],qt_puree_tomates:[32,1.4,0.2,5.3,1.5]/* */,
+ lait_coco:[75,0.7,7.2,2,0]/* light */,cornichons:[16,1.1,0.3,0.8,1.5],olives:[182,1.4,18,0.3,6.5],hf_olives_kalamata:[240,1.6,24,2.5,3.5]/* */,
+ concentre:[99,4.4,0.5,17.1,4.2],hf_concentre:[99,4.4,0.5,17.1,4.2],
+ // épicerie, condiments
+ huile:[899,0,99.9,0,0],et_huile_tournesol:[900,0,100,0,0],qt_colza:[900,0,100,0,0],mm_huile_pate:[900,0,100,0,0],
+ sel:[0,0,0,0,0],sj_sel_fin:[0,0,0,0,0],sj_fleur_sel:[0,0,0,0,0],mm_eau:[0,0,0,0,0],
+ soja:[40,7.2,0.2,1.7,0.9],miel:[331,0.7,0,82.1,0],moutarde:[151,6.9,11.2,4.3,0.5],
+ vinaigre:[92,0.7,0.3,18,0.8],hf_balsamique:[92,0.7,0.3,18,0.8],vinaigre_cidre:[19,0,0,0.9,0],hf_vinaigre:[22,0,0.1,0.9,0],qt_xeres:[22,0,0.1,0.9,0],qt_vinaigre:[22,0,0.1,0.9,0],
+ pesto:[370,3.9,35.4,6.6,2.5],hf_creme_basilic:[300,3,30,5,1]/* */,hf_aioli:[480,1.1,50.2,5.4,0.2],harissa:[76,2.7,2.9,7.3,5.1],
+ sesame:[606,17.7,49.7,12.8,11.8],tahini:[631,17.7,53.4,13.8,7],cajou:[600,18,47,26,3.3],graines:[620,25,52,8,6],beurre_cacahuete:[643,22.2,51.4,17.3,5],
+ bouillon_volaille:[193,13,8,17,0.5],hf_bouillon_volaille:[193,13,8,17,0.5],bouillon_legumes:[287,9.7,16,26,0.2],bouillon_boeuf:[232,10.2,13.3,18,0],et_fond:[232,10.2,13.3,18,0],
+ qt_vin_blanc:[55,0.2,0,0.2,0],
+ cumin:[427,17.8,22.3,33.7,10.5],paprika:[318,14.1,12.9,18.8,34.9],curry:[301,14.5,14,2.6,53.2],curcuma:[291,9.7,3.2,44.4,22.7],garam:[330,13,15,35,30]/* */,ras:[330,13,15,35,30]/* */,
+ hf_epices_mex:[330,13,13,35,30]/* */,piment:[376,12,17.3,29.4,27.2],herbes:[283,11.5,7.2,23.1,40.1],qt_herbes_provence:[283,11.5,7.2,23.1,40.1],
+ origan:[265,9,4.3,26.4,42.5],hf_origan:[265,9,4.3,26.4,42.5],thym:[285,9.1,7.4,26.9,37],hf_thym:[285,9.1,7.4,26.9,37],ff_basilic:[244,23,4.1,10.1,37.7],ff_muscade:[506,5.8,36.3,27.4,20.8],
+ // aliments sans identifiant maison, reconnus par leur nom (recettes ajoutées, brouillons)
+ _coco:[199,1.9,19.2,4.3,0.8],_creme:[293,2.2,30,3.7,0],_creme_legere:[189,2.8,17.6,4.3,0],_beurre:[753,0.6,83,0.7,0],_sucre:[399,0,0,99.7,0],
+ _avoine:[367,13.5,7,58.7,10.1],_farine:[350,9,1,73.7,3.2],_maizena:[350,0.3,0.1,87,0.9],_pates:[364,12,1.6,72.7,2.9],_semoule:[350,11.8,1.3,69.8,3.7],
+ _riz_rond:[350,6.5,0.6,78,1.2],_lait_entier:[64,3.4,3.5,4.8,0],_lait_ecreme:[34,3.6,0,5,0],_boisson_veg:[40,1,1.5,5,0.5],_yaourt:[50,3.8,1.7,4.3,0],_yaourt_grec:[103,3,8.2,3.7,0.1],
+ _skyr:[63,11,0.2,3.8,0],_feta:[273,15.4,22.6,1.2,0],_mozza:[227,16.5,17.7,0.7,0],_ricotta:[165,8.1,10.7,4.1,0],_mascarpone:[434,4.6,44,3.5,0],_comte:[410,28,34,0.5,0],
+ _fromage_rape:[368,27.6,28.2,0.6,0],_creme_soja:[180,2.8,17,3,0.5],
+ _lardons:[269,16.3,22.6,0.5,0],_bacon:[150,22,6.5,0.7,0],_saucisse:[270,14,23.5,1.5,0],_veau:[114,20.5,3.3,0.6,0],_canard:[132,19.6,6,0,0],_sardine:[220,23,14,0,0],
+ _calamar:[80,15.6,1,2.5,0],_moules:[90,14.4,2.2,3.3,0],_cabillaud:[77,18.1,0.6,0,0.1],_poulet_cuisse:[160,18.6,9.5,0,0],
+ _mayonnaise:[692,1.3,74.5,3.4,0.3],_ketchup:[110,1.5,0.2,24,0.5],_sauce_huitre:[51,1.4,0.2,10.6,0.3],_nuoc_mam:[35,5,0,3.6,0],_sriracha:[100,2,1,20,2],
+ _sirop:[260,0,0,67,0],_confiture:[245,0.4,0.1,60,1],_compote:[70,0.3,0.1,16,1.5],
+ _amande:[634,25.4,53.4,7.7,10.9],_noisette:[680,15,63,7,8],_noix:[700,15,66,7,6],_pignons:[680,14,68,4,4],_cacahuete:[590,25,49,12,8],_chia:[490,17,31,8,34],_lin:[530,18,42,2,27],
+ _coco_rapee:[660,7,64,7,16],_raisins_secs:[300,2.5,0.5,70,4],_dattes:[290,2,0.4,66,7],_banane:[90,1.1,0.3,20,2.6],_fruits_rouges:[45,1,0.3,8,4],_poire:[55,0.4,0.2,12,2.8],
+ _chocolat_lait:[540,7,31,57,2],_pain_blanc:[270,9,1.5,55,3],_pain_mie:[257,7.3,4.1,41.8,7.3],
+ _patate:[81,1.6,0.1,17.1,3],_potimarron:[33,1,0.2,6.5,2.5],_navet:[24,0.8,0.1,4.3,1.9],_panais:[67,1.2,0.3,13,4.5],_radis:[16,0.7,0.1,2.4,1.6],
+ _poivron_vert:[24,0.9,0.2,3.4,1.7],_germes_soja:[35,3,0.2,4,1.8],_bok_choy:[13,1.5,0.2,1.2,1],_haricots_noirs:[110,7.5,0.5,15,7],_pois_casses:[330,22,1.5,47,15],
+ _feves:[70,5.5,0.5,8,5],_tempeh:[195,19,11,6,5],_seitan:[130,25,2,4,0.5],_gnocchi:[160,4,0.5,33,1.8],_polenta:[355,8,1.5,76,3],
+ _piment_frais:[37,1.9,0.4,5.8,1.5],_citronnelle:[100,1.8,0.5,25,0],_vin_rouge:[70,0.1,0,0.3,0],_levure:[108,0.1,0,26.9,0],_vanille:[0,0,0,0,0],_cannelle:[260,4,1.2,25,53],
+ _poivre:[331,13.3,7.5,39.9,25.3],_zero:[0,0,0,0,0],
+ _sauce_sucree:[171,2.9,0.2,39.5,0],_vinaigrette:[471,0.7,50.5,3,0.5],_puree_amande:[630,21,55,7,10],_tomates_sechees:[210,5,13,18,6],_saumon_chaud:[190,23,11,0,0],
+ _lentilles_cuites:[125,10.1,0.6,16.2,8.4],_riz_cuit:[148,3,0.4,32.9,0.2],_pates_cuites:[160,5.5,0.9,31,2],_quinoa_cuit:[120,4.4,1.9,19.4,2.8],_udon:[135,3.5,0.5,27,1.2],_portobello:[22,2.1,0.4,1.8,1.3]};
+// poids d'une unité de l'ingrédient (pièce, tranche, boîte égouttée, botte, sachet…), en grammes comestibles
+const NXU={oeufs:50,sj_oeuf:50,jambon:40,hf_jambon:40,saumon:125,tortillas:40,hf_tortillas:40,pain:35,qt_pain_noir:30,pain_burger:65,pita:65,galettes_riz:8,qt_galettes:55,qt_pate_brisee:230,
+ oignon:100,hf_oignon:100,oignon_rouge:100,echalote:30,hf_echalote:30,citron:40,hf_citron:40,citron_vert:30,carotte:100,courgette:250,aubergine:300,poivron:150,brocoli:300,
+ tomate:120,concombre:300,hf_mini_concombre:120,avocat:140,poireau:130,oignon_nouveau:100,persil:30,coriandre:30,aneth:30,menthe:30,ciboulette:30,basilic:30,
+ hf_persil:10,hf_aneth:10,et_persil:2,et_estragon:1,et_thym:0.5,qt_bouquet_garni:0,hf_gousse_ail:5,hf_tete_ail:45,hf_salade_sachet:75,hf_salade:100,hf_epinards:100,
+ hf_filet_poulet:140,hf_broccolini:150,hf_carotte_choux:150,hf_olives_kalamata:40,hf_fromage_grec:100,hf_gouda:25,hf_parmigiano:20,hf_ricotta:100,hf_creme_basilic:40,
+ hf_mozza_rapee:50,hf_aioli:25,hf_yaourt_grec:100,hf_concentre:70,hf_bouillon_volaille:10,hf_origan:1,hf_thym:1,hf_epices_mex:3,
+ thon:112,hf_thon:112,pois_chiches:265,haricots_rouges:250,haricots_blancs:250,tomates_concassees:400,ww_tomates:200,lait_coco:200,mais:140,artichauts:240,
+ chou_fleur:600,chou:800,chou_rouge:800,chou_rave:250,fenouil:220,betterave:120,butternut:800,endive:110,celeri:600,qt_celeri:40,
+ kaki:180,pomme:140,orange:140,kiwi:70,mangue:250};
+// poids d'une pièce pour les ingrédients vendus au poids (quand une recette ajoutée dit « 2 filets de poulet », « 1 pavé »…)
+const NXP={poulet:120,hf_blanc_poulet:120,bouillon_volaille:10,bouillon_legumes:10,bouillon_boeuf:10,dinde_esc:120,boeuf_hache:100,et_boeuf:100,porc:400,saumon:125,qt_saumon:125,cabillaud:120,truite:120,thon_frais:150,maquereau:100,
+ crevettes:15,saumon_fume:30,agneau:150,pdt:150,hf_pdt:150,hf_grenailles:40,patate:300,champignons:20,tomates_cerises:15,asperges:20,mozzarella:125,chevre:60,feta:200,
+ olives:3.5,cornichons:8,qt_jaune:17,ail:5,oignon_nouveau:15,gingembre:30,concentre:70,citron:40,_coco:400,lait_coco:200,_creme:200,_creme_legere:200,yaourt:150,fromage_blanc:100,_yaourt:125,_skyr:150,_banane:120,_poire:150,_pain_blanc:35,_pain_mie:28,_saucisse:60,_sardine:25,
+ _dattes:8,_potimarron:800,_navet:120,_panais:150,_radis:12,_poivron_vert:150,_bok_choy:150,_piment_frais:10,_citronnelle:15,_poulet_cuisse:150,_mozza:125,_feta:200,_portobello:90};
+// grammes par cuillère à soupe / à café (cuillère rase pour les poudres)
+const NXS={huile:[13.5,4.5],et_huile_tournesol:[13.5,4.5],qt_colza:[13.5,4.5],mm_huile_pate:[13.5,4.5],soja:[16,5.5],miel:[21,7],moutarde:[15,5],concentre:[16,5],
+ panko:[5,1.7],chapelure_crispy:[7,2.3],sesame:[9,3],graines:[10,3],cajou:[10,3],beurre_cacahuete:[16,5],tahini:[15,5],pesto:[15,5],harissa:[15,5],
+ hf_beurre:[15,5],hf_farine:[10,3],bouillon_volaille:[8,3],bouillon_legumes:[8,3],bouillon_boeuf:[8,3],
+ cumin:[7,2.1],paprika:[7,2.3],curry:[6,2],curcuma:[9,3],garam:[6,2],ras:[6,2],piment:[5,1.7],herbes:[3,1],qt_herbes_provence:[3,1],origan:[3,1],thym:[3,1],ff_basilic:[3,1],ff_muscade:[7,2.2],
+ sj_levure:[12,4],_sucre:[12,4],_farine:[10,3],_maizena:[10,3],_cacao:[7,2.5],_cannelle:[8,2.6],_poivre:[7,2.3],_beurre:[15,5],_sirop:[20,6.5]};
+// variante liquide (bouillon prêt à l'emploi) quand la quantité est donnée en ml ou cl
+const NXL={bouillon_volaille:[7,1.2,0.1,0.3,0],bouillon_legumes:[5,0.3,0.2,0.5,0],bouillon_boeuf:[6,0.8,0.1,0.4,0],et_fond:[6,0.8,0.1,0.4,0],hf_bouillon_volaille:[7,1.2,0.1,0.3,0]};
+// noms libres → aliment de la table (premier motif qui correspond)
+const NXN=[
+ // préparations et condiments d'abord (« bouillon de volaille », « vinaigre de riz », « huile de sésame »…)
+ [/bouillon de (boeuf|viande)|fond de (boeuf|veau)/,"bouillon_boeuf"],[/bouillon de legumes/,"bouillon_legumes"],[/bouillon|fond de volaille/,"bouillon_volaille"],
+ [/vinaigre balsamique noir|balsamique noir/,"vinaigre"],[/vinaigre de cidre/,"vinaigre_cidre"],[/vinaigre|balsamique/,"hf_vinaigre"],
+ [/sauce soja sucree|kecap/,"_sauce_sucree"],[/sauce soja|tamari|shoyu/,"soja"],[/sauce (d )?huitre/,"_sauce_huitre"],[/sauce (de )?poisson|nuoc mam/,"_nuoc_mam"],
+ [/sauce (asiatique|teriyaki|hoisin|aigre|barbecue|bbq|sucree|sweet chili|chili douce)/,"_sauce_sucree"],[/sriracha|sauce piquante|tabasco/,"_sriracha"],
+ [/sauce tomate|passata|coulis de tomates?|puree de tomates?/,"qt_puree_tomates"],[/concentre de tomates?/,"concentre"],[/pulpe de tomates?|tomates? (concassees?|pelees?|en des)/,"tomates_concassees"],
+ [/pesto/,"pesto"],[/creme de basilic/,"hf_creme_basilic"],[/harissa/,"harissa"],[/mayonnaise/,"_mayonnaise"],[/aioli/,"hf_aioli"],[/ketchup/,"_ketchup"],[/moutarde/,"moutarde"],
+ [/vinaigrette/,"_vinaigrette"],[/huile/,"huile"],
+ [/lait de coco (light|allege|leger)|lait de coco.*light/,"lait_coco"],[/lait de coco|creme de coco/,"_coco"],[/noix de coco|coco rapee/,"_coco_rapee"],
+ [/(lait|boisson)s? (d avoine|de soja|d amande|de riz|vegetale)/,"_boisson_veg"],[/creme (de )?soja|creme vegetale/,"_creme_soja"],
+ [/creme (fraiche )?(legere|allegee)|creme.*(12|15) ?%/,"_creme_legere"],[/\bcremes?\b(?! de (basilic|coco|soja|sesame|marrons?))/,"_creme"],
+ [/beurre de cacahuetes?|beurre d arachide/,"beurre_cacahuete"],[/beurre d amande|puree d amande/,"_puree_amande"],[/^beurre|\bbeurre\b(?! de)|noix de beurre/,"_beurre"],
+ [/tahin|creme de sesame/,"tahini"],[/graines? de sesame|\bsesame\b/,"sesame"],
+ [/blancs? d oeufs?/,"ff_blancs"],[/jaunes? d oeufs?/,"qt_jaune"],[/\boeufs?\b/,"oeufs"],
+ // légumes, fruits, herbes
+ [/ciboulette|\bciboule\b/,"ciboulette"],[/oignons? (nouveaux?|verts?|frais)|cebette/,"oignon_nouveau"],[/oignons? rouges?/,"oignon_rouge"],[/echalote/,"echalote"],[/\boignons?\b/,"oignon"],
+ [/gousses? d ail|tetes? d ail|\bail\b/,"ail"],[/gingembre/,"gingembre"],[/citrons? verts?|\blimes?\b/,"citron_vert"],[/citron/,"citron"],
+ [/tomates? cerises?/,"tomates_cerises"],[/tomates? sechees?/,"_tomates_sechees"],[/\btomates?\b/,"tomate"],
+ [/celeri[ -]?rave/,"celeri"],[/celeri/,"qt_celeri"],[/chou\w* de bruxelles/,"choux_bruxelles"],[/chou[ -]?fleur/,"chou_fleur"],[/chou[ -]?rave/,"chou_rave"],[/chou rouge/,"chou_rouge"],
+ [/carottes? et choux|coleslaw/,"hf_carotte_choux"],[/\bchoux?\b/,"chou"],
+ [/patates? douces?/,"patate"],[/pommes? de terre|grenailles?/,"pdt"],[/butternut|courge|potiron/,"butternut"],[/potimarron/,"_potimarron"],
+ [/brocoli|broccolini/,"brocoli"],[/courgette/,"courgette"],[/aubergine/,"aubergine"],[/poivrons? verts?/,"_poivron_vert"],[/poivrons? grilles?/,"hf_poivrons_grilles"],[/poivron/,"poivron"],
+ [/carotte/,"carotte"],[/haricots? verts?/,"haricots_verts"],[/epinard/,"epinards"],[/portobello/,"_portobello"],[/champignon|shiitake|pleurote/,"champignons"],[/concombre/,"concombre"],
+ [/roquette/,"roquette"],[/salade|laitue|mache|mesclun|jeunes pousses|sucrine|batavia|cresson/,"salade"],
+ [/avocat/,"avocat"],[/poireau/,"poireau"],[/pois gourmands?|mange[- ]?tout/,"pois_gourmands"],[/petits? pois/,"petits_pois"],[/edamame|feves? de soja/,"edamame"],
+ [/asperge/,"asperges"],[/fenouil/,"fenouil"],[/betterave/,"betterave"],[/endive/,"endive"],[/artichaut/,"artichauts"],[/\bmais\b/,"mais"],[/navet/,"_navet"],[/panais/,"_panais"],[/radis/,"_radis"],
+ [/germes? de soja|pousses? de soja/,"_germes_soja"],[/bok choy|pak choi|pak choy/,"_bok_choy"],[/piments? (frais|rouges?|verts?|oiseau)|jalapeno/,"_piment_frais"],[/citronnelle (fraiche|tige)/,"_citronnelle"],
+ [/ananas/,"ananas"],[/\bkakis?\b/,"kaki"],[/\bpommes?\b/,"pomme"],[/\bpoires?\b/,"_poire"],[/\boranges?\b|clementine|mandarine/,"orange"],[/kiwi/,"kiwi"],[/mangue/,"mangue"],[/banane/,"_banane"],
+ [/framboise|myrtille|fruits rouges|fraise|\bmures?\b/,"_fruits_rouges"],[/raisins? secs?/,"_raisins_secs"],[/dattes?/,"_dattes"],
+ [/persil/,"persil"],[/coriandre/,"coriandre"],[/aneth/,"aneth"],[/menthe/,"menthe"],[/basilic seche/,"ff_basilic"],[/basilic/,"basilic"],[/estragon/,"et_estragon"],[/thym frais/,"et_thym"],
+ [/bouquet garni|laurier|romarin|sauge|vanille|\beau\b|glacons?/,"_zero"],
+ // légumineuses
+ [/pois chiches?/,"pois_chiches"],[/haricots? rouges?/,"haricots_rouges"],[/haricots? noirs?/,"_haricots_noirs"],[/haricots? blancs?|lingots|\bcocos?\b/,"haricots_blancs"],
+ [/lentilles? .*(cuites?|precuites?)/,"_lentilles_cuites"],[/lentilles? corail/,"lentilles_corail"],[/lentille/,"lentilles"],[/pois casses?/,"_pois_casses"],[/\bfeves?\b/,"_feves"],[/tempeh/,"_tempeh"],[/seitan/,"_seitan"],
+ // laitiers
+ [/fromage blanc|faisselle/,"fromage_blanc"],[/skyr/,"_skyr"],[/yaourt.*(grec|grecque).*(0|maigre|light)|yaourt grec 0/,"yaourt"],[/yaourt.*(grec|grecque)/,"_yaourt_grec"],[/yaourt|yogourt/,"_yaourt"],
+ [/lait (entier)/,"_lait_entier"],[/lait ecreme/,"_lait_ecreme"],[/^lait\b|lait demi/,"lait"],
+ [/feta.*(allegee|light)/,"feta"],[/feta|fromage (a la )?grecque?/,"_feta"],[/mozzarella.*(light|allegee)/,"mozzarella"],[/mozzarella.*rapee/,"hf_mozza_rapee"],[/mozzarella|burrata/,"_mozza"],
+ [/parmesan|parmigiano|grana/,"parmesan"],[/emmental|gruyere|fromage rape/,"emmental"],[/comte|beaufort|cheddar/,"_comte"],[/gouda|edam|raclette/,"hf_gouda"],[/chevre/,"chevre"],
+ [/ricotta/,"_ricotta"],[/mascarpone/,"_mascarpone"],[/halloumi/,"halloumi"],[/fromage frais|st moret|carre frais|philadelphia|cream cheese/,"fromage_frais"],[/houmous|hummus/,"houmous"],
+ [/tofu/,"tofu"],[/hache (vegetal|de soja)|proteines? de soja/,"qt_hache_soja"],
+ // poissons, viandes
+ [/saumon fume a chaud|miettes? de saumon/,"_saumon_chaud"],[/saumon fume/,"saumon_fume"],[/saumon/,"saumon"],[/truite/,"truite"],[/maquereau/,"maquereau"],[/sardine/,"_sardine"],
+ [/thon (frais|albacore|rouge)|steak de thon|pave de thon/,"thon_frais"],[/thon/,"thon"],
+ [/cabillaud|colin|\blieu\b|merlu|eglefin|poisson blanc|lotte|\bbar\b|dorade|\bsole\b/,"cabillaud"],[/crevette|gambas/,"crevettes"],[/calamar|encornet|seiche/,"_calamar"],[/\bmoules?\b/,"_moules"],[/fruits de mer/,"fruits_mer"],
+ [/cuisses? de poulet|hauts? de cuisse/,"_poulet_cuisse"],[/poulet|volaille/,"poulet"],[/dinde hachee|hache de dinde/,"dinde_hachee"],[/dinde/,"dinde_esc"],
+ [/boeuf hache.*(15|20)|viande hachee|steak hache|hache au boeuf/,"et_boeuf"],[/boeuf hache|hache de boeuf/,"boeuf_hache"],[/boeuf|bavette|rumsteck|steak/,"boeuf_emince"],[/\bveau\b/,"_veau"],[/canard/,"_canard"],
+ [/agneau/,"agneau"],[/lardon/,"_lardons"],[/bacon/,"_bacon"],[/chorizo/,"hf_chorizo"],[/saucisse|merguez|chipolata/,"_saucisse"],[/jambon/,"jambon"],[/porc/,"porc"],
+ // féculents
+ [/riz .*cuit|riz cuit/,"_riz_cuit"],[/pates .*cuites|pates cuites/,"_pates_cuites"],[/quinoa .*cuit/,"_quinoa_cuit"],
+ [/riz complet/,"riz_complet"],[/riz rond|riz (a )?risotto|arborio/,"_riz_rond"],[/nouilles? de riz|vermicelles? de riz/,"nouilles"],[/galettes? de riz|feuilles? de riz/,"galettes_riz"],[/\briz\b/,"riz"],
+ [/udon|nouilles? (fraiches|precuites|sautees|a wok)/,"_udon"],[/pates fraiches|tagliatelles? fraiches|lasagnes? fraiches|gnocchi/,"hf_lasagne_fraiche"],
+ [/pates? (completes?|integrales?)|spaghetti complet/,"pates"],[/lasagne/,"lasagnes"],[/orzo|langue d oiseau/,"orzo"],
+ [/\bpates\b|spaghetti|tagliatelle|penne|fusilli|coquillette|macaroni|linguine|farfalle|nouilles?|soba|ramen/,"_pates"],
+ [/semoule complete|couscous complet/,"semoule"],[/semoule|couscous/,"_semoule"],[/boulgour/,"boulgour"],[/quinoa/,"quinoa"],[/polenta/,"_polenta"],
+ [/flocons? d avoine|avoine/,"_avoine"],[/farine d orge/,"sj_farine_orge"],[/maizena|fecule/,"_maizena"],[/farine/,"_farine"],[/chapelure|panko/,"panko"],
+ [/tortilla|wrap/,"hf_tortillas"],[/pains? pitas?|\bpitas?\b/,"pita"],[/pains? (a )?burgers?|\bbuns?\b/,"pain_burger"],[/pain de mie/,"_pain_mie"],[/pain (complet|aux cereales|de seigle|noir)/,"pain"],[/\bpain\b|baguette/,"_pain_blanc"],
+ [/galettes? (de )?(sarrasin|ble noir)/,"qt_galettes"],[/pate brisee|pate feuilletee|pate a tarte/,"qt_pate_brisee"],
+ // épicerie sucrée, fruits secs
+ [/chocolat (noir|patissier)/,"sj_chocolat"],[/chocolat/,"_chocolat_lait"],[/cacao/,"sj_cacao"],[/proteines? (en poudre|whey)|whey|caseine/,"sj_proteine"],
+ [/levure|bicarbonate/,"_levure"],[/sucre|cassonade|vergeoise/,"_sucre"],[/miel/,"miel"],[/sirop/,"_sirop"],[/confiture/,"_confiture"],[/compote/,"_compote"],
+ [/amande/,"_amande"],[/noisette/,"_noisette"],[/noix de cajou|cajou/,"cajou"],[/pignon/,"_pignons"],[/cacahuete/,"_cacahuete"],[/\bnoix\b/,"_noix"],[/chia/,"_chia"],[/graines? de lin/,"_lin"],[/graines?/,"graines"],
+ [/olives? kalamata/,"hf_olives_kalamata"],[/olive/,"olives"],[/cornichon|capre/,"cornichons"],
+ [/vin blanc/,"qt_vin_blanc"],[/vin rouge|\bvin\b|porto|madere/,"_vin_rouge"],
+ // épices
+ [/cumin/,"cumin"],[/paprika/,"paprika"],[/garam/,"garam"],[/ras el hanout/,"ras"],[/curry|colombo|tandoori/,"curry"],[/curcuma/,"curcuma"],[/cannelle/,"_cannelle"],[/muscade/,"ff_muscade"],
+ [/piment|cayenne|chili|espelette/,"piment"],[/epices? (mexicaines?|cajun|tex)/,"hf_epices_mex"],[/herbes? de provence/,"qt_herbes_provence"],[/herbes|fines herbes/,"herbes"],[/origan/,"origan"],[/thym/,"thym"],
+ [/\bsel\b|fleur de sel/,"sel"],[/poivre/,"_poivre"],[/citronnelle|epice/,"garam"]];
+// poids d'un sachet de kit (épices, herbes, sauces, fromage…) selon la famille d'aliment
+const NX_SACHET=k=>/^(cumin|paprika|curry|curcuma|garam|ras|piment|herbes|qt_herbes_provence|origan|thym|hf_origan|hf_thym|hf_epices_mex|ff_basilic|ff_muscade|_cannelle|_poivre)$/.test(k)?3
+ :/^(persil|coriandre|aneth|menthe|ciboulette|basilic|hf_persil|hf_aneth|et_estragon)$/.test(k)?10
+ :/^(huile|soja|_sauce_sucree|_sauce_huitre|_nuoc_mam|_sriracha|hf_vinaigre|vinaigre|vinaigre_cidre|moutarde|miel|_ketchup)$/.test(k)?15
+ :/^(_mayonnaise|hf_aioli|pesto|hf_creme_basilic|harissa|_vinaigrette)$/.test(k)?25
+ :/^(_cacahuete|cajou|graines|sesame|_amande|_noix|_noisette|_pignons)$/.test(k)?20
+ :/^(emmental|parmesan|hf_gouda|_comte|hf_mozza_rapee|_feta|feta|chevre)$/.test(k)?25:/^(salade|roquette|hf_salade_sachet|epinards|_germes_soja)$/.test(k)?75:50;
+// ---------- moteur ----------
+const NX_CACHE={};
+function nxKey(n){n=nrmS(n);const z=NXN.find(x=>x[0].test(n));return z?z[1]:null}
+// profil nutritionnel d'un ingrédient : valeurs pour 100 g, poids d'une unité, d'une pièce, d'une cuillère
+function nxProfile(id){if(id in NX_CACHE)return NX_CACHE[id];const I=ING[id];if(!I)return null;let key=NUTX[id]?id:null,P=null;
+ if(!key)key=nxKey(I[0]);
+ if(key&&NUTX[key])P={key,v:NUTX[key],uw:NXU[id]||(I[2]===(ING[key]&&ING[key][2])?NXU[key]:null),pw:NXP[key]||((ING[key]&&(ING[key][2]===""||ING[key][2]==="pièce"||ING[key][2]==="pavé"))?NXU[key]:null),sp:NXS[key]||NXS[id]||null,liq:NXL[key]||null,src:"t"};
+ else{const n=nrmS(I[0]);let C=null;if(typeof CQ!=="undefined"&&CQ&&typeof cqFind==="function"){C=cqFind(n);if(C&&CQ_COOK.test(C.ts)&&!CQ_COOK.test(" "+n+" ")){const C2=cqFind(n+" cru");if(C2&&!CQ_COOK.test(C2.ts))C=C2}if(C&&!(C.score>=4))C=null}
+  if(C)P={key:null,v:[C.k,C.p,C.f,C.c,C.fi],src:"c"};else{const e=NUTDB.find(z=>z[0].test(n));if(e)P={key:null,v:[e[1],e[2],e[3],e[4],e[5]],pw:e[6]||null,uw:e[7]||null,src:"d"}}}
+ if(P||CQ)NX_CACHE[id]=P;return P}
+const NX_FR={"½":0.5,"¼":0.25,"¾":0.75,"⅓":1/3,"⅔":2/3,"⅘":0.8,"⅛":0.125,"⅕":0.2};
+// nombre écrit dans une quantité libre (« 1½ cs », « 1/4 c. à café », « 2 à 3 », « quelques »)
+function nxNum(t){let m;
+ if((m=t.match(/(\d+)\s+(\d+)\s*\/\s*(\d+)/)))return +m[1]+(+m[2])/((+m[3])||1);
+ if((m=t.match(/(\d+)\s*\/\s*(\d+)/)))return(+m[1])/((+m[2])||1);
+ if((m=t.match(/(\d+(?:[.,]\d+)?)?\s?([½¼¾⅓⅔⅘⅛⅕])/))&&(m[1]||m[2]))return(m[1]?parseFloat(m[1].replace(",",".")):0)+(m[2]?NX_FR[m[2]]:0);
+ if((m=t.match(/(\d+(?:[.,]\d+)?)\s*(?:a|-|ou)\s*(\d+(?:[.,]\d+)?)/)))return(parseFloat(m[1].replace(",","."))+parseFloat(m[2].replace(",",".")))/2;
+ if((m=t.match(/(\d+(?:[.,]\d+)?)/)))return parseFloat(m[1].replace(",","."));
+ if(/\bquelques\b/.test(t))return 3;if(/\b(une?|un peu)\b/.test(t))return 1;if(/\bdeux\b/.test(t))return 2;if(/\btrois\b/.test(t))return 3;return null}
+// grammes pour une quantité écrite en toutes lettres (ingrédients « au goût » : huile, épices, ail…)
+function nxStrG(s,P,n){const t=nrmS(s).replace(/\(.*?\)/g," ");if(!t.trim()||/facultatif|selon (le|votre|ton) gout|au gout|a doser|a volonte|\bq\.? ?s\b/.test(t)&&!/\d|½|¼|¾/.test(t))return{g:0};
+ let m=t.match(/(\d[\d.,]*\s?[½¼¾⅓⅔⅘⅛⅕]?|[½¼¾⅓⅔⅘⅛⅕])\s*(kg|g|gr|grammes?|mg|ml|cl|dl|l)\b/);
+ if(m){const v=nxNum(m[1])||0;const u=m[2];const vol=/^(ml|cl|dl|l)$/.test(u);const g=v*({kg:1000,mg:0.001,cl:10,dl:100,l:1000}[u]||1);
+  return{g:vol&&/huile/.test(n)?g*0.92:vol&&/miel|sirop/.test(n)?g*1.4:g,liq:vol}}
+ const q=nxNum(t);const N=q==null?1:q;const sp=(P&&P.sp)||[15,5];
+ if(/\bcs\b|\bcas\b|c\.? ?a\.? ?s\b|cuill?\w*\.? (a )?soupe|tbsp/.test(t))return{g:N*sp[0]};
+ if(/\bcc\b|\bcac\b|c\.? ?a\.? ?c\b|cuill?\w*\.? (a )?cafe|tsp/.test(t))return{g:N*sp[1]};
+ if(/gousse/.test(t))return{g:N*5};if(/\btetes?\b/.test(t))return{g:N*45};if(/\bcm\b/.test(t))return{g:N*5};if(/cube|tablette/.test(t))return{g:N*10};
+ if(/pincee/.test(t))return{g:N*0.3};if(/filet/.test(t))return{g:N*(/lait|creme/.test(n)?10:5)};if(/trait/.test(t))return{g:N*3};if(/\bnoix\b/.test(t))return{g:(/quelques/.test(t)?2:N)*10};if(/noisette/.test(t))return{g:N*5};
+ if(/poignee/.test(t))return{g:N*30};if(/brin|branche/.test(t))return{g:N*2};if(/feuille/.test(t))return{g:N*0.5};if(/zeste/.test(t))return{g:N*2};
+ if(/verre/.test(t))return{g:N*200};if(/tasse|\bbol\b/.test(t))return{g:N*240};if(/sachet/.test(t))return{g:N*((P&&P.uw)||(P&&P.key?NX_SACHET(P.key):3))};
+ if(/pieces?|\bpcs?\b/.test(t)&&P&&(P.pw||P.uw))return{g:N*(P.pw||P.uw)};
+ if(q!=null&&/^\s*[\d½¼¾⅓⅔.,\s\/]+\s*$/.test(t))return{g:N*((P&&(P.pw||P.uw))||0)};
+ return{g:0}}
+// une ligne d'ingrédient → grammes et valeurs
+function nxLine(id,q){const P=nxProfile(id);if(!P)return null;const u=ING[id]?ING[id][2]:"";const n=nrmS(ING[id][0]);let g=null,liq=false;
+ if(typeof q==="string"||u===null){const r=nxStrG(typeof q==="string"?q:"",P,n);g=r.g;liq=!!r.liq}
+ else if(typeof q==="number"){if(u==="g")g=q;else if(u==="ml"){g=/huile/.test(n)?q*0.92:q;liq=true}else if(u==="kg")g=q*1000;else if(u==="cl"){g=q*10;liq=true}
+  else if(u===""||u==="pièce"||u==="pavé")g=q*(P.uw||P.pw||0)||null;else g=P.uw?q*P.uw:null;
+  if(g==null){let a=null;try{a=approxG(id,q)}catch(e){}g=a||null}}
+ if(g==null)return null;const v=liq&&P.liq?P.liq:P.v;const m=g/100;return{g,k:v[0]*m,p:v[1]*m,f:v[2]*m,c:v[3]*m,fi:v[4]*m,src:P.src}}
+// total d'une recette, par portion (ou par pièce pour un encas)
+recipeNutCalc=function(r){const T={k:0,p:0,f:0,c:0,fi:0};let unk=0;
+ for(const it of r.i||[]){const[id,q]=it;if(!ING[id])continue;const L=nxLine(id,q);if(!L){if(ING[id][2]!==null)unk++;continue}for(const x in T)T[x]+=L[x]}
+ const div=r.snack?(r.yieldN||1):(r.base||2);for(const x in T)T[x]/=div;return{T,unk}};
+function nxFill(r){const{T,unk}=recipeNutCalc(r);r.nut={k:Math.round(T.k),p:r1(T.p),f:r1(T.f),c:r1(T.c),fi:r1(T.fi),est:true,calc:true,unk};r.k=r.nut.k;r.pr=Math.round(T.p);return r.nut}
+recipeNutFill=function(r){if(r.nut&&!r.nut.est&&r.nut.f!=null&&r.nut.c!=null&&r.nut.fi!=null)return;
+ if(r.nut&&!r.nut.est&&r.nut.k>0){// seules les calories (et protéines) sont connues : on garde ces valeurs, le reste est réparti d'après les ingrédients
+  const{T}=recipeNutCalc(r);const k=r.nut.k,p=r.nut.p>0?r.nut.p:r1(T.p);const rest=Math.max(0,k-4*p),efc=9*T.f+4*T.c;const s=efc>0?rest/efc:0;
+  r.nut={k,p,f:r1(efc>0?T.f*s:k*0.3/9),c:r1(efc>0?T.c*s:Math.max(0,(k-4*p-3*k*0.1)/4)),fi:r1(T.fi),est:false,part:true};return}
+ nxFill(r)};
+// recalcule toutes les recettes (valeurs de la source conservées tant que les ingrédients n'ont pas changé)
+function nxSameIng(id){const E=state.edits&&state.edits[id],O=ED_ORIG[id];if(!E||!O)return true;
+ try{const a=(O.i0||O.i||[]).map(ingLineOf).filter(Boolean).map(nrmS),b=(E.il||[]).map(nrmS);return a.length===b.length&&a.every((x,i)=>x===b[i])}catch(e){return false}}
+function nxRefresh(list){for(const r of list||RECIPES){const src=SRC_NUT[r.id];
+  if(r.my){if(r.nut&&!r.nut.est)continue;r.nut=null;nxFill(r);continue}
+  if(src&&(!r.ed||nxSameIng(r.id))){r.nut={...src,est:false};r.k=src.k;r.pr=Math.round(src.p);continue}
+  if(r.ed&&r.nut&&!r.nut.est&&!(src&&r.nut.k===src.k))continue;// valeurs saisies à la main dans la recette modifiée
+  r.nut=null;nxFill(r)}}
+nxRefresh();
+applyEdits=(f=>function(ed,subs){f(ed,subs);try{nxRefresh(RECIPES.filter(r=>r.ed||ED_ORIG[r.id]))}catch(e){}})(applyEdits);
+regMyRecipes=(f=>function(list){f(list);try{nxRefresh(RECIPES.filter(r=>r.my))}catch(e){}})(regMyRecipes);
+try{nxRefresh(RECIPES.filter(r=>r.my))}catch(e){}
+// la base Ciqual complète (chargée en différé) sert aux ingrédients inconnus des recettes ajoutées
+cqReady(()=>{let ch=false;for(const id in NX_CACHE)if(NX_CACHE[id]==null||NX_CACHE[id].src==="d"){delete NX_CACHE[id];ch=true}
+ for(const r of RECIPES){if(r.nut&&!r.nut.calc)continue;if(!(r.i||[]).some(([id])=>!(id in NX_CACHE)))continue;r.nut=null;nxFill(r);ch=true}
+ if(ch){try{if(ui.tab==="suivi")renderSuivi();else if(ui.tab==="semaine"&&typeof renderWeek==="function")renderWeek()}catch(e){}}});
+// brouillon de recette (formulaire) : chaque ligne est rapprochée d'un aliment de la table
+nutEstimate=function(il,div){const T={k:0,p:0,f:0,c:0,fi:0};let known=0,tot=0;const miss=[];
+ for(const line of il){const x=parseIngLine(line);if(!x)continue;tot++;
+  if(!ING_BY_NAME){ING_BY_NAME={};for(const k in ING){if(/^(b_|x_|p_|u_)/.test(k))continue;const kk=nrm4(ING[k][0])+"|"+ING[k][2];if(!(kk in ING_BY_NAME))ING_BY_NAME[kk]=k}}
+  let id=ING_BY_NAME&&ING_BY_NAME[nrm4(x.name)+"|"+x.unit];const tmp=!id;if(tmp){id="u_nxtmp";ING[id]=[x.name,"E",x.unit];delete NX_CACHE[id]}
+  const P=nxProfile(id);let L=null;
+  if(P){if(x.unit===null)L=nxLine(id,x.txt||"");else if(x.unit==="g"||x.unit==="ml"||x.unit==="kg"||x.unit==="cl")L=nxLine(id,x.qty);
+   else if(/[a-zà-ÿ]/i.test(x.txt||"")&&nxStrG(x.txt,P,nrmS(x.name)).g>0){const g=nxStrG(x.txt,P,nrmS(x.name)).g,m=g/100;L={g,k:P.v[0]*m,p:P.v[1]*m,f:P.v[2]*m,c:P.v[3]*m,fi:P.v[4]*m}}
+   else{const w=(x.unit===""||x.unit==="pièce"||x.unit==="pavé")?(P.pw||P.uw):(P.uw||(x.unit==="sachet"&&P.key?NX_SACHET(P.key):null)||({tranche:30,pot:125,boîte:250,botte:30,poignée:30,branche:2,brin:2,feuille:0.5,tête:45,paquet:150,barquette:150}[x.unit]));
+    if(w){const g=x.qty*w,m=g/100;L={g,k:P.v[0]*m,p:P.v[1]*m,f:P.v[2]*m,c:P.v[3]*m,fi:P.v[4]*m}}
+    else{const r=nxStrG(x.txt||"",P,nrmS(x.name));if(r.g>0){const m=r.g/100;L={g:r.g,k:P.v[0]*m,p:P.v[1]*m,f:P.v[2]*m,c:P.v[3]*m,fi:P.v[4]*m}}}}}
+  if(tmp){delete ING[id];delete NX_CACHE[id]}
+  if(L){for(const k in T)T[k]+=L[k];known++}else miss.push(x.name)}
+ div=Math.max(1,Number(div)||1);return{k:Math.round(T.k/div),p:r1(T.p/div),f:r1(T.f/div),c:r1(T.c/div),fi:r1(T.fi/div),known,tot,miss}};
+
+// ================= v21 : encas dans la semaine, source des valeurs, navigation =================
+// --- d'où viennent les valeurs nutritionnelles (sous les valeurs de la fiche)
+factsV13=(f=>function(r){const h=f(r);const n=r.nut;if(!n||!n.k)return h;const per=r.snack?(r.unitS||"pièce"):"portion";let s;
+ if(n.est)s=`Calculé ingrédient par ingrédient avec la table Ciqual (Anses), par ${esc(per)}.`+(n.unk?` ${n.unk} ingrédient${n.unk>1?"s":""} sans poids connu, non compté${n.unk>1?"s":""}.`:"");
+ else if(n.part)s="Calories données par la recette ; lipides, glucides et fibres répartis d'après les ingrédients.";
+ else s=r.my&&!r.u?"Valeurs indiquées avec la recette.":"Valeurs publiées par la recette d'origine.";
+ return h+`<p class="m-nsrc">${s}</p>`})(factsV13);
+
+// --- encas de la semaine (onglet Semaine)
+function renderWeekSnacks(){const box=document.getElementById("wkSnk");if(!box)return;const S=state.snacks||{};
+ const rows=Object.keys(S).filter(id=>S[id]>0&&(RMAP[id]&&RMAP[id].snack||PRODUCT_MAP[id])).map(id=>{const n=S[id],r=RMAP[id];
+  if(r){const nu=rNut(r),yN=r.yieldN||1,tot=n*yN;
+   return`<div class="ws-row"><button type="button" class="ws-open" data-open="${id}"><img src="${imgSrc(r)}" alt="" loading="lazy"><span class="ws-txt"><span class="ws-name">${esc(short(r))}</span><span class="ws-meta">${n} fournée${n>1?"s":""} · ${tot} ${esc(r.yieldU||"pièces")}${nu&&nu.k?` · ${fmtInt(nu.k)} kcal par ${esc(r.unitS||"pièce")}`:""}</span></span></button>
+   <div class="ws-bar"><span class="serv" role="group" aria-label="Fournées de ${esc(short(r))}"><button type="button" data-wsnk="${id}" data-dir="-1" aria-label="Une fournée de moins">−</button><b>${n}</b><button type="button" data-wsnk="${id}" data-dir="1" aria-label="Une fournée de plus">+</button></span><button type="button" class="btn sm" data-open="${id}">Cuisiner</button></div></div>`}
+  const p=PRODUCT_MAP[id];
+  return`<div class="ws-row"><div class="ws-open"><span class="ws-emo" aria-hidden="true">${p.emoji||"🍪"}</span><span class="ws-txt"><span class="ws-name">${esc(p.n)}</span><span class="ws-meta">Encas du commerce · ${n} à avoir</span></span></div>
+   <div class="ws-bar"><span class="serv" role="group" aria-label="Quantité de ${esc(p.n)}"><button type="button" data-wsnk="${id}" data-dir="-1" aria-label="Un de moins">−</button><b>${n}</b><button type="button" data-wsnk="${id}" data-dir="1" aria-label="Un de plus">+</button></span></div></div>`});
+ const free=SNACK_RECIPES.filter(r=>!(S[r.id]>0));
+ box.innerHTML=(rows.length?`<div class="ws-list">${rows.join("")}</div>`:`<p class="muted ws-empty">Aucun encas prévu cette semaine.</p>`)
+  +(free.length?`<div class="ws-add"><span class="ws-add-l">Prévoir :</span>${free.map(r=>`<button type="button" class="chip" data-wsnk-add="${r.id}">+ ${esc(short(r))}</button>`).join("")}</div>`
+   :SNACK_RECIPES.length?"":`<p class="ws-add"><button type="button" class="btn sm" data-act="rec-add">+ Ajouter une recette d'encas</button></p>`)}
+renderWeek=(f=>function(){f.apply(this,arguments);try{renderWeekSnacks()}catch(e){}})(renderWeek);
+document.addEventListener("click",e=>{const t=e.target.closest("[data-wsnk],[data-wsnk-add]");if(!t)return;e.stopPropagation();
+ if(t.dataset.wsnkAdd){const id=t.dataset.wsnkAdd;if(!RMAP[id])return;state.snacks[id]=1;commit();renderWeek();try{renderShop()}catch(err){}toast(short(RMAP[id])+" : prévu cette semaine");return}
+ const id=t.dataset.wsnk,v=Math.max(0,Math.min(99,(state.snacks[id]||0)+Number(t.dataset.dir)));if(v)state.snacks[id]=v;else delete state.snacks[id];
+ commit();renderWeek();try{renderShop()}catch(err){}if(!v)toast("Retiré de la semaine")},true);
+
+// --- bouton Réglages (synchro indiquée par la pastille)
+const GEAR_SVG=`<svg class="i sy-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>`;
+setSync=(f=>function(){f.apply(this,arguments);const el=document.getElementById("sync");if(!el)return;const st=el.textContent;
+ el.innerHTML=`${GEAR_SVG}<span class="sy-t">Réglages</span><i class="sy-dot" aria-hidden="true"></i>`;el.setAttribute("aria-label","Réglages et données · "+st);el.title=st+" · "+(el.title||"")})(setSync);
+try{setSync()}catch(e){}
+
+// --- bannière « Découvrir » plus compacte
+renderDiscBanner=(f=>function(){f.apply(this,arguments);const el=document.getElementById("discBanner");if(!el||el.hidden)return;const L=discSorted("all");
+ const h=el.querySelector(".dc-banner h2"),p=el.querySelector(".dc-banner .dc-b-txt>p:not(.dc-kick)");
+ if(h)h.textContent=`${L.length} recette${L.length>1?"s":""} de chefs à découvrir`;if(p)p.textContent="HelloFresh, 750g, Philippe Etchebest, Cyril Lignac… avec le lien, la nutrition et la vidéo. Tu choisis lesquelles ajouter.";
+ const k=el.querySelector(".dc-kick");if(k)k.innerHTML=`${DI.spark}À valider`})(renderDiscBanner);
+
+// --- barre « Aller à » (sections de l'onglet)
+function jumpTo(sel){let el=null;if(sel.startsWith("h:")){const lab=nrmS(sel.slice(2));el=Array.from(document.querySelectorAll("#suivi > *")).find(c=>{const h=c.querySelector("h2,h3,summary");return h&&nrmS(h.textContent).startsWith(lab)})}
+ else el=document.getElementById(sel);if(!el||el.hidden||!el.getClientRects().length)return false;
+ const jb=document.querySelector(".tab:not([hidden]) .jump"),ab=document.querySelector(".appbar");
+ const top=el.getBoundingClientRect().top+window.scrollY-(innerWidth<900&&ab?ab.offsetHeight:0)-(jb?jb.offsetHeight:0)-12;
+ const rm=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;try{window.scrollTo({top:Math.max(0,top),behavior:rm?"auto":"smooth"})}catch(e){window.scrollTo(0,top)}
+ const f=el.matches("h2,h3")?el:el.querySelector("h2,h3,summary");if(f){f.setAttribute("tabindex","-1");setTimeout(()=>{try{f.focus({preventScroll:true})}catch(e){}},rm?0:450)}return true}
+document.addEventListener("click",e=>{const t=e.target.closest("[data-jump]");if(!t)return;e.preventDefault();jumpTo(t.dataset.jump)});
+function syncJumpVis(){document.querySelectorAll(".jump [data-jump]").forEach(b=>{const s=b.dataset.jump;if(s.startsWith("h:"))return;const el=document.getElementById(s);b.hidden=!el||el.hidden||!el.innerHTML.trim()&&!/^(tt|grid)$/.test(s)})}
+renderAll=(f=>function(){f.apply(this,arguments);try{syncJumpVis()}catch(e){}})(renderAll);
+const abhSet=()=>{const a=document.querySelector(".appbar");document.documentElement.style.setProperty("--abh",(innerWidth<900&&a?a.offsetHeight:0)+"px")};
+addEventListener("resize",abhSet,{passive:true});abhSet();
 
 setTab(ui.tab);renderAll();initDb();sbStart();
 
