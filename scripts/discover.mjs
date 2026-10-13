@@ -51,12 +51,12 @@ const SRC = {
   marmiton: { name: "Marmiton", maps: [1, 2, 3, 4, 5, 6, 7, 8, 9].map((i) => `https://www.marmiton.org/wsitemap_recipes_${i}.xml`), re: /\/recettes\/recette_[a-z0-9-]+_\d+\.aspx$/, w: 2.5 },
 };
 const SNACK_SLUG = /(proteine|skyr|fromage-blanc|cottage|energy-ball|bouchee|muffin|pancake|barre|houmous|hummus|tzatziki|edamame|pois-chiches?-(grilles|rotis|croustillants)|oeufs?-(mimosa|durs?|cocotte|farcis)|roules?-de-jambon|collation|encas|snack|mug-cake|cheesecake|porridge|overnight|yaourt)/;
-const BAD = /(frite|friture|beignet|burger|pizza|tartiflette|raclette|fondue|croque|nugget|cordon bleu|\bpanee?s?\b|chips|gratin dauphinois|aligot|confit|lardon|camembert|\bbrie\b|mont d.or|reblochon|tarte|quiche|feuillete|feuilletee|pate brisee|terrine|navets? sales|choucroute|cassoulet|carbonara|kebab|tacos? (frite|frites)|hot ?dog)/;
+const BAD = /(frite|friture|beignet|burger|pizza|tartiflette|raclette|fondue|croque|nugget|cordon bleu|\bpanee?s?\b|chips|gratin dauphinois|aligot|confit|lardon|camembert|\bbrie\b|mont d.or|reblochon|tarte|quiche|feuillete|feuilletee|pate brisee|terrine|navets? sales|choucroute|cassoulet|carbonara|kebab|tacos? (frite|frites)|hot ?dog|grilled cheese|pepperoni|gateau|anniversaire)/;
 const SNACK_T = /(muffin|pancake|energy|bouchee|barre|cookie|mug ?cake|cheesecake|porridge|overnight|mimosa|roule|verrine|mousse|bowl ?cake|tartine|houmous|hummus|tzatziki|trempette|\bdip\b|crackers?|smoothie|yaourt|skyr|fromage blanc|cottage|oeufs? (durs?|a la coque|coque|cocotte|mimosa|farcis?)|oeuf (dur|a la coque|cocotte|mimosa|farci)|collation|encas|snack|gaufre|madeleine|edamame|pois chiches? (grilles|rotis|croustillants))/;
 const MEAL_T = /(puree|\briz\b|pates|spaghetti|semoule|quinoa|boulgour|nouilles|gratin|curry|mijote|roti|poelee|risotto|wok|bowl(?! ?cake)|tajine|blanquette|pot-au-feu)/;
 // catégorie de protéine (pour varier chaque page)
-const PT = [["crevettes", /crevette|gambas|fruits? de mer|moules?|calamar|encornet|saint-jacques|noix de st/], ["poisson", /saumon|cabillaud|thon|merlu|\blieu\b|colin|truite|sardine|maquereau|dorade|\bbar\b|poisson|haddock|eglefin|merlan|sole|lotte/],
-  ["dinde", /dinde/], ["poulet", /poulet|volaille|pintade/], ["boeuf", /boeuf|veau|steak|bavette|hache|kefta|bolognaise/], ["porc", /porc|jambon|filet mignon|echine|chorizo|saucisse/],
+const PT = [["crevettes", /crevette|gambas|fruits? de mer|\bmoules?\b|calamar|encornet|saint-jacques|noix de st|surimi|crabe/], ["poisson", /saumon|cabillaud|thon|merlu|\blieu\b|colin|truite|sardine|maquereau|dorade|\bbar\b|poisson|haddock|eglefin|merlan|sole|lotte/],
+  ["dinde", /dinde/], ["poulet", /poulet|volaille|pintade|canard|caille/], ["boeuf", /boeuf|veau|steak|bavette|hache|kefta|bolognaise|viande|boulette|agneau|paleron|tagliata/], ["porc", /porc|jambon|filet mignon|echine|chorizo|saucisse/],
   ["oeufs", /\boeufs?\b|omelette|frittata|shakshuka|chakchouka/], ["vege", /tofu|tempeh|seitan|lentille|pois chiche|haricot|feve|quinoa|falafel/]];
 // d'abord le titre (« Œufs cocotte aux asperges » = œufs), puis les premiers ingrédients
 const VEG = /\bv[eé]g[eé]|vegetari|vegan|tofu|tempeh|seitan|lentille|pois chiche|falafel|halloumi|paneer/;
@@ -94,7 +94,7 @@ function toRecipe(key, url, R) {
   // encas sain et protéiné
   const tt = nrm(t);
   const snackLike = !MEAL_T.test(tt) && (SNACK_T.test(tt) || /(petit[- ]dejeuner|brunch|gouter|collation|encas|snack|aperitif|amuse)/.test(cat + " " + nrm(R.keywords || "")));
-  if (snackLike && k <= 300) {
+  if (snackLike && k <= 300 && !(/(cake|brownie|cookie|crepe|gaufre|madeleine)/.test(tt) && !/prot[eé]in/.test(tt))) {
     if (k < 50 || p < 7 || pr < 0.2 || f > 16 || (sug != null && sug > 15)) return { why: "encas pas assez protéiné" };
     o.k = "encas"; const su = SNACK_UNIT.find(([re]) => re.test(nrm(t))); o.yU = su ? su[1] : y > 1 ? "portions" : "portion"; o.uS = su ? su[2] : "portion";
     o.emo = (SNACK_EMO.find(([re]) => re.test(nrm(t))) || [0, "🥚"])[1]; o.pt = "encas"; return { r: o };
@@ -109,7 +109,7 @@ function toRecipe(key, url, R) {
 // --- état (dans la branche data)
 fs.mkdirSync(path.join(DIR, "p"), { recursive: true });
 const SP = path.join(DIR, "state.json");
-const RULES = 2;
+const RULES = 3;
 let st = fs.existsSync(SP) ? JSON.parse(fs.readFileSync(SP, "utf8")) : null;
 if (!st || st.rules !== RULES) { if (st) say(`nouvelles règles (v${RULES}) : collecte reprise de zéro`); st = { rules: RULES, seen: {}, pending: [], titles: {}, pages: 0, total: 0, runs: 0 };
   for (const f of fs.readdirSync(path.join(DIR, "p"))) fs.unlinkSync(path.join(DIR, "p", f)); }
