@@ -1,0 +1,31 @@
+name: Recettes à découvrir
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: [".github/workflows/discover.yml", "scripts/discover*.mjs"]
+  schedule:
+    - cron: "17 4 * * *"
+permissions:
+  contents: write
+concurrency: { group: discover, cancel-in-progress: false }
+jobs:
+  discover:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - name: Sonde
+        run: node scripts/discover-probe.mjs
+      - name: Publier sur la branche data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git fetch origin data || true
+          mkdir -p /tmp/pub && cp -r out/* /tmp/pub/
+          if git rev-parse --verify origin/data >/dev/null 2>&1; then git checkout -B data origin/data; else git checkout --orphan data; git rm -rf . >/dev/null; fi
+          mkdir -p discover && cp -r /tmp/pub/* discover/
+          git add discover && git commit -m "Recettes à découvrir : mise à jour" || echo "rien à publier"
+          git push origin data
