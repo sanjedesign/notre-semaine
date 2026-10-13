@@ -158,6 +158,6 @@ let made = 0, pg;
 while ((pg = takePage(false))) { st.pages++; st.total += pg.length; fs.writeFileSync(path.join(DIR, "p", `${st.pages}.json`), JSON.stringify(pg)); made++; }
 st.runs++;
 fs.writeFileSync(SP, JSON.stringify(st));
-fs.writeFileSync(IX, JSON.stringify({ v: 1, updated: new Date().toISOString(), pages: st.pages, total: st.total, sources: Object.values(SRC).map((s) => s.name) }));
+fs.writeFileSync(IX, JSON.stringify({ v: 1, gen: RULES, updated: new Date().toISOString(), pages: st.pages, total: st.total, sources: Object.values(SRC).map((s) => s.name) }));
 say(`pages créées : ${made} · total ${st.pages} pages, ${st.total} recettes · en attente ${st.pending.length}`);
 fs.writeFileSync(path.join(DIR, "log.txt"), log.join("\n") + "\n");
