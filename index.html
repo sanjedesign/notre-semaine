@@ -1575,6 +1575,12 @@ h1,h2,.sec-head h1,.block-title,.row-head h2,.m-body h2,.pn-title{color:var(--ti
 @media (max-width:380px){.sw-stack{min-height:400px}.sw-btns{gap:12px}.sw-b.no{width:60px;height:60px}.sw-b.yes{width:66px;height:66px}}
 @media (prefers-reduced-motion:reduce){.sw-card,.sw-next,.sw-ref svg{transition:none!important}}
 
+/* ================= v23 : chargement des nouvelles recettes ================= */
+.sw-ref[aria-busy="true"] svg{animation:swSpin .9s linear infinite}
+.sw-ref:disabled{opacity:.75;cursor:progress}
+@keyframes swSpin{to{transform:rotate(-360deg)}}
+@media (prefers-reduced-motion:reduce){.sw-ref[aria-busy="true"] svg{animation:none}}
+
 </style>
 </head>
 <body>
@@ -1672,7 +1678,7 @@ h1,h2,.sec-head h1,.block-title,.row-head h2,.m-body h2,.pn-title{color:var(--ti
 </div>
 <div id="timers" class="timers" hidden aria-live="polite"></div>
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
-<script>window.NS_CONFIG={"hosted": true, "sbUrl": "https://zjsawjudrdneeptxbskd.supabase.co", "sbKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpqc2F3anVkcmRuZWVwdHhic2tkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1NjUxMjcsImV4cCI6MjEwNzE0MTEyN30.Wn1bUy--5O78gGICTOyEGbnT6B-SdoNCG_XxBBaaUIY", "build": "20261012213444"}</script>
+<script>window.NS_CONFIG={"hosted": true, "sbUrl": "https://zjsawjudrdneeptxbskd.supabase.co", "sbKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpqc2F3anVkcmRuZWVwdHhic2tkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1NjUxMjcsImV4cCI6MjEwNzE0MTEyN30.Wn1bUy--5O78gGICTOyEGbnT6B-SdoNCG_XxBBaaUIY", "build": "20261013200845"}</script>
 <script>
 const AISLES={L:"Fruits & légumes",H:"Herbes fraîches",V:"Viandes & poissons",C:"Crèmerie & œufs",S:"Surgelés",F:"Féculents",B:"Conserves",E:"Épices & condiments"};
 const AISLE_ORDER=["L","H","V","C","S","F","B","E"];
@@ -3125,6 +3131,13 @@ DISC.push(
  ing:["30 g de préparation en poudre riche en protéines (1 dose)","40 g de flocons d'avoine","60 g de farine complète","2 carottes","3 blancs d'œufs","100 ml de lait d'amande","2 cs de miel","2 cs de sirop d'agave","1 cc de levure","½ cc de cannelle"]}
 );
 for(const e of DISC){if(!DISC_MAP[e.id]){e.ing=e.ing.map(l=>l.replace(/\((?:s|x|es)\)/g,"").replace(/\s{2,}/g," ").trim());DISC_MAP[e.id]=e}}
+
+// ================= v23 (avant l'état) : choix gardés pour les recettes chargées à distance =================
+// state.disc[id] = "ok" (ajoutée), "no" (écartée) ou "vu" (passée sans choisir) : ces recettes ne reviennent plus.
+const normalizeV23=normalize;
+normalize=function(d){const s=normalizeV23(d);const src=d&&typeof d==="object"&&d.disc&&typeof d.disc==="object"?d.disc:{};const out={...(s.disc||{})};
+ for(const k in src){const v=src[k];if((v==="ok"||v==="no"||v==="vu")&&(DISC_MAP[k]||/^x[a-z0-9]{6,20}$/.test(k)))out[k]=v}
+ const keys=Object.keys(out);if(keys.length>4000)for(const k of keys.slice(0,keys.length-4000))delete out[k];s.disc=out;return s};
 
 // ---------- état ----------
 const dayOf=k=>k.split("-")[0];
@@ -5537,6 +5550,79 @@ renderDiscBanner=(f=>function(){f.apply(this,arguments);const el=document.getEle
  const h=el.querySelector(".dc-banner h2"),p=el.querySelector(".dc-banner .dc-b-txt>p:not(.dc-kick)");
  if(h)h.textContent=`${L.length-nS} recettes et ${nS} encas protéinés à découvrir`;if(p)p.textContent="HelloFresh, chefs, Santé Canada, Manger Bouger, WW… Glisse la carte pour ajouter ou écarter, « Actualiser » pour d'autres idées."})(renderDiscBanner);
 try{renderDiscBanner()}catch(e){}
+
+
+// ================= v23 : « Actualiser » charge de nouvelles recettes à distance, 10 par 10 =================
+// Une collecte deux fois par jour (GitHub Actions) range des recettes saines et protéinées de HelloFresh, Jow et Marmiton
+// par pages de 10 ; l'appli lit la page suivante à chaque « Actualiser ». Les recettes écartées ou passées ne reviennent jamais.
+const DREM="https://raw.githubusercontent.com/sanjedesign/notre-semaine/data/discover/";
+const DQ_KEY="sano-discq",DP_KEY="sano-discp";
+const lsGetJ=(k,d)=>{try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}};
+const lsSetJ=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}};
+// curseur : dernière page lue, pour une génération donnée de la collecte (remis à zéro si la collecte repart de zéro)
+const dpRaw=lsGetJ(DP_KEY,null);let DQ=[],DP=dpRaw&&typeof dpRaw==="object"?(+dpRaw.p||0):(+dpRaw||0),DG=dpRaw&&typeof dpRaw==="object"?dpRaw.g:null,DIX=null,DIXt=0;
+const okUrl=u=>typeof u==="string"&&/^https:\/\/[^\s"'<>]{4,600}$/.test(u);
+function dqValid(e){if(!e||typeof e!=="object"||!/^x[a-z0-9]{6,20}$/.test(e.id||"")||!e.t||!okUrl(e.u)||!Array.isArray(e.ing)||!e.ing.length)return null;
+ const o={id:e.id,t:String(e.t).slice(0,120),src:String(e.src||"").slice(0,40),u:e.u,img:okUrl(e.img)?e.img:"",min:+e.min||0,y:Math.max(1,Math.min(24,+e.y||2)),
+  ing:e.ing.map(l=>String(l).replace(/\((?:s|x|es)\)/g,"").replace(/\s{2,}/g," ").trim().slice(0,140)).filter(Boolean).slice(0,30)};
+ if(e.a)o.a=String(e.a).slice(0,60);if(Array.isArray(e.r)&&e.r.length===2)o.r=[+e.r[0],+e.r[1]];if(/^[A-Za-z0-9_-]{11}$/.test(e.v||""))o.v=e.v;
+ if(e.n&&+e.n.k>0)o.n={k:+e.n.k,p:+e.n.p||0,f:+e.n.f||0,c:+e.n.c||0,...(e.n.fi!=null?{fi:+e.n.fi}:{})};
+ if(e.k==="encas"){o.k="encas";o.yU=String(e.yU||"portions").slice(0,20);o.uS=String(e.uS||"portion").slice(0,20);o.emo=PEMOJI.includes(e.emo)?e.emo:"🥚"}
+ if(typeof e.pt==="string")o.pt=e.pt;return o}
+function dqRegister(list){for(const e of list){if(!e||DISC_MAP[e.id])continue;DISC.push(e);DISC_MAP[e.id]=e}}
+function dqSave(){const dz=state.disc||{};DQ=DQ.filter(e=>!dz[e.id]).slice(-80);lsSetJ(DQ_KEY,DQ);lsSetJ(DP_KEY,{p:DP,g:DG})}
+DQ=(lsGetJ(DQ_KEY,[])||[]).map(dqValid).filter(Boolean);dqRegister(DQ);
+async function dqIndex(){if(DIX&&Date.now()-DIXt<6e5)return DIX;const r=await fetch(DREM+"index.json?t="+Math.floor(Date.now()/3e5),{cache:"no-store"});if(!r.ok)throw new Error("index");DIX=await r.json();DIXt=Date.now();if(DIX.gen!=null&&DIX.gen!==DG){DG=DIX.gen;DP=0;lsSetJ(DP_KEY,{p:DP,g:DG})}return DIX}
+// lit les pages suivantes jusqu'à trouver `need` recettes encore jamais vues (dans la catégorie choisie)
+async function dqFetch(need,tag){const ix=await dqIndex();let got=0,pages=0;const urls=new Set(DISC.map(e=>e.u));
+ while(DP<(+ix.pages||0)&&pages<8){const n=DP+1;const r=await fetch(DREM+"p/"+n+".json");if(!r.ok)throw new Error("page");const L=await r.json();DP=n;pages++;
+  const dz=state.disc||{},mine=new Set((state.myrec||[]).map(x=>x.u).filter(Boolean));
+  const fresh=(Array.isArray(L)?L:[]).map(dqValid).filter(e=>e&&!dz[e.id]&&!DISC_MAP[e.id]&&!urls.has(e.u)&&!mine.has(e.u));
+  fresh.forEach(e=>urls.add(e.u));DQ.push(...fresh);dqRegister(fresh);got+=fresh.filter(e=>tag==="all"||discTag(e).p===tag).length;if(got>=need)break}
+ dqSave();return{got,left:Math.max(0,(+ix.pages||0)-DP)}}
+// série : d'abord les recettes chargées à distance, une catégorie à tour de rôle, 2 encas dans « Tout »
+function dqPick(arr,n,tag){const G={};for(const e of arr){const p=discTag(e).p;(G[p]=G[p]||[]).push(e)}const out=[];
+ if(tag!=="all"){for(const p in G)out.push(...G[p]);return out.slice(0,n)}
+ const cats=Object.keys(G).filter(p=>p!=="encas").sort(()=>Math.random()-0.5),nM=Math.max(0,n-Math.min(2,(G.encas||[]).length));
+ for(let i=0;out.length<nM;i++){let any=false;for(const p of cats){const g=G[p];if(g[i]&&out.length<nM){out.push(g[i]);any=true}}if(!any)break}
+ (G.encas||[]).slice(0,n-out.length).forEach((e,k)=>out.splice(Math.min(out.length,3+k*4),0,e));return out}
+discMakeBatch=function(tag){const pool=discPool(tag),rem=new Set(DQ.map(e=>e.id));
+ let out=dqPick(pool.filter(e=>rem.has(e.id)),D_N,tag);if(out.length<D_N){const have=new Set(out.map(e=>e.id));out=out.concat(dqPick(pool.filter(e=>!rem.has(e.id)&&!have.has(e.id)).sort((a,b)=>discScore(b)-discScore(a)),D_N-out.length,tag))}
+ ui.dbatch=out.map(e=>e.id);ui.dbatchTag=tag;ui.dstats={ok:0,no:0};ui.dlast=null;ui.dshown=new Set();return false};
+// passer à une nouvelle série : les recettes vues sans choix sont rangées comme « passées » et ne reviennent plus
+function discMarkShown(){const dz={...(state.disc||{})};let n=0;for(const id of ui.dshown||[])if(!dz[id]&&!(ui.dpend&&ui.dpend.has(id))&&DISC_MAP[id]){dz[id]="vu";n++}
+ if(n){state.disc=dz;commit();dqSave()}ui.dshown=new Set()}
+async function discRefresh(){if(ui.dload)return;const tag=ui.dtag||"all";discMarkShown();ui.dload=true;renderPanel();let err=false,res=null;
+ try{res=await dqFetch(D_N,tag)}catch(e){err=true}
+ ui.dload=false;discMakeBatch(tag);if(ui.panel==="decouvrir")renderPanel();try{renderDiscBanner()}catch(e){}
+ const k=(ui.dbatch||[]).length;
+ toast(err?(k?"Serveur de recettes injoignable : voici des recettes déjà chargées":"Serveur de recettes injoignable : réessaie dans un moment")
+  :!k?"Plus de nouvelles recettes pour l'instant : de nouvelles arrivent chaque jour":`${k} nouvelle${k>1?"s":""} recette${k>1?"s":""}`);
+ const s=document.querySelector(".sw-stack,.dc-grid");if(s&&!swReduced())try{s.animate([{opacity:0,transform:"translateY(14px) scale(.98)"},{opacity:1,transform:"none"}],{duration:320,easing:"cubic-bezier(.2,.8,.2,1)"})}catch(x){}}
+// à l'ouverture : si la série est incomplète, on complète en arrière-plan sans déranger la carte affichée
+async function discTopUp(){if(ui.dload||ui.dtried)return;ui.dtried=true;const tag=ui.dtag||"all";
+ try{await dqFetch(D_N,tag)}catch(e){return}
+ if(ui.panel!=="decouvrir"||(ui.dtag||"all")!==tag)return;const have=new Set(ui.dbatch||[]),need=D_N-discDeck().length;if(need<=0)return;
+ const add=dqPick(discPool(tag).filter(e=>!have.has(e.id)&&DQ.some(q=>q.id===e.id)),need,tag);if(!add.length)return;ui.dbatch=(ui.dbatch||[]).concat(add.map(e=>e.id));if(!ui.dsel)renderPanel()}
+document.addEventListener("click",ev=>{const t=ev.target.closest&&ev.target.closest('[data-sw="refresh"]');if(!t)return;ev.stopImmediatePropagation();ev.preventDefault();if(!t.disabled)discRefresh()},true);
+document.addEventListener("click",ev=>{const t=ev.target.closest&&ev.target.closest('[data-sw^="tag|"]');if(!t)return;discMarkShown();ui.dtried=false},true);
+// panneau : cartes vues retenues, bouton « Actualiser » occupé pendant le chargement, plus de « revoir les écartées »
+const panelDiscV23=panelDisc;
+panelDisc=function(){if(!ui.dsel&&(!ui.dbatch||ui.dbatchTag!==(ui.dtag||"all")))discMakeBatch(ui.dtag||"all");
+ let h=panelDiscV23();if(ui.dsel)return h;
+ const deck=discDeck();ui.dshown=ui.dshown||new Set();if((ui.dview||"swipe")==="list")deck.forEach(id=>ui.dshown.add(id));else if(deck[0])ui.dshown.add(deck[0]);
+ h=h.replace(/<button type="button" class="link" data-dsc="reset">[^<]*<\/button>/,"");
+ if(ui.dload)h=h.replace('<button type="button" class="btn sw-ref" data-sw="refresh">','<button type="button" class="btn sw-ref" data-sw="refresh" aria-busy="true" disabled>').replace(/(data-sw="refresh"[^>]*>)(<svg[\s\S]*?<\/svg>)Actualiser/,"$1$2Chargement…");
+ if(deck.length<D_N&&!ui.dtried)setTimeout(discTopUp,0);return h};
+swEnd=function(st){const pages=DIX?Math.max(0,(+DIX.pages||0)-DP):1;return`<div class="sw-end"><p class="sw-end-t">${st.ok||st.no?`Série terminée : ${st.ok} ajoutée${st.ok>1?"s":""}, ${st.no} écartée${st.no>1?"s":""}.`:"Série terminée."}</p>
+ <p class="sw-end-s">${pages||discPool(ui.dtag||"all").length?"« Actualiser » charge 10 nouvelles recettes que tu n'as encore jamais vues.":"Tu as vu toutes les recettes disponibles. De nouvelles arrivent chaque jour."}</p>
+ <button type="button" class="btn primary dc-big" data-sw="refresh"${ui.dload?" disabled":""}>${SW_I.ref}${ui.dload?"Chargement…":"Actualiser : 10 nouvelles recettes"}</button></div>`};
+// bannière : toujours visible (de nouvelles recettes peuvent être chargées)
+renderDiscBanner=function(){const el=document.getElementById("discBanner");if(!el)return;const L=discSorted("all");const th=L.concat(DQ).filter(e=>e.img).slice(0,3);el.hidden=false;
+ el.innerHTML=`<div class="dc-banner"><div class="dc-b-txt"><p class="dc-kick">${DI.spark}À valider</p><h2>Recettes et encas protéinés à découvrir</h2><p>HelloFresh, Jow, Marmiton, chefs… 10 nouvelles idées saines à chaque « Actualiser », jamais deux fois les mêmes.</p><button type="button" class="btn primary dc-go" data-dsc="open">Découvrir</button></div>
+ <div class="dc-b-art" aria-hidden="true">${th.map((e,i)=>`<span class="dc-b-ph p${i}"><img src="${esc(e.img)}" alt="" loading="lazy" referrerpolicy="no-referrer"></span>`).join("")}</div></div>`};
+try{renderDiscBanner()}catch(e){}
+document.addEventListener("click",ev=>{if(ev.target.closest&&ev.target.closest('[data-dsc="open"]'))ui.dtried=false},true);
 
 setTab(ui.tab);renderAll();initDb();sbStart();
 
