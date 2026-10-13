@@ -1,4 +1,3 @@
-nouvelles règles (v3) : collecte reprise de zéro
 plan hellofresh 200 https://www.hellofresh.fr/sitemap_recipe_pages.xml → 8358
 plan jow 200 https://jow.fr/sitemap.xml → 3683
 plan marmiton 200 https://www.marmiton.org/wsitemap_recipes_1.xml → 5000
@@ -11,5 +10,5 @@ plan marmiton 200 https://www.marmiton.org/wsitemap_recipes_7.xml → 5000
 plan marmiton 200 https://www.marmiton.org/wsitemap_recipes_8.xml → 5000
 plan marmiton 200 https://www.marmiton.org/wsitemap_recipes_9.xml → 3896
 à lire : 520 fiches (168 pistes d'encas)
-gardées : 63 · écartées : {"kcal #":163,"plat trop riche (nom)":83,"protéines # g":104,"catégorie dessert":14,"encas pas assez protéiné":28,"nutrition absente":24,"lipides # g":34,"catégorie cocktail":2,"catégorie sauce":1,"fiche incomplète":1,"catégorie boisson":1,"catégorie boisson mixee":1,"catégorie dessert sans cuisson":1}
-pages créées : 6 · total 6 pages, 60 recettes · en attente 3
+gardées : 64 · écartées : {"protéines # g":119,"kcal #":157,"lipides # g":34,"plat trop riche (nom)":78,"encas pas assez protéiné":23,"nutrition absente":18,"catégorie dessert sans cuisson":3,"catégorie dessert":14,"catégorie confiserie":2,"fiche incomplète":2,"catégorie sauce":1,"catégorie cocktail":2,"catégorie boisson":3}
+pages créées : 6 · total 12 pages, 120 recettes · en attente 7
