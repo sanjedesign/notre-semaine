@@ -1,3 +1,4 @@
+nouvelles règles (v3) : collecte reprise de zéro
 plan hellofresh 200 https://www.hellofresh.fr/sitemap_recipe_pages.xml → 8358
 plan jow 200 https://jow.fr/sitemap.xml → 3683
 plan marmiton 200 https://www.marmiton.org/wsitemap_recipes_1.xml → 5000
@@ -9,6 +10,6 @@ plan marmiton 200 https://www.marmiton.org/wsitemap_recipes_6.xml → 5000
 plan marmiton 200 https://www.marmiton.org/wsitemap_recipes_7.xml → 5000
 plan marmiton 200 https://www.marmiton.org/wsitemap_recipes_8.xml → 5000
 plan marmiton 200 https://www.marmiton.org/wsitemap_recipes_9.xml → 3896
-à lire : 420 fiches (138 pistes d'encas)
-gardées : 56 · écartées : {"protéines # g":102,"kcal #":125,"plat trop riche (nom)":59,"encas pas assez protéiné":21,"nutrition absente":16,"lipides # g":22,"catégorie dessert":14,"catégorie confiserie":1,"catégorie boisson chaude":2,"catégorie dessert sans cuisson":1,"fiche incomplète":1}
-pages créées : 6 · total 9 pages, 90 recettes · en attente 5
+à lire : 520 fiches (168 pistes d'encas)
+gardées : 63 · écartées : {"kcal #":163,"plat trop riche (nom)":83,"protéines # g":104,"catégorie dessert":14,"encas pas assez protéiné":28,"nutrition absente":24,"lipides # g":34,"catégorie cocktail":2,"catégorie sauce":1,"fiche incomplète":1,"catégorie boisson":1,"catégorie boisson mixee":1,"catégorie dessert sans cuisson":1}
+pages créées : 6 · total 6 pages, 60 recettes · en attente 3
