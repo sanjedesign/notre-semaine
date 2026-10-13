@@ -51,12 +51,17 @@ const SRC = {
   marmiton: { name: "Marmiton", maps: [1, 2, 3, 4, 5, 6, 7, 8, 9].map((i) => `https://www.marmiton.org/wsitemap_recipes_${i}.xml`), re: /\/recettes\/recette_[a-z0-9-]+_\d+\.aspx$/, w: 2.5 },
 };
 const SNACK_SLUG = /(proteine|skyr|fromage-blanc|cottage|energy-ball|bouchee|muffin|pancake|barre|houmous|hummus|tzatziki|edamame|pois-chiches?-(grilles|rotis|croustillants)|oeufs?-(mimosa|durs?|cocotte|farcis)|roules?-de-jambon|collation|encas|snack|mug-cake|cheesecake|porridge|overnight|yaourt)/;
-const BAD = /(frite|friture|beignet|burger|pizza|tartiflette|raclette|fondue|croque|nugget|cordon bleu|pane|panee|chips|gratin dauphinois|aligot|confit|lardon)/;
+const BAD = /(frite|friture|beignet|burger|pizza|tartiflette|raclette|fondue|croque|nugget|cordon bleu|\bpanee?s?\b|chips|gratin dauphinois|aligot|confit|lardon|camembert|\bbrie\b|mont d.or|reblochon|tarte|quiche|feuillete|feuilletee|pate brisee|terrine|navets? sales|choucroute|cassoulet|carbonara|kebab|tacos? (frite|frites)|hot ?dog)/;
+const SNACK_T = /(muffin|pancake|energy|bouchee|barre|cookie|mug ?cake|cheesecake|porridge|overnight|mimosa|roule|verrine|mousse|bowl ?cake|tartine|houmous|hummus|tzatziki|trempette|\bdip\b|crackers?|smoothie|yaourt|skyr|fromage blanc|cottage|oeufs? (durs?|a la coque|coque|cocotte|mimosa|farcis?)|oeuf (dur|a la coque|cocotte|mimosa|farci)|collation|encas|snack|gaufre|madeleine|edamame|pois chiches? (grilles|rotis|croustillants))/;
+const MEAL_T = /(puree|\briz\b|pates|spaghetti|semoule|quinoa|boulgour|nouilles|gratin|curry|mijote|roti|poelee|risotto|wok|bowl(?! ?cake)|tajine|blanquette|pot-au-feu)/;
 // catégorie de protéine (pour varier chaque page)
 const PT = [["crevettes", /crevette|gambas|fruits? de mer|moules?|calamar|encornet|saint-jacques|noix de st/], ["poisson", /saumon|cabillaud|thon|merlu|\blieu\b|colin|truite|sardine|maquereau|dorade|\bbar\b|poisson|haddock|eglefin|merlan|sole|lotte/],
   ["dinde", /dinde/], ["poulet", /poulet|volaille|pintade/], ["boeuf", /boeuf|veau|steak|bavette|hache|kefta|bolognaise/], ["porc", /porc|jambon|filet mignon|echine|chorizo|saucisse/],
   ["oeufs", /\boeufs?\b|omelette|frittata|shakshuka|chakchouka/], ["vege", /tofu|tempeh|seitan|lentille|pois chiche|haricot|feve|quinoa|falafel/]];
-const ptOf = (txt) => { const t = nrm(txt); for (const [p, re] of PT) if (re.test(t)) return p; return "vege"; };
+// d'abord le titre (« Œufs cocotte aux asperges » = œufs), puis les premiers ingrédients
+const VEG = /\bv[eé]g[eé]|vegetari|vegan|tofu|tempeh|seitan|lentille|pois chiche|falafel|halloumi|paneer/;
+const ptOf = (title, ing) => { const t = nrm(title); if (VEG.test(t)) return "vege"; for (const [p, re] of PT) if (re.test(t)) return p;
+  const i = nrm(ing.slice(0, 6).join(" | ")); for (const [p, re] of PT) if (re.test(i)) return p; return "vege"; };
 
 function normIng(src, s) {
   let x = clean(s).replace(/\((?:s|x|es)\)/g, "").replace(/\s{2,}/g, " ").trim();
@@ -76,9 +81,7 @@ function toRecipe(key, url, R) {
   if (!t || ing.length < 2) return { why: "fiche incomplète" };
   const yTxt = Array.isArray(R.recipeYield) ? R.recipeYield.join(" ") : String(R.recipeYield ?? "");
   const y = Math.max(1, Math.min(24, Math.round(num(yTxt) || (key === "jow" ? 1 : 2))));
-  const txt = nrm(t + " " + ing.join(" ") + " " + (R.recipeCategory || "") + " " + (R.keywords || ""));
   const cat = nrm(Array.isArray(R.recipeCategory) ? R.recipeCategory.join(" ") : R.recipeCategory || "");
-  const slugSnack = SNACK_SLUG.test(nrm(url));
   const pr = (p * 4) / k;
   const o = { id: idOf(url), t, src: SRC[key].name, u: url, img: imgOf(R.image), min: iso(R.totalTime) || iso(R.prepTime) + iso(R.cookTime) || 0, y, ing, n: { k: Math.round(k), p: +p.toFixed(1), f: +f.toFixed(1), c: +c.toFixed(1) } };
   if (fi != null) o.n.fi = +fi.toFixed(1);
@@ -87,25 +90,29 @@ function toRecipe(key, url, R) {
   const ar = R.aggregateRating; if (ar && num(ar.ratingValue) && num(ar.ratingCount || ar.reviewCount)) o.r = [Math.round(num(ar.ratingValue) * 10) / 10, Math.round(num(ar.ratingCount || ar.reviewCount))];
   const vid = R.video && (Array.isArray(R.video) ? R.video[0] : R.video); const yv = ytId(vid && (vid.embedUrl || vid.contentUrl)); if (yv) o.v = yv;
   if (BAD.test(nrm(t))) return { why: "plat trop riche (nom)" };
-  if (/dessert|boisson|cocktail|sauce|confiserie/.test(cat) && !slugSnack) return { why: "catégorie " + cat };
+  if (/dessert|boisson|cocktail|sauce|confiserie/.test(cat) && !SNACK_T.test(nrm(t))) return { why: "catégorie " + cat };
   // encas sain et protéiné
-  const snackLike = slugSnack || /(petit[- ]dejeuner|brunch|gouter|collation|encas|snack|amuse)/.test(cat + " " + nrm(R.keywords || ""));
+  const tt = nrm(t);
+  const snackLike = !MEAL_T.test(tt) && (SNACK_T.test(tt) || /(petit[- ]dejeuner|brunch|gouter|collation|encas|snack|aperitif|amuse)/.test(cat + " " + nrm(R.keywords || "")));
   if (snackLike && k <= 300) {
-    if (k < 50 || p < 7 || pr < 0.2 || f > 16 || (sug != null && sug > 18)) return { why: "encas pas assez protéiné" };
+    if (k < 50 || p < 7 || pr < 0.2 || f > 16 || (sug != null && sug > 15)) return { why: "encas pas assez protéiné" };
     o.k = "encas"; const su = SNACK_UNIT.find(([re]) => re.test(nrm(t))); o.yU = su ? su[1] : y > 1 ? "portions" : "portion"; o.uS = su ? su[2] : "portion";
     o.emo = (SNACK_EMO.find(([re]) => re.test(nrm(t))) || [0, "🥚"])[1]; o.pt = "encas"; return { r: o };
   }
   // plat : léger et riche en protéines
-  if (k < 280 || k > 720) return { why: `kcal ${Math.round(k)}` };
+  if (k < 280 || k > 680) return { why: `kcal ${Math.round(k)}` };
   if (p < 24 || pr < 0.17) return { why: `protéines ${p} g` };
-  if (f > 34) return { why: `lipides ${f} g` };
-  o.pt = ptOf(txt); return { r: o };
+  if (f > 30 || (f * 9) / k > 0.45) return { why: `lipides ${f} g` };
+  o.pt = ptOf(t, ing); return { r: o };
 }
 
 // --- état (dans la branche data)
 fs.mkdirSync(path.join(DIR, "p"), { recursive: true });
 const SP = path.join(DIR, "state.json");
-const st = fs.existsSync(SP) ? JSON.parse(fs.readFileSync(SP, "utf8")) : { seen: {}, pending: [], titles: {}, pages: 0, total: 0, runs: 0 };
+const RULES = 2;
+let st = fs.existsSync(SP) ? JSON.parse(fs.readFileSync(SP, "utf8")) : null;
+if (!st || st.rules !== RULES) { if (st) say(`nouvelles règles (v${RULES}) : collecte reprise de zéro`); st = { rules: RULES, seen: {}, pending: [], titles: {}, pages: 0, total: 0, runs: 0 };
+  for (const f of fs.readdirSync(path.join(DIR, "p"))) fs.unlinkSync(path.join(DIR, "p", f)); }
 const IX = path.join(DIR, "index.json");
 
 async function urlsOf(key) {
