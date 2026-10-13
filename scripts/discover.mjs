@@ -59,7 +59,7 @@ const PT = [["crevettes", /crevette|gambas|fruits? de mer|\bmoules?\b|calamar|en
   ["dinde", /dinde/], ["poulet", /poulet|volaille|pintade|canard|caille/], ["boeuf", /boeuf|veau|steak|bavette|hache|kefta|bolognaise|viande|boulette|agneau|paleron|tagliata/], ["porc", /porc|jambon|filet mignon|echine|chorizo|saucisse/],
   ["oeufs", /\boeufs?\b|omelette|frittata|shakshuka|chakchouka/], ["vege", /tofu|tempeh|seitan|lentille|pois chiche|haricot|feve|quinoa|falafel/]];
 // d'abord le titre (« Œufs cocotte aux asperges » = œufs), puis les premiers ingrédients
-const VEG = /\bv[eé]g[eé]|vegetari|vegan|tofu|tempeh|seitan|lentille|pois chiche|falafel|halloumi|paneer/;
+const VEG = /\bv[eé]g[eé]|vegetari|vegan|tofu|tempeh|seitan|falafel|halloumi|paneer/;
 const ptOf = (title, ing) => { const t = nrm(title); if (VEG.test(t)) return "vege"; for (const [p, re] of PT) if (re.test(t)) return p;
   const i = nrm(ing.slice(0, 6).join(" | ")); for (const [p, re] of PT) if (re.test(i)) return p; return "vege"; };
 
@@ -96,6 +96,7 @@ function toRecipe(key, url, R) {
   const snackLike = !MEAL_T.test(tt) && (SNACK_T.test(tt) || /(petit[- ]dejeuner|brunch|gouter|collation|encas|snack|aperitif|amuse)/.test(cat + " " + nrm(R.keywords || "")));
   if (snackLike && k <= 300 && !(/(cake|brownie|cookie|crepe|gaufre|madeleine)/.test(tt) && !/prot[eé]in/.test(tt))) {
     if (k < 50 || p < 7 || pr < 0.2 || f > 16 || (sug != null && sug > 15)) return { why: "encas pas assez protéiné" };
+    if (/(bacon|chorizo|saucisson|rillette|lardon|salami)/.test(tt)) return { why: "encas trop gras" };
     o.k = "encas"; const su = SNACK_UNIT.find(([re]) => re.test(nrm(t))); o.yU = su ? su[1] : y > 1 ? "portions" : "portion"; o.uS = su ? su[2] : "portion";
     o.emo = (SNACK_EMO.find(([re]) => re.test(nrm(t))) || [0, "🥚"])[1]; o.pt = "encas"; return { r: o };
   }
@@ -144,6 +145,10 @@ for (const [key, url] of queue) {
 }
 say(`gardées : ${ok} · écartées : ${JSON.stringify(why)}`);
 
+// les catégories des pages déjà publiées suivent les règles actuelles
+for (const f of fs.readdirSync(path.join(DIR, "p"))) { const fp = path.join(DIR, "p", f); try { const L = JSON.parse(fs.readFileSync(fp, "utf8")); let ch = false;
+  for (const e of L) { if (e.k === "encas") continue; const pt = ptOf(e.t, e.ing); if (pt !== e.pt) { e.pt = pt; ch = true; } } if (ch) fs.writeFileSync(fp, JSON.stringify(L)); } catch { /* page illisible */ } }
+for (const e of st.pending) if (e.k !== "encas") e.pt = ptOf(e.t, e.ing);
 // --- pages de 10 : une recette par catégorie à tour de rôle + 2 encas
 function takePage(force) {
   const P = st.pending; const sn = P.filter((r) => r.k === "encas"), mains = P.filter((r) => r.k !== "encas");
