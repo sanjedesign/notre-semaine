@@ -1,31 +1,39 @@
 name: Recettes à découvrir
+# Chaque nuit : nouvelles recettes saines et protéinées (HelloFresh, Jow, Marmiton) rangées par pages de 10
+# dans la branche « data », lues par l'appli avec le bouton « Actualiser ».
 on:
   workflow_dispatch:
   push:
     branches: [main]
-    paths: [".github/workflows/discover.yml", "scripts/discover*.mjs"]
+    paths: [".github/workflows/discover.yml", "scripts/discover.mjs"]
   schedule:
-    - cron: "17 4 * * *"
+    - cron: "17 3 * * *"
 permissions:
   contents: write
 concurrency: { group: discover, cancel-in-progress: false }
 jobs:
   discover:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 40
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with: { node-version: 20 }
-      - name: Sonde
-        run: node scripts/discover-probe.mjs
-      - name: Publier sur la branche data
+      - name: Branche data
         run: |
+          git fetch origin data
+          git worktree add data origin/data
+      - name: Chercher de nouvelles recettes
+        run: node scripts/discover.mjs
+        env:
+          DATA_DIR: data/discover
+          MAX_FETCH: ${{ github.event_name == 'schedule' && '160' || '420' }}
+      - name: Publier
+        run: |
+          cd data
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git fetch origin data || true
-          mkdir -p /tmp/pub && cp -r out/* /tmp/pub/
-          if git rev-parse --verify origin/data >/dev/null 2>&1; then git checkout -B data origin/data; else git checkout --orphan data; git rm -rf . >/dev/null; fi
-          mkdir -p discover && cp -r /tmp/pub/* discover/
-          git add discover && git commit -m "Recettes à découvrir : mise à jour" || echo "rien à publier"
-          git push origin data
+          git rm -q --ignore-unmatch discover/probe.txt
+          git add discover
+          git commit -q -m "Recettes à découvrir : mise à jour" || echo "rien à publier"
+          git push origin HEAD:data
