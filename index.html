@@ -1581,6 +1581,42 @@ h1,h2,.sec-head h1,.block-title,.row-head h2,.m-body h2,.pn-title{color:var(--ti
 @keyframes swSpin{to{transform:rotate(-360deg)}}
 @media (prefers-reduced-motion:reduce){.sw-ref[aria-busy="true"] svg{animation:none}}
 
+/* ================= v24 : scanner, mes saisies ================= */
+.sc-reader{position:relative;max-width:520px;aspect-ratio:4/3;max-height:56vh;margin:6px auto 0;border-radius:20px;overflow:hidden;background:#151012;min-height:0}
+.sc-reader video{width:100%!important;height:100%!important;object-fit:cover;display:block}
+.sc-frame{position:absolute;left:6%;right:6%;top:20%;bottom:20%;border:3px solid rgba(255,255,255,.92);border-radius:16px;box-shadow:0 0 0 999px rgba(20,10,10,.38);pointer-events:none;transition:border-color .2s}
+.sc-line{position:absolute;left:5%;right:5%;top:50%;height:2px;border-radius:2px;background:#FF7A6B;box-shadow:0 0 10px #FF7A6B;animation:scLine 1.6s ease-in-out infinite alternate}
+@keyframes scLine{from{top:12%}to{top:88%}}
+.sc-ok .sc-frame{border-color:#3BC46F;box-shadow:0 0 0 999px rgba(20,60,30,.35)}
+.sc-ok .sc-line{display:none}
+.sc-tip{position:absolute;left:12px;right:12px;bottom:10px;margin:0;padding:6px 10px;border-radius:12px;background:rgba(20,10,10,.66);color:#fff;font-size:.82rem;line-height:1.35;text-align:center}
+.sc-tip:empty{display:none}
+.sc-tools{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:10px}
+.sc-tools:empty{display:none}
+.sc-b{display:inline-flex;align-items:center;gap:6px}
+.sc-b svg,.sc-photo svg{width:18px;height:18px}
+.sc-b[aria-pressed="true"]{background:var(--accent-soft);border-color:var(--cta)!important;color:var(--coral-ink)}
+.sc-photo{display:flex!important;width:100%;justify-content:center;align-items:center;gap:8px;margin:4px 0 10px}
+@media (prefers-reduced-motion:reduce){.sc-line{animation:none}}
+.rec-top{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.rec-top h3{margin:0}
+.rec-tabs button{font-size:.8rem;padding:6px 10px}
+.rec-search{margin:0 0 8px}
+.rec-row{align-items:center}
+.rec-fav{flex:0 0 auto;width:34px;height:34px;border-radius:50%;border:0;background:none;font-size:1.25rem;line-height:1;color:var(--muted);cursor:pointer}
+.rec-fav.on{color:#B26A00}
+.rec-meta{display:block;font-size:.74rem;color:var(--muted);margin-top:1px}
+.rec-more{width:100%;margin-top:6px}
+.rec-help{margin:8px 0 0}
+.rec-card .rec-list{display:flex;flex-direction:column;gap:6px}
+.rec-card .rec-row{gap:4px;padding:4px 6px 4px 2px}
+.rec-card .rec-fav{width:30px;height:40px;border-radius:10px;font-size:1.15rem}
+.rec-card .rec-add{padding:4px 0}
+.rec-card .rec-add small{font-size:.76rem;line-height:1.3}
+.rec-card .rec-m{gap:2px}
+.rec-card .rec-m button{width:28px;height:28px;font-size:.95rem}
+.rec-card .rec-m b{min-width:30px;font-size:.82rem}
+
 </style>
 </head>
 <body>
@@ -1678,7 +1714,7 @@ h1,h2,.sec-head h1,.block-title,.row-head h2,.m-body h2,.pn-title{color:var(--ti
 </div>
 <div id="timers" class="timers" hidden aria-live="polite"></div>
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
-<script>window.NS_CONFIG={"hosted": true, "sbUrl": "https://zjsawjudrdneeptxbskd.supabase.co", "sbKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpqc2F3anVkcmRuZWVwdHhic2tkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1NjUxMjcsImV4cCI6MjEwNzE0MTEyN30.Wn1bUy--5O78gGICTOyEGbnT6B-SdoNCG_XxBBaaUIY", "build": "20261013200845"}</script>
+<script>window.NS_CONFIG={"hosted": true, "sbUrl": "https://zjsawjudrdneeptxbskd.supabase.co", "sbKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpqc2F3anVkcmRuZWVwdHhic2tkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1NjUxMjcsImV4cCI6MjEwNzE0MTEyN30.Wn1bUy--5O78gGICTOyEGbnT6B-SdoNCG_XxBBaaUIY", "build": "20261014134346"}</script>
 <script>
 const AISLES={L:"Fruits & légumes",H:"Herbes fraîches",V:"Viandes & poissons",C:"Crèmerie & œufs",S:"Surgelés",F:"Féculents",B:"Conserves",E:"Épices & condiments"};
 const AISLE_ORDER=["L","H","V","C","S","F","B","E"];
@@ -3138,6 +3174,12 @@ const normalizeV23=normalize;
 normalize=function(d){const s=normalizeV23(d);const src=d&&typeof d==="object"&&d.disc&&typeof d.disc==="object"?d.disc:{};const out={...(s.disc||{})};
  for(const k in src){const v=src[k];if((v==="ok"||v==="no"||v==="vu")&&(DISC_MAP[k]||/^x[a-z0-9]{6,20}$/.test(k)))out[k]=v}
  const keys=Object.keys(out);if(keys.length>4000)for(const k of keys.slice(0,keys.length-4000))delete out[k];s.disc=out;return s};
+
+// ================= v24 (avant l'état) : saisies favorites du suivi =================
+// state.logFav[nom normalisé] = 1 : épinglées en haut de « Mes saisies » (synchronisé).
+const normalizeV24=normalize;
+normalize=function(d){const s=normalizeV24(d);const src=d&&typeof d==="object"&&d.logFav&&typeof d.logFav==="object"?d.logFav:{};const out={};let n=0;
+ for(const k in src){if(n>=60)break;if(typeof k==="string"&&k.length>0&&k.length<=80&&src[k]){out[k]=1;n++}}s.logFav=out;return s};
 
 // ---------- état ----------
 const dayOf=k=>k.split("-")[0];
@@ -5623,6 +5665,134 @@ renderDiscBanner=function(){const el=document.getElementById("discBanner");if(!e
  <div class="dc-b-art" aria-hidden="true">${th.map((e,i)=>`<span class="dc-b-ph p${i}"><img src="${esc(e.img)}" alt="" loading="lazy" referrerpolicy="no-referrer"></span>`).join("")}</div></div>`};
 try{renderDiscBanner()}catch(e){}
 document.addEventListener("click",ev=>{if(ev.target.closest&&ev.target.closest('[data-dsc="open"]'))ui.dtried=false},true);
+
+
+// ================= v24 : pas de doublons dans Découvrir, scanner de code-barres fiable, saisies habituelles =================
+// --- 1. Découvrir ne repropose jamais une recette déjà dans tes recettes (même lien, ou même nom à un mot près)
+const DUP_STOP=new Set("avec sans pour sur son ses une des les aux facon maison recette leger legere light express minute rapide facile garni garnie garnis garnies servi servie".split(" "));
+const dupTok=s=>nrmS(s).replace(/[^a-z0-9 ]+/g," ").split(/\s+/).filter(w=>w.length>2&&!DUP_STOP.has(w)).map(w=>w.replace(/(s|x)$/,""));
+const normU=u=>{try{const x=new URL(u);return(x.hostname.replace(/^www\./,"")+x.pathname.replace(/\/+$/,"")).toLowerCase()}catch(e){return String(u||"").toLowerCase()}};
+let DUP_IDX=null,DUP_SIG="";
+function dupIndex(){const sig=RECIPES.length+"|"+(state.myrec||[]).length+"|"+Object.keys(state.edits||{}).length;if(DUP_IDX&&DUP_SIG===sig)return DUP_IDX;const urls=new Set(),toks=[];
+ const add=(n,u)=>{if(u)urls.add(normU(u));const t=dupTok(n);if(t.length>=2)toks.push(new Set(t))};
+ for(const r of RECIPES)add(r.n,r.u);for(const x of state.myrec||[])add(x.n,x.u);for(const id in state.edits||{}){const x=state.edits[id];if(x)add(x.n,x.u)}
+ DUP_IDX={urls,toks};DUP_SIG=sig;return DUP_IDX}
+function isDupRecipe(e){const I=dupIndex();if(e.u&&I.urls.has(normU(e.u)))return true;const A=new Set(dupTok(e.t));if(A.size<2)return false;
+ for(const B of I.toks){let n=0;for(const w of A)if(B.has(w))n++;const mn=Math.min(A.size,B.size),un=A.size+B.size-n;if(n/un>=0.75||(mn>=3&&n===mn&&un-mn<=1))return true}return false}
+// les pages chargées à distance sont filtrées dès la lecture : « Actualiser » remplit bien 10 cartes inédites
+const dqValidV24=dqValid;dqValid=function(e){const o=dqValidV24(e);return o&&isDupRecipe(o)?null:o};
+const discLeftV24=discLeft;
+discLeft=function(){dupIndex();return discLeftV24().filter(e=>{if(e._dupSig!==DUP_SIG){e._dup=isDupRecipe(e);e._dupSig=DUP_SIG}return!e._dup})};
+
+// --- 2. Scanner : ZXing-C++ (WebAssembly), le même moteur que les applis de scan, sur iPhone comme sur Android
+const ZX_V="3.1.4",ZX_FMT=["EAN13","EAN8","UPCA","UPCE","QRCode","Code128","DataBar"];
+let zxP=null;
+function loadZX(){if(zxP)return zxP;const tryLoad=(js,wasm)=>new Promise((res,rej)=>{if(window.ZXingWASM)return res(window.ZXingWASM);const s=document.createElement("script");s.src=js;s.async=true;
+  s.onload=()=>{const Z=window.ZXingWASM;if(!Z)return rej(new Error("lib"));try{Z.prepareZXingModule({overrides:{locateFile:(p,pre)=>p.endsWith(".wasm")?wasm:pre+p}})}catch(e){}res(Z)};
+  s.onerror=()=>{s.remove();rej(new Error("lib"))};document.head.appendChild(s)});
+ const cdn=["https://cdn.jsdelivr.net/npm/zxing-wasm@"+ZX_V+"/dist/iife/reader/index.js","https://cdn.jsdelivr.net/npm/zxing-wasm@"+ZX_V+"/dist/reader/zxing_reader.wasm"];
+ zxP=(HOSTED?tryLoad("zxing-reader.js",new URL("zxing_reader.wasm",location.href).href).catch(()=>tryLoad(...cdn)):tryLoad(...cdn)).catch(e=>{zxP=null;throw e});return zxP}
+// contrôle de la clé des codes EAN / UPC (évite les lectures fausses)
+function eanOk(c){if(!/^\d+$/.test(c)||![8,12,13,14].includes(c.length))return true;const d=c.split("").map(Number),k=d.pop();let s=0;d.reverse().forEach((x,i)=>{s+=x*(i%2?1:3)});return(10-s%10)%10===k}
+const SC={stream:null,track:null,video:null,timer:0,frame:0,native:null,canvas:null,t0:0,tipT:0,zoom:1,torch:false};
+const scanIco={torch:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 2.5h6v4l-2 3v11h-2v-11l-2-3z"/><path d="M12 13v2"/></svg>',
+ zoom:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.3-4.3M11 8v6M8 11h6"/></svg>',
+ photo:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8.5A1.5 1.5 0 0 1 5.5 7h2.3l1.5-2.5h5.4L16.2 7h2.3A1.5 1.5 0 0 1 20 8.5v9a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 17.5z"/><circle cx="12" cy="12.8" r="3.3"/></svg>'};
+panelScan=function(){return`<h2 class="pn-title">Scanner un produit</h2><p class="pn-help">Place le code-barres dans le cadre, à 15-25 cm. Il est lu tout seul, même de travers.</p>
+ <div id="reader" class="reader sc-reader"><video id="scanVid" playsinline muted autoplay></video><div class="sc-frame" aria-hidden="true"><i class="sc-line"></i></div><p class="sc-tip" id="scanTip" aria-live="polite"></p></div>
+ <div class="sc-tools" id="scanTools"></div>
+ <p class="scan-msg" id="scanMsg" aria-live="polite">Ouverture de la caméra…</p>
+ <label class="btn scan-photo sc-photo">${scanIco.photo}Prendre une photo du code<input type="file" accept="image/*" capture="environment" id="scanFile" hidden></label>
+ <form class="pf-row" id="codeForm" autocomplete="off"><input class="pn-in" name="code" inputmode="numeric" pattern="[0-9 ]*" maxlength="16" placeholder="Ou tape les chiffres sous le code" aria-label="Chiffres du code-barres"><button type="submit" class="btn">OK</button></form>${offNote()}`};
+async function scanStopV24(){clearTimeout(SC.timer);SC.timer=0;const st=SC.stream;SC.stream=null;SC.track=null;if(st)try{st.getTracks().forEach(t=>t.stop())}catch(e){}if(SC.video)try{SC.video.srcObject=null}catch(e){}}
+scanStop=scanStopV24;
+scanStart=async function(){scanBusy=false;await scanStopV24();const v=document.getElementById("scanVid");if(!v)return;SC.video=v;SC.frame=0;SC.zoom=1;SC.torch=false;
+ if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){scanMsg("Ce navigateur n'ouvre pas la caméra : prends une photo du code ou tape ses chiffres.",true);return}
+ loadZX().catch(()=>{});
+ let st;try{st=await navigator.mediaDevices.getUserMedia({audio:false,video:{facingMode:{ideal:"environment"},width:{ideal:1920},height:{ideal:1080}}})}
+ catch(e){try{st=await navigator.mediaDevices.getUserMedia({audio:false,video:{facingMode:"environment"}})}catch(e2){scanMsg("Caméra refusée ou indisponible : autorise la caméra pour ce site, ou prends une photo du code.",true);return}}
+ if(ui.panel!=="scan"||!document.getElementById("scanVid")){st.getTracks().forEach(t=>t.stop());return}
+ SC.stream=st;SC.track=st.getVideoTracks()[0];v.srcObject=st;try{await v.play()}catch(e){}
+ const caps=SC.track&&SC.track.getCapabilities?SC.track.getCapabilities():{};
+ try{if(caps.focusMode&&caps.focusMode.includes("continuous"))await SC.track.applyConstraints({advanced:[{focusMode:"continuous"}]})}catch(e){}
+ const tools=document.getElementById("scanTools");
+ if(tools){let h="";if(caps.torch)h+=`<button type="button" class="btn sc-b" data-sc="torch" aria-pressed="false">${scanIco.torch}Lampe</button>`;
+  if(caps.zoom&&caps.zoom.max>=1.5)h+=`<button type="button" class="btn sc-b" data-sc="zoom" aria-pressed="false">${scanIco.zoom}Zoom ×2</button>`;tools.innerHTML=h}
+ if("BarcodeDetector" in window){try{const f=await BarcodeDetector.getSupportedFormats();const want=["ean_13","ean_8","upc_a","upc_e","qr_code","code_128"].filter(x=>f.includes(x));if(want.includes("ean_13"))SC.native=new BarcodeDetector({formats:want})}catch(e){SC.native=null}}
+ SC.t0=Date.now();scanMsg("Vise le code-barres…");scanLoop()};
+const SCAN_TIPS=["Éloigne un peu le téléphone : le code doit être net, pas forcément gros.","Évite les reflets : incline légèrement le produit.","Pièce sombre ? Allume la lampe.","Toujours rien ? Prends une photo du code : c'est souvent plus net."];
+function scanLoop(){clearTimeout(SC.timer);SC.timer=setTimeout(scanTick,SC.frame?90:250)}
+async function scanTick(){if(!SC.stream||scanBusy)return;if(ui.panel!=="scan"||!document.getElementById("scanVid")){scanStopV24();return}const v=SC.video;
+ if(!v||v.readyState<2||!v.videoWidth){scanLoop();return}SC.frame++;
+ const el=(Date.now()-SC.t0)/1000,tip=document.getElementById("scanTip");if(tip&&el>5){const t=SCAN_TIPS[Math.floor((el-5)/4)%SCAN_TIPS.length];if(tip.textContent!==t)tip.textContent=t}
+ const vw=v.videoWidth,vh=v.videoHeight,m=SC.frame%4;
+ // cycle de 4 images : zone du cadre ; centre agrandi ×2 (code petit ou lointain) ; image entière ; image penchée de ±25° (code de travers)
+ const cv=SC.canvas||(SC.canvas=document.createElement("canvas"));let img;
+ if(m===0){img=zxCanvas(v,vw,vh,SC.frame%8===0?25:-25,1100);cv.width=img.width;cv.height=img.height;cv.getContext("2d",{willReadFrequently:true}).putImageData(img,0,0)}
+ else{const B=m===1?[.06,.2,.88,.6]:m===2?[.2,.3,.6,.4]:[0,0,1,1],sw=vw*B[2],sh=vh*B[3],sc=m===2?Math.min(2,1600/sw):Math.min(1,1280/sw);
+  cv.width=Math.round(sw*sc);cv.height=Math.round(sh*sc);const ctx=cv.getContext("2d",{willReadFrequently:true});ctx.imageSmoothingQuality="high";ctx.drawImage(v,vw*B[0],vh*B[1],sw,sh,0,0,cv.width,cv.height);img=ctx.getImageData(0,0,cv.width,cv.height)}
+ let txt=null;
+ if(SC.native){try{const r=await SC.native.detect(cv);const ok=r.find(x=>eanOk(x.rawValue||""));if(ok)txt=ok.rawValue}catch(e){}}
+ if(!txt&&window.ZXingWASM){try{const r=await window.ZXingWASM.readBarcodes(img,{formats:ZX_FMT,tryHarder:true,tryRotate:SC.frame%3===0,tryInvert:false,maxNumberOfSymbols:1});
+  const ok=r.find(x=>x.isValid&&eanOk(x.text||""));if(ok)txt=ok.text}catch(e){}}
+ if(txt&&SC.stream&&!scanBusy){onScanned(txt);return}scanLoop()}
+// lecture d'une photo : moteur ZXing en mode approfondi, puis le détecteur du téléphone,
+// puis des variantes (code penché de 15 à 45°, image réduite pour les photos floues, contraste renforcé)
+function zxCanvas(src,w,h,deg,max,boost){const r=deg*Math.PI/180,c=Math.abs(Math.cos(r)),s=Math.abs(Math.sin(r)),k=Math.min(1,max/Math.max(w,h));
+ const W=Math.round((w*c+h*s)*k),H=Math.round((w*s+h*c)*k),cv=document.createElement("canvas");cv.width=W;cv.height=H;const x=cv.getContext("2d",{willReadFrequently:true});
+ x.fillStyle="#fff";x.fillRect(0,0,W,H);if(boost)x.filter="grayscale(1) contrast(1.8)";x.translate(W/2,H/2);x.rotate(r);x.drawImage(src,-w*k/2,-h*k/2,w*k,h*k);return x.getImageData(0,0,W,H)}
+// netteté renforcée (masque flou) pour les photos floues
+function zxSharp(img,a){const W=img.width,H=img.height,d=img.data,g=new Float32Array(W*H);for(let i=0;i<W*H;i++)g[i]=d[i*4]*.3+d[i*4+1]*.59+d[i*4+2]*.11;
+ for(let y=1;y<H-1;y++)for(let x=1;x<W-1;x++){const i=y*W+x,bl=(g[i-1]+g[i+1]+g[i-W]+g[i+W]+g[i])/5;let v=g[i]+a*(g[i]-bl);v=v<0?0:v>255?255:v;d[i*4]=d[i*4+1]=d[i*4+2]=v}return img}
+async function zxRead(Z,img,o){const r=await Z.readBarcodes(img,{formats:ZX_FMT,tryHarder:true,tryRotate:true,tryInvert:false,maxNumberOfSymbols:1,...(o||{})});const ok=r.find(x=>x.isValid&&eanOk(x.text||""));return ok?ok.text:null}
+async function zxDecodeFile(file){let txt=null,Z=null;
+ try{Z=await loadZX();txt=await zxRead(Z,file,{tryInvert:true,tryDownscale:true})}catch(e){}
+ if(!txt&&"BarcodeDetector" in window){try{const bmp=await createImageBitmap(file);const r=await new BarcodeDetector().detect(bmp);const ok=r.find(x=>eanOk(x.rawValue||""));if(ok)txt=ok.rawValue}catch(e){}}
+ if(!txt&&Z){let bmp=null;try{bmp=await createImageBitmap(file)}catch(e){}
+  if(bmp){const w=bmp.width,h=bmp.height,V=[[0,800],[0,480],[0,1400,1],[-22,1400],[22,1400],[-40,1400],[40,1400],[-12,1400],[12,1400],[0,500,0,1.6],[0,700,0,1],[0,360,0,2.5],[-30,900,1],[30,900,1]];
+   for(const [d,m,b,sh] of V){try{const im=zxCanvas(bmp,w,h,d,m,b);txt=await zxRead(Z,sh?zxSharp(im,sh):im)}catch(e){}if(txt)break}try{bmp.close()}catch(e){}}}
+ return txt}
+scanPhoto=async function(file){if(!file)return;scanMsg("Lecture de la photo…");await scanStopV24();const txt=await zxDecodeFile(file);
+ if(txt){try{navigator.vibrate&&navigator.vibrate(60)}catch(e){}handleCode(txt)}else{scanMsg("Pas de code lisible sur cette photo : cadre le code-barres seul, bien net, ou tape ses chiffres.",true);setTimeout(()=>{if(ui.panel==="scan")scanStart()},1200)}};
+onScanned=function(txt){if(scanBusy)return;scanBusy=true;try{navigator.vibrate&&navigator.vibrate(60)}catch(e){}const r=document.getElementById("reader");if(r)r.classList.add("sc-ok");
+ setTimeout(()=>scanStopV24().then(()=>handleCode(txt)),180)};
+document.addEventListener("click",async ev=>{const b=ev.target.closest&&ev.target.closest("[data-sc]");if(!b||!SC.track)return;const k=b.dataset.sc;
+ try{if(k==="torch"){SC.torch=!SC.torch;await SC.track.applyConstraints({advanced:[{torch:SC.torch}]});b.setAttribute("aria-pressed",String(SC.torch))}
+  else if(k==="zoom"){const c=SC.track.getCapabilities();SC.zoom=SC.zoom>1?1:Math.min(2,c.zoom.max);await SC.track.applyConstraints({advanced:[{zoom:Math.max(c.zoom.min,SC.zoom)}]});b.setAttribute("aria-pressed",String(SC.zoom>1))}}catch(e){toast("Réglage non disponible sur ce téléphone")}});
+document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="hidden")scanStopV24();else if(ui.panel==="scan"&&!SC.stream&&!scanBusy)scanStart()});
+// les chiffres tapés à la main sont vérifiés (clé de contrôle)
+document.addEventListener("submit",e=>{const f=e.target;if(!f||f.id!=="codeForm")return;const c=String(new FormData(f).get("code")||"").replace(/\D/g,"");
+ if(c.length>=8&&!eanOk(c)){e.preventDefault();e.stopImmediatePropagation();toast("Ce code semble mal recopié : vérifie les chiffres")}},true);
+
+// --- 3. Suivi : retrouver ses saisies habituelles (les plus fréquentes, favoris, recherche)
+function logStats(pi){const S={};for(const d of Object.keys(state.log)){const L=state.log[d];if(!Array.isArray(L))continue;
+ for(const p of [0,1])for(const it of L[p]||[]){if(!it||!it.n)continue;const k=nrmS(it.n).replace(/\s+/g," ").trim().slice(0,80);if(!k)continue;
+  const s=S[k]||(S[k]={k,it,cnt:0,mine:0,last:""});s.cnt++;if(p===pi)s.mine++;if(d>=s.last){s.last=d;s.it=it}}}return Object.values(S)}
+recentItems=function(){const pi=(ui.logCtx&&ui.logCtx.pi)||0,tab=ui.recT||"hab",q=nrmS(ui.recQ||"").trim(),fav=state.logFav||{};let L=logStats(pi);
+ if(q)L=L.filter(s=>s.k.includes(q));else if(tab==="fav")L=L.filter(s=>fav[s.k]);
+ if(tab==="rec"&&!q)L.sort((a,b)=>b.last.localeCompare(a.last)||b.cnt-a.cnt);
+ else L.sort((a,b)=>(fav[b.k]?1:0)-(fav[a.k]?1:0)||(b.mine*2+b.cnt)-(a.mine*2+a.cnt)||b.last.localeCompare(a.last));
+ return L.slice(0,ui.recAll||q?40:8).map(s=>({...s.it,_k:s.k,_cnt:s.cnt,_last:s.last}))};
+function relDay(d){if(!d)return"";const t=DAYS[0][0];if(d===t)return"aujourd'hui";const dt=new Date(+d.slice(0,4),+d.slice(4,6)-1,+d.slice(6,8)),n=Math.round((new Date(+t.slice(0,4),+t.slice(4,6)-1,+t.slice(6,8))-dt)/864e5);
+ if(n===1)return"hier";if(n>1&&n<7)return`il y a ${n} jours`;if(n<0)return fmtDate(dt,{day:"numeric",month:"short"});return"le "+fmtDate(dt,{day:"numeric",month:"short"})}
+function recRows(rec){if(!rec.length)return`<p class="pn-help rec-empty">${ui.recQ?"Aucune saisie ne correspond.":ui.recT==="fav"?"Touche ☆ à côté d'une saisie pour la retrouver ici en un geste.":"Tes saisies apparaîtront ici."}</p>`;
+ const M=ui.recM||(ui.recM={}),fav=state.logFav||{};
+ return rec.map((it,i)=>{const m=M[i]||(M[i]=it.m||1),x=scaleItem(it,m),f=!!fav[it._k];
+  return`<div class="rec-row" data-reci="${i}"><button type="button" class="rec-fav${f?" on":""}" data-recfav="${esc(it._k)}" aria-pressed="${f}" aria-label="${f?"Retirer des favoris":"Mettre en favori"} : ${esc(it.n)}">${f?"★":"☆"}</button>
+  <button type="button" class="rec-add" data-logrec="${i}" aria-label="Ajouter ${esc(it.n)}"><b>${esc(it.n)}</b><small class="rec-q">${esc(x.q||"")}${x.q?" · ":""}${fmtInt(x.k)} kcal · ${fmtG(x.p)} g prot.</small><small class="rec-meta">${it._cnt>1?`${it._cnt} fois · `:""}${relDay(it._last)}</small></button>
+  <span class="rec-m"><button type="button" data-recm="${i}|-1" aria-label="Moins">−</button><b>×${fmtM(m)}</b><button type="button" data-recm="${i}|1" aria-label="Plus">+</button><button type="button" class="rec-ed" data-recedit="${i}" aria-label="Quantité exacte">✎</button></span></div>`}).join("")
+  +(!ui.recAll&&!ui.recQ&&rec.length>=8?`<button type="button" class="btn ghost rec-more" data-recmore="1">Voir toutes mes saisies</button>`:"")}
+recentHtml=function(rec){if(!Object.keys(state.log||{}).length)return"";const tab=ui.recT||"hab";
+ return`<div class="pn-card rec-card" id="recCard"><div class="rec-top"><h3>Mes saisies</h3><div class="seg rec-tabs" role="group" aria-label="Classer mes saisies">${[["hab","Habituelles"],["rec","Récentes"],["fav","★ Favoris"]].map(([t,l])=>`<button type="button" data-rect="${t}" aria-pressed="${tab===t}">${l}</button>`).join("")}</div></div>
+ <input class="pn-in rec-search" id="recQ" type="search" value="${esc(ui.recQ||"")}" placeholder="Chercher (skyr, amandes…)" aria-label="Chercher dans mes saisies" autocomplete="off" enterkeyhint="search">
+ <div class="rec-list" id="recList">${recRows(rec)}</div><p class="pn-help rec-help">Touche une saisie pour l'ajouter ; − / + ou ✎ pour la quantité.</p></div>`};
+function recRefresh(){ui.recM={};const L=document.getElementById("recList");if(L)L.innerHTML=recRows(recentItems());document.querySelectorAll("[data-rect]").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.rect===(ui.recT||"hab"))))}
+document.addEventListener("input",e=>{if(e.target&&e.target.id==="recQ"){ui.recQ=e.target.value.slice(0,40);recRefresh()}});
+document.addEventListener("click",e=>{const t=e.target.closest&&e.target.closest("[data-rect],[data-recfav],[data-recmore]");if(!t)return;
+ if(t.dataset.rect){ui.recT=t.dataset.rect;ui.recAll=false;recRefresh();return}
+ if(t.dataset.recmore){ui.recAll=true;recRefresh();return}
+ const k=t.dataset.recfav;const fav={...(state.logFav||{})};if(fav[k])delete fav[k];else{if(Object.keys(fav).length>=60){toast("60 favoris au maximum");return}fav[k]=1}state.logFav=fav;commit();recRefresh();toast(fav[k]?"Ajouté aux favoris ★":"Retiré des favoris")});
+document.addEventListener("click",e=>{if(e.target.closest&&e.target.closest('[data-act="nt-add"],[data-act="nt-add-snack"]')){ui.recQ="";ui.recAll=false;ui.recM={}}},true);
 
 setTab(ui.tab);renderAll();initDb();sbStart();
 
