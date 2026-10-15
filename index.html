@@ -1950,7 +1950,7 @@ h1,h2,.sec-head h1,.block-title,.row-head h2,.m-body h2,.pn-title{color:var(--ti
 </div>
 <div id="timers" class="timers" hidden aria-live="polite"></div>
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
-<script>window.NS_CONFIG={"hosted": true, "sbUrl": "https://zjsawjudrdneeptxbskd.supabase.co", "sbKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpqc2F3anVkcmRuZWVwdHhic2tkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1NjUxMjcsImV4cCI6MjEwNzE0MTEyN30.Wn1bUy--5O78gGICTOyEGbnT6B-SdoNCG_XxBBaaUIY", "build": "20261015210426"}</script>
+<script>window.NS_CONFIG={"hosted": true, "sbUrl": "https://zjsawjudrdneeptxbskd.supabase.co", "sbKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpqc2F3anVkcmRuZWVwdHhic2tkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1NjUxMjcsImV4cCI6MjEwNzE0MTEyN30.Wn1bUy--5O78gGICTOyEGbnT6B-SdoNCG_XxBBaaUIY", "build": "20261015210944"}</script>
 <script>
 const AISLES={L:"Fruits & légumes",H:"Herbes fraîches",V:"Viandes & poissons",C:"Crèmerie & œufs",S:"Surgelés",F:"Féculents",B:"Conserves",E:"Épices & condiments"};
 const AISLE_ORDER=["L","H","V","C","S","F","B","E"];
@@ -6702,10 +6702,10 @@ function f3Pose(X,Pz,id){const T=F3.T,P=F3.P,J=f3Joints(X,Pz),front=!!X.front;
   const ms=at(sh,el,0.42);f3Ball(P["dl"+s],sh,0.07);f3Cone(P["uaS"+s],sh,ms,0.07,0.064);f3Cone(P["ua"+s],ms,el,0.058,0.046);f3Ball(P["el"+s],el,0.046);f3Cone(P["fa"+s],el,wr,0.048,0.034);
   const hd=new T.Vector3().subVectors(wr,el).normalize();f3Ball(P["hn"+s],wr.clone().addScaledVector(hd,0.035),0.04,1,1.25,1);P["hn"+s].quaternion.setFromUnitVectors(new T.Vector3(0,1,0),hd)}
  // haltères
- const DB=F3.DB;DB[0].visible=DB[1].visible=!!X.db;
+ const DB=F3.DB;DB[0].visible=!!X.db;DB[1].visible=!!X.db&&!X.dbN;
  if(X.db){if(X.dbAt==="hip"){DB[0].position.copy(J.hip).add(new T.Vector3(0,0.12,0));DB[0].quaternion.setFromUnitVectors(new T.Vector3(0,1,0),new T.Vector3(0,0,1));DB[1].visible=false}
   else if(X.dbOne){const m=at(J.wrN,J.wrF,0.5).addScaledVector(f,X.dbAx==="v"?0.035:0),d=X.dbAx==="v"?new T.Vector3(0,1,0):new T.Vector3().subVectors(J.wrN,J.elN).normalize();DB[0].position.copy(m).addScaledVector(d,0.05);DB[0].quaternion.setFromUnitVectors(new T.Vector3(0,1,0),d);DB[1].visible=false}
-  else for(const [i,s] of [[0,"N"],[1,"F"]]){const wr=J["wr"+s],d=new T.Vector3().subVectors(wr,J["el"+s]).normalize();DB[i].position.copy(wr).addScaledVector(d,0.045);
+  else for(const [i,s] of (X.dbN?[[0,"N"]]:[[0,"N"],[1,"F"]])){const wr=J["wr"+s],d=new T.Vector3().subVectors(wr,J["el"+s]).normalize();DB[i].position.copy(wr).addScaledVector(d,0.045);
    DB[i].quaternion.setFromUnitVectors(new T.Vector3(0,1,0),X.front||X.dbAx==="x"?new T.Vector3(1,0,0):new T.Vector3(0,0,1))}}
  return J}
 // cadrage : boîte englobante de toutes les poses de l'exercice
@@ -6747,8 +6747,10 @@ const FIG_TEMPO={squat_gob:[1500,250,1000,550],squat:[1400,200,950,500],thruster
  press_floor:[1400,300,900,450],ohp:[950,300,1300,350],lunge:[1300,200,1000,550],bridge_w:[900,600,1200,350],bridge:[900,600,1200,350],curl:[900,300,1300,350],tri:[1300,250,900,400],pushup:[1300,150,900,400]};
 for(const k in FIG_TEMPO){const X=FIGX[k];if(X&&X.fr.length===2){const[A,B]=X.fr;X.fr=[A,B,B,A];X.ms=FIG_TEMPO[k]}}
 Object.assign(FIGX.squat_gob,{dbOne:1,dbAx:"v",hz:0.05});Object.assign(FIGX.tri,{hz:0.05});Object.assign(FIGX.pushup,{hz:0.2});Object.assign(FIGX.mountain,{hz:0.2});Object.assign(FIGX.plank,{hz:0.13});
-Object.assign(FIGX.bridge_w,{hz:0.13});for(const k of ["row","farmer","lunge","thruster"])FIGX[k].dbAx="x";
+Object.assign(FIGX.bridge_w,{hz:0.13});for(const k of ["row","farmer","lunge","thruster"])FIGX[k].dbAx="x";FIGX.row.dbN=1;
 const spOpenV28=spOpen;spOpen=function(){try{f3Load()}catch(e){}return spOpenV28.apply(this,arguments)};
+
+const figDrawV28=figDraw;figDraw=function(svg,now){figDrawV28(svg,now);if(FIGX[svg.dataset.fig]&&FIGX[svg.dataset.fig].dbN){const c=svg.querySelectorAll(".fg-db circle");if(c.length>1)c[0].remove()}};
 
 setTab(ui.tab);renderAll();initDb();sbStart();
 
