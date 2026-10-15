@@ -1835,6 +1835,16 @@ h1,h2,.sec-head h1,.block-title,.row-head h2,.m-body h2,.pn-title{color:var(--ti
 .sp-gl{display:block}.sp-gl b{white-space:nowrap}
 .sp-fig{width:min(56vw,220px)}
 @media (max-height:700px){.sp-fig{width:min(46vw,180px)}}
+/* ================= v28 : personnage 3D ================= */
+.sp-fig{position:relative;overflow:hidden}
+.sp-fig .fig3-cv{display:block;width:100%!important;height:100%!important}
+.sp-fig.is3d>svg.fig{display:none}
+.fig3-th{display:block;width:100%;height:100%;object-fit:contain}
+.sp-fig{background:radial-gradient(120% 90% at 50% 100%,#FBEAE6 0%,var(--surface) 70%)}
+.sp-fig{width:min(62vw,240px)}
+.sp-duo>.sp-fig{width:auto}
+.sp-nx .sp-fig{width:120px}
+@media (max-height:700px){.sp-fig{width:min(50vw,190px)}}
 
 </style>
 </head>
@@ -1940,7 +1950,7 @@ h1,h2,.sec-head h1,.block-title,.row-head h2,.m-body h2,.pn-title{color:var(--ti
 </div>
 <div id="timers" class="timers" hidden aria-live="polite"></div>
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
-<script>window.NS_CONFIG={"hosted": true, "sbUrl": "https://zjsawjudrdneeptxbskd.supabase.co", "sbKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpqc2F3anVkcmRuZWVwdHhic2tkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1NjUxMjcsImV4cCI6MjEwNzE0MTEyN30.Wn1bUy--5O78gGICTOyEGbnT6B-SdoNCG_XxBBaaUIY", "build": "20261015202624"}</script>
+<script>window.NS_CONFIG={"hosted": true, "sbUrl": "https://zjsawjudrdneeptxbskd.supabase.co", "sbKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpqc2F3anVkcmRuZWVwdHhic2tkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1NjUxMjcsImV4cCI6MjEwNzE0MTEyN30.Wn1bUy--5O78gGICTOyEGbnT6B-SdoNCG_XxBBaaUIY", "build": "20261015210426"}</script>
 <script>
 const AISLES={L:"Fruits & légumes",H:"Herbes fraîches",V:"Viandes & poissons",C:"Crèmerie & œufs",S:"Surgelés",F:"Féculents",B:"Conserves",E:"Épices & condiments"};
 const AISLE_ORDER=["L","H","V","C","S","F","B","E"];
@@ -6430,7 +6440,7 @@ const fgGet=(P,key)=>P[key]!==undefined?P[key]:FG_DEF[key]?P[FG_DEF[key]]:undefi
 function figMix(A,B,k){const o={};for(const key of new Set([...Object.keys(A),...Object.keys(B)])){let a=fgGet(A,key),b=fgGet(B,key);if(a===undefined)a=b;if(b===undefined)b=a;if(a===undefined)continue;
  o[key]=Array.isArray(a)?fgP(a,b,k):typeof a==="number"&&!/^[ke]/.test(key)?fgL(a,b,k):k<0.5?a:b}return o}
 // squelette à partir d'une pose
-function figSkel(P,front){const h=P.h,t=fgR(P.t),nk=[h[0]+FG.T*Math.cos(t),h[1]+FG.T*Math.sin(t)],ht=fgR(P.t+(P.hd||0)),hd=[nk[0]+FG.H*Math.cos(ht),nk[1]+FG.H*Math.sin(ht)];
+function figSkel(P,front){const h=P.h,t=fgR(P.t),nk=[h[0]+FG.T*Math.cos(t),h[1]+FG.T*Math.sin(t)],gz=(!front&&Math.abs(P.t+90)<75)?-(P.t+90)*0.55:0,ht=fgR(P.t+(P.hd||0)+gz),hd=[nk[0]+FG.H*Math.cos(ht),nk[1]+FG.H*Math.sin(ht)];
  const sw=front?(P.sw||10):0,hw=front?(P.hw||6):0,shN=[nk[0]+sw,nk[1]+(front?3:0)],shF=[nk[0]-sw,nk[1]+(front?3:0)],hpN=[h[0]+hw,h[1]],hpF=[h[0]-hw,h[1]];
  const leg=(hp,f,s,ta)=>{const[k,a]=figIK(hp,f,FG.TH,FG.SH,s);const tt=fgR(ta);return[hp,k,a,[a[0]+FG.FT*Math.cos(tt),a[1]+FG.FT*Math.sin(tt)]]};
  const arm=(sh,w,s)=>{const[e,x]=figIK(sh,w,FG.UA,FG.FA,s);return[sh,e,x]};
@@ -6441,7 +6451,7 @@ const fgPath=pts=>"M"+pts.map(p=>p[0].toFixed(1)+" "+p[1].toFixed(1)).join("L");
 const S0={h:[70,90],t:-90,fN:[71,139],fF:[69,139],wN:[71,125],wF:[69,125],eN:-1};
 const P=(o)=>Object.assign({},S0,o);
 const FIGX={
- squat_gob:{db:1,ms:[1300,1300],fr:[P({wN:[80,70],wF:[79,71],eN:1}),P({h:[52,116],t:-55,fN:[72,139],fF:[70,139],wN:[86,98],wF:[85,99],eN:1})]},
+ squat_gob:{db:1,ms:[1300,1300],fr:[P({wN:[78,60],wF:[77,61],eN:1}),P({h:[54,118],t:-64,fN:[72,139],fF:[70,139],wN:[78,91],wF:[77,92],eN:1})]},
  squat:{ms:[1200,1200],fr:[P({}),P({h:[52,116],t:-55,fN:[72,139],fF:[70,139],wN:[108,90],wF:[107,91],eN:1})]},
  thruster:{db:1,ms:[900,1100],fr:[P({h:[52,116],t:-60,wN:[84,84],wF:[83,85],eN:1}),P({wN:[73,21],wF:[72,22],eN:1})]},
  rdl:{db:1,ms:[1500,1300],fr:[P({wN:[75,121],wF:[73,121]}),P({h:[52,94],t:-14,fN:[72,139],fF:[70,139],wN:[86,121],wF:[84,121],eN:1})]},
@@ -6485,9 +6495,11 @@ const FIGX={
  mountain:{prop:"mat",vb:[10,62,150,90],ms:[330,330],fr:[
    {h:[69,118],t:-26,fN:[86,130],kN:1,tN:60,fF:[25,139],tF:80,wN:[100,139],wF:[101,139],eN:-1},
    {h:[69,118],t:-26,fN:[25,139],tN:80,fF:[86,130],kF:1,tF:60,wN:[100,139],wF:[101,139],eN:-1}]},
- jacks:{front:1,ms:[420,420],fr:[
-   {h:[80,90],t:-90,sw:10,hw:5,fN:[84,139],fF:[76,139],kN:1,kF:-1,tN:0,tF:180,wN:[92,124],wF:[68,124],eN:1,eF:-1},
-   {h:[80,93],t:-90,sw:10,hw:5,fN:[106,137],fF:[54,137],kN:1,kF:-1,tN:15,tF:165,wN:[100,24],wF:[60,24],eN:1,eF:-1}]},
+ jacks:{front:1,ms:[230,230,230,230],fr:[
+   {h:[80,90],t:-90,sw:10,hw:5,fN:[84,139],fF:[76,139],kN:1,kF:-1,tN:0,tF:180,wN:[91,95],wF:[69,95],eN:1,eF:-1},
+   {h:[80,92],t:-90,sw:10,hw:5,fN:[95,138],fF:[65,138],kN:1,kF:-1,tN:8,tF:172,wN:[125,60],wF:[35,60],eN:1,eF:-1},
+   {h:[80,93],t:-90,sw:10,hw:5,fN:[106,137],fF:[54,137],kN:1,kF:-1,tN:15,tF:165,wN:[100,24],wF:[60,24],eN:1,eF:-1},
+   {h:[80,92],t:-90,sw:10,hw:5,fN:[95,138],fF:[65,138],kN:1,kF:-1,tN:8,tF:172,wN:[125,60],wF:[35,60],eN:1,eF:-1}]},
  knees:{ms:[300,300],fr:[
    P({h:[70,89],fN:[78,116],kN:1,fF:[70,139],wN:[60,74],wF:[84,72],eN:-1,eF:1}),P({h:[70,89],fN:[70,139],fF:[78,116],kF:1,wN:[84,72],wF:[60,74],eN:1,eF:-1})]},
  arms:{ms:[260,260,260,260,260,260,260,260],fr:[0,45,90,135,180,225,270,315].map(a=>{const r=fgR(90-a),x=[70+35*Math.cos(r),56+35*Math.sin(r)];return P({wN:x,wF:[x[0]-1,x[1]],eN:1})})},
@@ -6614,6 +6626,129 @@ panelSpRun=function(){let h=panelSpRunV27.apply(this,arguments);if(!SR)return h;
   else if(st.k==="run")h=h.replace(/(<div class="sp-big"[\s\S]*?<\/span><\/div>)/,`<div class="sp-duo">${fig(st.v>=7?"run":"walk",{s:1,g:st.g,l:st.v>=7?"Course sur tapis":"Marche sur tapis"})}$1</div>`);
   else if(st.k==="rest"){const nx=SR.L[SR.i+1];if(nx&&nx.k==="work"&&FIGX[nx.e])h=h.replace('<div class="sp-adj">',`<div class="sp-nx">${fig(nx.e,{s:1})}<p>À suivre : <b>${esc((SPX[nx.e]||{}).n)}</b></p></div><div class="sp-adj">`)}}
  setTimeout(figKick,0);return h};
+
+
+// ================= v28 : personnage 3D (three.js, MIT) piloté par les mêmes poses que la silhouette =================
+// Un seul moteur WebGL : son canevas se place dans la grande vignette de l'exercice en cours.
+// Tant que three.js n'est pas chargé (ou sans WebGL), la silhouette 2D reste affichée.
+const F3={T:null,p:null,fail:false,ok:false,frames:{},thumbs:{},slot:null,w:0,h:0};
+const F3_CDN="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.min.js";
+function f3Load(){if(F3.p||F3.fail)return F3.p;const loc=HOSTED?new URL("three-sano.min.js",location.href).href:null;
+ F3.p=(loc?import(loc).catch(()=>import(F3_CDN)):import(F3_CDN)).then(T=>{F3.T=T;f3Init();F3.ok=true;figKick();return T}).catch(e=>{F3.fail=true;F3.p=null});return F3.p}
+const F3K=58;// unités de la silhouette par mètre
+const f3V=(T,x,y,z)=>new T.Vector3((x-80)/F3K,(FG.FL-y)/F3K,z);
+function f3Init(){const T=F3.T;let R;try{R=new T.WebGLRenderer({antialias:true,alpha:true,powerPreference:"low-power"})}catch(e){F3.fail=true;throw e}
+ R.setPixelRatio(Math.min(2,window.devicePixelRatio||1));R.shadowMap.enabled=true;R.shadowMap.type=T.PCFSoftShadowMap;R.outputColorSpace=T.SRGBColorSpace;R.toneMapping=T.ACESFilmicToneMapping;R.toneMappingExposure=1.05;
+ R.domElement.className="fig3-cv";R.domElement.setAttribute("aria-hidden","true");
+ const S=new T.Scene(),C=new T.PerspectiveCamera(26,1,0.05,40);
+ S.add(new T.HemisphereLight(0xffffff,0xf1d6cf,1.15));const D=new T.DirectionalLight(0xffffff,2.1);D.position.set(1.6,3.2,2.4);D.castShadow=true;D.shadow.mapSize.set(1024,1024);
+ Object.assign(D.shadow.camera,{left:-1.6,right:1.6,top:1.6,bottom:-1.6,near:0.5,far:9});D.shadow.radius=5;D.shadow.bias=-0.0006;S.add(D);S.add(D.target);
+ const M=c=>new T.MeshStandardMaterial({color:c,roughness:0.78,metalness:0.02});
+ const mat={skin:M(0xE2AE8C),shirt:M(0x3F8F87),shorts:M(0x2F3442),shoe:M(0xF2F0EC),sole:M(0xB9BDC4),hair:M(0x3A2A22),plate:M(0xC9473A),bar:new T.MeshStandardMaterial({color:0x8a8f96,roughness:0.35,metalness:0.6}),
+  mat:M(0xF0BDB2),wood:M(0xC9A27E),frame:M(0x4B4F57),belt:M(0x34373D),floor:new T.ShadowMaterial({opacity:0.2,color:0x6b2a20})};
+ const sph=new T.SphereGeometry(1,28,18),cyl=new T.CylinderGeometry(1,1,1,24,1),cylT=new T.CylinderGeometry(0.8,1,1,24,1),box=new T.BoxGeometry(1,1,1);
+ const mk=(g,m)=>{const o=new T.Mesh(g,m);o.castShadow=true;o.receiveShadow=true;return o};
+ const man=new T.Group();S.add(man);const P={};
+ const add=(k,g,m)=>{P[k]=mk(g,m);man.add(P[k]);return P[k]};
+ for(const s of ["N","F"]){add("thS"+s,cylT,mat.shorts);add("th"+s,cylT,mat.skin);add("kn"+s,sph,mat.skin);add("sh"+s,cylT,mat.skin);add("an"+s,sph,mat.skin);add("ft"+s,cyl,mat.shoe);add("fh"+s,sph,mat.shoe);add("fo"+s,sph,mat.shoe);add("so"+s,box,mat.sole);
+  add("dl"+s,sph,mat.shirt);add("uaS"+s,cylT,mat.shirt);add("ua"+s,cylT,mat.skin);add("el"+s,sph,mat.skin);add("fa"+s,cylT,mat.skin);add("hn"+s,sph,mat.skin);add("hp"+s,sph,mat.shorts)}
+ add("pel",sph,mat.shorts);add("abd",sph,mat.shirt);add("chs",sph,mat.shirt);add("nek",cyl,mat.skin);add("hed",sph,mat.skin);add("har",sph,mat.hair);add("nos",sph,mat.skin);
+ // haltères
+ const DB=[0,1].map(()=>{const g=new T.Group();const b=mk(cyl,mat.bar);b.scale.set(0.014,0.15,0.014);g.add(b);for(const y of [-0.085,0.085]){const p=mk(cyl,mat.plate);p.scale.set(0.048,0.04,0.048);p.position.y=y;g.add(p)}S.add(g);return g});
+ // accessoires
+ const floor=new T.Mesh(new T.PlaneGeometry(8,8),mat.floor);floor.rotation.x=-Math.PI/2;floor.receiveShadow=true;S.add(floor);
+ const props={mat:new T.Group(),bench:new T.Group(),tread:new T.Group()};
+ {const m=mk(box,mat.mat);m.scale.set(1.9,0.012,0.62);m.position.y=0.006;props.mat.add(m)}
+ {const top=mk(box,mat.wood);top.scale.set(1.0,0.05,0.34);top.position.y=0.255;props.bench.add(top);for(const x of [-0.4,0.4]){const l=mk(box,mat.frame);l.scale.set(0.05,0.23,0.28);l.position.set(x,0.115,0);props.bench.add(l)}}
+ {const belt=mk(box,mat.belt);belt.scale.set(1.75,0.07,0.56);belt.position.y=0.02;props.tread.userData.belt=belt;props.tread.add(belt);
+  for(const z of [-0.31,0.31]){const r=mk(box,mat.frame);r.scale.set(1.75,0.09,0.06);r.position.set(0,0.035,z);props.tread.add(r)}
+  for(const z of [-0.3,0.3]){const u=mk(box,mat.frame);u.scale.set(0.05,1.05,0.05);u.position.set(0.84,0.55,z);props.tread.add(u)}
+  const con=mk(box,mat.frame);con.scale.set(0.16,0.12,0.66);con.position.set(0.86,1.1,0);con.rotation.z=0.5;props.tread.add(con);props.tread.userData.parts=true}
+ for(const k in props){props[k].visible=false;S.add(props[k])}
+ Object.assign(F3,{R,S,C,D,P,DB,props,floor,man});}
+// pose 2D → points 3D (vue de profil : membres côté caméra en z+, côté opposé en z−)
+function f3Joints(X,Pz){const T=F3.T,front=!!X.front,S=figSkel(Pz,front);const v=(p,z)=>f3V(T,p[0],p[1],z);
+ const zs=front?0:0.17,zh=front?0:0.09,hz=X.hz!=null?X.hz:zs,toZ=(n)=>front?0:(n?1:-1);
+ const sh=k=>{const a=S[k][0],t=[S.h[0]-S.nk[0],S.h[1]-S.nk[1]],l=Math.hypot(t[0],t[1])||1;return front?a:[a[0]+t[0]/l*4,a[1]+t[1]/l*4]};
+ const J={hip:v(S.h,0),nk:v(S.nk,0),hd:v(S.hd,0)};
+ for(const [s,n] of [["N",1],["F",0]]){const L=S["l"+s],A=S["a"+s];const z=toZ(n);
+  J["hp"+s]=v(L[0],z*zh);J["kn"+s]=v(L[1],z*zh);J["an"+s]=v(L[2],z*zh);J["to"+s]=front?J["an"+s].clone().add(new F3.T.Vector3(0,-0.01,0.13)):v(L[3],z*zh);
+  J["sh"+s]=v(sh("a"+s),z*zs);J["el"+s]=v(A[1],z*(zs+hz)/2+(front?0:z*0.02));J["wr"+s]=v(A[2],z*hz)}
+ return J}
+function f3Seg(o,a,b,r1,r2){const T=F3.T,d=new T.Vector3().subVectors(b,a),L=d.length()||1e-4;o.position.copy(a).addScaledVector(d,0.5);
+ o.quaternion.setFromUnitVectors(new T.Vector3(0,1,0),d.multiplyScalar(1/L));o.scale.set(r2!=null?r2:r1,L,r2!=null?r2:r1);o.userData.r=[r1,r2]}
+// cylindre conique : rayon r1 côté a, r2 côté b (géométrie 0.8 / 1 → on oriente la grosse base vers a)
+function f3Cone(o,a,b,rA,rB){const T=F3.T;const big=rA>=rB;const p=big?a:b,q=big?b:a,R=Math.max(rA,rB);const d=new T.Vector3().subVectors(p,q),L=d.length()||1e-4;
+ o.position.copy(q).addScaledVector(d,0.5);o.quaternion.setFromUnitVectors(new T.Vector3(0,1,0),d.multiplyScalar(1/L));o.scale.set(R,L,R)}
+function f3Ball(o,p,r,sx,sy,sz){o.position.copy(p);o.quaternion.identity();o.scale.set(r*(sx||1),r*(sy||1),r*(sz||1))}
+function f3Ell(o,p,u,f,rx,ry,rz){const T=F3.T,s=new T.Vector3().crossVectors(f,u).normalize(),m=new T.Matrix4().makeBasis(f,u,s);o.position.copy(p);o.quaternion.setFromRotationMatrix(m);o.scale.set(rx,ry,rz)}
+function f3Pose(X,Pz,id){const T=F3.T,P=F3.P,J=f3Joints(X,Pz),front=!!X.front;
+ const u=new T.Vector3().subVectors(J.nk,J.hip).normalize(),f=front?new T.Vector3(0,0,1):new T.Vector3(u.y,-u.x,0);
+ const at=(a,b,k)=>new T.Vector3().lerpVectors(a,b,k);
+ // buste
+ f3Ell(P.pel,at(J.hip,J.nk,0.06),u,f,0.12,0.12,0.175);
+ f3Ell(P.abd,at(J.hip,J.nk,0.47),u,f,0.118,0.3,0.165);f3Ell(P.chs,at(J.hip,J.nk,0.72),u,f,0.128,0.2,0.19);
+ const hb=at(J.nk,J.hd,0.15);f3Seg(P.nek,at(J.hip,J.nk,0.9),hb,0.052);
+ const hu=new T.Vector3().subVectors(J.hd,J.nk).normalize(),hf=front?new T.Vector3(0,0,1):new T.Vector3(hu.y,-hu.x,0);
+ f3Ell(P.hed,J.hd,hu,hf,0.098,0.118,0.095);f3Ell(P.har,J.hd.clone().addScaledVector(hf,-0.024).addScaledVector(hu,0.02),hu,hf,0.1,0.112,0.1);
+ f3Ball(P.nos,J.hd.clone().addScaledVector(hf,0.097).addScaledVector(hu,-0.012),0.017);
+ for(const s of ["N","F"]){const hp=J["hp"+s],kn=J["kn"+s],an=J["an"+s],to=J["to"+s],sh=J["sh"+s],el=J["el"+s],wr=J["wr"+s];
+  const mid=at(hp,kn,0.5);f3Cone(P["thS"+s],hp,mid,0.1,0.09);f3Cone(P["th"+s],mid,kn,0.082,0.062);f3Ball(P["kn"+s],kn,0.062);f3Ball(P["hp"+s],hp,0.1);
+  f3Cone(P["sh"+s],kn,an,0.064,0.042);f3Ball(P["an"+s],an,0.043);
+  // chaussure : du talon (un peu derrière la cheville) à la pointe
+  const fd=new T.Vector3().subVectors(to,an).normalize(),heel=an.clone().addScaledVector(fd,-0.045),toe=to.clone().addScaledVector(fd,0.07);
+  f3Seg(P["ft"+s],heel,toe,0.044);f3Ball(P["fh"+s],heel,0.044);f3Ball(P["fo"+s],toe,0.044,1,0.85,1);
+  const sm=at(heel,toe,0.5);const pl=Math.abs(fd.z)>0.5?new T.Vector3(0,-1,0):new T.Vector3(fd.y,-fd.x,0).normalize();P["so"+s].position.copy(sm).addScaledVector(pl,0.04);P["so"+s].quaternion.setFromUnitVectors(new T.Vector3(1,0,0),fd);P["so"+s].scale.set(heel.distanceTo(toe)+0.09,0.016,0.085);
+  const ms=at(sh,el,0.42);f3Ball(P["dl"+s],sh,0.07);f3Cone(P["uaS"+s],sh,ms,0.07,0.064);f3Cone(P["ua"+s],ms,el,0.058,0.046);f3Ball(P["el"+s],el,0.046);f3Cone(P["fa"+s],el,wr,0.048,0.034);
+  const hd=new T.Vector3().subVectors(wr,el).normalize();f3Ball(P["hn"+s],wr.clone().addScaledVector(hd,0.035),0.04,1,1.25,1);P["hn"+s].quaternion.setFromUnitVectors(new T.Vector3(0,1,0),hd)}
+ // haltères
+ const DB=F3.DB;DB[0].visible=DB[1].visible=!!X.db;
+ if(X.db){if(X.dbAt==="hip"){DB[0].position.copy(J.hip).add(new T.Vector3(0,0.12,0));DB[0].quaternion.setFromUnitVectors(new T.Vector3(0,1,0),new T.Vector3(0,0,1));DB[1].visible=false}
+  else if(X.dbOne){const m=at(J.wrN,J.wrF,0.5).addScaledVector(f,X.dbAx==="v"?0.035:0),d=X.dbAx==="v"?new T.Vector3(0,1,0):new T.Vector3().subVectors(J.wrN,J.elN).normalize();DB[0].position.copy(m).addScaledVector(d,0.05);DB[0].quaternion.setFromUnitVectors(new T.Vector3(0,1,0),d);DB[1].visible=false}
+  else for(const [i,s] of [[0,"N"],[1,"F"]]){const wr=J["wr"+s],d=new T.Vector3().subVectors(wr,J["el"+s]).normalize();DB[i].position.copy(wr).addScaledVector(d,0.045);
+   DB[i].quaternion.setFromUnitVectors(new T.Vector3(0,1,0),X.front||X.dbAx==="x"?new T.Vector3(1,0,0):new T.Vector3(0,0,1))}}
+ return J}
+// cadrage : boîte englobante de toutes les poses de l'exercice
+function f3Frame(id,g,aspect){const key=id+"|"+(g||0)+"|"+aspect.toFixed(2);if(F3.frames[key])return F3.frames[key];const T=F3.T,X=FIGX[id];
+ const tot=X.ms.reduce((a,b)=>a+b,0);let mn=[9,9,9],mx=[-9,-9,-9];
+ for(let i=0;i<24;i++){let Pz=figAt(X,tot*i/24);if(X.prop==="tread")Pz=figTread(Pz,g||0);const J=f3Joints(X,Pz);for(const k in J){const p=J[k];mn=[Math.min(mn[0],p.x),Math.min(mn[1],p.y),Math.min(mn[2],p.z)];mx=[Math.max(mx[0],p.x),Math.max(mx[1],p.y),Math.max(mx[2],p.z)]}}
+ mn[1]=-0.15;mx[1]+=0.1;mn[0]-=0.16;mx[0]+=0.16;if(X.prop==="tread"){mn[0]=Math.min(mn[0],-0.9);mx[0]=Math.max(mx[0],0.95);mx[1]=Math.max(mx[1],1.25)}
+ const lying=(mx[1]-mn[1])<0.75,az=X.front?0.3:(lying?0.62:0.55),el=lying?0.42:0.14;
+ const c=[(mn[0]+mx[0])/2,(mn[1]+mx[1])/2,(mn[2]+mx[2])/2],w=mx[0]-mn[0],h=mx[1]-mn[1];
+ const fov=26*Math.PI/180,need=Math.max(h*1.0,(w*Math.cos(az)+0.5*Math.sin(az))*1.0/aspect)/2,dist=need/Math.tan(fov/2)+0.2;
+ return F3.frames[key]={c,dist,az,el}}
+function f3Render(id,g,ms,cw,ch){const T=F3.T,X=FIGX[id];if(!X)return;const R=F3.R,C=F3.C;
+ const W=Math.max(60,Math.round(cw)),H=Math.max(60,Math.round(ch));if(W!==F3.w||H!==F3.h){R.setSize(W,H,false);F3.w=W;F3.h=H;C.aspect=W/H;C.updateProjectionMatrix()}
+ let Pz=figAt(X,ms);if(X.prop==="tread")Pz=figTread(Pz,g||0);f3Pose(X,Pz,id);
+ for(const k in F3.props)F3.props[k].visible=X.prop===k;
+ const cx=X.vb?((X.vb[0]+X.vb[2]/2)-80)/F3K:0;
+ if(X.prop==="mat")F3.props.mat.position.set(cx,0,0);
+ if(X.prop==="bench")F3.props.bench.position.set((80-80)/F3K,0,-0.17);
+ if(X.prop==="tread"){const a=Math.atan((g||0)/100)*1.6;F3.props.tread.rotation.z=a;F3.props.tread.position.set(0,-0.035,0)}
+ const fr=f3Frame(id,g,W/H);C.position.set(fr.c[0]+Math.sin(fr.az)*fr.dist*Math.cos(fr.el),fr.c[1]+Math.sin(fr.el)*fr.dist,fr.c[2]+Math.cos(fr.az)*fr.dist*Math.cos(fr.el));C.lookAt(fr.c[0],fr.c[1],fr.c[2]);
+ F3.floor.position.set(fr.c[0],0,0);F3.D.position.set(fr.c[0]+1.6,3.2,2.4);F3.D.target.position.set(fr.c[0],0,0);
+ R.render(F3.S,C)}
+// placement du canevas WebGL dans la grande vignette visible ; vignettes du récapitulatif en images fixes
+function f3Step(now){if(!F3.ok)return false;if(F3.last&&now-F3.last<22&&F3.R.domElement.isConnected&&F3.act&&F3.act.isConnected)return F3.act;F3.last=now;const L=[...document.querySelectorAll(".sp-fig svg.fig[data-fig]")].filter(s=>s.parentNode.getClientRects().length);const s=L[0];
+ const cv=F3.R.domElement;if(!s){if(cv.parentNode)cv.remove();F3.slot=null;return false}
+ const box=s.parentNode;if(cv.parentNode!==box){box.appendChild(cv);F3.slot=box}box.classList.add("is3d");F3.act=s;
+ if(!s._t0)s._t0=now;const r=box.getBoundingClientRect(),pad=6;f3Render(s.dataset.fig,+s.dataset.g||0,now-s._t0,r.width-pad*2,r.height-pad*2);return s}
+function f3Thumbs(){if(!F3.ok)return;const L=document.querySelectorAll(".sp-xs svg.fig[data-fig]");if(!L.length)return;const keep=[F3.w,F3.h];
+ L.forEach(s=>{const id=s.dataset.fig;let url=F3.thumbs[id];if(!url){const X=FIGX[id],tot=X.ms.reduce((a,b)=>a+b,0);f3Render(id,0,X.ms[0]*0.999,96,88);url=F3.thumbs[id]=F3.R.domElement.toDataURL("image/png")}
+  const img=new Image();img.src=url;img.alt="";img.className="fig3-th";s.replaceWith(img)});if(keep[0]){F3.R.setSize(keep[0],keep[1],false);F3.w=keep[0];F3.h=keep[1];F3.C.aspect=keep[0]/keep[1];F3.C.updateProjectionMatrix()}}
+// la boucle d'animation existante dessine en 3D la grande vignette, en 2D le reste
+figLoop=function(now){figRaf=0;const L=document.querySelectorAll("svg.fig[data-fig]");if(!L.length&&!(F3.R&&F3.R.domElement.parentNode)){return}
+ let active=null;if(document.visibilityState==="visible"){try{active=f3Step(now)}catch(e){F3.ok=false;F3.fail=true;const cv=F3.R&&F3.R.domElement;if(cv&&cv.parentNode){cv.parentNode.classList.remove("is3d");cv.remove()}}
+  L.forEach(s=>{if(s!==active&&s.getClientRects().length)try{figDraw(s,now)}catch(e){}});try{f3Thumbs()}catch(e){}}
+ figRaf=requestAnimationFrame(figLoop)};
+
+// tempo : [aller, pause, retour, pause] pour les mouvements à deux positions
+const FIG_TEMPO={squat_gob:[1500,250,1000,550],squat:[1400,200,950,500],thruster:[1000,150,850,500],rdl:[1600,200,1100,500],hinge:[1400,200,1000,400],row:[800,350,1300,350],
+ press_floor:[1400,300,900,450],ohp:[950,300,1300,350],lunge:[1300,200,1000,550],bridge_w:[900,600,1200,350],bridge:[900,600,1200,350],curl:[900,300,1300,350],tri:[1300,250,900,400],pushup:[1300,150,900,400]};
+for(const k in FIG_TEMPO){const X=FIGX[k];if(X&&X.fr.length===2){const[A,B]=X.fr;X.fr=[A,B,B,A];X.ms=FIG_TEMPO[k]}}
+Object.assign(FIGX.squat_gob,{dbOne:1,dbAx:"v",hz:0.05});Object.assign(FIGX.tri,{hz:0.05});Object.assign(FIGX.pushup,{hz:0.2});Object.assign(FIGX.mountain,{hz:0.2});Object.assign(FIGX.plank,{hz:0.13});
+Object.assign(FIGX.bridge_w,{hz:0.13});for(const k of ["row","farmer","lunge","thruster"])FIGX[k].dbAx="x";
+const spOpenV28=spOpen;spOpen=function(){try{f3Load()}catch(e){}return spOpenV28.apply(this,arguments)};
 
 setTab(ui.tab);renderAll();initDb();sbStart();
 
