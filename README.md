@@ -31,5 +31,6 @@ Lancer une collecte à la main : onglet Actions → « Recettes à découvrir »
 ## Sport et pas
 
 - Chaque téléphone choisit son profil (« À qui est ce téléphone ? », ou Réglages → Ce téléphone) : Suivi et Sport s'ouvrent dessus. Ce réglage reste sur l'appareil.
-- Onglet Sport : pas du jour (objectif, 7 derniers jours), séances guidées (haltères, tapis de course, tapis de sol) avec séries, chrono de repos, bips et voix, chrono de repos libre, bilan de la semaine. Les séances et les pas sont synchronisés avec le foyer.
+- Onglet Sport, en trois blocs : Pas (objectif, 7 derniers jours), Séance (séance du jour, toutes les séances haltères / tapis de course / tapis de sol, lecteur avec séries, repos chronométré, bips, voix et animation de chaque mouvement) et Stats (semaine en cours, 8 dernières semaines, poids, charges, records). Les séances et les pas sont synchronisés avec le foyer.
+- Les animations des exercices sont dessinées par l'appli (silhouette animée), sans image ni vidéo externe ; « Comment faire » propose aussi une recherche de vidéos YouTube.
 - Pas automatiques sur iPhone : Sport → Pas automatiques. Sano crée une ligne privée dans la table `planner` (une par personne) ; un raccourci Apple (« Sano pas ») y écrit le total du jour par une requête PATCH, et l'appli le relit. Aucune modification de Supabase n'est nécessaire.

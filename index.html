@@ -1777,6 +1777,64 @@ h1,h2,.sec-head h1,.block-title,.row-head h2,.m-body h2,.pn-title{color:var(--ti
 #tab-recettes .sec-head h1,#tab-courses .sec-head h1,#tab-stock .sec-head h1{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
 #tab-recettes .sec-head .sub,#tab-courses .sec-head .sub,#tab-stock .sec-head .sub{margin-top:0}
 @media (prefers-reduced-motion:reduce){.subtabs button{transition:none}}
+/* ================= v27 : Sport en 3 blocs, stats, animations des mouvements ================= */
+.fig{display:block;width:100%;height:100%}
+.fg-floor{stroke:var(--line-2);stroke-width:1.5}
+.fg-far path{stroke:#C4ADA9;stroke-width:6;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.fg-near path,.fg-t{stroke:var(--ink);stroke-width:6;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.fg-t{stroke-width:9}.fg-hd{fill:var(--ink)}
+.fg-front .fg-far path{stroke:var(--ink)}
+.fg-dbn{fill:var(--cta)}.fg-dbf{fill:#E59B8E}
+.fg-prop{fill:#EBD3CE}.fg-propl{stroke:#D9B8B1;stroke-width:3;fill:none;stroke-linecap:round}.fg-mat{fill:#F7DAD3}.fg-belt{stroke:#A08E8A;stroke-width:4;stroke-linecap:round}
+.sp-fig{width:min(64vw,250px);aspect-ratio:1.12;margin:2px auto 8px;padding:6px;border-radius:22px;background:var(--surface);box-shadow:var(--sh-1)}
+.sp-fig-s{width:100%;max-width:190px;margin:0}
+.sp-duo{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;max-width:460px}
+.sp-duo>.sp-fig{flex:1 1 52%}
+.sp-duo>.sp-big{flex:0 0 auto;width:min(40vw,190px);margin:0}
+.sp-nx{display:flex;align-items:center;gap:12px;margin:8px 0 4px;text-align:left}
+.sp-nx .sp-fig{width:110px;flex:0 0 auto}
+.sp-nx p{margin:0;font-size:.92rem;max-width:20ch}
+.sp-exf{display:flex;align-items:center;gap:10px}
+.sp-xs{width:46px;height:42px;flex:0 0 auto;border-radius:10px;background:var(--surface-2);padding:2px}
+.sp-vid{display:inline-block;margin-top:8px;font-weight:600;color:var(--coral-ink)}
+.sp-all{margin-top:14px;border-top:1px solid var(--line);padding-top:12px}
+.sp-all>summary,.sp-histd>summary{cursor:pointer;font-family:var(--f-sub);font-weight:700;font-size:.95rem;list-style-position:inside}
+.sp-all[open]>summary{margin-bottom:12px}
+.sp-kpis{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:4px 0 6px}
+.sp-kpi{display:flex;flex-direction:column;gap:3px;padding:12px;border-radius:var(--r-md);background:var(--surface-2);min-width:0}
+.sp-kl{font-size:.78rem;font-weight:600;color:var(--muted)}
+.sp-kv{font-family:var(--f-title);font-size:1.55rem;line-height:1.1;font-weight:700}
+.sp-kv small{font-size:.8rem;font-weight:600;color:var(--muted);font-family:var(--f-body)}
+.sp-ks{font-size:.76rem;color:var(--muted);line-height:1.3}
+.sp-dl{font-size:.78rem;font-weight:700;color:var(--muted)}
+.sp-dl.up{color:var(--ok)}.sp-dl.down{color:var(--high)}
+.sp-meter{display:block;height:6px;border-radius:6px;background:var(--pink-2);overflow:hidden;margin:3px 0 2px}
+.sp-meter i{display:block;height:100%;border-radius:6px;background:var(--cta)}.sp-meter i.ok{background:var(--ok)}
+.sp-ch-h{display:flex;justify-content:flex-start;margin:0 0 8px}
+.sp-met button{font-size:.8rem}
+.sp-ch-sel{margin:0 0 6px;font-size:.88rem}
+.sp-ch{position:relative;display:flex;align-items:stretch;gap:4px;height:150px;padding-bottom:20px;border-bottom:1px solid var(--line)}
+.sp-ch-t{position:absolute;left:0;right:0;border-top:2px dashed rgba(176,58,46,.45);pointer-events:none;z-index:1}
+.sp-ch-t span{position:absolute;right:0;top:-17px;font-size:.66rem;font-weight:600;color:var(--coral-ink);background:var(--surface);padding:0 4px;border-radius:4px}
+.sp-cb{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;border:0;background:none;padding:0;min-width:0;cursor:pointer;font:inherit;color:var(--muted);position:relative}
+.sp-cbt{flex:1;width:100%;display:flex;align-items:flex-end;justify-content:center}
+.sp-cbt i{display:block;width:min(24px,70%);background:#EBB3A9;border-radius:4px 4px 0 0}
+.sp-cb.cur .sp-cbt i{background:var(--cta)}
+.sp-cb.on .sp-cbt i{box-shadow:0 0 0 2px var(--surface),0 0 0 4px var(--ink)}
+.sp-cb small{position:absolute;bottom:-19px;font-size:.62rem;white-space:nowrap}
+.sp-cb.cur small,.sp-cb.on small{font-weight:700;color:var(--ink)}
+.sp-cb:focus-visible{outline:3px solid var(--focus,#2F2A2B);outline-offset:2px;border-radius:6px}
+.sp-pg{margin:0;display:grid;gap:8px}
+.sp-pg div{display:grid;grid-template-columns:110px 1fr;gap:8px;padding:9px 12px;border-radius:var(--r-sm);background:var(--surface-2)}
+.sp-pg dt{font-size:.8rem;font-weight:700;color:var(--muted)}
+.sp-pg dd{margin:0;font-size:.88rem;line-height:1.45}
+@media (max-width:380px){.sp-pg div{grid-template-columns:1fr;gap:2px}}
+.sp-note{margin-top:10px;font-size:.74rem}
+.sp-histd{margin-top:12px;border-top:1px solid var(--line);padding-top:12px}
+.sp-histd[open]>summary{margin-bottom:8px}
+.sp-gl{display:block}.sp-gl b{white-space:nowrap}
+.sp-fig{width:min(56vw,220px)}
+@media (max-height:700px){.sp-fig{width:min(46vw,180px)}}
 
 </style>
 </head>
@@ -1859,8 +1917,8 @@ h1,h2,.sec-head h1,.block-title,.row-head h2,.m-body h2,.pn-title{color:var(--ti
   <div class="columns" id="stockList"></div>
  </section>
  <section id="tab-sport" class="tab" hidden>
-  <div class="sec-head"><div><h1>Sport</h1><p class="sub">Pas du jour, séances guidées et chrono de repos.</p></div></div>
-  <nav class="jump" aria-label="Aller à une partie de l'onglet"><button type="button" data-jump="spSteps">Pas</button><button type="button" data-jump="spToday">Séance du jour</button><button type="button" data-jump="spTimer">Chrono</button><button type="button" data-jump="spList">Séances</button><button type="button" data-jump="spWeek">Semaine</button></nav>
+  <div class="sec-head"><div><h1>Sport</h1><p class="sub">Pas du jour, séances guidées et progrès.</p></div></div>
+  <nav class="jump" aria-label="Aller à une partie de l'onglet"><button type="button" data-jump="spSteps">Pas</button><button type="button" data-jump="spSess">Séance</button><button type="button" data-jump="spStats">Stats</button></nav>
   <div id="sport"></div>
  </section>
 </main>
@@ -1882,7 +1940,7 @@ h1,h2,.sec-head h1,.block-title,.row-head h2,.m-body h2,.pn-title{color:var(--ti
 </div>
 <div id="timers" class="timers" hidden aria-live="polite"></div>
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
-<script>window.NS_CONFIG={"hosted": true, "sbUrl": "https://zjsawjudrdneeptxbskd.supabase.co", "sbKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpqc2F3anVkcmRuZWVwdHhic2tkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1NjUxMjcsImV4cCI6MjEwNzE0MTEyN30.Wn1bUy--5O78gGICTOyEGbnT6B-SdoNCG_XxBBaaUIY", "build": "20261015193315"}</script>
+<script>window.NS_CONFIG={"hosted": true, "sbUrl": "https://zjsawjudrdneeptxbskd.supabase.co", "sbKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpqc2F3anVkcmRuZWVwdHhic2tkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1NjUxMjcsImV4cCI6MjEwNzE0MTEyN30.Wn1bUy--5O78gGICTOyEGbnT6B-SdoNCG_XxBBaaUIY", "build": "20261015201734"}</script>
 <script>
 const AISLES={L:"Fruits & légumes",H:"Herbes fraîches",V:"Viandes & poissons",C:"Crèmerie & œufs",S:"Surgelés",F:"Féculents",B:"Conserves",E:"Épices & condiments"};
 const AISLE_ORDER=["L","H","V","C","S","F","B","E"];
@@ -3353,6 +3411,7 @@ normalize=function(d){const s=normalizeV24(d);const src=d&&typeof d==="object"&&
 // state.sport = {steps:{"0":{AAAAMMJJ:n},"1":{…}}, goal:[8000,8000], wk:[3,3], eq:{h,t,s},
 //   hist:[{i,p,d,s,t,min,kcal,n,at}], w:{"0":{exo:kg},"1":{…}}, inbox:{"0":"hex","1":"hex"}}
 const SP_EQ_DEF={h:true,t:true,s:true};
+function spHx(h){const o={};const km=+h.km;if(km>0&&km<300)o.km=Math.round(km*10)/10;if(h.w&&typeof h.w==="object"){const w={};let c=0;for(const k in h.w){const v=+h.w[k];if(/^[a-z0-9_]{2,20}$/.test(k)&&v>0&&v<=300&&c<20){w[k]=Math.round(v*2)/2;c++}}if(c)o.w=w}return o}
 function spNorm(src){const o={steps:{"0":{},"1":{}},goal:[8000,8000],wk:[3,3],eq:{...SP_EQ_DEF},hist:[],w:{"0":{},"1":{}},inbox:{}};
  if(!src||typeof src!=="object")return o;const okD=k=>/^20\d{6}$/.test(k);
  for(const p of ["0","1"]){const S=src.steps&&src.steps[p];if(S&&typeof S==="object"){const ks=Object.keys(S).filter(okD).sort().slice(-400);for(const k of ks){const n=Math.round(+S[k]);if(n>=0&&n<=120000)o.steps[p][k]=n}}
@@ -3362,7 +3421,7 @@ function spNorm(src){const o={steps:{"0":{},"1":{}},goal:[8000,8000],wk:[3,3],eq
  if(Array.isArray(src.wk))o.wk=[0,1].map(i=>{const v=Math.round(+src.wk[i]);return v>=1&&v<=7?v:3});
  if(src.eq&&typeof src.eq==="object")for(const k in SP_EQ_DEF)if(typeof src.eq[k]==="boolean")o.eq[k]=src.eq[k];
  if(Array.isArray(src.hist))for(const h of src.hist.slice(-400)){if(!h||typeof h!=="object"||!okD(String(h.d||""))||!/^[a-z0-9]{4,16}$/.test(String(h.i||"")))continue;
-  o.hist.push({i:h.i,p:h.p?1:0,d:h.d,s:String(h.s||"").slice(0,24),t:String(h.t||"Séance").slice(0,60),min:Math.max(0,Math.min(600,Math.round(+h.min||0))),kcal:Math.max(0,Math.min(5000,Math.round(+h.kcal||0))),n:Math.max(0,Math.min(200,Math.round(+h.n||0))),at:+h.at||0})}
+  o.hist.push({i:h.i,p:h.p?1:0,d:h.d,s:String(h.s||"").slice(0,24),t:String(h.t||"Séance").slice(0,60),min:Math.max(0,Math.min(600,Math.round(+h.min||0))),kcal:Math.max(0,Math.min(5000,Math.round(+h.kcal||0))),n:Math.max(0,Math.min(200,Math.round(+h.n||0))),at:+h.at||0,...spHx(h)})}
  return o}
 const normalizeV25=normalize;
 normalize=function(d){const s=normalizeV25(d);s.sport=spNorm(d&&typeof d==="object"?d.sport:null);return s};
@@ -6225,7 +6284,7 @@ function spPause(){if(!SR||SR.paused||SR.ph!=="run")return;SR.paused=true;SR.pAt
 function spResume(){if(!SR||!SR.paused)return;SR.pTot+=Date.now()-SR.pAt;SR.paused=false;SR.sheet=false;spAudioUnlock();spWake(true)}
 function spFinish(save){const S=SR.S,p=SR.p,min=Math.max(1,Math.round(spE()/60));if(SR.paused){SR.pTot+=Date.now()-SR.pAt;SR.paused=false}
  SR.ph="done";SR.sheet=false;SR.res={min,kcal:Math.round(SR.kcal),n:SR.n,km:SR.km};
- if(save&&(SR.n>0||spE()>=120)){const sp=SPD();sp.hist=[...sp.hist,{i:Math.random().toString(36).slice(2,10).padEnd(6,"0"),p,d:spToday(),s:S.id,t:S.t,min,kcal:SR.res.kcal,n:SR.n,at:Date.now()}].slice(-400);
+ if(save&&(SR.n>0||spE()>=120)){const sp=SPD();sp.hist=[...sp.hist,{i:Math.random().toString(36).slice(2,10).padEnd(6,"0"),p,d:spToday(),s:S.id,t:S.t,min,kcal:SR.res.kcal,n:SR.n,at:Date.now(),km:Math.round(SR.km*10)/10,w:{...(SR.wd||{})}}].slice(-400);
   if(Object.keys(SR.ws).length){const W={...(sp.w[p]||{}),...SR.ws};sp.w={...sp.w,[p]:W}}commit();SR.saved=true;spSay("Séance terminée. Bravo !");try{npCelebrate(false)}catch(e){}}
  spWake(false);renderPanel();renderSport();try{renderSuivi()}catch(e){}}
 function spWeight(e){const v=SR.ws[e]!=null?SR.ws[e]:((SPD().w[SR.p]||{})[e]);return v!=null?+v:null}
@@ -6355,6 +6414,206 @@ setTab=function(t){if(NAV_G[t])t=NAV_LAST[t];const g=grpOf(t);
  if(NAV_G[g]){NAV_LAST[g]=t;try{localStorage.setItem(LS+"-navlast",JSON.stringify(NAV_LAST))}catch(e){}}
  const r=setTabV26.call(this,t);
  document.querySelectorAll(".toptabs [data-tab],.bottombar [data-tab]").forEach(b=>b.setAttribute("aria-current",b.dataset.tab===g?"page":"false"));return r};
+
+
+// ================= v27 : animations des exercices (silhouette dessinée, cinématique inverse) =================
+// Chaque exercice = des poses clés (hanche, angle du buste, chevilles, poignets) ; genoux et coudes sont
+// calculés à chaque image, les segments gardent leur longueur. Vue de profil (tournée vers la droite) ou de face.
+const FG={T:34,H:10,R:7.5,UA:19,FA:17,TH:25,SH:24,FT:8,FL:142};
+function figIK(a,b,l1,l2,s){const dx=b[0]-a[0],dy=b[1]-a[1];let d=Math.hypot(dx,dy)||0.001;const mx=l1+l2-0.01,mn=Math.abs(l1-l2)+0.5;
+ let e=[b[0],b[1]];if(d>mx){e=[a[0]+dx/d*mx,a[1]+dy/d*mx];d=mx}const dd=Math.max(d,mn);
+ const base=Math.atan2(dy,dx),al=Math.acos(Math.max(-1,Math.min(1,(l1*l1+dd*dd-l2*l2)/(2*l1*dd)))),an=base-s*al;
+ return[[a[0]+l1*Math.cos(an),a[1]+l1*Math.sin(an)],e]}
+const fgR=d=>d*Math.PI/180,fgL=(a,b,k)=>a+(b-a)*k,fgP=(a,b,k)=>[fgL(a[0],b[0],k),fgL(a[1],b[1],k)];
+const FG_DEF={fF:"fN",wF:"wN",kF:"kN",eF:"eN",tF:"tN"};
+const fgGet=(P,key)=>P[key]!==undefined?P[key]:FG_DEF[key]?P[FG_DEF[key]]:undefined;
+function figMix(A,B,k){const o={};for(const key of new Set([...Object.keys(A),...Object.keys(B)])){let a=fgGet(A,key),b=fgGet(B,key);if(a===undefined)a=b;if(b===undefined)b=a;if(a===undefined)continue;
+ o[key]=Array.isArray(a)?fgP(a,b,k):typeof a==="number"&&!/^[ke]/.test(key)?fgL(a,b,k):k<0.5?a:b}return o}
+// squelette à partir d'une pose
+function figSkel(P,front){const h=P.h,t=fgR(P.t),nk=[h[0]+FG.T*Math.cos(t),h[1]+FG.T*Math.sin(t)],ht=fgR(P.t+(P.hd||0)),hd=[nk[0]+FG.H*Math.cos(ht),nk[1]+FG.H*Math.sin(ht)];
+ const sw=front?(P.sw||10):0,hw=front?(P.hw||6):0,shN=[nk[0]+sw,nk[1]+(front?3:0)],shF=[nk[0]-sw,nk[1]+(front?3:0)],hpN=[h[0]+hw,h[1]],hpF=[h[0]-hw,h[1]];
+ const leg=(hp,f,s,ta)=>{const[k,a]=figIK(hp,f,FG.TH,FG.SH,s);const tt=fgR(ta);return[hp,k,a,[a[0]+FG.FT*Math.cos(tt),a[1]+FG.FT*Math.sin(tt)]]};
+ const arm=(sh,w,s)=>{const[e,x]=figIK(sh,w,FG.UA,FG.FA,s);return[sh,e,x]};
+ return{nk,hd,h,lN:leg(hpN,P.fN,P.kN==null?1:P.kN,P.tN==null?(front?90:4):P.tN),lF:leg(hpF,P.fF||P.fN,P.kF==null?(P.kN==null?1:P.kN):P.kF,P.tF==null?(P.tN==null?(front?90:4):P.tN):P.tF),
+  aN:arm(shN,P.wN,P.eN==null?-1:P.eN),aF:arm(shF,P.wF||P.wN,P.eF==null?(P.eN==null?-1:P.eN):P.eF)}}
+const fgPath=pts=>"M"+pts.map(p=>p[0].toFixed(1)+" "+p[1].toFixed(1)).join("L");
+// poses de base (sol à y=142, debout : hanche 70/90)
+const S0={h:[70,90],t:-90,fN:[71,139],fF:[69,139],wN:[71,125],wF:[69,125],eN:-1};
+const P=(o)=>Object.assign({},S0,o);
+const FIGX={
+ squat_gob:{db:1,ms:[1300,1300],fr:[P({wN:[80,70],wF:[79,71],eN:1}),P({h:[52,116],t:-55,fN:[72,139],fF:[70,139],wN:[86,98],wF:[85,99],eN:1})]},
+ squat:{ms:[1200,1200],fr:[P({}),P({h:[52,116],t:-55,fN:[72,139],fF:[70,139],wN:[108,90],wF:[107,91],eN:1})]},
+ thruster:{db:1,ms:[900,1100],fr:[P({h:[52,116],t:-60,wN:[84,84],wF:[83,85],eN:1}),P({wN:[73,21],wF:[72,22],eN:1})]},
+ rdl:{db:1,ms:[1500,1300],fr:[P({wN:[75,121],wF:[73,121]}),P({h:[52,94],t:-14,fN:[72,139],fF:[70,139],wN:[86,121],wF:[84,121],eN:1})]},
+ hinge:{ms:[1300,1300],fr:[P({wN:[72,91],wF:[70,91]}),P({h:[54,96],t:-22,wN:[87,118],wF:[85,118],eN:1})]},
+ row:{db:1,prop:"bench",vb:[18,50,140,100],ms:[900,1300],fr:[
+   {h:[72,100],t:-10,fN:[62,139],kN:1,tN:4,fF:[50,124],kF:1,tF:180,wN:[106,127],eN:-1,wF:[108,124],eF:1},
+   {h:[72,100],t:-10,fN:[62,139],kN:1,tN:4,fF:[50,124],kF:1,tF:180,wN:[84,102],eN:-1,wF:[108,124],eF:1}]},
+ press_floor:{db:1,prop:"mat",vb:[18,62,140,90],ms:[1200,1100],fr:[
+   {h:[88,134],t:180,hd:0,fN:[118,139],kN:1,tN:0,wN:[56,99],wF:[57,100],eN:1},
+   {h:[88,134],t:180,hd:0,fN:[118,139],kN:1,tN:0,wN:[68,116],wF:[69,117],eN:-1}]},
+ ohp:{db:1,ms:[1100,1300],fr:[P({wN:[76,54],wF:[75,55],eN:1}),P({wN:[72,21],wF:[71,22],eN:1})]},
+ lunge:{db:1,ms:[1300,1300],fr:[P({wN:[72,125],wF:[70,125]}),P({h:[62,112],fN:[33,133],kN:1,tN:110,fF:[80,139],kF:1,wN:[64,147],wF:[62,147]})]},
+ bridge_w:{db:1,dbAt:"hip",prop:"mat",vb:[18,62,140,90],ms:[1200,1200],fr:[
+   {h:[82,134],t:180,fN:[112,139],kN:1,tN:0,wN:[82,128],wF:[83,128],eN:1},
+   {h:[86,114],t:152,fN:[112,139],kN:1,tN:0,wN:[86,108],wF:[87,108],eN:1}]},
+ bridge:{prop:"mat",vb:[18,62,140,90],ms:[1200,1200],fr:[
+   {h:[82,134],t:180,fN:[112,139],kN:1,tN:0,wN:[84,139],eN:1},
+   {h:[86,114],t:152,fN:[112,139],kN:1,tN:0,wN:[91,139],eN:1}]},
+ curl:{db:1,ms:[1100,1300],fr:[P({wN:[73,125],wF:[71,125],eN:-1}),P({wN:[80,62],wF:[79,63],eN:-1})]},
+ tri:{db:1,dbOne:1,ms:[1300,1100],fr:[P({wN:[71,21],wF:[70,21],eN:1}),P({wN:[60,42],wF:[59,42],eN:-1})]},
+ farmer:{db:1,ms:[380,380,380,380],fr:[
+   P({h:[70,91],fN:[84,139],fF:[56,139],kF:1,tF:30,wN:[71,126],wF:[69,126]}),P({h:[70,89],fN:[70,139],fF:[70,128],kF:1,wN:[71,124],wF:[69,124]}),
+   P({h:[70,91],fN:[56,139],fF:[84,139],tN:30,wN:[71,126],wF:[69,126]}),P({h:[70,89],fN:[70,128],fF:[70,139],wN:[71,124],wF:[69,124]})]},
+ walk:{prop:"tread",ms:[380,380,380,380],fr:[
+   P({h:[70,91],fN:[84,139],fF:[56,139],tF:30,wN:[62,120],wF:[80,120]}),P({h:[70,89],fN:[70,139],fF:[70,128],wN:[70,124],wF:[71,124]}),
+   P({h:[70,91],fN:[56,139],fF:[84,139],tN:30,wN:[80,120],wF:[62,120]}),P({h:[70,89],fN:[70,128],fF:[70,139],wN:[71,124],wF:[70,124]})]},
+ run:{prop:"tread",ms:[230,230,230,230],fr:[
+   {h:[70,92],t:-80,fN:[90,137],fF:[50,132],kF:1,tN:4,tF:40,wN:[64,94],wF:[86,76],eN:-1,eF:1},{h:[70,88],t:-80,fN:[72,139],fF:[64,118],kF:1,tN:4,wN:[74,90],wF:[74,90],eN:-1},
+   {h:[70,92],t:-80,fN:[50,132],fF:[90,137],tN:40,tF:4,wN:[86,76],wF:[64,94],eN:1,eF:-1},{h:[70,88],t:-80,fN:[64,118],fF:[72,139],tF:4,wN:[74,90],wF:[74,90],eN:-1}]},
+ pushup:{prop:"mat",vb:[10,62,150,90],ms:[1100,1100],fr:[
+   {h:[69,118],t:-26,fN:[25,139],tN:80,wN:[100,139],wF:[101,139],eN:-1},
+   {h:[70,132],t:-8,fN:[22,139],tN:80,wN:[100,139],wF:[101,139],eN:-1}]},
+ plank:{prop:"mat",vb:[8,62,150,90],ms:[1500,1500],fr:[
+   {h:[67,128],t:-13,fN:[19,139],tN:80,wN:[116,139],wF:[117,139],eN:-1},
+   {h:[67,127],t:-13,fN:[19,139],tN:80,wN:[116,139],wF:[117,139],eN:-1}]},
+ deadbug:{prop:"mat",vb:[12,62,140,90],ms:[900,700,900,700],fr:[
+   {h:[90,134],t:180,fN:[114,109],kN:1,tN:-90,wN:[56,99],wF:[57,100],eN:1},
+   {h:[90,134],t:180,fN:[114,109],kN:1,tN:-90,fF:[138,128],kF:-1,tF:-60,wN:[22,130],wF:[57,100],eN:1},
+   {h:[90,134],t:180,fN:[114,109],kN:1,tN:-90,wN:[56,99],wF:[57,100],eN:1},
+   {h:[90,134],t:180,fN:[138,128],kN:-1,tN:-60,fF:[114,109],kF:1,tF:-90,wN:[56,99],wF:[22,130],eN:1}]},
+ mountain:{prop:"mat",vb:[10,62,150,90],ms:[330,330],fr:[
+   {h:[69,118],t:-26,fN:[86,130],kN:1,tN:60,fF:[25,139],tF:80,wN:[100,139],wF:[101,139],eN:-1},
+   {h:[69,118],t:-26,fN:[25,139],tN:80,fF:[86,130],kF:1,tF:60,wN:[100,139],wF:[101,139],eN:-1}]},
+ jacks:{front:1,ms:[420,420],fr:[
+   {h:[80,90],t:-90,sw:10,hw:5,fN:[84,139],fF:[76,139],kN:1,kF:-1,tN:0,tF:180,wN:[92,124],wF:[68,124],eN:1,eF:-1},
+   {h:[80,93],t:-90,sw:10,hw:5,fN:[106,137],fF:[54,137],kN:1,kF:-1,tN:15,tF:165,wN:[100,24],wF:[60,24],eN:1,eF:-1}]},
+ knees:{ms:[300,300],fr:[
+   P({h:[70,89],fN:[78,116],kN:1,fF:[70,139],wN:[60,74],wF:[84,72],eN:-1,eF:1}),P({h:[70,89],fN:[70,139],fF:[78,116],kF:1,wN:[84,72],wF:[60,74],eN:1,eF:-1})]},
+ arms:{ms:[260,260,260,260,260,260,260,260],fr:[0,45,90,135,180,225,270,315].map(a=>{const r=fgR(90-a),x=[70+35*Math.cos(r),56+35*Math.sin(r)];return P({wN:x,wF:[x[0]-1,x[1]],eN:1})})},
+ stretch:{ms:[2400,600,2400,600],fr:[
+   P({fN:[54,94],kN:1,tN:-80,wN:[55,92],eN:-1,wF:[100,70],eF:1}),P({}),P({fF:[54,94],kF:1,tF:-80,wF:[55,92],eF:-1,wN:[100,70],eN:1}),P({})]}
+};
+FIGX.bridge.fr.forEach(f=>f.wF=f.wN);
+const figEase=k=>0.5-0.5*Math.cos(Math.PI*k);
+function figAt(X,ms){const n=X.fr.length,tot=X.ms.reduce((a,b)=>a+b,0);let t=ms%tot,i=0;while(t>X.ms[i]){t-=X.ms[i];i++}
+ const k=figRM()?0:figEase(Math.min(1,t/X.ms[i]));return figMix(X.fr[i],X.fr[(i+1)%n],figRM()?(t>X.ms[i]*0.5?1:0):k)}
+const figRM=()=>{try{return matchMedia("(prefers-reduced-motion: reduce)").matches}catch(e){return false}};
+function figProp(X,g){const fl=FG.FL+1.5;if(X.prop==="bench")return`<rect x="40" y="126" width="80" height="7" rx="3" class="fg-prop"/><path d="M48 133v8M112 133v8" class="fg-propl"/>`;
+ if(X.prop==="mat")return`<rect x="${(X.vb?X.vb[0]:0)+6}" y="${fl-2}" width="${(X.vb?X.vb[2]:160)-12}" height="4" rx="2" class="fg-mat"/>`;
+ if(X.prop==="tread"){const a=Math.atan((g||0)/100)*1.6,dx=60,y0=fl+2;return`<path d="M${80-dx} ${(y0+dx*Math.tan(a)).toFixed(1)}L${80+dx} ${(y0-dx*Math.tan(a)).toFixed(1)}" class="fg-belt"/><path d="M${80+dx} ${(y0-dx*Math.tan(a)).toFixed(1)}l6 -46l-12 -4" class="fg-propl"/>`}
+ return""}
+function figSvg(id,opt){const X=FIGX[id];if(!X)return"";const vb=X.vb||(X.front?[24,12,112,134]:[16,12,124,134]);opt=opt||{};
+ return`<svg class="fig${X.front?" fg-front":""}${opt.cls?" "+opt.cls:""}" data-fig="${id}"${opt.g!=null?` data-g="${opt.g}"`:""} viewBox="${vb.join(" ")}" role="img" aria-label="${esc(opt.label||"Animation du mouvement")}" preserveAspectRatio="xMidYMid meet">
+ <path d="M${vb[0]} ${FG.FL+1.5}H${vb[0]+vb[2]}" class="fg-floor"/>${figProp(X,opt.g)}
+ <g class="fg-far"><path class="fg-l"/><path class="fg-a"/></g><path class="fg-t"/><circle class="fg-hd" r="${FG.R}"/><g class="fg-near"><path class="fg-l"/><path class="fg-a"/></g><g class="fg-db"></g></svg>`}
+// cale les pieds sur le tapis incliné (vue simplifiée)
+function figTread(P0,g){if(!g)return P0;const a=Math.tan(Math.atan(g/100)*1.6),o={...P0},dy=x=>-(x-80)*a;
+ o.fN=[P0.fN[0],P0.fN[1]+dy(P0.fN[0])];o.fF=[(P0.fF||P0.fN)[0],(P0.fF||P0.fN)[1]+dy((P0.fF||P0.fN)[0])];const m=(dy(o.fN[0])+dy(o.fF[0]))/2;o.h=[P0.h[0],P0.h[1]+m];
+ for(const k of ["wN","wF"])if(P0[k])o[k]=[P0[k][0],P0[k][1]+m];return o}
+function figDraw(svg,now){const id=svg.dataset.fig,X=FIGX[id];if(!X)return;if(!svg._t0)svg._t0=now-(Math.random()*200);
+ let Pz=figAt(X,now-svg._t0);if(X.prop==="tread")Pz=figTread(Pz,+svg.dataset.g||0);const S=figSkel(Pz,!!X.front);
+ if(!svg._el){svg._el={fl:svg.querySelector(".fg-far .fg-l"),fa:svg.querySelector(".fg-far .fg-a"),t:svg.querySelector(".fg-t"),hd:svg.querySelector(".fg-hd"),nl:svg.querySelector(".fg-near .fg-l"),na:svg.querySelector(".fg-near .fg-a"),db:svg.querySelector(".fg-db")}}
+ const E=svg._el;E.fl.setAttribute("d",fgPath(S.lF));E.fa.setAttribute("d",fgPath(S.aF));E.nl.setAttribute("d",fgPath(S.lN));E.na.setAttribute("d",fgPath(S.aN));
+ E.t.setAttribute("d",fgPath([S.h,S.nk]));E.hd.setAttribute("cx",S.hd[0].toFixed(1));E.hd.setAttribute("cy",S.hd[1].toFixed(1));
+ if(X.db){const pts=X.dbAt==="hip"?[[S.h[0],S.h[1]-7]]:X.dbOne?[[(S.aN[2][0]+S.aF[2][0])/2,(S.aN[2][1]+S.aF[2][1])/2-2]]:[S.aF[2],S.aN[2]];
+  E.db.innerHTML=pts.map((p,i)=>`<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="5.6" class="${i===0&&pts.length>1?"fg-dbf":"fg-dbn"}"/>`).join("")}}
+let figRaf=0;
+function figLoop(now){figRaf=0;const L=document.querySelectorAll("svg.fig[data-fig]");if(!L.length)return;if(document.visibilityState==="visible")L.forEach(s=>{if(s.getClientRects().length)try{figDraw(s,now)}catch(e){}});figRaf=requestAnimationFrame(figLoop)}
+function figKick(){if(!figRaf)figRaf=requestAnimationFrame(figLoop)}
+document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible")figKick()});
+
+// --- v27 : Sport en 3 blocs (Pas, Séance, Stats), plus de bandeau dans Suivi, animations dans le lecteur
+spStripHtml=function(){return""};
+try{document.querySelectorAll(".sp-strip").forEach(e=>e.remove())}catch(e){}
+ui.spAllOpen=false;ui.spMet="min";ui.spWk=null;ui.spHowOpen=false;
+document.addEventListener("toggle",e=>{const t=e.target;if(!t||!t.classList)return;if(t.classList.contains("sp-all"))ui.spAllOpen=t.open;else if(t.classList.contains("sp-how"))ui.spHowOpen=t.open},true);
+// charges utilisées pendant la séance (pour suivre la progression)
+const spAccV27=spAcc;
+spAcc=function(){try{const st=SR&&SR.L[SR.i];if(st&&st.k==="work"&&SPX[st.e]&&SPX[st.e].load){const w=spWeight(st.e);if(w)(SR.wd=SR.wd||{})[st.e]=w}}catch(e){}return spAccV27.apply(this,arguments)};
+// bloc Séance : séance du jour + toutes les séances repliées
+function spSessHtml(p){const sp=SPD(),g=spSuggest(p),today=spToday(),done=sp.hist.filter(h=>h.p===p&&h.d===today),f=ui.spF||"all",kg=spKg(p);
+ const L=SPS.filter(s=>f==="all"||s.kind===f||s.kind==="mixte"),ok=L.filter(spAvail),hid=L.length-ok.length;
+ let top;
+ if(!g)top=`<p class="pn-help">Coche ton matériel ci-dessous pour recevoir une proposition.</p>`;
+ else{const e=spEst(g.S,kg);top=`<p class="sp-kick">${done.length?`✓ ${done.length} séance${done.length>1?"s":""} faite${done.length>1?"s":""} aujourd'hui · encore une ?`:`Séance du jour pour ${pName(p)}`}</p>
+  <div class="sp-td"><span class="sp-ico" aria-hidden="true">${spIco(g.S)}</span><div><h3>${esc(g.S.t)}</h3><p class="sp-meta">${g.S.lvl} · ≈ ${e.min} min · ≈ ${fmtInt(e.kcal)} kcal</p></div></div>
+  <p class="sp-why">${esc(g.why)}</p><div class="pf-actions"><button type="button" class="btn primary" data-spsess="${g.S.id}">Commencer</button>${g.n>1?`<button type="button" class="btn" data-spact="other">Autre idée</button>`:""}</div>`}
+ return`<div class="sv-card sp-card sp-today" id="spSess">${top}
+ <details class="sp-all"${ui.spAllOpen?" open":""}><summary>Toutes les séances <span class="sp-mut">(${ok.length})</span></summary>
+  <div class="sp-eq" role="group" aria-label="Mon matériel"><span class="sp-mut">Mon matériel :</span>${[["h","Haltères",SPI.db],["t","Tapis de course",SPI.run]].map(([k,l,ic])=>`<button type="button" class="chip sp-eqb" data-speq="${k}" aria-pressed="${!!sp.eq[k]}">${ic}${l}</button>`).join("")}<span class="chip sp-eqb sp-eqfix">${SPI.mat}Tapis de sol</span></div>
+  <div class="seg sp-f" role="group" aria-label="Type de séance">${[["all","Toutes"],["renfo","Renforcement"],["cardio","Cardio"]].map(([k,l])=>`<button type="button" data-spf="${k}" aria-pressed="${f===k}">${l}</button>`).join("")}</div>
+  <div class="sp-grid">${ok.map(S=>{const e=spEst(S,kg);return`<button type="button" class="sp-sess" data-spsess="${S.id}"><span class="sp-ico" aria-hidden="true">${spIco(S)}</span><span class="sp-sx"><b>${esc(S.t)}</b><small class="sp-meta">${S.lvl} · ≈ ${e.min} min · ≈ ${fmtInt(e.kcal)} kcal</small><small class="sp-d">${esc(S.d)}</small></span></button>`}).join("")}</div>
+  ${hid?`<p class="pn-help">${hid} séance${hid>1?"s":""} masquée${hid>1?"s":""} : coche le matériel correspondant.</p>`:""}</details></div>`}
+// --- Stats : semaine en cours, comparaison, 8 semaines, progrès
+function spWeeks(n){const t=new Date();t.setHours(12,0,0,0);const off=(t.getDay()+6)%7,mon=new Date(t);mon.setDate(t.getDate()-off);const out=[];
+ for(let w=n-1;w>=0;w--){const m=new Date(mon);m.setDate(mon.getDate()-7*w);const days=[];for(let i=0;i<7;i++){const d=new Date(m);d.setDate(m.getDate()+i);days.push(ymd(d))}out.push({m,days})}return out}
+function spWkStat(p,days){const sp=SPD(),today=spToday(),H=sp.hist.filter(h=>h.p===p&&days.includes(h.d)),S=sp.steps[p]||{},kg=spKg(p),st=spStride(p);
+ const sd=days.filter(d=>d<=today&&S[d]!=null),steps=sd.reduce((a,d)=>a+S[d],0);
+ return{n:H.length,min:H.reduce((a,h)=>a+h.min,0),kc:H.reduce((a,h)=>a+h.kcal,0)+steps*st/1000*0.5*kg,avg:sd.length?steps/sd.length:null,H}}
+const spPct=(a,b)=>b?Math.round((a-b)/b*100):null;
+function spDelta(v,good,txt){if(v==null||!isFinite(v))return"";if(Math.abs(v)<1)return`<span class="sp-dl">= ${txt}</span>`;const up=v>0,ok=up===good;
+ return`<span class="sp-dl ${ok?"up":"down"}">${up?"▲":"▼"} ${Math.abs(v)} % ${txt}</span>`}
+function spChart(p,W,met){const sp=SPD(),goal=sp.goal[p]||8000,vals=W.map(w=>{const s=spWkStat(p,w.days);return met==="min"?s.min:met==="pas"?(s.avg||0):Math.round(s.kc)});
+ const tgt=met==="min"?150:met==="pas"?goal:null,mx=Math.max(1,tgt||0,...vals)*1.12,sel=ui.spWk==null?W.length-1:ui.spWk;
+ const unit=met==="min"?" min":met==="pas"?" pas/jour":" kcal",fmt=v=>met==="min"?fmtInt(v)+" min":fmtInt(v)+unit;
+ const lab=w=>fmtDate(w.m,{day:"numeric",month:"short"}).replace(".","");
+ const s=spWkStat(p,W[sel].days);
+ return`<div class="sp-ch-h"><div class="seg sp-met" role="group" aria-label="Mesure">${[["min","Minutes"],["pas","Pas/jour"],["kc","Calories"]].map(([k,l])=>`<button type="button" data-spmet="${k}" aria-pressed="${met===k}">${l}</button>`).join("")}</div></div>
+ <p class="sp-ch-sel"><b>${sel===W.length-1?"Cette semaine":"Semaine du "+lab(W[sel])}</b> : ${fmt(vals[sel])}${met!=="min"?"":` · ${s.n} séance${s.n>1?"s":""}`}</p>
+ <div class="sp-ch" role="group" aria-label="8 dernières semaines">${tgt?`<i class="sp-ch-t" style="bottom:${(20+130*tgt/mx).toFixed(1)}px"><span>${met==="min"?"150 min (OMS)":"objectif "+fmtInt(tgt)}</span></i>`:""}
+  ${W.map((w,i)=>`<button type="button" class="sp-cb${i===W.length-1?" cur":""}${i===sel?" on":""}" data-spwk="${i}" aria-pressed="${i===sel}" aria-label="Semaine du ${lab(w)} : ${fmt(vals[i])}"><span class="sp-cbt"><i style="height:${Math.max(vals[i]?3:0,vals[i]/mx*100).toFixed(1)}%"></i></span><small>${i===W.length-1?"cette sem.":lab(w)}</small></button>`).join("")}</div>`}
+function spProgress(p){const sp=SPD(),H=sp.hist.filter(h=>h.p===p).sort((a,b)=>a.at-b.at),S=sp.steps[p]||{},goal=sp.goal[p]||8000,out=[],P=(state.people||[])[p]||{};
+ const w=(P.w||[]).slice().sort((a,b)=>a[0]<b[0]?-1:1);
+ if(w.length>=2){const a=w[0],b=w[w.length-1],d=Math.round((b[1]-a[1])*10)/10;out.push(["Poids",`${spNum(a[1])} → <b>${spNum(b[1])} kg</b> <span class="sp-dl ${d<=0?"up":"down"}">${d>0?"+":d<0?"−":""}${spNum(Math.abs(d))} kg</span> depuis le ${fmtDate(dateFromYmd(a[0]),{day:"numeric",month:"short"})}`])}
+ const first={},last={};for(const h of H)for(const k in (h.w||{})){if(first[k]==null)first[k]=h.w[k];last[k]=h.w[k]}
+ const gains=Object.keys(last).map(k=>[k,first[k],last[k]]).filter(x=>x[2]>x[1]).sort((a,b)=>(b[2]-b[1])/b[1]-(a[2]-a[1])/a[1]).slice(0,3);
+ out.push(["Charges",gains.length?gains.map(([k,a,b])=>`<span class="sp-gl">${esc((SPX[k]||{}).n||k)} <b>${spNum(a)} → ${spNum(b)} kg</b></span>`).join(""):Object.keys(last).length?"Mêmes charges pour l'instant : ajoute 1 à 2 kg quand les dernières répétitions deviennent faciles.":"Note tes charges pendant les séances : ta progression s'affichera ici."]);
+ const keys=Object.keys(S).sort();if(keys.length){const best=keys.reduce((a,k)=>S[k]>S[a]?k:a,keys[0]);
+  let d=new Date();d.setHours(12,0,0,0);if((S[ymd(d)]||0)<goal)d.setDate(d.getDate()-1);let n=0;while((S[ymd(d)]||0)>=goal&&n<400){n++;d.setDate(d.getDate()-1)}
+  out.push(["Pas",`Record : <b>${fmtInt(S[best])}</b> le ${fmtDate(dateFromYmd(best),{day:"numeric",month:"short"})}${n?` · <b>${n} jour${n>1?"s":""}</b> d'affilée à l'objectif`:""}`])}
+ if(H.length){const min=H.reduce((a,h)=>a+h.min,0),km=keys.reduce((a,k)=>a+S[k],0)*spStride(p)/1000;
+  out.push(["Depuis le début",`<b>${H.length}</b> séance${H.length>1?"s":""} · <b>${min>=60?Math.floor(min/60)+" h "+String(min%60).padStart(2,"0"):min+" min"}</b> de sport${km>=1?` · <b>${fmtInt(km)} km</b> à pied`:""}`])}
+ return out}
+function spStatsHtml(p){const sp=SPD(),W=spWeeks(8),cur=spWkStat(p,W[7].days),prev=spWkStat(p,W[6].days),tgt=sp.wk[p]||3,today=spToday();
+ const mPct=Math.min(1,cur.min/150),fat=Math.round(cur.kc/7.7/10)*10,rec=sp.hist.filter(h=>h.p===p).sort((a,b)=>b.at-a.at);
+ const kpi=(l,v,s)=>`<div class="sp-kpi"><span class="sp-kl">${l}</span><b class="sp-kv">${v}</b>${s}</div>`;
+ return`<div class="sv-card sp-card" id="spStats"><div class="sv-h"><h3>Stats</h3><label class="sp-sel"><span>Objectif</span><select data-spwk-t aria-label="Séances par semaine">${[1,2,3,4,5,6].map(n=>`<option value="${n}"${n===tgt?" selected":""}>${n} séance${n>1?"s":""}/sem.</option>`).join("")}</select></label></div>
+ <div class="sp-wd">${W[7].days.map(d=>{const k=cur.H.filter(h=>h.d===d).length,dt=dateFromYmd(d);return`<span class="sp-wdd${k?" on":""}${d===today?" today":""}" aria-label="${fmtDate(dt,{weekday:"long"})} : ${k?k+" séance"+(k>1?"s":""):"rien"}"><i>${k?"✓":""}</i><small>${SP_INI[dt.getDay()]}</small></span>`}).join("")}</div>
+ <div class="sp-kpis">
+  ${kpi("Séances",`${cur.n} <small>/ ${tgt}</small>`,`<span class="sp-ks">${cur.n>=tgt?"✓ objectif atteint":`encore ${tgt-cur.n}`} · sem. dernière : ${prev.n}</span>`)}
+  ${kpi("Minutes de sport",`${cur.min} <small>min</small>`,`<span class="sp-meter" aria-hidden="true"><i style="width:${(mPct*100).toFixed(0)}%"${mPct>=1?' class="ok"':""}></i></span><span class="sp-ks">${cur.min>=150?"✓ repère OMS atteint":`${150-cur.min} min avant le repère OMS`}</span>`)}
+  ${kpi("Calories dépensées",`≈ ${fmtInt(Math.round(cur.kc/10)*10)} <small>kcal</small>`,`<span class="sp-ks">${fat>0?`≈ ${fmtInt(fat)} g de graisse brûlée`:"séances + pas de la semaine"}</span>`)}
+  ${kpi("Pas par jour",cur.avg!=null?fmtInt(Math.round(cur.avg)):"—",cur.avg!=null&&prev.avg?spDelta(spPct(cur.avg,prev.avg),true,"vs sem. dernière"):`<span class="sp-ks">moyenne de la semaine</span>`)}
+ </div>
+ <h4 class="sp-h4">8 dernières semaines</h4>${spChart(p,W,ui.spMet||"min")}
+ <h4 class="sp-h4">Progrès</h4><dl class="sp-pg">${spProgress(p).map(([k,v])=>`<div><dt>${k}</dt><dd>${v}</dd></div>`).join("")}</dl>
+ <p class="pn-help sp-note">Dépense estimée (équations ACSM pour le tapis, MET pour le renforcement, foulée et poids pour les pas). 7 700 kcal ≈ 1 kg de graisse.</p>
+ ${rec.length?`<details class="sp-histd"><summary>Historique des séances <span class="sp-mut">(${rec.length})</span></summary><ul class="sp-hist">${rec.slice(0,30).map(h=>`<li><span><b>${esc(h.t)}</b><small>${fmtDate(dateFromYmd(h.d),{weekday:"short",day:"numeric",month:"short"})} · ${h.min} min · ≈ ${fmtInt(h.kcal)} kcal${h.km?` · ${spNum(h.km)} km`:""}</small></span><button type="button" class="sp-del" data-sphdel="${h.i}" aria-label="Supprimer la séance ${esc(h.t)}">×</button></li>`).join("")}</ul></details>`:""}
+ </div>`}
+renderSport=function(){const root=document.getElementById("sport");if(!root)return;const p=ui.spP||0;
+ const top=`<div class="sv-top"><div class="seg" role="group" aria-label="Personne">${[0,1].map(i=>`<button type="button" data-spp="${i}" aria-pressed="${i===p}">${pName(i)}</button>`).join("")}</div></div>`;
+ root.innerHTML=meCard()+top+spResumeHtml()+spStepsHtml(p)+spSessHtml(p)+spStatsHtml(p);try{syncJumpVis()}catch(e){}};
+function spStatsRe(){const el=document.getElementById("spStats");if(!el)return;const d=el.querySelector(".sp-histd"),o=d&&d.open;el.outerHTML=spStatsHtml(ui.spP||0);if(o){const n=document.querySelector("#spStats .sp-histd");if(n)n.open=true}}
+document.addEventListener("click",e=>{const t=e.target.closest&&e.target.closest("[data-spmet],.sp-cb");if(!t)return;
+ if(t.dataset.spmet){ui.spMet=t.dataset.spmet;spStatsRe();return}const i=+t.dataset.spwk;ui.spWk=i===7?null:i;spStatsRe();const b=document.querySelector(`#spStats .sp-cb[data-spwk="${i}"]`);if(b)try{b.focus({preventScroll:true})}catch(x){}});
+document.addEventListener("pointerover",e=>{const t=e.target.closest&&e.target.closest(".sp-cb");if(!t||e.pointerType==="touch")return;const i=+t.dataset.spwk;if((ui.spWk==null?7:ui.spWk)===i)return;ui.spWk=i===7?null:i;spStatsRe()});
+document.addEventListener("change",e=>{const t=e.target;if(!t||!t.matches||!t.matches("[data-spwk-t]"))return;const sp=SPD(),w=[...sp.wk];w[ui.spP||0]=+t.value;sp.wk=w;commit();renderSport()});
+document.addEventListener("click",e=>{if(e.target.closest&&e.target.closest("[data-spp]")){ui.spWk=null}},true);
+// --- animations dans le lecteur de séance
+spHowHtml=function(E){if(!E||!E.how)return"";const q=encodeURIComponent(E.n+" exercice technique");
+ return`<details class="sp-how"${ui.spHowOpen?" open":""}><summary>Comment faire</summary><ul>${E.how.map(x=>`<li>${esc(x)}</li>`).join("")}</ul><a class="sp-vid" href="https://www.youtube.com/results?search_query=${q}" target="_blank" rel="noopener noreferrer">Voir des vidéos sur YouTube</a></details>`};
+const SPX_BYN={};for(const k in SPX)SPX_BYN[esc(SPX[k].n)]=k;
+const panelSpRunV27=panelSpRun;
+panelSpRun=function(){let h=panelSpRunV27.apply(this,arguments);if(!SR)return h;
+ const fig=(id,o)=>FIGX[id]?`<div class="sp-fig${o&&o.s?" sp-fig-s":""}">${figSvg(id,{g:o&&o.g,label:"Animation : "+((o&&o.l)||((SPX[id]||{}).n||""))})}</div>`:"";
+ if(SR.ph==="intro")h=h.replace(/<li><b>([^<]+)<\/b>/g,(m,n)=>SPX_BYN[n]&&FIGX[SPX_BYN[n]]?`<li class="sp-exf"><span class="sp-xs">${figSvg(SPX_BYN[n],{label:"Animation"})}</span><b>${n}</b>`:m);
+ else if(SR.ph==="run"){const st=SR.L[SR.i];
+  if(st.k==="work"&&!st.sec)h=h.replace(/(<h2 class="sp-ex">[^<]*<\/h2>)/,"$1"+fig(st.e));
+  else if(st.k==="work")h=h.replace(/(<div class="sp-big"[\s\S]*?<\/span><\/div>)/,`<div class="sp-duo">${fig(st.e,{s:1})}$1</div>`);
+  else if(st.k==="run")h=h.replace(/(<div class="sp-big"[\s\S]*?<\/span><\/div>)/,`<div class="sp-duo">${fig(st.v>=7?"run":"walk",{s:1,g:st.g,l:st.v>=7?"Course sur tapis":"Marche sur tapis"})}$1</div>`);
+  else if(st.k==="rest"){const nx=SR.L[SR.i+1];if(nx&&nx.k==="work"&&FIGX[nx.e])h=h.replace('<div class="sp-adj">',`<div class="sp-nx">${fig(nx.e,{s:1})}<p>À suivre : <b>${esc((SPX[nx.e]||{}).n)}</b></p></div><div class="sp-adj">`)}}
+ setTimeout(figKick,0);return h};
 
 setTab(ui.tab);renderAll();initDb();sbStart();
 
