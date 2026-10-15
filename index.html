@@ -1766,6 +1766,17 @@ h1,h2,.sec-head h1,.block-title,.row-head h2,.m-body h2,.pn-title{color:var(--ti
 .sp-nextup{margin:6px 0 0}
 @media (max-width:370px){.sp-nl{display:none}.sp-nav [data-spnav="prev"]{flex:0 0 56px}}
 @media (min-width:700px){.sp-form{max-width:520px}}
+/* ================= v26 : menu à 4 entrées + sous-onglets ================= */
+.bottombar{grid-template-columns:repeat(4,1fr)!important}
+.bottombar button{font-size:.76rem!important;letter-spacing:.01em!important}
+.bottombar svg{width:23px!important;height:23px!important}
+.subtabs{display:flex;gap:4px;width:100%;max-width:440px;margin:0 0 18px;padding:4px;border-radius:999px;background:#F6ECEA}
+.subtabs button{flex:1;min-height:42px;border:0;border-radius:999px;background:transparent;font-family:var(--f-sub);font-weight:600;font-size:.92rem;color:var(--muted);cursor:pointer;transition:background-color .2s,color .2s,box-shadow .2s}
+.subtabs button[aria-current="page"]{background:var(--surface);color:var(--coral-ink);font-weight:700;box-shadow:0 2px 8px -2px rgba(150,70,60,.25)}
+.subtabs button:focus-visible{outline:3px solid var(--focus,#2F2A2B);outline-offset:2px}
+#tab-recettes .sec-head h1,#tab-courses .sec-head h1,#tab-stock .sec-head h1{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+#tab-recettes .sec-head .sub,#tab-courses .sec-head .sub,#tab-stock .sec-head .sub{margin-top:0}
+@media (prefers-reduced-motion:reduce){.subtabs button{transition:none}}
 
 </style>
 </head>
@@ -1773,12 +1784,10 @@ h1,h2,.sec-head h1,.block-title,.row-head h2,.m-body h2,.pn-title{color:var(--ti
 <header class="appbar"><div class="wrap">
  <div class="brand"><img class="logo" src="data:image/webp;base64,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" alt="" width="46" height="46"><span class="brand-txt">Sano<small>Simplifiez vos repas, prenez soin de votre santé.</small></span></div>
  <nav class="toptabs" aria-label="Sections">
-  <button type="button" data-tab="recettes"><svg class="ni" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 3.5v5.2a1.8 1.8 0 0 0 3.6 0V3.5M5.8 3.5v17"/><circle cx="13" cy="12" r="4.3"/><path d="M20.5 20.5v-17c-1.6.8-2.4 2.8-2.4 5.4V13h2.4"/></svg><span>Recettes</span></button>
-  <button type="button" data-tab="semaine"><svg class="ni" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4"/><path d="M8 14.5h.01M12 14.5h.01M16 14.5h.01M8 17.5h.01M12 17.5h.01" stroke-width="2.4"/></svg><span>Semaine</span></button>
+  <button type="button" data-tab="repas"><svg class="ni" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 3.5v5.2a1.8 1.8 0 0 0 3.6 0V3.5M5.8 3.5v17"/><circle cx="13" cy="12" r="4.3"/><path d="M20.5 20.5v-17c-1.6.8-2.4 2.8-2.4 5.4V13h2.4"/></svg><span>Repas</span></button>
+  <button type="button" data-tab="achats"><svg class="ni" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 9.5h17l-1.7 9a2 2 0 0 1-2 1.6H7.2a2 2 0 0 1-2-1.6z"/><path d="M8 9.5l3-5.5M16 9.5l-3-5.5M9.5 13.5v3M14.5 13.5v3"/></svg><span>Courses</span></button>
   <button type="button" data-tab="suivi"><svg class="ni" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 20.5h17"/><path d="M4.5 16l5-5 3.5 3 6.5-7"/><path d="M15 7h4.5v4.5"/></svg><span>Suivi</span></button>
   <button type="button" data-tab="sport"><svg class="ni" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.5 6.5v11M17.5 6.5v11M3.5 9.5v5M20.5 9.5v5M6.5 12h11"/></svg><span>Sport</span></button>
-  <button type="button" data-tab="courses"><svg class="ni" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 9.5h17l-1.7 9a2 2 0 0 1-2 1.6H7.2a2 2 0 0 1-2-1.6z"/><path d="M8 9.5l3-5.5M16 9.5l-3-5.5M9.5 13.5v3M14.5 13.5v3"/></svg><span>Courses</span></button>
-  <button type="button" data-tab="stock"><svg class="ni" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8.5 3.5h7M7 7h10a1.5 1.5 0 0 1 1.5 1.5V18a2.5 2.5 0 0 1-2.5 2.5H8A2.5 2.5 0 0 1 5.5 18V8.5A1.5 1.5 0 0 1 7 7z"/><path d="M9.5 3.5V7M14.5 3.5V7"/><path d="M9.6 16.4c0-2.6 1.8-4.1 4.6-4.1 0 2.6-1.8 4.1-4.6 4.1z"/></svg><span>Stock</span></button>
  </nav>
  <button type="button" class="side-cta" data-tab="semaine"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4"/><path d="M8 14.5h.01M12 14.5h.01M16 14.5h.01M8 17.5h.01M12 17.5h.01" stroke-width="2.4"/></svg>Planifier ma semaine</button>
  <button type="button" id="sync" class="sync" data-act="panel-data">Sur cet appareil</button>
@@ -1786,6 +1795,7 @@ h1,h2,.sec-head h1,.block-title,.row-head h2,.m-body h2,.pn-title{color:var(--ti
 
 <main class="wrap">
  <section id="tab-recettes" class="tab" hidden>
+  <nav class="subtabs" aria-label="Repas"><button type="button" data-tab="semaine">Semaine</button><button type="button" data-tab="recettes">Recettes</button></nav>
   <div class="sec-head"><div><h1>Recettes</h1><p class="sub">Touche une recette pour la voir, choisir les portions et la planifier.</p></div>
    <div class="head-actions"><button type="button" class="btn primary" data-act="rec-add">+ Ajouter une recette</button><button type="button" class="btn" data-tab="semaine" id="planCount">0 / 14 repas planifiés</button></div></div>
   <nav class="jump" aria-label="Aller à une partie de l'onglet"><button type="button" data-jump="allT">Toutes</button><button type="button" data-jump="suggest">Idées</button><button type="button" data-jump="snkT">Encas</button><button type="button" class="go" data-dsc="open">Découvrir</button></nav>
@@ -1807,6 +1817,7 @@ h1,h2,.sec-head h1,.block-title,.row-head h2,.m-body h2,.pn-title{color:var(--ti
  </section>
 
  <section id="tab-semaine" class="tab" hidden>
+  <nav class="subtabs" aria-label="Repas"><button type="button" data-tab="semaine">Semaine</button><button type="button" data-tab="recettes">Recettes</button></nav>
   <div class="sec-head"><div><h1 id="weekTitle">Semaine</h1><p class="sub" id="weekSub"></p></div>
    <div class="head-actions"><button type="button" class="btn primary" data-act="fill-goal"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 3.5l1.8 4.9 4.9 1.8-4.9 1.8L11 16.9l-1.8-4.9-4.9-1.8 4.9-1.8z"/><path d="M18.5 14.5l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8z"/></svg>Compléter selon nos objectifs</button><button type="button" class="btn ghost" data-act="new-week">Vider le planning</button></div></div>
   <nav class="jump" aria-label="Aller à une partie de l'onglet"><button type="button" data-jump="tt">Planning</button><button type="button" data-jump="wkSnkT">Encas</button><button type="button" data-jump="cookT">À cuisiner</button></nav>
@@ -1826,6 +1837,7 @@ h1,h2,.sec-head h1,.block-title,.row-head h2,.m-body h2,.pn-title{color:var(--ti
  </section>
 
  <section id="tab-courses" class="tab" hidden>
+  <nav class="subtabs" aria-label="Courses"><button type="button" data-tab="courses">Liste de courses</button><button type="button" data-tab="stock">Stock</button></nav>
   <div class="sec-head"><div><h1>Courses</h1><p class="sub" id="shopSub"></p></div>
    <div class="head-actions"><button type="button" class="btn" data-act="copy">Copier la liste</button><button type="button" class="btn ghost" data-act="uncheck">Tout décocher</button></div></div>
   <div class="scanbar" id="scanBar" hidden><button type="button" class="btn primary" data-act="scan-open-c"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8.5A1.5 1.5 0 0 1 5.5 7h2.3l1.5-2.5h5.4L16.2 7h2.3A1.5 1.5 0 0 1 20 8.5v9a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 17.5z"/><circle cx="12" cy="12.8" r="3.3"/></svg>Scanner un produit</button><button type="button" class="btn" data-act="search-open-c"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.3-4.3"/></svg>Chercher un produit</button></div>
@@ -1839,6 +1851,7 @@ h1,h2,.sec-head h1,.block-title,.row-head h2,.m-body h2,.pn-title{color:var(--ti
  </section>
 
  <section id="tab-stock" class="tab" hidden>
+  <nav class="subtabs" aria-label="Courses"><button type="button" data-tab="courses">Liste de courses</button><button type="button" data-tab="stock">Stock</button></nav>
   <div class="sec-head"><div><h1>Stock</h1><p class="sub" id="stockSub"></p></div><div class="head-actions"><button type="button" class="btn ghost" data-act="reset-stock">Vider le stock</button></div></div>
   <div class="seg stk-seg" role="group" aria-label="Afficher"><button type="button" data-sf="have">🏠 Maison</button><button type="button" data-sf="week">🍽️ Repas</button><button type="button" data-sf="add">+ Ajouter</button></div>
   <div class="tools"><input id="stockQ" class="search" type="search" placeholder="Chercher dans le stock" aria-label="Chercher un ingrédient"></div>
@@ -1854,12 +1867,10 @@ h1,h2,.sec-head h1,.block-title,.row-head h2,.m-body h2,.pn-title{color:var(--ti
 <section id="panel" class="panel" hidden><div class="panel-top"><button type="button" class="m-close" data-act="panel-close" aria-label="Fermer">×</button></div><div id="panelBody" class="panel-body"></div></section>
 
 <nav class="bottombar" aria-label="Sections">
- <button type="button" data-tab="recettes"><svg class="ni" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 3.5v5.2a1.8 1.8 0 0 0 3.6 0V3.5M5.8 3.5v17"/><circle cx="13" cy="12" r="4.3"/><path d="M20.5 20.5v-17c-1.6.8-2.4 2.8-2.4 5.4V13h2.4"/></svg>Recettes</button>
- <button type="button" data-tab="semaine"><svg class="ni" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4"/><path d="M8 14.5h.01M12 14.5h.01M16 14.5h.01M8 17.5h.01M12 17.5h.01" stroke-width="2.4"/></svg>Semaine</button>
+ <button type="button" data-tab="repas"><svg class="ni" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 3.5v5.2a1.8 1.8 0 0 0 3.6 0V3.5M5.8 3.5v17"/><circle cx="13" cy="12" r="4.3"/><path d="M20.5 20.5v-17c-1.6.8-2.4 2.8-2.4 5.4V13h2.4"/></svg>Repas</button>
+ <button type="button" data-tab="achats"><svg class="ni" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 9.5h17l-1.7 9a2 2 0 0 1-2 1.6H7.2a2 2 0 0 1-2-1.6z"/><path d="M8 9.5l3-5.5M16 9.5l-3-5.5M9.5 13.5v3M14.5 13.5v3"/></svg>Courses</button>
  <button type="button" data-tab="suivi"><svg class="ni" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 20.5h17"/><path d="M4.5 16l5-5 3.5 3 6.5-7"/><path d="M15 7h4.5v4.5"/></svg>Suivi</button>
-  <button type="button" data-tab="sport"><svg class="ni" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.5 6.5v11M17.5 6.5v11M3.5 9.5v5M20.5 9.5v5M6.5 12h11"/></svg>Sport</button>
- <button type="button" data-tab="courses"><svg class="ni" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 9.5h17l-1.7 9a2 2 0 0 1-2 1.6H7.2a2 2 0 0 1-2-1.6z"/><path d="M8 9.5l3-5.5M16 9.5l-3-5.5M9.5 13.5v3M14.5 13.5v3"/></svg>Courses</button>
- <button type="button" data-tab="stock"><svg class="ni" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8.5 3.5h7M7 7h10a1.5 1.5 0 0 1 1.5 1.5V18a2.5 2.5 0 0 1-2.5 2.5H8A2.5 2.5 0 0 1 5.5 18V8.5A1.5 1.5 0 0 1 7 7z"/><path d="M9.5 3.5V7M14.5 3.5V7"/><path d="M9.6 16.4c0-2.6 1.8-4.1 4.6-4.1 0 2.6-1.8 4.1-4.6 4.1z"/></svg>Stock</button>
+ <button type="button" data-tab="sport"><svg class="ni" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.5 6.5v11M17.5 6.5v11M3.5 9.5v5M20.5 9.5v5M6.5 12h11"/></svg>Sport</button>
 </nav>
 
 <div id="modal" class="modal" hidden>
@@ -1871,7 +1882,7 @@ h1,h2,.sec-head h1,.block-title,.row-head h2,.m-body h2,.pn-title{color:var(--ti
 </div>
 <div id="timers" class="timers" hidden aria-live="polite"></div>
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
-<script>window.NS_CONFIG={"hosted": true, "sbUrl": "https://zjsawjudrdneeptxbskd.supabase.co", "sbKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpqc2F3anVkcmRuZWVwdHhic2tkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1NjUxMjcsImV4cCI6MjEwNzE0MTEyN30.Wn1bUy--5O78gGICTOyEGbnT6B-SdoNCG_XxBBaaUIY", "build": "20261015191101"}</script>
+<script>window.NS_CONFIG={"hosted": true, "sbUrl": "https://zjsawjudrdneeptxbskd.supabase.co", "sbKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpqc2F3anVkcmRuZWVwdHhic2tkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1NjUxMjcsImV4cCI6MjEwNzE0MTEyN30.Wn1bUy--5O78gGICTOyEGbnT6B-SdoNCG_XxBBaaUIY", "build": "20261015193315"}</script>
 <script>
 const AISLES={L:"Fruits & légumes",H:"Herbes fraîches",V:"Viandes & poissons",C:"Crèmerie & œufs",S:"Surgelés",F:"Féculents",B:"Conserves",E:"Épices & condiments"};
 const AISLE_ORDER=["L","H","V","C","S","F","B","E"];
@@ -6331,6 +6342,19 @@ document.addEventListener("submit",e=>{const f=e.target;if(!f||f.id!=="spStepFor
  const S={...(sp.steps[p]||{})};if(raw===""){delete S[day];sp.steps={...sp.steps,[p]:S};commit();renderSport();toast("Pas effacés");return}
  const n=+raw;if(n>120000){toast("Ça fait beaucoup : vérifie le nombre");return}S[day]=n;sp.steps={...sp.steps,[p]:S};commit();renderSport();try{renderSuivi()}catch(x){}
  toast(`${fmtInt(n)} pas notés${n>=(sp.goal[p]||8000)?" · objectif atteint 🎉":""}`)});
+
+
+// ================= v26 : 4 entrées de menu (Repas, Courses, Suivi, Sport) avec sous-onglets =================
+// Repas = Semaine + Recettes ; Courses = Liste + Stock. Le menu rouvre le dernier sous-onglet utilisé.
+const NAV_G={repas:["semaine","recettes"],achats:["courses","stock"]};
+const grpOf=t=>Object.keys(NAV_G).find(g=>NAV_G[g].includes(t))||t;
+let NAV_LAST={repas:"semaine",achats:"courses"};
+try{const v=JSON.parse(localStorage.getItem(LS+"-navlast")||"null");if(v)for(const g in NAV_G)if(NAV_G[g].includes(v[g]))NAV_LAST[g]=v[g]}catch(e){}
+const setTabV26=setTab;
+setTab=function(t){if(NAV_G[t])t=NAV_LAST[t];const g=grpOf(t);
+ if(NAV_G[g]){NAV_LAST[g]=t;try{localStorage.setItem(LS+"-navlast",JSON.stringify(NAV_LAST))}catch(e){}}
+ const r=setTabV26.call(this,t);
+ document.querySelectorAll(".toptabs [data-tab],.bottombar [data-tab]").forEach(b=>b.setAttribute("aria-current",b.dataset.tab===g?"page":"false"));return r};
 
 setTab(ui.tab);renderAll();initDb();sbStart();
 
