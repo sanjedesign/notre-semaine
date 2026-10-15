@@ -1,14 +1,14 @@
 plan hellofresh 200 https://www.hellofresh.fr/sitemap_recipe_pages.xml → 8358
 plan jow 200 https://jow.fr/sitemap.xml → 3698
-plan marmiton 200 https://www.marmiton.org/wsitemap_recipes_1.xml → 0
-plan marmiton 200 https://www.marmiton.org/wsitemap_recipes_2.xml → 0
+plan marmiton 200 https://www.marmiton.org/wsitemap_recipes_1.xml → 5000
+plan marmiton 200 https://www.marmiton.org/wsitemap_recipes_2.xml → 5000
 plan marmiton 200 https://www.marmiton.org/wsitemap_recipes_3.xml → 5000
-plan marmiton 200 https://www.marmiton.org/wsitemap_recipes_4.xml → 0
-plan marmiton 200 https://www.marmiton.org/wsitemap_recipes_5.xml → 0
-plan marmiton 200 https://www.marmiton.org/wsitemap_recipes_6.xml → 0
-plan marmiton 200 https://www.marmiton.org/wsitemap_recipes_7.xml → 0
-plan marmiton 200 https://www.marmiton.org/wsitemap_recipes_8.xml → 0
-plan marmiton 200 https://www.marmiton.org/wsitemap_recipes_9.xml → 0
-à lire : 393 fiches (78 pistes d'encas)
-gardées : 41 · écartées : {"protéines # g":92,"plat trop riche (nom)":84,"kcal #":110,"catégorie dessert":20,"lipides # g":23,"encas pas assez protéiné":14,"catégorie dessert sans cuisson":1,"catégorie sauce":1,"catégorie confiserie":1,"nutrition absente":3,"catégorie boisson":1,"fiche incomplète":2}
-pages créées : 4 · total 21 pages, 210 recettes · en attente 9
+plan marmiton 200 https://www.marmiton.org/wsitemap_recipes_4.xml → 5000
+plan marmiton 200 https://www.marmiton.org/wsitemap_recipes_5.xml → 5000
+plan marmiton 200 https://www.marmiton.org/wsitemap_recipes_6.xml → 5000
+plan marmiton 200 https://www.marmiton.org/wsitemap_recipes_7.xml → 5000
+plan marmiton 200 https://www.marmiton.org/wsitemap_recipes_8.xml → 5000
+plan marmiton 200 https://www.marmiton.org/wsitemap_recipes_9.xml → 3896
+à lire : 353 fiches (38 pistes d'encas)
+gardées : 31 · écartées : {"lipides # g":18,"protéines # g":70,"encas pas assez protéiné":12,"kcal #":105,"encas trop gras":1,"plat trop riche (nom)":80,"nutrition absente":14,"catégorie dessert":14,"catégorie boisson":2,"catégorie sauce":1,"fiche incomplète":1,"catégorie dessert sans cuisson":1,"catégorie confiserie":2,"catégorie boisson chaude":1}
+pages créées : 4 · total 25 pages, 250 recettes · en attente 0
