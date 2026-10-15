@@ -1845,6 +1845,29 @@ h1,h2,.sec-head h1,.block-title,.row-head h2,.m-body h2,.pn-title{color:var(--ti
 .sp-duo>.sp-fig{width:auto}
 .sp-nx .sp-fig{width:120px}
 @media (max-height:700px){.sp-fig{width:min(50vw,190px)}}
+/* ================= v29 : filtre Découvrir, niveaux et durées ================= */
+.df-btn{display:flex;align-items:center;gap:10px;width:100%;margin:2px 0 10px;padding:10px 12px;border:1.5px solid var(--ctl-line,var(--line-2));border-radius:16px;background:var(--surface);font:inherit;color:var(--ink);cursor:pointer;text-align:left}
+.df-btn:hover{border-color:var(--cta)}
+.df-ic{flex:0 0 auto;width:36px;height:36px;border-radius:12px;background:var(--accent-soft);display:grid;place-items:center;font-size:1.2rem}
+.df-tx{display:flex;flex-direction:column;min-width:0;flex:1;line-height:1.2}
+.df-tx small{font-size:.74rem;color:var(--muted);font-weight:600}
+.df-tx b{font-family:var(--f-sub);font-size:1rem}
+.df-n{font-size:.78rem;color:var(--muted);white-space:nowrap}
+.df-chev{width:20px;height:20px;color:var(--coral-ink);flex:0 0 auto}
+.df-sheet{position:fixed;inset:0;z-index:96;background:rgba(47,42,43,.45);display:flex;align-items:flex-end;justify-content:center;padding:12px 12px calc(12px + env(safe-area-inset-bottom,0px))}
+.df-in{width:100%;max-width:520px;max-height:86vh;overflow:auto;background:var(--surface);border-radius:var(--r-lg);padding:16px;box-shadow:var(--sh-2)}
+.df-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}.df-h h3{margin:0}
+.df-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.df-o{display:flex;align-items:center;gap:10px;padding:10px;border:1.5px solid var(--line);border-radius:14px;background:var(--surface);font:inherit;color:var(--ink);cursor:pointer;text-align:left;min-height:56px}
+.df-o.on{border-color:var(--cta);background:var(--accent-soft)}
+.df-o.on .df-tx b{color:var(--coral-ink)}
+.df-o:focus-visible,.df-btn:focus-visible{outline:3px solid var(--focus,#2F2A2B);outline-offset:2px}
+.sp-var{display:grid;gap:8px;margin:10px 0 12px;padding:12px;border-radius:var(--r-md);background:var(--surface);box-shadow:var(--sh-1)}
+.sp-vr{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.sp-vr>span{width:58px;font-size:.82rem;font-weight:700;color:var(--muted)}
+.sp-vr .seg{flex:1;display:flex}.sp-vr .seg button{flex:1;font-size:.8rem;padding-left:4px;padding-right:4px}
+.sp-var .sp-mut{margin:0}
+.sp-pref{margin:8px 0 0}
 
 </style>
 </head>
@@ -1950,7 +1973,7 @@ h1,h2,.sec-head h1,.block-title,.row-head h2,.m-body h2,.pn-title{color:var(--ti
 </div>
 <div id="timers" class="timers" hidden aria-live="polite"></div>
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
-<script>window.NS_CONFIG={"hosted": true, "sbUrl": "https://zjsawjudrdneeptxbskd.supabase.co", "sbKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpqc2F3anVkcmRuZWVwdHhic2tkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1NjUxMjcsImV4cCI6MjEwNzE0MTEyN30.Wn1bUy--5O78gGICTOyEGbnT6B-SdoNCG_XxBBaaUIY", "build": "20261015210944"}</script>
+<script>window.NS_CONFIG={"hosted": true, "sbUrl": "https://zjsawjudrdneeptxbskd.supabase.co", "sbKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpqc2F3anVkcmRuZWVwdHhic2tkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1NjUxMjcsImV4cCI6MjEwNzE0MTEyN30.Wn1bUy--5O78gGICTOyEGbnT6B-SdoNCG_XxBBaaUIY", "build": "20261015214247"}</script>
 <script>
 const AISLES={L:"Fruits & légumes",H:"Herbes fraîches",V:"Viandes & poissons",C:"Crèmerie & œufs",S:"Surgelés",F:"Féculents",B:"Conserves",E:"Épices & condiments"};
 const AISLE_ORDER=["L","H","V","C","S","F","B","E"];
@@ -3435,6 +3458,13 @@ function spNorm(src){const o={steps:{"0":{},"1":{}},goal:[8000,8000],wk:[3,3],eq
  return o}
 const normalizeV25=normalize;
 normalize=function(d){const s=normalizeV25(d);s.sport=spNorm(d&&typeof d==="object"?d.sport:null);return s};
+
+// ================= v29 (avant l'état) : niveau et durée choisis par personne pour les séances =================
+const spNormV29=spNorm;
+spNorm=function(src){const o=spNormV29(src);o.pref={};const P=src&&typeof src==="object"&&src.pref&&typeof src.pref==="object"?src.pref:{};
+ for(const p of ["0","1"]){const x=P[p];if(x&&typeof x==="object"){const lv=Math.round(+x.lv),dur=Math.round(+x.dur);o.pref[p]={lv:lv>=0&&lv<=2?lv:0,dur:[15,30,45].includes(dur)?dur:30}}}
+ if(src&&Array.isArray(src.hist))o.hist.forEach((h,i)=>{const s=src.hist.find(x=>x&&x.i===h.i);if(s){const lv=Math.round(+s.lv),du=Math.round(+s.du);if(lv>=0&&lv<=2)h.lv=lv;if([15,30,45].includes(du))h.du=du}});
+ return o};
 
 // ---------- état ----------
 const dayOf=k=>k.split("-")[0];
@@ -6713,7 +6743,7 @@ function f3Frame(id,g,aspect){const key=id+"|"+(g||0)+"|"+aspect.toFixed(2);if(F
  const tot=X.ms.reduce((a,b)=>a+b,0);let mn=[9,9,9],mx=[-9,-9,-9];
  for(let i=0;i<24;i++){let Pz=figAt(X,tot*i/24);if(X.prop==="tread")Pz=figTread(Pz,g||0);const J=f3Joints(X,Pz);for(const k in J){const p=J[k];mn=[Math.min(mn[0],p.x),Math.min(mn[1],p.y),Math.min(mn[2],p.z)];mx=[Math.max(mx[0],p.x),Math.max(mx[1],p.y),Math.max(mx[2],p.z)]}}
  mn[1]=-0.15;mx[1]+=0.1;mn[0]-=0.16;mx[0]+=0.16;if(X.prop==="tread"){mn[0]=Math.min(mn[0],-0.9);mx[0]=Math.max(mx[0],0.95);mx[1]=Math.max(mx[1],1.25)}
- const lying=(mx[1]-mn[1])<0.75,az=X.front?0.3:(lying?0.62:0.55),el=lying?0.42:0.14;
+ const lying=(mx[1]-mn[1])<0.75,az=X.front?(F3.body?Math.PI-0.3:0.3):(lying?0.62:0.55),el=lying?0.42:0.14;
  const c=[(mn[0]+mx[0])/2,(mn[1]+mx[1])/2,(mn[2]+mx[2])/2],w=mx[0]-mn[0],h=mx[1]-mn[1];
  const fov=26*Math.PI/180,need=Math.max(h*1.0,(w*Math.cos(az)+0.5*Math.sin(az))*1.0/aspect)/2,dist=need/Math.tan(fov/2)+0.2;
  return F3.frames[key]={c,dist,az,el}}
@@ -6729,7 +6759,7 @@ function f3Render(id,g,ms,cw,ch){const T=F3.T,X=FIGX[id];if(!X)return;const R=F3
  F3.floor.position.set(fr.c[0],0,0);F3.D.position.set(fr.c[0]+1.6,3.2,2.4);F3.D.target.position.set(fr.c[0],0,0);
  R.render(F3.S,C)}
 // placement du canevas WebGL dans la grande vignette visible ; vignettes du récapitulatif en images fixes
-function f3Step(now){if(!F3.ok)return false;if(F3.last&&now-F3.last<22&&F3.R.domElement.isConnected&&F3.act&&F3.act.isConnected)return F3.act;F3.last=now;const L=[...document.querySelectorAll(".sp-fig svg.fig[data-fig]")].filter(s=>s.parentNode.getClientRects().length);const s=L[0];
+function f3Step(now){if(!F3.ok)return false;if(F3.last&&now-F3.last<0&&F3.R.domElement.isConnected&&F3.act&&F3.act.isConnected)return F3.act;F3.last=now;const L=[...document.querySelectorAll(".sp-fig svg.fig[data-fig]")].filter(s=>s.parentNode.getClientRects().length);const s=L[0];
  const cv=F3.R.domElement;if(!s){if(cv.parentNode)cv.remove();F3.slot=null;return false}
  const box=s.parentNode;if(cv.parentNode!==box){box.appendChild(cv);F3.slot=box}box.classList.add("is3d");F3.act=s;
  if(!s._t0)s._t0=now;const r=box.getBoundingClientRect(),pad=6;f3Render(s.dataset.fig,+s.dataset.g||0,now-s._t0,r.width-pad*2,r.height-pad*2);return s}
@@ -6751,6 +6781,261 @@ Object.assign(FIGX.bridge_w,{hz:0.13});for(const k of ["row","farmer","lunge","t
 const spOpenV28=spOpen;spOpen=function(){try{f3Load()}catch(e){}return spOpenV28.apply(this,arguments)};
 
 const figDrawV28=figDraw;figDraw=function(svg,now){figDrawV28(svg,now);if(FIGX[svg.dataset.fig]&&FIGX[svg.dataset.fig].dbN){const c=svg.querySelectorAll(".fg-db circle");if(c.length>1)c[0].remove()}};
+
+
+// ================= v29 : filtre clair dans Découvrir, niveaux et durées des séances =================
+// --- 1. Découvrir : « Je veux découvrir… » (encas, poisson, poulet, tous les plats…), choix mémorisé
+const DF_K=LS+"-dtag";
+const DF_OPTS=[["all","Tout","✨"],["plats","Tous les plats","🍽️"],["encas","Encas protéinés","🥚"],["poisson","Poisson","🐟"],["crevettes","Crevettes","🦐"],["poulet","Poulet","🍗"],["dinde","Dinde","🦃"],["boeuf","Bœuf","🥩"],["porc","Porc","🥓"],["oeufs","Œufs","🍳"],["vege","Végétarien","🥗"]];
+const dfMatch=(e,t)=>!t||t==="all"?true:t==="plats"?discTag(e).p!=="encas":discTag(e).p===t;
+try{const v=localStorage.getItem(DF_K);if(v&&DF_OPTS.some(o=>o[0]===v))ui.dtag=v}catch(e){}
+discPool=function(tag){return discLeft().filter(e=>!(ui.dpend&&ui.dpend.has(e.id))&&dfMatch(e,tag||"all"))};
+const dqPickV29=dqPick;dqPick=function(arr,n,tag){return dqPickV29(arr,n,tag==="plats"?"all":tag)};
+dqFetch=async function(need,tag){const ix=await dqIndex();let got=0,pages=0;const urls=new Set(DISC.map(e=>e.u)),lim=tag==="all"||tag==="plats"?8:16;
+ while(DP<(+ix.pages||0)&&pages<lim){const n=DP+1;const r=await fetch(DREM+"p/"+n+".json");if(!r.ok)throw new Error("page");const L=await r.json();DP=n;pages++;
+  const dz=state.disc||{},mine=new Set((state.myrec||[]).map(x=>x.u).filter(Boolean));
+  const fresh=(Array.isArray(L)?L:[]).map(dqValid).filter(e=>e&&!dz[e.id]&&!DISC_MAP[e.id]&&!urls.has(e.u)&&!mine.has(e.u));
+  fresh.forEach(e=>urls.add(e.u));DQ.push(...fresh);dqRegister(fresh);got+=fresh.filter(e=>dfMatch(e,tag)).length;if(got>=need)break}
+ dqSave();return{got,left:Math.max(0,(+ix.pages||0)-DP)}};
+const dfOpt=t=>DF_OPTS.find(o=>o[0]===t)||DF_OPTS[0];
+function dfSheet(){const tag=ui.dtag||"all";return`<div class="df-sheet" role="dialog" aria-modal="true" aria-labelledby="dfT"><div class="df-in"><div class="df-h"><h3 id="dfT">Je veux découvrir</h3><button type="button" class="m-close df-x" data-df="close" aria-label="Fermer">×</button></div>
+ <div class="df-grid">${DF_OPTS.map(([t,l,ic])=>{const n=discPool(t).length;return`<button type="button" class="df-o${t===tag?" on":""}" data-df="${t}" aria-pressed="${t===tag}"><span class="df-ic" aria-hidden="true">${ic}</span><span class="df-tx"><b>${l}</b><small>${n?`${n} prête${n>1?"s":""}`:"à charger"}</small></span></button>`}).join("")}</div>
+ <p class="pn-help">Les recettes déjà vues, écartées ou ajoutées ne reviennent pas. « Actualiser » charge 10 nouvelles recettes du type choisi.</p></div></div>`}
+const panelDiscV29=panelDisc;
+panelDisc=function(){let h=panelDiscV29.apply(this,arguments);if(ui.dsel)return h;const[t,l,ic]=dfOpt(ui.dtag||"all"),n=discPool(t).length;
+ const btn=`<button type="button" class="df-btn" data-df="open" aria-haspopup="dialog"><span class="df-ic" aria-hidden="true">${ic}</span><span class="df-tx"><small>Je veux découvrir</small><b>${l}</b></span><span class="df-n">${n} prête${n>1?"s":""}</span><svg class="df-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>`;
+ h=h.replace(/<div class="chips dc-tags sw-tags"[^>]*>[\s\S]*?<\/div>/,btn);return h+(ui.dfOpen?dfSheet():"")};
+document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-df]");if(!b)return;e.preventDefault();const v=b.dataset.df;
+ if(v==="open"){ui.dfOpen=true;renderPanel();setTimeout(()=>{const x=document.querySelector(".df-o.on")||document.querySelector(".df-o");if(x)x.focus()},30);return}
+ if(v==="close"){ui.dfOpen=false;renderPanel();return}
+ ui.dfOpen=false;try{discMarkShown()}catch(x){}ui.dtag=v;ui.dbatch=null;ui.dtried=false;ui.dpage=0;try{localStorage.setItem(DF_K,v)}catch(x){}renderPanel();
+ const L=dfOpt(v)[1];toast(v==="all"?"Toutes les recettes":`Uniquement : ${L.toLowerCase()}`)});
+document.addEventListener("click",e=>{if(ui.dfOpen&&e.target.classList&&e.target.classList.contains("df-sheet")){ui.dfOpen=false;renderPanel()}});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&ui.dfOpen){e.stopImmediatePropagation();ui.dfOpen=false;renderPanel()}},true);
+// le bandeau « Découvrir » rappelle le filtre choisi
+document.addEventListener("click",e=>{if(e.target.closest&&e.target.closest('[data-dsc="open"]'))ui.dfOpen=false},true);
+
+// --- 2. Séances : niveau (débutant → avancé) et durée (15, 30, 45 min) recalculent séries, tours, repos, vitesses et pentes
+const SP_LV=["Débutant","Intermédiaire","Avancé"],SP_DUR=[15,30,45];
+const spLvI=s=>Math.max(0,SP_LV.indexOf(s));
+function spPref(p){const o=(SPD().pref||{})[p]||{};return{lv:[0,1,2].includes(o.lv)?o.lv:0,dur:SP_DUR.includes(o.dur)?o.dur:30}}
+function spSetPref(p,o){const sp=SPD(),cur=spPref(p);sp.pref={...(sp.pref||{}),[p]:{...cur,...o}};commit()}
+const spRunLv=([t,sec,v,g],d)=>{const calm=/chauffement|calme/i.test(t),run=v>=7;return[t,sec,Math.max(3,Math.round((v+(calm?0:(run?0.7:0.3))*d)*10)/10),Math.max(0,Math.min(15,g+(calm?0:(run?1:2)*d)))]};
+const spRepLv=(x,d)=>typeof x==="string"?Math.max(20,parseInt(x,10)+10*d)+"s":Math.max(5,x+2*d);
+const spEstB=b=>spSteps({b}).reduce((a,st)=>a+spDur(st),0);
+function spVariant(S,lv,dur){const d=lv-spLvI(S.lvl),T=dur*60;
+ const B1=S.b.map(B=>B.k==="sets"?{...B,rest:Math.max(30,Math.min(90,B.rest-15*d)),it:B.it.map(([e,x])=>[e,spRepLv(x,d)])}
+  :B.k==="circ"?{...B,rest:Math.max(10,B.rest-5*d),rrest:Math.max(30,B.rrest-15*d),it:B.it.map(([e,x])=>[e,spRepLv(x,d)])}
+  :B.k==="run"?{...B,it:B.it.map(x=>x.x?{...x,it:x.it.map(ph=>spRunLv(ph,d))}:spRunLv(x,d))}:B);
+ const build=(s,B0)=>B0.map(B=>{if(B.k==="sets")return{...B,sets:Math.max(2,Math.min(5,Math.round(B.sets*s)))};if(B.k==="circ")return{...B,rounds:Math.max(2,Math.min(8,Math.round(B.rounds*s)))};
+  if(B.k==="run")return{...B,it:B.it.map(x=>x.x?{...x,x:Math.max(2,Math.min(16,Math.round(x.x*s)))}:/chauffement|calme/i.test(x[0])?(dur<=15?[x[0],Math.min(x[1],180),x[2],x[3]]:x):[x[0],Math.max(60,Math.round(x[1]*s/30)*30),x[2],x[3]])};return B});
+ let B0=B1,best=null;
+ for(let k=0;k<4;k++){best=null;for(let s=0.3;s<=3.01;s+=0.05){const b=build(s,B0),e=spEstB(b);if(!best||Math.abs(e-T)<Math.abs(best.e-T))best={b,e}}
+  if(best.e<=T*1.12)break;// trop long même au minimum : on retire le dernier exercice du plus gros bloc
+  let bi=-1,mx=3;B0.forEach((B,i)=>{if((B.k==="sets"||B.k==="circ")&&B.it.length>mx){mx=B.it.length;bi=i}});if(bi<0)break;B0=B0.map((B,i)=>i===bi?{...B,it:B.it.slice(0,-1)}:B)}
+ return{...S,b:best.b,lvl:SP_LV[lv],lv,dur,base:S.lvl}}
+const spVar=(id,p)=>{const S=SPS_MAP[id];if(!S)return null;const f=spPref(p==null?(ui.spP||0):p);return spVariant(S,f.lv,f.dur)};
+// estimation affichée = celle de la variante choisie
+const spEstV29=spEst;spEst=function(S,kg){const V=S&&S.lv!=null?S:(S&&SPS_MAP[S.id]?spVar(S.id):S);return spEstV29(V,kg)};
+// ouverture : la séance prend le niveau et la durée de la personne
+const spOpenV29=spOpen;spOpen=function(id){const r=spOpenV29.apply(this,arguments);if(SR&&SR.ph==="intro"){const V=spVar(id,SR.p);if(V){SR.S=V;SR.L=spSteps(V);renderPanel()}}return r};
+// en-tête du récapitulatif : choix du niveau et de la durée
+const panelSpRunV29=panelSpRun;
+panelSpRun=function(){let h=panelSpRunV29.apply(this,arguments);if(!SR||SR.ph!=="intro")return h;const f=spPref(SR.p);
+ const ctl=`<div class="sp-var"><div class="sp-vr"><span>Niveau</span><div class="seg" role="group" aria-label="Niveau">${SP_LV.map((l,i)=>`<button type="button" data-splv="${i}" aria-pressed="${f.lv===i}">${l}</button>`).join("")}</div></div>
+  <div class="sp-vr"><span>Durée</span><div class="seg" role="group" aria-label="Durée">${SP_DUR.map(m=>`<button type="button" data-spdur="${m}" aria-pressed="${f.dur===m}">${m} min</button>`).join("")}</div></div>
+  <p class="sp-mut">${(()=>{const d=f.lv-spLvI(SR.S.base||"Débutant"),k=SR.S.kind;if(!d)return"Version de référence de la séance.";const up=d>0;
+  return k==="cardio"&&SR.S.eq.includes("t")?(up?"Vitesse et pente plus élevées.":"Vitesse et pente plus douces."):k==="renfo"||!SR.S.eq.includes("t")?(up?"Plus de répétitions, moins de repos.":"Moins de répétitions, plus de repos."):(up?"Plus de répétitions, de vitesse et de pente.":"Moins de répétitions, vitesse et pente plus douces.")})()} ${SR.S.eq.includes("t")&&SR.S.kind!=="mixte"?"Les intervalles et les phases s'adaptent à la durée.":"Le nombre de séries ou de tours s'adapte à la durée."}</p></div>`;
+ return h.replace(/(<h2 class="pn-title">[^<]*<\/h2><p class="pn-help">[\s\S]*?<\/p>)/,"$1"+ctl).replace(/Pour <b>([^<]*)<\/b> · [^·<]+ · /,"Pour <b>$1</b> · "+SP_LV[f.lv]+" · ")};
+document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-splv],[data-spdur]");if(!b||!SR||SR.ph!=="intro")return;
+ const o=b.dataset.splv!=null?{lv:+b.dataset.splv}:{dur:+b.dataset.spdur};spSetPref(SR.p,o);const V=spVar(SR.S.id,SR.p);if(V){SR.S=V;SR.L=spSteps(V);SR.kg=spKg(SR.p)}renderPanel();renderSport()});
+// historique : niveau et durée choisis
+const spFinishV29=spFinish;spFinish=function(save){const lv=SR&&SR.S&&SR.S.lv,du=SR&&SR.S&&SR.S.dur;const r=spFinishV29.apply(this,arguments);
+ try{if(SR&&SR.saved){const sp=SPD(),h=sp.hist[sp.hist.length-1];if(h&&lv!=null){h.lv=lv;h.du=du;commit()}}}catch(e){}return r};
+// cartes de séance : niveau et durée de la personne, « 3 niveaux · 15 à 45 min » dans la liste
+const spSessHtmlV29=spSessHtml;
+spSessHtml=function(p){let h=spSessHtmlV29.apply(this,arguments);const f=spPref(p);
+ h=h.replace(/(<p class="sp-meta">)(Débutant|Intermédiaire|Avancé)( · ≈ )/,`$1${SP_LV[f.lv]}$3`);
+ h=h.replace(/<small class="sp-meta">(Débutant|Intermédiaire|Avancé) · /g,`<small class="sp-meta">${SP_LV[f.lv]} · `);
+ return h.replace('<div class="pf-actions"><button type="button" class="btn primary" data-spsess=',`<p class="sp-mut sp-pref">Niveau ${SP_LV[f.lv].toLowerCase()} · ${f.dur} min, modifiables avant de démarrer.</p><div class="pf-actions"><button type="button" class="btn primary" data-spsess=`)};
+
+
+// ================= v30 : corps lisse d'un seul tenant (champ de distance + « surface nets »), pondéré sur 12 os =================
+// Le corps est modélisé en pose de repos (bras légèrement écartés) par des formes douces fusionnées ; le maillage est
+// calculé une fois, puis déformé sur la carte graphique par le squelette (skinning) que pilotent les poses des exercices.
+const BODY={};
+(function(){
+ const K=58,L={T:34/K,H:10/K,TH:25/K,SH:24/K,FT:8/K,UA:19/K,FA:17/K,SO:4/K};
+ const v3=(x,y,z)=>[x,y,z],add=(a,b)=>[a[0]+b[0],a[1]+b[1],a[2]+b[2]],sub=(a,b)=>[a[0]-b[0],a[1]-b[1],a[2]-b[2]],mul=(a,s)=>[a[0]*s,a[1]*s,a[2]*s],
+  dot=(a,b)=>a[0]*b[0]+a[1]*b[1]+a[2]*b[2],len=a=>Math.hypot(a[0],a[1],a[2]),nrm=a=>{const l=len(a)||1;return[a[0]/l,a[1]/l,a[2]/l]},lerp=(a,b,t)=>[a[0]+(b[0]-a[0])*t,a[1]+(b[1]-a[1])*t,a[2]+(b[2]-a[2])*t];
+ // pose de repos (mètres) : tournée vers +x, côté « proche » en +z, mêmes longueurs que la silhouette
+ const an=0.052,kn=an+L.SH,hp=kn+L.TH,nk=hp+L.T,sh=nk-4/K,R={};
+ R.hip=v3(0,hp,0);R.nk=v3(0,nk,0);R.hd=v3(0,nk+L.H,0);
+ for(const [s,z] of [["N",1],["F",-1]]){
+  R["hp"+s]=v3(0,hp,0.09*z);const kd=nrm([0.012,-1,0.025*z]);R["kn"+s]=add(R["hp"+s],mul(kd,L.TH));const sd=nrm([-0.012,-1,0.02*z]);R["an"+s]=add(R["kn"+s],mul(sd,L.SH));
+  R["to"+s]=add(R["an"+s],mul(nrm([1,-0.07,0]),L.FT));
+  R["sh"+s]=v3(0,sh,0.17*z);const ud=nrm([0.02,-Math.cos(0.25),Math.sin(0.25)*z]);R["el"+s]=add(R["sh"+s],mul(ud,L.UA));const fd=nrm([0.08,-Math.cos(0.17),Math.sin(0.17)*z]);R["wr"+s]=add(R["el"+s],mul(fd,L.FA))}
+ // os : [tête, queue]
+ const BONES=[["hip","nk"],["nk","hd"],["hpN","knN"],["knN","anN"],["anN","toN"],["hpF","knF"],["knF","anF"],["anF","toF"],["shN","elN"],["elN","wrN"],["shF","elF"],["elF","wrF"]];
+ const ADJ=[[1,2,5,8,10],[0],[0,3],[2,4],[3],[0,6],[5,7],[6],[0,9],[8],[0,11],[10]];
+ const C={skin:[0.886,0.682,0.549],shirt:[0.247,0.561,0.529],shorts:[0.184,0.204,0.259],shoe:[0.95,0.94,0.925],sole:[0.72,0.74,0.77],hair:[0.227,0.165,0.133],sock:[0.95,0.95,0.95]};
+ // formes : e = ellipsoïde, s = sphère, c = cône arrondi (a,b,ra,rb), b = boîte arrondie ; w = poids fixes {os:poids} ou le long du cône
+ const P=[];const E=(g,col,c,r,w)=>P.push({t:"e",g,col,c,r,w}),S=(g,col,c,r,w)=>P.push({t:"s",g,col,c,r,w}),Cn=(g,col,a,b,ra,rb,w)=>P.push({t:"c",g,col,a,b,ra,rb,w}),B=(g,col,c,h,r,w)=>P.push({t:"b",g,col,c,h,r,w});
+ const T0={0:1},H1={1:1};
+ E(0,"shorts",[0.0,hp+0.005,0],[0.118,0.115,0.168],T0);
+ for(const z of [1,-1])E(0,"shorts",[-0.04,hp-0.035,0.072*z],[0.088,0.1,0.082],T0);
+ E(0,"shirt",[0.004,hp+0.17,0],[0.112,0.16,0.152],T0);E(0,"shirt",[0.014,hp+0.37,0],[0.127,0.17,0.176],T0);E(0,"shirt",[-0.016,sh+0.012,0],[0.088,0.072,0.2],T0);
+ for(const [s,z] of [["N",1],["F",-1]])S(0,"shirt",add(R["sh"+s],[0,0.008,0.012*z]),0.063,{0:0.45,[s==="N"?8:10]:0.55});
+ Cn(0,"skin",[0,sh,0],[0.014,nk+0.1,0],0.056,0.05,{al:[0,1,0.25,0.85]});
+ E(0,"skin",add(R.hd,[0.014,0.01,0]),[0.1,0.118,0.092],H1);E(0,"skin",add(R.hd,[0.048,-0.04,0]),[0.064,0.05,0.07],H1);
+ E(0,"hair",add(R.hd,[-0.007,0.036,0]),[0.106,0.112,0.098],H1);E(0,"skin",add(R.hd,[0.113,0.004,0]),[0.022,0.03,0.016],H1);
+ for(const z of [1,-1])E(0,"skin",add(R.hd,[0.0,0.004,0.093*z]),[0.018,0.03,0.013],H1);
+ for(const [s,z,g,th,shn,ft,ua,fa] of [["N",1,1,2,3,4,8,9],["F",-1,2,5,6,7,10,11]]){
+  const h=R["hp"+s],k=R["kn"+s],a=R["an"+s],t=R["to"+s],S_=R["sh"+s],e=R["el"+s],w=R["wr"+s];
+  Cn(g,"shorts",add(h,[0,0.01,0]),lerp(h,k,0.52),0.1,0.09,{al:[0,th,0.35,1]});
+  Cn(g,"skin",h,k,0.088,0.06,{st:[0,0.15],m:th,en:[shn,0.12]});S(g,"skin",k,0.057,{[th]:0.5,[shn]:0.5});
+  E(g,"skin",add(lerp(k,a,0.3),[-0.026,0,0]),[0.05,0.11,0.048],{[shn]:1});
+  Cn(g,"skin",k,a,0.053,0.035,{st:[th,0.12],m:shn,en:[ft,0.1]});S(g,"sock",a,0.04,{[shn]:0.55,[ft]:0.45});
+  const fdir=nrm(sub(t,a));Cn(g,"shoe",add(a,add(mul(fdir,-0.05),[0,-0.004,0])),add(t,mul(fdir,0.035)),0.05,0.041,{[ft]:1});
+  B(g,"sole",add(lerp(add(a,mul(fdir,-0.05)),add(t,mul(fdir,0.035)),0.5),[0,-0.04,0]),[0.15,0.012,0.046],0.01,{[ft]:1});
+  const g2=g+2;
+  Cn(g2,"shirt",S_,lerp(S_,e,0.42),0.062,0.057,{al:[0,ua,0.4,1]});Cn(g2,"skin",S_,e,0.053,0.042,{st:[0,0.15],m:ua,en:[fa,0.12]});S(g2,"skin",e,0.043,{[ua]:0.5,[fa]:0.5});
+  Cn(g2,"skin",e,w,0.043,0.031,{st:[ua,0.12],m:fa});const hd_=nrm(sub(w,e));
+  E(g2,"skin",add(w,mul(hd_,0.06)),[0.042,0.07,0.024],{[fa]:1});Cn(g2,"skin",add(w,[0.028,-0.012,-0.008*z]),add(w,[0.05,-0.05,-0.006*z]),0.013,0.011,{[fa]:1})}
+ // distances signées
+ function sd(p,q){if(p.t==="s")return len(sub(q,p.c))-p.r;
+  if(p.t==="e"){const d=sub(q,p.c),k0=Math.hypot(d[0]/p.r[0],d[1]/p.r[1],d[2]/p.r[2]),k1=Math.hypot(d[0]/(p.r[0]*p.r[0]),d[1]/(p.r[1]*p.r[1]),d[2]/(p.r[2]*p.r[2]));return k1>1e-9?k0*(k0-1)/k1:-Math.min(...p.r)}
+  if(p.t==="b"){const d=sub(q,p.c),qx=Math.abs(d[0])-p.h[0],qy=Math.abs(d[1])-p.h[1],qz=Math.abs(d[2])-p.h[2];return Math.hypot(Math.max(qx,0),Math.max(qy,0),Math.max(qz,0))+Math.min(Math.max(qx,qy,qz),0)-p.r}
+  // cône arrondi (Inigo Quilez)
+  const ba=sub(p.b,p.a),pa=sub(q,p.a),l2=dot(ba,ba),rr=p.ra-p.rb,a2=l2-rr*rr,il2=1/l2,y=dot(pa,ba),z=y-l2,xv=sub(mul(pa,l2),mul(ba,y)),x2=dot(xv,xv),y2=y*y*l2,z2=z*z*l2,k=Math.sign(rr)*rr*rr*x2;
+  if(Math.sign(z)*a2*z2>k)return Math.sqrt(x2+z2)*il2-p.rb;if(Math.sign(y)*a2*y2<k)return Math.sqrt(x2+y2)*il2-p.ra;return(Math.sqrt(x2*a2*il2)+y*rr)*il2-p.ra}
+ for(const p of P){const pts=p.t==="c"?[p.a,p.b]:[p.c],rad=p.t==="c"?Math.max(p.ra,p.rb):p.t==="e"?Math.max(...p.r):p.t==="b"?Math.max(...p.h)+p.r:p.r;
+  p.lo=[0,1,2].map(i=>Math.min(...pts.map(x=>x[i]))-rad-0.04);p.hi=[0,1,2].map(i=>Math.max(...pts.map(x=>x[i]))+rad+0.04)}
+ const smin=(a,b,k)=>{const h=Math.max(k-Math.abs(a-b),0)/k;return Math.min(a,b)-h*h*k*0.25};
+ const KG=[0.022,0.014,0.014,0.014,0.014],KJ=0.03;
+ // champ global : chaque membre se fond dans le buste, mais pas dans l'autre membre
+ function field(q,out){let G=[1e9,1e9,1e9,1e9,1e9];for(let i=0;i<P.length;i++){const p=P[i];let d;
+   if(q[0]<p.lo[0]||q[0]>p.hi[0]||q[1]<p.lo[1]||q[1]>p.hi[1]||q[2]<p.lo[2]||q[2]>p.hi[2])d=0.05;else d=sd(p,q);if(out)out[i]=d;G[p.g]=smin(G[p.g],d,KG[p.g])}
+  let f=1e9;for(let g=1;g<5;g++)f=Math.min(f,smin(G[0],G[g],KJ));return f}
+ function weights(q,ds){let i0=0;for(let i=1;i<ds.length;i++)if(ds[i]<ds[i0])i0=i;const p0=P[i0];
+  const bw=new Float32Array(12);const mainOf=p=>{const w=p.w;if(w.al)return w.al[1];if(w.m!=null)return w.m;let b=0,m=-1;for(const k in w)if(w[k]>m){m=w[k];b=+k}return b};
+  const m0=mainOf(p0),ok=b=>b===m0||ADJ[m0].includes(b)||ADJ[b].some(x=>x===m0);
+  for(let i=0;i<ds.length;i++){const dd=ds[i]-ds[i0];if(dd>0.014)continue;const p=P[i],a=Math.exp(-dd/0.005),w=p.w;
+   const put=(b,v)=>{if(ok(b))bw[b]+=a*v};
+   if(w.al||w.m!=null){const ba=sub(p.b,p.a),t=Math.max(0,Math.min(1,dot(sub(q,p.a),ba)/dot(ba,ba)));
+    if(w.al){const[b0,b1,t0,t1]=w.al,u=Math.max(0,Math.min(1,(t-t0)/(t1-t0))),s=u*u*(3-2*u);put(b0,1-s);put(b1,s)}
+    else{let ws=0,we=0;if(w.st&&t<w.st[1])ws=0.5*(1-(t/w.st[1])*(t/w.st[1])*(3-2*t/w.st[1]));if(w.en&&t>1-w.en[1]){const u=(t-(1-w.en[1]))/w.en[1];we=0.5*u*u*(3-2*u)}
+     if(ws)put(w.st[0],ws);if(we)put(w.en[0],we);put(w.m,1-ws-we)}}
+   else for(const k in w)put(+k,w[k])}
+  const idx=[...bw.keys()].sort((x,y)=>bw[y]-bw[x]).slice(0,4);let s=0;for(const i of idx)s+=bw[i];if(s<=0)return{i:[m0,0,0,0],w:[1,0,0,0],col:p0.col};
+  return{i:idx,w:idx.map(i=>bw[i]/s),col:p0.col}}
+ // polygonisation « surface nets » sur une grille régulière
+ BODY.build=function(h){h=h||0.013;const lo=[-0.2,-0.005,-0.4],hi=[0.3,1.9,0.4],nx=Math.ceil((hi[0]-lo[0])/h)+1,ny=Math.ceil((hi[1]-lo[1])/h)+1,nz=Math.ceil((hi[2]-lo[2])/h)+1;
+  const V=new Float32Array(nx*ny*nz),id=(i,j,k)=>i+nx*(j+ny*k);
+  for(let k=0;k<nz;k++)for(let j=0;j<ny;j++)for(let i=0;i<nx;i++)V[id(i,j,k)]=field([lo[0]+i*h,lo[1]+j*h,lo[2]+k*h]);
+  const cx=nx-1,cy=ny-1,cz=nz-1,cell=new Int32Array(cx*cy*cz).fill(-1),cid=(i,j,k)=>i+cx*(j+cy*k);const pos=[];
+  const E=[[0,1],[2,3],[4,5],[6,7],[0,2],[1,3],[4,6],[5,7],[0,4],[1,5],[2,6],[3,7]],O=[[0,0,0],[1,0,0],[0,1,0],[1,1,0],[0,0,1],[1,0,1],[0,1,1],[1,1,1]];
+  for(let k=0;k<cz;k++)for(let j=0;j<cy;j++)for(let i=0;i<cx;i++){let m=0;const g=[];for(let c=0;c<8;c++){const o=O[c];const v=V[id(i+o[0],j+o[1],k+o[2])];g.push(v);if(v<0)m|=1<<c}
+   if(m===0||m===255)continue;let sx=0,sy=0,sz=0,n=0;for(const[a,b]of E){if((g[a]<0)===(g[b]<0))continue;const t=g[a]/(g[a]-g[b]),A=O[a],Bv=O[b];sx+=A[0]+(Bv[0]-A[0])*t;sy+=A[1]+(Bv[1]-A[1])*t;sz+=A[2]+(Bv[2]-A[2])*t;n++}
+   cell[cid(i,j,k)]=pos.length/3;pos.push(lo[0]+(i+sx/n)*h,lo[1]+(j+sy/n)*h,lo[2]+(k+sz/n)*h)}
+  const idx=[];const quad=(a,b,c,d,flip)=>{if(a<0||b<0||c<0||d<0)return;if(flip)idx.push(a,c,b,a,d,c);else idx.push(a,b,c,a,c,d)};
+  for(let k=1;k<cz;k++)for(let j=1;j<cy;j++)for(let i=0;i<cx;i++){const s0=V[id(i,j,k)]<0,s1=V[id(i+1,j,k)]<0;if(s0===s1)continue;quad(cell[cid(i,j-1,k-1)],cell[cid(i,j,k-1)],cell[cid(i,j,k)],cell[cid(i,j-1,k)],!s0)}
+  for(let k=1;k<cz;k++)for(let j=0;j<cy;j++)for(let i=1;i<cx;i++){const s0=V[id(i,j,k)]<0,s1=V[id(i,j+1,k)]<0;if(s0===s1)continue;quad(cell[cid(i-1,j,k-1)],cell[cid(i-1,j,k)],cell[cid(i,j,k)],cell[cid(i,j,k-1)],!s0)}
+  for(let k=0;k<cz;k++)for(let j=1;j<cy;j++)for(let i=1;i<cx;i++){const s0=V[id(i,j,k)]<0,s1=V[id(i,j,k+1)]<0;if(s0===s1)continue;quad(cell[cid(i-1,j-1,k)],cell[cid(i,j-1,k)],cell[cid(i,j,k)],cell[cid(i-1,j,k)],!s0)}
+  const nv=pos.length/3,CI=new Uint8Array(nv),N=new Float32Array(nv*3),COL=new Float32Array(nv*3),SI=new Uint16Array(nv*4),SW=new Float32Array(nv*4),ds=new Float32Array(P.length),e=h*0.5;
+  for(let v=0;v<nv;v++){const q=[pos[3*v],pos[3*v+1],pos[3*v+2]];
+   const gx=field([q[0]+e,q[1],q[2]])-field([q[0]-e,q[1],q[2]]),gy=field([q[0],q[1]+e,q[2]])-field([q[0],q[1]-e,q[2]]),gz=field([q[0],q[1],q[2]+e])-field([q[0],q[1],q[2]-e]);const n=nrm([gx,gy,gz]);
+   N.set(n,3*v);field(q,ds);const W=weights(q,ds);COL.set(C[W.col]||C.skin,3*v);CI[v]=Math.max(0,["skin","shirt","shorts","shoe","sole","hair","sock"].indexOf(W.col));for(let c=0;c<4;c++){SI[4*v+c]=W.i[c]||0;SW[4*v+c]=W.w[c]||0}}
+  return{pos:new Float32Array(pos),N,COL,CI,SI,SW,idx:nv>65535?new Uint32Array(idx):new Uint16Array(idx),nv,nt:idx.length/3}};
+ BODY.REST=R;BODY.BONES=BONES;BODY.P=P;BODY.field=field;
+})();
+
+// --- v30 : le corps lisse remplace le mannequin articulé (même cadrage, mêmes haltères et accessoires)
+const F3B_URL="sano-body.bin";
+// format binaire : en-tête (nv, nt, h) puis positions int16, normales int8, couleur (index), os (4×uint8), poids (4×uint8), indices
+async function f3BodyData(){if(F3.bdata)return F3.bdata;let d=null;
+ if(HOSTED){try{const r=await fetch(new URL(F3B_URL,location.href).href);if(r.ok)d=f3BodyDecode(await r.arrayBuffer())}catch(e){}}
+ if(!d&&typeof BODY!=="undefined"){const b=BODY.build(0.017);d={pos:b.pos,N:b.N,COL:b.COL,SI:b.SI,SW:b.SW,idx:b.idx}}
+ return F3.bdata=d}
+const F3B_PAL=[[0.886,0.682,0.549],[0.247,0.561,0.529],[0.184,0.204,0.259],[0.95,0.94,0.925],[0.72,0.74,0.77],[0.227,0.165,0.133],[0.95,0.95,0.95]];
+function f3BodyDecode(buf){const dv=new DataView(buf);if(dv.getUint32(0,true)!==0x59444f42)return null;const nv=dv.getUint32(4,true),nt=dv.getUint32(8,true);let o=12;
+ const lo=[dv.getFloat32(o,true),dv.getFloat32(o+4,true),dv.getFloat32(o+8,true)],sc=dv.getFloat32(o+12,true);o+=16;
+ const pos=new Float32Array(nv*3),N=new Float32Array(nv*3),COL=new Float32Array(nv*3),SI=new Uint16Array(nv*4),SW=new Float32Array(nv*4);
+ const qp=new Uint16Array(buf,o,nv*3);o+=nv*6;const qn=new Int8Array(buf,o,nv*3);o+=nv*3;const qc=new Uint8Array(buf,o,nv);o+=nv;const qi=new Uint8Array(buf,o,nv*4);o+=nv*4;const qw=new Uint8Array(buf,o,nv*4);o+=nv*4;
+ for(let i=0;i<nv*3;i++){pos[i]=lo[i%3]+qp[i]*sc;N[i]=qn[i]/127}
+ for(let i=0;i<nv;i++){COL.set(F3B_PAL[qc[i]]||F3B_PAL[0],3*i);let s=0;for(let c=0;c<4;c++){SI[4*i+c]=qi[4*i+c];s+=qw[4*i+c]}for(let c=0;c<4;c++)SW[4*i+c]=s?qw[4*i+c]/s:(c?0:1)}
+ o=(o+3)&~3;const idx=nv>65535?new Uint32Array(buf,o,nt*3):new Uint16Array(buf,o,nt*3);return{pos,N,COL,SI,SW,idx:idx.slice()}}
+const F3B_BONES=[["hip","nk"],["nk","hd"],["hpN","knN"],["knN","anN"],["anN","toN"],["hpF","knF"],["knF","anF"],["anF","toF"],["shN","elN"],["elN","wrN"],["shF","elF"],["elF","wrF"]];
+const F3B_REST=(()=>{const K=58,L={T:34/K,H:10/K,TH:25/K,SH:24/K,FT:8/K,UA:19/K,FA:17/K};const nrm=a=>{const l=Math.hypot(...a)||1;return a.map(x=>x/l)},add=(a,b)=>a.map((x,i)=>x+b[i]),mul=(a,s)=>a.map(x=>x*s);
+ const an=0.052,kn=an+L.SH,hp=kn+L.TH,nk=hp+L.T,sh=nk-4/K,R={hip:[0,hp,0],nk:[0,nk,0],hd:[0,nk+L.H,0]};
+ for(const [s,z] of [["N",1],["F",-1]]){R["hp"+s]=[0,hp,0.09*z];R["kn"+s]=add(R["hp"+s],mul(nrm([0.012,-1,0.025*z]),L.TH));R["an"+s]=add(R["kn"+s],mul(nrm([-0.012,-1,0.02*z]),L.SH));
+  R["to"+s]=add(R["an"+s],mul(nrm([1,-0.07,0]),L.FT));R["sh"+s]=[0,sh,0.17*z];R["el"+s]=add(R["sh"+s],mul(nrm([0.02,-Math.cos(0.25),Math.sin(0.25)*z]),L.UA));R["wr"+s]=add(R["el"+s],mul(nrm([0.08,-Math.cos(0.17),Math.sin(0.17)*z]),L.FA))}
+ return R})();
+function f3BodyInit(d){const T=F3.T,g=new T.BufferGeometry();const lin=new Float32Array(d.COL.length);for(let i=0;i<lin.length;i++)lin[i]=Math.pow(d.COL[i],2.2);
+ g.setAttribute("position",new T.BufferAttribute(d.pos,3));g.setAttribute("normal",new T.BufferAttribute(d.N,3));g.setAttribute("color",new T.BufferAttribute(lin,3));
+ g.setAttribute("skinIndex",new T.Uint16BufferAttribute(d.SI,4));g.setAttribute("skinWeight",new T.BufferAttribute(d.SW,4));g.setIndex(new T.BufferAttribute(d.idx,1));
+ const mat=new T.MeshStandardMaterial({vertexColors:true,roughness:0.66,metalness:0});
+ const bones=F3B_BONES.map(()=>{const b=new T.Bone();b.matrixAutoUpdate=false;b.matrixWorldAutoUpdate=false;return b});
+ const m=new T.SkinnedMesh(g,mat);m.castShadow=true;m.receiveShadow=true;m.frustumCulled=false;m.updateMatrixWorld(true);m.bind(new T.Skeleton(bones,bones.map(()=>new T.Matrix4())),new T.Matrix4());
+ // repères de repos de chaque os
+ const s0=new T.Vector3(0,0,1),f0=new T.Vector3(1,0,0),RJ={};for(const k in F3B_REST)RJ[k]=new T.Vector3(...F3B_REST[k]);
+ const rest=F3B_BONES.map(([h,t])=>{const M=f3BFrame(RJ[h],RJ[t],s0,f0);return{h:RJ[h],Mt:M.clone().transpose()}});
+ F3.man.visible=false;F3.S.add(m);F3.body={m,bones,rest}}
+function f3BFrame(a,b,s,f){const T=F3.T,d=new T.Vector3().subVectors(b,a).normalize();let n=s.clone().addScaledVector(d,-s.dot(d));if(n.lengthSq()<0.02)n=f.clone().addScaledVector(d,-f.dot(d));n.normalize();
+ const c=new T.Vector3().crossVectors(d,n);return new T.Matrix4().makeBasis(d,n,c)}
+// longueurs exactes des os (le corps ne s'étire pas)
+function f3BFix(J){const T=F3.T,K=58,fix=(a,b,l)=>{const d=new T.Vector3().subVectors(J[b],J[a]);const n=d.length()||1;J[b]=J[a].clone().addScaledVector(d,l/n)};
+ fix("hip","nk",34/K);fix("nk","hd",10/K);for(const s of ["N","F"]){fix("hp"+s,"kn"+s,25/K);fix("kn"+s,"an"+s,24/K);fix("an"+s,"to"+s,8/K);fix("sh"+s,"el"+s,19/K);fix("el"+s,"wr"+s,17/K)}return J}
+function f3BPose(J,front){const T=F3.T,B=F3.body,u=new T.Vector3().subVectors(J.nk,J.hip).normalize(),f=front?new T.Vector3(0,0,-1):new T.Vector3(u.y,-u.x,0),s=front?new T.Vector3(1,0,0):new T.Vector3(0,0,1);
+ F3B_BONES.forEach(([h,t],i)=>{const M=f3BFrame(J[h],J[t],s,f).multiply(B.rest[i].Mt),bm=B.bones[i].matrixWorld;
+  bm.makeTranslation(J[h].x,J[h].y,J[h].z).multiply(M).multiply(new T.Matrix4().makeTranslation(-B.rest[i].h.x,-B.rest[i].h.y,-B.rest[i].h.z))})}
+// remplace la pose du mannequin quand le corps lisse est prêt
+const f3PoseV30=f3Pose;
+f3Pose=function(X,Pz,id){if(!F3.body)return f3PoseV30(X,Pz,id);const J=f3BFix(f3Joints(X,Pz));f3BPose(J,!!X.front);
+ const T=F3.T,u=new T.Vector3().subVectors(J.nk,J.hip).normalize(),f=X.front?new T.Vector3(0,0,-1):new T.Vector3(u.y,-u.x,0),at=(a,b,k)=>new T.Vector3().lerpVectors(a,b,k),DB=F3.DB;
+ DB[0].visible=!!X.db;DB[1].visible=!!X.db&&!X.dbN;
+ if(X.db){if(X.dbAt==="hip"){DB[0].position.copy(J.hip).add(new T.Vector3(0,0.13,0));DB[0].quaternion.setFromUnitVectors(new T.Vector3(0,1,0),new T.Vector3(0,0,1));DB[1].visible=false}
+  else if(X.dbOne){const m=at(J.wrN,J.wrF,0.5).addScaledVector(f,X.dbAx==="v"?0.04:0),d=X.dbAx==="v"?new T.Vector3(0,1,0):new T.Vector3().subVectors(J.wrN,J.elN).normalize();DB[0].position.copy(m).addScaledVector(d,0.06);DB[0].quaternion.setFromUnitVectors(new T.Vector3(0,1,0),d);DB[1].visible=false}
+  else for(const [i,s] of (X.dbN?[[0,"N"]]:[[0,"N"],[1,"F"]])){const wr=J["wr"+s],d=new T.Vector3().subVectors(wr,J["el"+s]).normalize();DB[i].position.copy(wr).addScaledVector(d,0.06);
+   DB[i].quaternion.setFromUnitVectors(new T.Vector3(0,1,0),X.front||X.dbAx==="x"?new T.Vector3(1,0,0):new T.Vector3(0,0,1))}}
+ return J};
+// le moteur charge le corps juste après three.js
+const f3InitV30=f3Init;
+f3Init=function(){f3InitV30();f3BodyData().then(d=>{if(!d){F3.bodyFail=true;return}if(F3.T&&!F3.body){try{f3BodyInit(d);F3.frames={};figKick()}catch(e){F3.body=null;F3.bodyFail=true;F3.man.visible=true}}}).catch(()=>{F3.bodyFail=true})};
+// tant que le corps n'est pas prêt : silhouette 2D (pas d'ancien mannequin, pas de vignette figée)
+const f3StepV30=f3Step;f3Step=function(now){if(!F3.body&&!F3.bodyFail)return false;return f3StepV30(now)};
+const f3ThumbsV30=f3Thumbs;f3Thumbs=function(){if(!F3.body&&!F3.bodyFail)return;return f3ThumbsV30()};
+
+// --- v30 : mouvements plus fluides — trajectoires en arc autour des épaules et des hanches, courbes continues pour les
+// mouvements en boucle, sens de flexion des coudes et genoux constant (plus d'à-coups)
+(function(){const fx=(id,fn)=>{if(FIGX[id])FIGX[id].fr.forEach((f,i)=>fn(f,i))};
+ fx("press_floor",f=>{f.eN=-1});fx("tri",f=>{f.eN=-1;delete f.eF});fx("squat",f=>{f.eN=-1});fx("hinge",f=>{f.eN=-1});fx("rdl",f=>{f.eN=-1});
+ fx("knees",(f,i)=>{f.eN=-1;f.eF=-1;if(i===0){f.wN=[63,86];f.wF=[83,64]}else{f.wN=[83,64];f.wF=[63,86]}});fx("run",f=>{f.eN=-1;f.eF=-1});fx("deadbug",f=>{f.kN=1;f.kF=1});fx("stretch",f=>{f.eN=-1;f.eF=-1;f.kN=1;f.kF=1});
+ fx("pushup",f=>{f.wN=[f.wN[0],134];f.wF=[(f.wF||f.wN)[0],134]});fx("mountain",f=>{f.wN=[f.wN[0],134];f.wF=[(f.wF||f.wN)[0],134]});
+ for(const k of ["farmer","walk","run","mountain","jacks","knees","arms"])if(FIGX[k])FIGX[k].loop=1;})();
+function figRoots(P,front){const t=fgR(P.t),nk=[P.h[0]+FG.T*Math.cos(t),P.h[1]+FG.T*Math.sin(t)],sw=front?(P.sw||10):0,hw=front?(P.hw||6):0;
+ return{wN:[nk[0]+sw,nk[1]+(front?3:0)],wF:[nk[0]-sw,nk[1]+(front?3:0)],fN:[P.h[0]+hw,P.h[1]],fF:[P.h[0]-hw,P.h[1]]}}
+const FG_END=["wN","wF","fN","fF"];
+function figRel(P,front){const o={...P},R=figRoots(P,front);for(const k of FG_END){const v=fgGet(P,k);if(v)o[k]=[v[0]-R[k][0],v[1]-R[k][1]]}return o}
+function figAbs(o,front){const R=figRoots(o,front);for(const k of FG_END)if(o[k])o[k]=[o[k][0]+R[k][0],o[k][1]+R[k][1]];return o}
+function figMix2(A,B,k,front){const a=figRel(A,front),b=figRel(B,front),m=figMix(a,b,k);
+ for(const key of FG_END){const va=a[key],vb=b[key];if(!va||!vb)continue;const la=Math.hypot(va[0],va[1]),lb=Math.hypot(vb[0],vb[1]);
+  const aa=Math.atan2(va[1],va[0]);let d=Math.atan2(vb[1],vb[0])-aa;while(d>Math.PI)d-=2*Math.PI;while(d<-Math.PI)d+=2*Math.PI;const L=la+(lb-la)*k,an=aa+d*k;m[key]=[L*Math.cos(an),L*Math.sin(an)]}
+ return figAbs(m,front)}
+const figCRn=(p0,p1,p2,p3,u)=>0.5*(2*p1+(-p0+p2)*u+(2*p0-5*p1+4*p2-p3)*u*u+(-p0+3*p1-3*p2+p3)*u*u*u);
+function figCR(Ps,u,front){const r=Ps.map(p=>figRel(p,front)),o={},keys=new Set();r.forEach(p=>Object.keys(p).forEach(k=>keys.add(k)));
+ for(const key of keys){const v=r.map(p=>fgGet(p,key));if(v[1]===undefined)continue;const w=v.map(x=>x===undefined?v[1]:x);
+  if(Array.isArray(w[1])&&FG_END.includes(key)){const L=w.map(v=>Math.hypot(v[0],v[1])),A=w.map(v=>Math.atan2(v[1],v[0]));for(const j of [0,2,3]){const ref=j===3?A[2]:A[1];while(A[j]-ref>Math.PI)A[j]-=2*Math.PI;while(A[j]-ref<-Math.PI)A[j]+=2*Math.PI}
+   const l=figCRn(L[0],L[1],L[2],L[3],u),an=figCRn(A[0],A[1],A[2],A[3],u);o[key]=[l*Math.cos(an),l*Math.sin(an)]}
+  else if(Array.isArray(w[1]))o[key]=[0,1].map(i=>figCRn(w[0][i],w[1][i],w[2][i],w[3][i],u));else if(typeof w[1]==="number"&&!/^[ke]/.test(key))o[key]=figCRn(w[0],w[1],w[2],w[3],u);else o[key]=u<0.5?w[1]:w[2]}
+ return figAbs(o,front)}
+figAt=function(X,ms){const n=X.fr.length,tot=X.ms.reduce((a,b)=>a+b,0);let t=((ms%tot)+tot)%tot,i=0;while(i<n-1&&t>X.ms[i]){t-=X.ms[i];i++}
+ const u=Math.min(1,Math.max(0,t/X.ms[i])),front=!!X.front;
+ if(figRM())return figMix2(X.fr[i],X.fr[(i+1)%n],u>0.5?1:0,front);
+ if(X.loop)return figCR([X.fr[(i-1+n)%n],X.fr[i],X.fr[(i+1)%n],X.fr[(i+2)%n]],u,front);
+ return figMix2(X.fr[i],X.fr[(i+1)%n],figEase(u),front)};
+// le cadrage se recalcule avec les nouvelles trajectoires
+try{F3.frames={}}catch(e){}
 
 setTab(ui.tab);renderAll();initDb();sbStart();
 
