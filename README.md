@@ -27,3 +27,9 @@ Sans clé, le plateau se compose à la main à partir d'une liste de plats de ca
 Deux fois par jour, le workflow `.github/workflows/discover.yml` lance `scripts/discover.mjs` : il lit les plans de site de HelloFresh, Jow et Marmiton, ouvre des fiches au hasard et garde les recettes saines et riches en protéines d'après les valeurs nutritionnelles publiées par le site (plats de 280 à 680 kcal avec au moins 24 g de protéines, encas de 50 à 300 kcal avec au moins 7 g de protéines). Elles sont rangées par pages de 10, variées (viandes, poissons, œufs, végé et 2 encas), dans la branche `data` (`discover/index.json`, `discover/p/N.json`). L'appli lit la page suivante à chaque « Actualiser » ; les recettes ajoutées, écartées ou passées ne reviennent jamais. Seuls le titre, la photo, le lien, les ingrédients et les valeurs nutritionnelles sont repris ; les étapes restent sur le site d'origine.
 
 Lancer une collecte à la main : onglet Actions → « Recettes à découvrir » → Run workflow.
+
+## Sport et pas
+
+- Chaque téléphone choisit son profil (« À qui est ce téléphone ? », ou Réglages → Ce téléphone) : Suivi et Sport s'ouvrent dessus. Ce réglage reste sur l'appareil.
+- Onglet Sport : pas du jour (objectif, 7 derniers jours), séances guidées (haltères, tapis de course, tapis de sol) avec séries, chrono de repos, bips et voix, chrono de repos libre, bilan de la semaine. Les séances et les pas sont synchronisés avec le foyer.
+- Pas automatiques sur iPhone : Sport → Pas automatiques. Sano crée une ligne privée dans la table `planner` (une par personne) ; un raccourci Apple (« Sano pas ») y écrit le total du jour par une requête PATCH, et l'appli le relit. Aucune modification de Supabase n'est nécessaire.

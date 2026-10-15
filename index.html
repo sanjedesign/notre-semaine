@@ -1616,6 +1616,156 @@ h1,h2,.sec-head h1,.block-title,.row-head h2,.m-body h2,.pn-title{color:var(--ti
 .rec-card .rec-m{gap:2px}
 .rec-card .rec-m button{width:28px;height:28px;font-size:.95rem}
 .rec-card .rec-m b{min-width:30px;font-size:.82rem}
+/* ================= v25 : profil du téléphone, onglet Sport ================= */
+.me-card h3{margin:0 0 4px}
+.me-btns{display:flex;gap:10px;margin-top:10px}
+.me-btns .btn{flex:1;justify-content:center;padding:12px;font-weight:700}
+.me-set .seg{margin-top:8px}
+.bottombar{grid-template-columns:repeat(6,1fr)!important}
+@media (max-width:400px){.bottombar button{font-size:.64rem!important;letter-spacing:0!important}.bottombar svg{width:21px;height:21px}}
+@media (max-width:340px){.bottombar button{font-size:.58rem!important}}
+.sp-card h3{display:flex;align-items:center;gap:8px;margin:0}
+.sp-card h3 svg{width:22px;height:22px;color:var(--cta);flex:0 0 auto}
+.sp-sel{display:inline-flex;align-items:center;gap:6px;font-size:.8rem;color:var(--muted)}
+.sp-sel select{font:inherit;font-weight:600;color:var(--ink);border:1px solid var(--ctl-line,var(--line-2));border-radius:999px;padding:6px 10px;background:var(--surface)}
+.sp-st{display:flex;align-items:center;gap:16px;margin:4px 0 12px}
+.sp-ring{position:relative;width:118px;height:118px;flex:0 0 auto}
+.sp-ring svg,.sp-big svg{width:100%;height:100%;transform:rotate(-90deg);display:block}
+.sp-tr{fill:none;stroke:var(--pink-2);stroke-width:10}
+.sp-pr{fill:none;stroke:var(--cta);stroke-width:10;stroke-linecap:round;transition:stroke-dashoffset .5s ease}
+.sp-pr.ok{stroke:var(--ok)}
+.sp-rv{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.15}
+.sp-rv b{font-family:var(--f-title);font-size:1.45rem;font-variant-numeric:tabular-nums}
+.sp-rv small{font-size:.74rem;color:var(--muted)}
+.sp-side p{margin:0 0 4px;font-size:.88rem}
+.sp-day{font-family:var(--f-sub);font-weight:700;color:var(--coral-ink)}
+.sp-mut{color:var(--muted);font-size:.8rem;margin:4px 0}
+.sp-bars{display:flex;gap:6px;height:120px;margin:6px 0 4px}
+.sp-bar{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;border:0;background:none;padding:0;min-width:0;cursor:pointer;color:var(--muted);font:inherit}
+.sp-bv{font-size:.66rem;font-weight:600;height:14px;line-height:14px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.sp-bt{position:relative;flex:1;width:100%;max-width:34px;border-radius:10px;background:var(--surface-2);display:flex;align-items:flex-end}
+.sp-bt::after{content:"";position:absolute;left:-3px;right:-3px;bottom:var(--g);border-top:2px dashed rgba(176,58,46,.5);pointer-events:none}
+.sp-bt i{display:block;width:100%;background:#E59B8E;border-radius:10px 10px 6px 6px}
+.sp-bar.ok .sp-bt i{background:var(--cta)}
+.sp-bd{font-family:var(--f-sub);font-weight:700;font-size:.72rem;height:16px}
+.sp-bar.on .sp-bd{color:var(--coral-ink)}
+.sp-bar.on .sp-bt{box-shadow:0 0 0 2px var(--surface),0 0 0 4px var(--cta)}
+.sp-bar:focus-visible{outline:none}.sp-bar:focus-visible .sp-bt{box-shadow:0 0 0 2px var(--surface),0 0 0 4px var(--focus,#2F2A2B)}
+.sp-form{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.sp-lab{flex:1 0 100%;font-size:.8rem;font-weight:600;color:var(--muted)}
+.sp-form .pn-in{flex:1;min-width:0;font-variant-numeric:tabular-nums}
+.sp-acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.sp-acts .btn,.sp-eqb{display:inline-flex;align-items:center;gap:6px}
+.sp-acts svg,.sp-eqb svg{width:18px;height:18px;flex:0 0 auto}
+.sp-kick{font-family:var(--f-sub);font-weight:700;font-size:.82rem;color:var(--coral-ink);margin:0 0 8px}
+.sp-td{display:flex;gap:12px;align-items:center}
+.sp-td h3{font-size:1.12rem}
+.sp-ico{flex:0 0 auto;width:46px;height:46px;border-radius:14px;background:var(--accent-soft);color:var(--cta);display:grid;place-items:center}
+.sp-ico svg{width:26px;height:26px}
+.sp-meta{font-size:.82rem;color:var(--muted);margin:2px 0 0}
+.sp-why{margin:10px 0 0;font-size:.9rem}
+.sp-today .pf-actions,.sp-resume .pf-actions{display:flex;gap:8px;flex-wrap:wrap}
+.sp-resume{box-shadow:0 0 0 2px var(--cta),var(--sh-1)!important}
+.sp-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.sp-eq{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:0 0 12px}
+.sp-eq .sp-mut{margin:0}
+.sp-eqb[aria-pressed="true"]{background:var(--accent-soft);border-color:var(--cta);color:var(--coral-ink)}
+.sp-eqb[aria-pressed="false"]{color:var(--muted)}
+.sp-eqfix{cursor:default;background:var(--surface-2)}
+.sp-f{margin:0 0 12px;display:inline-flex;flex-wrap:wrap}
+.sp-grid{display:grid;gap:10px}
+@media (min-width:700px){.sp-grid{grid-template-columns:1fr 1fr}}
+.sp-sess{display:flex;gap:12px;align-items:flex-start;text-align:left;border:1px solid var(--line);background:var(--surface);border-radius:var(--r-md);padding:12px;font:inherit;color:inherit;cursor:pointer;width:100%}
+.sp-sess:hover{border-color:var(--line-2);background:var(--surface-2)}
+.sp-sx{display:flex;flex-direction:column;gap:2px;min-width:0}
+.sp-sx b{font-family:var(--f-sub);font-size:.98rem}
+.sp-d{font-size:.8rem;color:var(--muted);line-height:1.35}
+.sp-wd{display:flex;justify-content:space-between;gap:4px;margin:6px 0 10px}
+.sp-wdd{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1}
+.sp-wdd i{width:34px;height:34px;border-radius:50%;border:2px solid var(--line-2);display:grid;place-items:center;font-style:normal;font-weight:800;color:#fff;background:var(--surface)}
+.sp-wdd.on i{background:var(--cta);border-color:var(--cta)}
+.sp-wdd.today i{box-shadow:0 0 0 3px var(--pink)}
+.sp-wdd small{font-family:var(--f-sub);font-weight:700;font-size:.72rem;color:var(--muted)}
+.sp-wsum{margin:0 0 4px}
+.sp-h4{font-family:var(--f-sub);font-size:.92rem;margin:16px 0 6px}
+.sp-hist{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.sp-hist li{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 6px 8px 12px;border-radius:var(--r-sm);background:var(--surface-2)}
+.sp-hist li span{display:flex;flex-direction:column;min-width:0}
+.sp-hist b{font-size:.9rem}.sp-hist small{font-size:.78rem;color:var(--muted)}
+.sp-del{border:0;background:none;color:var(--muted);font-size:1.25rem;min-width:40px;min-height:40px;border-radius:10px;cursor:pointer;flex:0 0 auto}
+.sp-del.armed{font-size:.78rem;font-weight:700;color:var(--danger);background:var(--accent-soft);padding:0 8px}
+/* bandeau d'activité dans Suivi */
+.sp-strip{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px;width:100%;margin:0 0 16px;padding:12px 14px;border:0;border-radius:var(--r-md);background:var(--surface);box-shadow:var(--sh-1);font:inherit;color:var(--ink);cursor:pointer;text-align:left}
+.sp-strip span{display:inline-flex;align-items:center;gap:5px;font-size:.86rem}
+.sp-strip svg{width:18px;height:18px;color:var(--cta)}
+.sp-strip .sp-go{margin-left:auto;font-family:var(--f-sub);font-weight:700;color:var(--coral-ink)}
+/* lecteur de séance */
+.sp-blk{margin:12px 0;padding:12px 14px;border-radius:var(--r-md);background:var(--surface);box-shadow:var(--sh-1)}
+.sp-blk h3{margin:0 0 4px;font-size:1rem}
+.sp-ex-l,.sp-ph{list-style:none;margin:8px 0 0;padding:0;display:grid;gap:6px}
+.sp-ex-l li,.sp-ph li{font-size:.88rem;line-height:1.4}
+.sp-ex-l span{color:var(--muted)}
+.sp-aud{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0;justify-content:center}
+.sp-start{width:100%;padding:15px;font-size:1.05rem;margin-top:4px}
+.sp-run{position:relative;display:flex;flex-direction:column;min-height:calc(100svh - 150px)}
+.sp-prog{height:6px;border-radius:6px;background:var(--pink-2);overflow:hidden}
+.sp-prog i{display:block;height:100%;background:var(--cta);transition:width .4s}
+.sp-rmeta{display:flex;justify-content:space-between;gap:10px;margin:6px 0 0;font-size:.8rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.sp-body{flex:1;display:flex;flex-direction:column;align-items:center;text-align:center;padding:16px 0 6px}
+.sp-body .sp-kick{margin-bottom:4px}
+.sp-ex{font-family:var(--f-title);font-size:clamp(1.6rem,7vw,2.2rem);line-height:1.15;margin:0 0 6px;text-wrap:balance}
+.sp-tg{font-size:1.05rem;margin:4px 0 12px}
+.sp-tg b{font-family:var(--f-title);font-size:3.4rem;line-height:1;display:block;color:var(--coral-ink);font-variant-numeric:tabular-nums}
+.sp-tread{font-size:1.05rem;margin:0 0 4px;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;justify-content:center}
+.sp-tread b{font-family:var(--f-title);font-size:2.4rem;color:var(--coral-ink)}
+.sp-big{position:relative;width:min(62vw,240px);aspect-ratio:1;margin:8px auto}
+.sp-big .sp-tr,.sp-big .sp-pr{stroke-width:9}
+.sp-big .sp-pr{transition:stroke-dashoffset .2s linear}
+.sp-bigv{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.sp-bigv b{font-family:var(--f-title);font-size:clamp(2.6rem,13vw,3.6rem);line-height:1;font-variant-numeric:tabular-nums}
+.sp-bigv small{font-size:.85rem;color:var(--muted);margin-top:6px}
+.sp-k-rest .sp-pr{stroke:var(--ok)}
+.sp-load{display:flex;align-items:center;gap:10px;margin:2px 0 4px}
+.sp-load span{color:var(--muted);font-size:.85rem}
+.sp-load button{width:44px;height:44px;border-radius:50%;border:1px solid var(--ctl-line,var(--line-2));background:var(--surface);font-size:1.3rem;font-weight:700;color:var(--ink);cursor:pointer}
+.sp-load b{min-width:76px;font-family:var(--f-title);font-size:1.3rem;font-variant-numeric:tabular-nums}
+.sp-lastw{max-width:36ch}
+.sp-how{width:100%;max-width:520px;text-align:left;margin:10px 0;border-radius:var(--r-md);background:var(--surface);padding:10px 14px;box-shadow:var(--sh-1)}
+.sp-how summary{font-family:var(--f-sub);font-weight:700;cursor:pointer;color:var(--coral-ink)}
+.sp-how ul{margin:8px 0 0;padding-left:18px}
+.sp-how li{margin:4px 0;font-size:.9rem;line-height:1.4}
+.sp-done{width:100%;max-width:520px;padding:16px;font-size:1.08rem;margin-top:8px}
+.sp-adj{display:flex;gap:10px;justify-content:center;margin:6px 0;flex-wrap:wrap}
+.sp-next{text-align:center;font-size:.88rem;color:var(--muted);margin:6px 0 10px;text-wrap:balance}
+.sp-nav{display:flex;gap:8px}
+.sp-nav .btn{flex:1;justify-content:center;padding-left:6px;padding-right:6px}
+.sp-sheet{position:fixed;inset:0;z-index:95;background:rgba(47,42,43,.45);display:flex;align-items:flex-end;justify-content:center;padding:16px 16px calc(16px + env(safe-area-inset-bottom,0px))}
+.sp-sh-in{width:100%;max-width:440px;background:var(--surface);border-radius:var(--r-lg);padding:18px;display:grid;gap:10px;box-shadow:var(--sh-2)}
+.sp-sh-in h3{margin:0}.sp-sh-in .sp-mut{margin:0 0 4px}
+.sp-sh-in .btn{justify-content:center;padding:13px}
+.sp-end{text-align:center}
+.sp-sum{display:flex;justify-content:center;gap:10px;margin:16px 0}
+.sp-sum div{flex:1;max-width:120px;padding:12px 6px;border-radius:var(--r-md);background:var(--surface);box-shadow:var(--sh-1);display:flex;flex-direction:column}
+.sp-sum b{font-family:var(--f-title);font-size:1.4rem}
+.sp-sum span{font-size:.8rem;color:var(--muted)}
+.sp-cp{margin:10px 0}
+.sp-cp label{display:block;font-size:.8rem;font-weight:600;color:var(--muted);margin-bottom:4px}
+.sp-cp .pf-row{display:flex;gap:8px;margin:0}
+.sp-cp .pn-in{flex:1;min-width:0;font-size:.85rem}
+.sp-ol{margin:8px 0;padding-left:20px}
+.sp-ol li{margin:6px 0;line-height:1.45}
+.sp-tml{text-align:center;margin-top:16px}
+.sp-big-done .sp-bigv b{color:var(--ok)}
+.sp-big-done{border-radius:50%;box-shadow:inset 0 0 0 9px var(--pink-2)}
+@media (prefers-reduced-motion:reduce){.sp-pr,.sp-prog i{transition:none}}
+.sp-rtop{padding-right:52px}
+.sp-start{position:sticky;bottom:calc(92px + env(safe-area-inset-bottom,0px));z-index:3;box-shadow:var(--sh-btn,0 12px 22px -12px rgba(201,71,58,.75))}
+@media (min-width:900px){.sp-start{bottom:16px}}
+.sp-fin{min-width:220px;padding:14px 22px}
+.sp-end .pf-actions{display:flex;justify-content:center}
+.sp-nextup{margin:6px 0 0}
+@media (max-width:370px){.sp-nl{display:none}.sp-nav [data-spnav="prev"]{flex:0 0 56px}}
+@media (min-width:700px){.sp-form{max-width:520px}}
 
 </style>
 </head>
@@ -1626,6 +1776,7 @@ h1,h2,.sec-head h1,.block-title,.row-head h2,.m-body h2,.pn-title{color:var(--ti
   <button type="button" data-tab="recettes"><svg class="ni" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 3.5v5.2a1.8 1.8 0 0 0 3.6 0V3.5M5.8 3.5v17"/><circle cx="13" cy="12" r="4.3"/><path d="M20.5 20.5v-17c-1.6.8-2.4 2.8-2.4 5.4V13h2.4"/></svg><span>Recettes</span></button>
   <button type="button" data-tab="semaine"><svg class="ni" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4"/><path d="M8 14.5h.01M12 14.5h.01M16 14.5h.01M8 17.5h.01M12 17.5h.01" stroke-width="2.4"/></svg><span>Semaine</span></button>
   <button type="button" data-tab="suivi"><svg class="ni" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 20.5h17"/><path d="M4.5 16l5-5 3.5 3 6.5-7"/><path d="M15 7h4.5v4.5"/></svg><span>Suivi</span></button>
+  <button type="button" data-tab="sport"><svg class="ni" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.5 6.5v11M17.5 6.5v11M3.5 9.5v5M20.5 9.5v5M6.5 12h11"/></svg><span>Sport</span></button>
   <button type="button" data-tab="courses"><svg class="ni" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 9.5h17l-1.7 9a2 2 0 0 1-2 1.6H7.2a2 2 0 0 1-2-1.6z"/><path d="M8 9.5l3-5.5M16 9.5l-3-5.5M9.5 13.5v3M14.5 13.5v3"/></svg><span>Courses</span></button>
   <button type="button" data-tab="stock"><svg class="ni" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8.5 3.5h7M7 7h10a1.5 1.5 0 0 1 1.5 1.5V18a2.5 2.5 0 0 1-2.5 2.5H8A2.5 2.5 0 0 1 5.5 18V8.5A1.5 1.5 0 0 1 7 7z"/><path d="M9.5 3.5V7M14.5 3.5V7"/><path d="M9.6 16.4c0-2.6 1.8-4.1 4.6-4.1 0 2.6-1.8 4.1-4.6 4.1z"/></svg><span>Stock</span></button>
  </nav>
@@ -1694,6 +1845,11 @@ h1,h2,.sec-head h1,.block-title,.row-head h2,.m-body h2,.pn-title{color:var(--ti
   <div id="stockScan" class="stk-scan"></div>
   <div class="columns" id="stockList"></div>
  </section>
+ <section id="tab-sport" class="tab" hidden>
+  <div class="sec-head"><div><h1>Sport</h1><p class="sub">Pas du jour, séances guidées et chrono de repos.</p></div></div>
+  <nav class="jump" aria-label="Aller à une partie de l'onglet"><button type="button" data-jump="spSteps">Pas</button><button type="button" data-jump="spToday">Séance du jour</button><button type="button" data-jump="spTimer">Chrono</button><button type="button" data-jump="spList">Séances</button><button type="button" data-jump="spWeek">Semaine</button></nav>
+  <div id="sport"></div>
+ </section>
 </main>
 <section id="panel" class="panel" hidden><div class="panel-top"><button type="button" class="m-close" data-act="panel-close" aria-label="Fermer">×</button></div><div id="panelBody" class="panel-body"></div></section>
 
@@ -1701,6 +1857,7 @@ h1,h2,.sec-head h1,.block-title,.row-head h2,.m-body h2,.pn-title{color:var(--ti
  <button type="button" data-tab="recettes"><svg class="ni" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 3.5v5.2a1.8 1.8 0 0 0 3.6 0V3.5M5.8 3.5v17"/><circle cx="13" cy="12" r="4.3"/><path d="M20.5 20.5v-17c-1.6.8-2.4 2.8-2.4 5.4V13h2.4"/></svg>Recettes</button>
  <button type="button" data-tab="semaine"><svg class="ni" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4"/><path d="M8 14.5h.01M12 14.5h.01M16 14.5h.01M8 17.5h.01M12 17.5h.01" stroke-width="2.4"/></svg>Semaine</button>
  <button type="button" data-tab="suivi"><svg class="ni" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 20.5h17"/><path d="M4.5 16l5-5 3.5 3 6.5-7"/><path d="M15 7h4.5v4.5"/></svg>Suivi</button>
+  <button type="button" data-tab="sport"><svg class="ni" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.5 6.5v11M17.5 6.5v11M3.5 9.5v5M20.5 9.5v5M6.5 12h11"/></svg>Sport</button>
  <button type="button" data-tab="courses"><svg class="ni" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 9.5h17l-1.7 9a2 2 0 0 1-2 1.6H7.2a2 2 0 0 1-2-1.6z"/><path d="M8 9.5l3-5.5M16 9.5l-3-5.5M9.5 13.5v3M14.5 13.5v3"/></svg>Courses</button>
  <button type="button" data-tab="stock"><svg class="ni" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8.5 3.5h7M7 7h10a1.5 1.5 0 0 1 1.5 1.5V18a2.5 2.5 0 0 1-2.5 2.5H8A2.5 2.5 0 0 1 5.5 18V8.5A1.5 1.5 0 0 1 7 7z"/><path d="M9.5 3.5V7M14.5 3.5V7"/><path d="M9.6 16.4c0-2.6 1.8-4.1 4.6-4.1 0 2.6-1.8 4.1-4.6 4.1z"/></svg>Stock</button>
 </nav>
@@ -1714,7 +1871,7 @@ h1,h2,.sec-head h1,.block-title,.row-head h2,.m-body h2,.pn-title{color:var(--ti
 </div>
 <div id="timers" class="timers" hidden aria-live="polite"></div>
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
-<script>window.NS_CONFIG={"hosted": true, "sbUrl": "https://zjsawjudrdneeptxbskd.supabase.co", "sbKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpqc2F3anVkcmRuZWVwdHhic2tkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1NjUxMjcsImV4cCI6MjEwNzE0MTEyN30.Wn1bUy--5O78gGICTOyEGbnT6B-SdoNCG_XxBBaaUIY", "build": "20261014134346"}</script>
+<script>window.NS_CONFIG={"hosted": true, "sbUrl": "https://zjsawjudrdneeptxbskd.supabase.co", "sbKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpqc2F3anVkcmRuZWVwdHhic2tkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1NjUxMjcsImV4cCI6MjEwNzE0MTEyN30.Wn1bUy--5O78gGICTOyEGbnT6B-SdoNCG_XxBBaaUIY", "build": "20261015191101"}</script>
 <script>
 const AISLES={L:"Fruits & légumes",H:"Herbes fraîches",V:"Viandes & poissons",C:"Crèmerie & œufs",S:"Surgelés",F:"Féculents",B:"Conserves",E:"Épices & condiments"};
 const AISLE_ORDER=["L","H","V","C","S","F","B","E"];
@@ -3180,6 +3337,24 @@ normalize=function(d){const s=normalizeV23(d);const src=d&&typeof d==="object"&&
 const normalizeV24=normalize;
 normalize=function(d){const s=normalizeV24(d);const src=d&&typeof d==="object"&&d.logFav&&typeof d.logFav==="object"?d.logFav:{};const out={};let n=0;
  for(const k in src){if(n>=60)break;if(typeof k==="string"&&k.length>0&&k.length<=80&&src[k]){out[k]=1;n++}}s.logFav=out;return s};
+
+// ================= v25 (avant l'état) : sport — pas, séances, charges (synchronisé) =================
+// state.sport = {steps:{"0":{AAAAMMJJ:n},"1":{…}}, goal:[8000,8000], wk:[3,3], eq:{h,t,s},
+//   hist:[{i,p,d,s,t,min,kcal,n,at}], w:{"0":{exo:kg},"1":{…}}, inbox:{"0":"hex","1":"hex"}}
+const SP_EQ_DEF={h:true,t:true,s:true};
+function spNorm(src){const o={steps:{"0":{},"1":{}},goal:[8000,8000],wk:[3,3],eq:{...SP_EQ_DEF},hist:[],w:{"0":{},"1":{}},inbox:{}};
+ if(!src||typeof src!=="object")return o;const okD=k=>/^20\d{6}$/.test(k);
+ for(const p of ["0","1"]){const S=src.steps&&src.steps[p];if(S&&typeof S==="object"){const ks=Object.keys(S).filter(okD).sort().slice(-400);for(const k of ks){const n=Math.round(+S[k]);if(n>=0&&n<=120000)o.steps[p][k]=n}}
+  const W=src.w&&src.w[p];if(W&&typeof W==="object"){let c=0;for(const k in W){if(c>=80)break;const v=+W[k];if(/^[a-z0-9_]{2,20}$/.test(k)&&v>0&&v<=300){o.w[p][k]=Math.round(v*2)/2;c++}}}
+  const ib=src.inbox&&src.inbox[p];if(typeof ib==="string"&&/^[a-f0-9]{32}$/.test(ib))o.inbox[p]=ib}
+ if(Array.isArray(src.goal))o.goal=[0,1].map(i=>{const v=Math.round(+src.goal[i]);return v>=1000&&v<=40000?v:8000});
+ if(Array.isArray(src.wk))o.wk=[0,1].map(i=>{const v=Math.round(+src.wk[i]);return v>=1&&v<=7?v:3});
+ if(src.eq&&typeof src.eq==="object")for(const k in SP_EQ_DEF)if(typeof src.eq[k]==="boolean")o.eq[k]=src.eq[k];
+ if(Array.isArray(src.hist))for(const h of src.hist.slice(-400)){if(!h||typeof h!=="object"||!okD(String(h.d||""))||!/^[a-z0-9]{4,16}$/.test(String(h.i||"")))continue;
+  o.hist.push({i:h.i,p:h.p?1:0,d:h.d,s:String(h.s||"").slice(0,24),t:String(h.t||"Séance").slice(0,60),min:Math.max(0,Math.min(600,Math.round(+h.min||0))),kcal:Math.max(0,Math.min(5000,Math.round(+h.kcal||0))),n:Math.max(0,Math.min(200,Math.round(+h.n||0))),at:+h.at||0})}
+ return o}
+const normalizeV25=normalize;
+normalize=function(d){const s=normalizeV25(d);s.sport=spNorm(d&&typeof d==="object"?d.sport:null);return s};
 
 // ---------- état ----------
 const dayOf=k=>k.split("-")[0];
@@ -5793,6 +5968,369 @@ document.addEventListener("click",e=>{const t=e.target.closest&&e.target.closest
  if(t.dataset.recmore){ui.recAll=true;recRefresh();return}
  const k=t.dataset.recfav;const fav={...(state.logFav||{})};if(fav[k])delete fav[k];else{if(Object.keys(fav).length>=60){toast("60 favoris au maximum");return}fav[k]=1}state.logFav=fav;commit();recRefresh();toast(fav[k]?"Ajouté aux favoris ★":"Retiré des favoris")});
 document.addEventListener("click",e=>{if(e.target.closest&&e.target.closest('[data-act="nt-add"],[data-act="nt-add-snack"]')){ui.recQ="";ui.recAll=false;ui.recM={}}},true);
+
+
+// ================= v25 : profil du téléphone, onglet Sport (pas, séances guidées, chrono repos) =================
+// --- 1. Profil de ce téléphone : réglage propre à l'appareil (non synchronisé)
+const ME_KEY=LS+"-me";
+function meGet(){try{const v=localStorage.getItem(ME_KEY);return v==="0"||v==="1"?+v:null}catch(e){return null}}
+let ME=meGet();
+if(ME!=null)ui.ntP=ME;ui.spP=ME!=null?ME:0;ui.spF="all";ui.spAlt=0;ui.spDay=null;
+try{if(localStorage.getItem(LS+"-tab")==="sport")ui.tab="sport"}catch(e){}
+function meSet(i){ME=i?1:0;try{localStorage.setItem(ME_KEY,String(ME))}catch(e){}ui.ntP=ME;ui.spP=ME;ui.spDay=null}
+const pName=i=>esc(((state.people||[])[i]||{}).n||(i?"Partenaire":"Moi"));
+function meCard(){if(ME!=null)return"";return`<div class="sv-card me-card"><h3>À qui est ce téléphone ?</h3><p class="pn-help">Suivi et Sport s'ouvriront sur ce profil. Tu pourras toujours voir l'autre.</p>
+ <div class="me-btns">${[0,1].map(i=>`<button type="button" class="btn me-b" data-me="${i}">${pName(i)}</button>`).join("")}</div></div>`}
+document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-me]");if(!b)return;meSet(+b.dataset.me);
+ try{renderSuivi()}catch(x){}renderSport();if(ui.panel==="data")renderPanel();toast("Ce téléphone ouvre le profil de "+(((state.people||[])[ME]||{}).n||""))});
+const panelDataV25=panelData;
+panelData=function(){const h=panelDataV25.apply(this,arguments);const card=`<div class="pn-card me-set"><h3>Ce téléphone</h3><p class="pn-help">Suivi et Sport s'ouvrent sur ce profil. Réglage propre à cet appareil.</p>
+ <div class="seg" role="group" aria-label="Profil de ce téléphone">${[0,1].map(i=>`<button type="button" data-me="${i}" aria-pressed="${ME===i}">${pName(i)}</button>`).join("")}</div></div>`;
+ return/<h2 class="pn-title">[^<]*<\/h2>/.test(h)?h.replace(/(<h2 class="pn-title">[^<]*<\/h2>)/,"$1"+card):card+h};
+
+// --- 2. Sport : données de base
+const SPD=()=>{if(!state.sport)state.sport=spNorm(null);return state.sport};
+const spToday=()=>ymd(new Date());
+const SPI={
+ db:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.5 7v10M17.5 7v10M3.5 9.5v5M20.5 9.5v5M6.5 12h11"/></svg>',
+ run:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="14" cy="4.6" r="1.8"/><path d="M8.5 9.2l3.2-1.6 3 1.4 1.6 3 2.7.6M11.7 7.6l-1.8 5.2 3.4 2.6-1.2 5.1M9.9 12.8l-1.9 3.4H4.5"/></svg>',
+ mat:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="9" width="18" height="7" rx="3.5"/><path d="M7.5 9v7"/></svg>',
+ mix:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 18h16M6 18l2.5-9h7L18 18M9 5.5h6"/></svg>',
+ steps:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.5 3.5c1.7 0 2.6 1.8 2.6 4s-1 3.9-2.6 3.9S5 9.7 5 7.5s.8-4 2.5-4zM16.5 8.5c1.7 0 2.5 1.8 2.5 4s-.9 3.9-2.5 3.9-2.6-1.7-2.6-3.9.9-4 2.6-4zM5.6 14h3.8M14.6 19h3.8"/></svg>',
+ timer:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="13.5" r="7"/><path d="M12 10v3.5l2.3 1.8M10 3h4M18.5 6.5l1.2-1.2"/></svg>',
+ flame:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21c-3.6 0-6-2.4-6-5.6 0-3.5 3-5.3 3.4-9.4 2.6 1.6 4.2 3.7 4.4 6.2.8-.7 1.3-1.7 1.4-2.9C17.4 10.9 18 13 18 15.4 18 18.6 15.6 21 12 21z"/></svg>'};
+// exercices : consignes courtes, « side » = de chaque côté, « load » = avec haltères (charge retenue)
+const SPX={
+ squat_gob:{n:"Squat gobelet",load:1,how:["Haltère tenu à la verticale contre la poitrine, pieds largeur d'épaules.","Descends en poussant les fesses en arrière, dos droit, genoux dans l'axe des pieds.","Remonte en poussant dans les talons."]},
+ rdl:{n:"Soulevé de terre roumain",load:1,how:["Haltères devant les cuisses, genoux légèrement fléchis.","Recule les fesses en penchant le buste dos plat : les haltères glissent le long des jambes jusqu'à mi-tibia.","Remonte en serrant les fessiers, sans cambrer."]},
+ row:{n:"Rowing haltère un bras",load:1,side:1,how:["Une main et un genou sur une chaise ou un banc, dos plat.","Tire l'haltère vers la hanche, coude près du corps.","Redescends lentement, bras tendu."]},
+ press_floor:{n:"Développé couché au sol",load:1,how:["Allongé sur le dos, genoux pliés, haltères au-dessus de la poitrine.","Descends jusqu'à poser les coudes au sol, à 45° du buste.","Pousse vers le plafond."]},
+ ohp:{n:"Développé épaules",load:1,how:["Debout, haltères à hauteur des épaules, abdos serrés.","Pousse au-dessus de la tête sans cambrer.","Redescends contrôlé jusqu'aux épaules."]},
+ lunge:{n:"Fentes arrière",load:1,side:1,leg:1,how:["Haltères le long du corps, recule une jambe d'un grand pas.","Descends le genou arrière vers le sol, genou avant au-dessus de la cheville.","Remonte en poussant sur le pied avant, puis change de jambe."]},
+ thruster:{n:"Thruster",load:1,how:["Haltères aux épaules, descends en squat.","En remontant, pousse les haltères au-dessus de la tête d'un seul élan.","Ramène-les aux épaules et enchaîne."]},
+ bridge_w:{n:"Pont fessier lesté",load:1,how:["Sur le dos, genoux pliés, un haltère posé sur les hanches.","Monte les hanches en serrant les fessiers, pause 1 s en haut.","Redescends sans relâcher complètement."]},
+ curl:{n:"Curl biceps",load:1,how:["Debout, coudes collés au corps.","Monte les haltères sans balancer le buste.","Redescends lentement."]},
+ tri:{n:"Extension triceps",load:1,how:["Un haltère tenu à deux mains au-dessus de la tête.","Plie les coudes pour le descendre derrière la tête, coudes serrés.","Tends les bras sans cambrer."]},
+ farmer:{n:"Marche du fermier",load:1,how:["Un haltère lourd dans chaque main, épaules basses.","Marche à petits pas, dos droit, abdos serrés."]},
+ squat:{n:"Squat",how:["Pieds largeur d'épaules, bras tendus devant.","Descends comme pour t'asseoir, dos droit, talons au sol.","Remonte en poussant dans les talons."]},
+ pushup:{n:"Pompes",how:["Mains un peu plus larges que les épaules, corps aligné. Sur les genoux si besoin.","Descends la poitrine vers le sol, coudes à 45°.","Pousse en restant gainé."]},
+ plank:{n:"Gainage planche",how:["Avant-bras sous les épaules, corps aligné de la tête aux talons.","Serre abdos et fessiers, respire calmement."]},
+ deadbug:{n:"Dead bug",side:1,how:["Sur le dos, bras vers le plafond, genoux pliés à 90°.","Descends un bras et la jambe opposée en gardant le bas du dos collé au sol.","Reviens et change de côté."]},
+ mountain:{n:"Mountain climbers",how:["En position de pompe, bras tendus.","Ramène les genoux vers la poitrine en alternant, à rythme soutenu.","Garde les hanches basses."]},
+ jacks:{n:"Jumping jacks",how:["Saute en écartant jambes et bras, puis reviens.","Sans saut : un pas de côté en levant les bras, en alternant."]},
+ bridge:{n:"Pont fessier",how:["Sur le dos, genoux pliés, pieds à plat.","Monte les hanches en serrant les fessiers, pause 1 s.","Redescends lentement."]},
+ knees:{n:"Montées de genoux",how:["Sur place, monte les genoux vers les hanches en balançant les bras."]},
+ arms:{n:"Moulinets des bras",how:["Grands cercles avec les bras, vers l'avant puis vers l'arrière."]},
+ hinge:{n:"Flexions de hanches",how:["Mains sur les hanches, penche le buste dos plat en reculant les fesses, puis redresse-toi."]},
+ stretch:{n:"Étirements",how:["Cuisses, fessiers, mollets, épaules : 20 à 30 s par position, sans à-coups.","Respire lentement."]}};
+// séances : blocs « seq » (enchaînement chronométré), « sets » (séries + repos), « circ » (circuit en tours), « run » (tapis de course)
+const SP_WU={k:"seq",t:"Échauffement",m:3.5,it:[["knees","45s"],["arms","30s"],["hinge","30s"],["squat","40s"],["jacks","30s"]]};
+const SP_CD={k:"seq",t:"Étirements",m:2.3,it:[["stretch","120s"]]};
+const SPS=[
+ {id:"fba",t:"Full body haltères A",kind:"renfo",eq:["h"],lvl:"Débutant",d:"Tout le corps en 5 exercices, 3 séries. La base pour perdre du gras en gardant ses muscles.",
+  b:[SP_WU,{k:"sets",t:"Renforcement",m:4,sets:3,rest:60,it:[["squat_gob",12],["press_floor",10],["row",10],["lunge",8],["plank","30s"]]},SP_CD]},
+ {id:"fbb",t:"Full body haltères B",kind:"renfo",eq:["h"],lvl:"Débutant",d:"L'autre moitié du programme : arrière des jambes, épaules, pompes et gainage. À alterner avec A.",
+  b:[SP_WU,{k:"sets",t:"Renforcement",m:4,sets:3,rest:60,it:[["rdl",12],["ohp",10],["bridge_w",15],["pushup",8],["deadbug",8]]},SP_CD]},
+ {id:"low",t:"Bas du corps & fessiers",kind:"renfo",eq:["h"],lvl:"Débutant",d:"Cuisses et fessiers, les plus gros muscles du corps : ce sont eux qui dépensent le plus.",
+  b:[SP_WU,{k:"sets",t:"Renforcement",m:4,sets:3,rest:60,it:[["squat_gob",15],["rdl",12],["lunge",10],["bridge_w",15],["farmer","40s"]]},SP_CD]},
+ {id:"up",t:"Haut du corps & gainage",kind:"renfo",eq:["h"],lvl:"Débutant",d:"Dos, poitrine, épaules et bras, avec du gainage pour finir.",
+  b:[SP_WU,{k:"sets",t:"Renforcement",m:4,sets:3,rest:45,it:[["row",12],["press_floor",12],["ohp",10],["curl",12],["tri",12],["plank","40s"]]},SP_CD]},
+ {id:"circ",t:"Circuit brûle-graisses haltères",kind:"renfo",eq:["h"],lvl:"Intermédiaire",d:"4 tours enchaînés avec peu de repos : le cœur monte et la séance reste courte.",
+  b:[SP_WU,{k:"circ",t:"Circuit",m:5.5,rounds:4,rest:15,rrest:90,it:[["thruster",12],["row",10],["lunge",10],["mountain","30s"]]},SP_CD]},
+ {id:"sol",t:"Circuit au sol sans matériel",kind:"cardio",eq:[],lvl:"Débutant",d:"Juste un tapis de sol : 6 exercices en 3 tours, pour les jours sans haltères.",
+  b:[SP_WU,{k:"circ",t:"Circuit",m:5,rounds:3,rest:20,rrest:60,it:[["squat",15],["pushup",8],["bridge",15],["mountain","30s"],["plank","30s"],["jacks","40s"]]},SP_CD]},
+ {id:"incl",t:"Marche inclinée",kind:"cardio",eq:["t"],lvl:"Débutant",d:"Marche en côte de plus en plus raide : on dépense beaucoup sans courir et sans abîmer les genoux.",
+  b:[{k:"run",t:"Tapis de course",it:[["Échauffement",300,4.5,1],["Marche inclinée",300,5,4],["Marche inclinée",300,5,6],["Marche inclinée",600,5,8],["Retour au calme",300,4.5,1]]}]},
+ {id:"i1230",t:"Marche inclinée 12-3-30",kind:"cardio",eq:["t"],lvl:"Intermédiaire",d:"Le format connu : pente 12 %, 4,8 km/h (3 mph) pendant 30 min. Baisse la pente si tu ne peux plus parler.",
+  b:[{k:"run",t:"Tapis de course",it:[["Échauffement",180,4.5,2],["12-3-30",1800,4.8,12],["Retour au calme",180,4.5,1]]}]},
+ {id:"frac",t:"Fractionné marche / course",kind:"cardio",eq:["t"],lvl:"Débutant",d:"8 fois 1 min de course légère et 2 min de marche : idéal pour se mettre à courir.",
+  b:[{k:"run",t:"Tapis de course",it:[["Échauffement",300,5,1],{x:8,it:[["Course",60,8,1],["Marche",120,5.5,1]]},["Retour au calme",240,4.5,0]]}]},
+ {id:"frac2",t:"Fractionné course",kind:"cardio",eq:["t"],lvl:"Intermédiaire",d:"6 fois 2 min rapides et 1 min 30 de récupération.",
+  b:[{k:"run",t:"Tapis de course",it:[["Échauffement",300,5.5,1],{x:6,it:[["Course rapide",120,9.5,1],["Récupération",90,5.5,1]]},["Retour au calme",300,5,0]]}]},
+ {id:"combo",t:"Tapis + haltères express",kind:"mixte",eq:["t","h"],lvl:"Débutant",d:"20 min de marche inclinée puis un circuit haltères en 3 tours.",
+  b:[{k:"run",t:"Tapis de course",it:[["Échauffement",300,5,2],["Marche inclinée",900,5,7]]},{k:"circ",t:"Circuit haltères",m:5,rounds:3,rest:20,rrest:60,it:[["squat_gob",12],["row",10],["press_floor",10],["deadbug",8]]},SP_CD]}];
+const SPS_MAP=Object.fromEntries(SPS.map(s=>[s.id,s]));
+// liste des étapes d'une séance
+function spSteps(S){const out=[];const rr=x=>typeof x==="string"?{sec:parseInt(x,10)}:{r:x};
+ S.b.forEach((B,bi)=>{
+  if(B.k==="seq")B.it.forEach(([e,x])=>out.push({k:"work",e,sec:parseInt(x,10),auto:1,bi,m:B.m}));
+  else if(B.k==="sets")B.it.forEach(([e,x],ei)=>{for(let s=1;s<=B.sets;s++){out.push({k:"work",e,...rr(x),set:s,sets:B.sets,ex:ei+1,exn:B.it.length,bi,m:B.m});out.push({k:"rest",sec:B.rest,bi,m:B.m})}});
+  else if(B.k==="circ")for(let r=1;r<=B.rounds;r++)B.it.forEach(([e,x],ei)=>{out.push({k:"work",e,...rr(x),round:r,rounds:B.rounds,ex:ei+1,exn:B.it.length,bi,m:B.m});const last=ei===B.it.length-1;out.push({k:"rest",sec:last?B.rrest:B.rest,big:last,bi,m:B.m})});
+  else if(B.k==="run")B.it.forEach(x=>{if(x.x){for(let i=1;i<=x.x;i++)x.it.forEach(([t,sec,v,g])=>out.push({k:"run",t,sec,v,g,ri:i,rn:x.x,bi}))}else{const[t,sec,v,g]=x;out.push({k:"run",t,sec,v,g,bi})}})});
+ return out.filter((st,i)=>!(st.k==="rest"&&(!out[i+1]||out[i+1].bi!==st.bi)))}
+function spKg(p){const P=(state.people||[])[p]||{};const w=P.w||[];const v=w.length?+w[w.length-1][1]:(P.prof&&+P.prof.kg);return v>30&&v<300?v:70}
+function spStride(p){const pr=((state.people||[])[p]||{}).prof;return pr&&+pr.cm>120?+pr.cm*(pr.sex==="h"?0.415:0.413)/100:0.72}
+// dépense : tapis = équations ACSM (marche / course, avec la pente) ; renfo = MET × poids
+function spRate(st,kg){if(st.k==="run"){const S=st.v*1000/60,G=(st.g||0)/100,vo=st.v<7?0.1*S+1.8*S*G+3.5:0.2*S+0.9*S*G+3.5;return vo*kg/1000*5}return(st.m||4)*3.5*kg/200}
+function spDur(st){if(st.k==="work"&&!st.sec)return st.r*3*(SPX[st.e]&&SPX[st.e].side?2:1)+6;return st.sec||0}
+function spEst(S,kg){let sec=0,kc=0;for(const st of spSteps(S)){const d=spDur(st);sec+=d;kc+=d/60*spRate(st,kg)}return{min:Math.round(sec/60),kcal:Math.round(kc/5)*5}}
+const spAvail=S=>S.eq.every(k=>SPD().eq[k]);
+const spIco=S=>S.kind==="mixte"?SPI.mix:S.eq.includes("t")?SPI.run:S.eq.includes("h")?SPI.db:SPI.mat;
+const spNum=v=>String(v).replace(".",",");
+function spRepTxt(st){const E=SPX[st.e]||{};if(st.sec)return`${st.sec} s`;return`${st.r} ${E.side?(E.leg?"par jambe":"par côté"):"répétitions"}`}
+function spClock(s){s=Math.max(0,Math.round(s));const m=Math.floor(s/60),r=s%60;return m+":"+String(r).padStart(2,"0")}
+function spDurTxt(sec){if(sec<60)return sec+" s";const m=Math.floor(sec/60),r=sec%60;return r?`${m} min ${r}`:`${m} min`}
+
+// --- 3. Pas : saisie, objectif, graphique 7 jours, envoi automatique depuis l'iPhone
+const SPIN_K=LS+"-spin";
+const spInLast=()=>{try{return JSON.parse(localStorage.getItem(SPIN_K)||"{}")||{}}catch(e){return{}}};
+const isIOS=()=>/iPhone|iPad|iPod/.test(navigator.userAgent)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);
+function spLast7(){const t=new Date();t.setHours(12,0,0,0);const out=[];for(let i=6;i>=0;i--){const d=new Date(t);d.setDate(t.getDate()-i);out.push(ymd(d))}return out}
+const SP_INI=["D","L","M","M","J","V","S"];
+function spStepsHtml(p){const sp=SPD(),S=sp.steps[p]||{},goal=sp.goal[p]||8000,today=spToday(),day=ui.spDay||today,n=S[day],kg=spKg(p);
+ const v=n||0,pct=Math.min(1,v/goal),km=v*spStride(p)/1000,kc=km*0.5*kg,days=spLast7(),mx=Math.max(goal,...days.map(d=>S[d]||0)),hit=days.filter(d=>(S[d]||0)>=goal).length;
+ const C=2*Math.PI*52,last=spInLast()[p],lab=day===today?"aujourd'hui":relDay(day);
+ const goals=[4000,5000,6000,7000,8000,9000,10000,12000,15000];if(!goals.includes(goal))goals.push(goal),goals.sort((a,b)=>a-b);
+ return`<div class="sv-card sp-card" id="spSteps"><div class="sv-h"><h3>${SPI.steps}Pas</h3><label class="sp-sel"><span>Objectif</span><select data-spgoal aria-label="Objectif de pas par jour">${goals.map(g=>`<option value="${g}"${g===goal?" selected":""}>${fmtInt(g)}</option>`).join("")}</select></label></div>
+ <div class="sp-st"><div class="sp-ring" role="img" aria-label="${fmtInt(v)} pas sur ${fmtInt(goal)} ${lab}"><svg viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="52" class="sp-tr"/><circle cx="60" cy="60" r="52" class="sp-pr${pct>=1?" ok":""}" style="stroke-dasharray:${C.toFixed(1)};stroke-dashoffset:${(C*(1-pct)).toFixed(1)}"/></svg>
+  <span class="sp-rv"><b>${n==null?"—":fmtInt(v)}</b><small>sur ${fmtInt(goal)}</small></span></div>
+  <div class="sp-side"><p class="sp-day">${lab[0].toUpperCase()+lab.slice(1)}</p><p><b>${spNum(km.toFixed(1))} km</b> à pied</p><p><b>≈ ${fmtInt(Math.round(kc/5)*5)} kcal</b> dépensées en marchant</p><p class="sp-mut">Objectif atteint ${hit} jour${hit>1?"s":""} sur 7</p></div></div>
+ <div class="sp-bars" role="group" aria-label="Pas des 7 derniers jours" style="--g:${Math.min(100,goal/mx*100).toFixed(1)}%">${days.map(d=>{const x=S[d]||0,h=Math.round(x/mx*100);const dt=dateFromYmd(d);
+  return`<button type="button" class="sp-bar${x>=goal?" ok":""}${d===day?" on":""}" data-spday="${d}" aria-pressed="${d===day}" aria-label="${fmtDate(dt,{weekday:"long",day:"numeric"})} : ${S[d]==null?"pas de donnée":fmtInt(x)+" pas"}"><span class="sp-bv">${S[d]==null?"":x>=1000?spNum((x/1000).toFixed(x>=10000?0:1))+"k":x}</span><span class="sp-bt"><i style="height:${Math.max(x?4:0,h)}%"></i></span><span class="sp-bd">${SP_INI[dt.getDay()]}</span></button>`}).join("")}</div>
+ <form class="pf-row sp-form" id="spStepForm" autocomplete="off"><label class="sp-lab" for="spStepIn">Pas ${esc(lab)}</label><input class="pn-in" id="spStepIn" name="n" inputmode="numeric" pattern="[0-9 ]*" maxlength="7" placeholder="ex : 7500" value="${n!=null?n:""}"><button type="submit" class="btn">Enregistrer</button></form>
+ <div class="sp-acts">${isIOS()&&sp.inbox[p]?`<button type="button" class="btn" data-spact="ios-run">${SPI.steps}Envoyer mes pas</button>`:""}<button type="button" class="btn ghost" data-spact="steps-setup">Pas automatiques${sp.inbox[p]?" ✓":"…"}</button></div>
+ ${last&&last.at?`<p class="sp-mut sp-in">Dernier envoi de l'iPhone : ${fmtInt(last.n)} pas, ${relDay(last.d)} à ${new Date(last.at).toLocaleTimeString("fr-FR",{hour:"2-digit",minute:"2-digit"})}</p>`:""}</div>`}
+// boîte de réception : une ligne Supabase par personne, écrite par le Raccourci iPhone, lue par l'appli
+const SB_H=c=>({apikey:NS.sbKey,Authorization:"Bearer "+NS.sbKey,"x-foyer":c,"Content-Type":"application/json"});
+function spHex(){const a=new Uint8Array(16);crypto.getRandomValues(a);return Array.from(a,b=>("0"+b.toString(16)).slice(-2)).join("")}
+async function spInboxEnsure(p){if(!SYNC_ON||!sb.code)return null;const sp=SPD();let c=sp.inbox[p];
+ if(!c){c=spHex();sp.inbox={...sp.inbox,[p]:c};commit()}
+ try{await fetch(`${NS.sbUrl}/rest/v1/planner`,{method:"POST",headers:{...SB_H(c),Prefer:"resolution=ignore-duplicates,return=minimal"},body:JSON.stringify({id:c,data:{boite:"pas"},updated_at:new Date().toISOString()})})}catch(e){}
+ return c}
+const SP_MON={janv:1,jan:1,fevr:2,fev:2,feb:2,mars:3,mar:3,avr:4,apr:4,mai:5,may:5,juin:6,jun:6,juil:7,jul:7,aout:8,aug:8,sept:9,sep:9,oct:10,nov:11,dec:12};
+const SP_MK=Object.keys(SP_MON).sort((a,b)=>b.length-a.length),spMon=w=>{const k=SP_MK.find(k=>w.startsWith(k));return k?SP_MON[k]:0};
+function spParseDate(s){if(s==null)return null;s=String(s).trim();let m=s.match(/^(\d{4})-(\d{2})-(\d{2})/);if(m)return m[1]+m[2]+m[3];
+ m=s.match(/(\d{1,2})[\/.](\d{1,2})[\/.](\d{4})/);if(m)return m[3]+m[2].padStart(2,"0")+m[1].padStart(2,"0");
+ const t=norm(s);m=t.match(/(\d{1,2})(?:er)?\s+([a-z]{3,9})\.?\s+(\d{4})/);if(m&&spMon(m[2]))return m[3]+String(spMon(m[2])).padStart(2,"0")+m[1].padStart(2,"0");
+ m=t.match(/([a-z]{3,9})\.?\s+(\d{1,2}),?\s+(\d{4})/);if(m&&spMon(m[1]))return m[3]+String(spMon(m[1])).padStart(2,"0")+m[2].padStart(2,"0");return null}
+let spInT=0;
+async function spInboxPull(){if(!SYNC_ON||!sb.code)return;const sp=SPD(),ib=sp.inbox||{};if(!ib[0]&&!ib[1])return;if(Date.now()-spInT<8000)return;spInT=Date.now();
+ let ch=false;const today=spToday(),L=spInLast();
+ for(const p of [0,1]){const c=ib[p];if(!c)continue;
+  try{const r=await fetch(`${NS.sbUrl}/rest/v1/planner?id=eq.${c}&select=data`,{headers:SB_H(c),cache:"no-store"});if(!r.ok)continue;const rows=await r.json();const d=rows&&rows[0]&&rows[0].data;if(!d||d.pas==null)continue;
+   const n=Math.round(+String(d.pas).replace(/[^\d.]/g,"")),day=spParseDate(d.d);if(!(n>=0&&n<=120000)||!day||day>today||dDiff(day,today)>14)continue;
+   if(!L[p]||L[p].n!==n||L[p].d!==day)L[p]={n,d:day,at:Date.now()};
+   const cur=sp.steps[p][day];if(cur==null||n>cur){sp.steps[p]={...sp.steps[p],[day]:n};ch=true}}catch(e){}}
+ try{localStorage.setItem(SPIN_K,JSON.stringify(L))}catch(e){}
+ if(ch){commit();renderSport();try{renderSuivi()}catch(e){}}else if(ui.panel==="sport-steps")renderPanel()}
+document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible")setTimeout(spInboxPull,600)});
+setInterval(()=>{if(document.visibilityState==="visible"&&(ui.tab==="sport"||ui.tab==="suivi"))spInboxPull()},90000);
+setTimeout(spInboxPull,2500);
+// guide d'installation du Raccourci
+function panelSpSteps(){const p=ui.spP||0,sp=SPD(),c=sp.inbox[p],nm=pName(p),last=spInLast()[p];
+ const cp=(id,lab,val)=>`<div class="sp-cp"><label for="${id}">${lab}</label><div class="pf-row"><input class="pn-in" id="${id}" readonly value="${esc(val)}"><button type="button" class="btn" data-spcopy="${id}">Copier</button></div></div>`;
+ let body;
+ if(!SYNC_ON)body=`<div class="pn-card"><p>L'envoi automatique des pas marche sur le site Sano en ligne (avec la synchro). Ici, saisis tes pas à la main dans la carte Pas.</p></div>`;
+ else if(!sb.code)body=`<div class="pn-card"><p>Active d'abord la synchro du foyer (Réglages → Synchroniser vos téléphones) : les pas passent par elle.</p><div class="pf-actions"><button type="button" class="btn primary" data-spact="sync">Ouvrir les réglages</button></div></div>`;
+ else if(!c)body=`<div class="pn-card"><p>Sano va créer une adresse privée pour recevoir les pas de <b>${nm}</b>.</p><div class="pf-actions"><button type="button" class="btn primary" data-spin="1">Préparer l'envoi des pas</button></div></div>`;
+ else body=`<div class="pn-card"><h3>1. Crée le raccourci</h3><ol class="sp-ol">
+  <li>App <b>Raccourcis</b> → <b>+</b> → nomme-le <b>Sano pas</b> (exactement).</li>
+  <li>Action <b>Rechercher des échantillons de santé</b> : type <b>Nombre de pas</b>, ajoute le filtre <b>Date de début</b> <b>est aujourd'hui</b>, Regrouper par <b>Jour</b>.</li>
+  <li>Action <b>Calculer les statistiques</b> → <b>Somme</b>.</li>
+  <li>Action <b>Obtenir le contenu de l'URL</b> : colle l'adresse ci-dessous. Touche la flèche pour les options : Méthode <b>PATCH</b> ; En-têtes : <b>apikey</b> et <b>x-foyer</b> (valeurs ci-dessous) ; Corps de la requête <b>JSON</b> : ajoute un champ <b>Dictionnaire</b> nommé <b>data</b>, et dedans <b>pas</b> (Nombre) = <i>Statistiques</i>, <b>d</b> (Texte) = <i>Date actuelle</i>.</li>
+  <li>Lance-le une fois et autorise l'accès à Santé.</li></ol>
+  ${cp("spCpUrl","Adresse (URL)",`${NS.sbUrl}/rest/v1/planner?id=eq.${c}`)}${cp("spCpKey","En-tête apikey",NS.sbKey)}${cp("spCpFoy","En-tête x-foyer",c)}
+  <p class="pn-help">Ces valeurs sont propres à ${nm} : garde-les privées.</p></div>
+ <div class="pn-card"><h3>2. Rends-le automatique</h3><ol class="sp-ol"><li>Raccourcis → <b>Automatisation</b> → <b>+</b> → <b>App</b>.</li><li>Choisis une app que tu ouvres chaque soir (Messages, WhatsApp…) → <b>Est ouverte</b> → <b>Exécuter immédiatement</b>.</li><li>Choisis le raccourci <b>Sano pas</b>.</li></ol>
+  <p class="pn-help">L'iPhone ne lit les données Santé que déverrouillé : c'est pour ça qu'on déclenche à l'ouverture d'une app plutôt qu'à heure fixe. Tu peux aussi le lancer depuis Sano avec « Envoyer mes pas ».</p></div>
+ <div class="pn-card"><h3>3. Vérifie</h3><p>${last&&last.at?`✓ Dernier envoi reçu : <b>${fmtInt(last.n)} pas</b>, ${relDay(last.d)} à ${new Date(last.at).toLocaleTimeString("fr-FR",{hour:"2-digit",minute:"2-digit"})}.`:"Rien reçu pour l'instant."}</p>
+  <div class="pf-actions">${isIOS()?`<button type="button" class="btn primary" data-spact="ios-run">Lancer « Sano pas »</button>`:""}<button type="button" class="btn" data-spact="in-check">Vérifier maintenant</button></div></div>`;
+ return`<h2 class="pn-title">Pas automatiques</h2><p class="pn-help">Pour <b>${nm}</b>. Un site web ne peut pas lire l'app Santé : un raccourci Apple lui envoie le total du jour. Deux minutes à installer, une seule fois, sur l'iPhone de ${nm}.</p>${body}
+ <div class="pn-card"><h3>Android</h3><p class="pn-help">Android ne laisse aucun site lire les pas (Santé connectée / Google Fit). Saisis le total dans la carte Pas : 5 secondes. Une appli d'automatisation qui sait envoyer une requête web peut utiliser la même adresse.</p></div>`}
+
+// --- 4. Séance du jour, liste des séances, semaine et historique
+function spSuggest(p){const sp=SPD(),H=sp.hist.filter(h=>h.p===p).sort((a,b)=>b.at-a.at),ok=SPS.filter(spAvail);if(!ok.length)return null;
+ const last=H[0],lastS=last&&SPS_MAP[last.s],want=!lastS?"renfo":lastS.kind==="renfo"?"cardio":"renfo";
+ const lastAt=id=>{const h=H.find(x=>x.s===id);return h?h.at:0},beg=H.length<6;
+ const tr=s=>want==="cardio"&&sp.eq.t&&!s.eq.includes("t")?1:0;
+ const ord=L=>L.sort((a,b)=>(beg?(a.lvl==="Débutant"?0:1)-(b.lvl==="Débutant"?0:1):0)||tr(a)-tr(b)||lastAt(a.id)-lastAt(b.id));
+ const A=ord(ok.filter(s=>s.kind===want||(want==="cardio"&&s.kind==="mixte"))),B=ord(ok.filter(s=>!A.includes(s))),L=A.concat(B);
+ const why=!lastS?"Pour commencer : une séance complète et accessible.":`Dernière séance : ${lastS.kind==="renfo"?"renforcement":"cardio"} (${relDay(last.d)}). ${want==="cardio"?"Place au cardio.":"Place au renforcement."}`;
+ return{S:L[(ui.spAlt||0)%L.length],why,n:L.length}}
+function spResumeHtml(){if(!SR||SR.ph!=="run")return"";return`<div class="sv-card sp-card sp-resume"><p class="sp-kick">Séance en pause</p><h3>${esc(SR.S.t)}</h3><p class="sp-mut">${spClock(spE())} écoulées · étape ${SR.i+1} sur ${SR.L.length}</p><div class="pf-actions"><button type="button" class="btn primary" data-spact="resume">Reprendre la séance</button></div></div>`}
+function spTodayHtml(p){const g=spSuggest(p),sp=SPD(),today=spToday(),done=sp.hist.filter(h=>h.p===p&&h.d===today);
+ if(!g)return`<div class="sv-card sp-card" id="spToday"><h3>Séance du jour</h3><p class="pn-help">Coche ton matériel dans « Séances » pour recevoir une proposition.</p></div>`;
+ const e=spEst(g.S,spKg(p));
+ return`<div class="sv-card sp-card sp-today" id="spToday"><p class="sp-kick">${done.length?`✓ ${done.length} séance${done.length>1?"s":""} faite${done.length>1?"s":""} aujourd'hui · encore une ?`:`Séance du jour pour ${pName(p)}`}</p>
+ <div class="sp-td"><span class="sp-ico" aria-hidden="true">${spIco(g.S)}</span><div><h3>${esc(g.S.t)}</h3><p class="sp-meta">${g.S.lvl} · ≈ ${e.min} min · ≈ ${fmtInt(e.kcal)} kcal</p></div></div>
+ <p class="sp-why">${esc(g.why)}</p><div class="pf-actions"><button type="button" class="btn primary" data-spsess="${g.S.id}">Commencer</button>${g.n>1?`<button type="button" class="btn" data-spact="other">Autre idée</button>`:""}</div></div>`}
+function spTimerCard(){return`<div class="sv-card sp-card" id="spTimer"><div class="sv-h"><h3>${SPI.timer}Chrono repos</h3></div><p class="pn-help">Pour tes propres séances : lance le repos entre deux séries, il sonne à la fin.</p>
+ <div class="chips sp-chips">${[30,45,60,90,120,180].map(s=>`<button type="button" class="chip" data-sptm="${s}">${spDurTxt(s)}</button>`).join("")}</div></div>`}
+function spListHtml(p){const sp=SPD(),f=ui.spF||"all",kg=spKg(p);
+ const L=SPS.filter(s=>f==="all"||s.kind===f||s.kind==="mixte"),ok=L.filter(spAvail),hid=L.length-ok.length;
+ return`<div class="sv-card sp-card" id="spList"><div class="sv-h"><h3>Séances</h3></div>
+ <div class="sp-eq" role="group" aria-label="Mon matériel"><span class="sp-mut">Mon matériel :</span>${[["h","Haltères",SPI.db],["t","Tapis de course",SPI.run]].map(([k,l,ic])=>`<button type="button" class="chip sp-eqb" data-speq="${k}" aria-pressed="${!!sp.eq[k]}">${ic}${l}</button>`).join("")}<span class="chip sp-eqb sp-eqfix" title="Toujours disponible">${SPI.mat}Tapis de sol</span></div>
+ <div class="seg sp-f" role="group" aria-label="Type de séance">${[["all","Toutes"],["renfo","Renforcement"],["cardio","Cardio"]].map(([k,l])=>`<button type="button" data-spf="${k}" aria-pressed="${f===k}">${l}</button>`).join("")}</div>
+ <div class="sp-grid">${ok.map(S=>{const e=spEst(S,kg);return`<button type="button" class="sp-sess" data-spsess="${S.id}"><span class="sp-ico" aria-hidden="true">${spIco(S)}</span><span class="sp-sx"><b>${esc(S.t)}</b><small class="sp-meta">${S.lvl} · ≈ ${e.min} min · ≈ ${fmtInt(e.kcal)} kcal</small><small class="sp-d">${esc(S.d)}</small></span></button>`}).join("")}</div>
+ ${hid?`<p class="pn-help">${hid} séance${hid>1?"s":""} masquée${hid>1?"s":""} : coche le matériel correspondant.</p>`:""}</div>`}
+function spWeekKeys(){const t=new Date();t.setHours(12,0,0,0);const off=(t.getDay()+6)%7,out=[];for(let i=0;i<7;i++){const d=new Date(t);d.setDate(t.getDate()-off+i);out.push(ymd(d))}return out}
+function spWeekHtml(p){const sp=SPD(),W=spWeekKeys(),today=spToday(),H=sp.hist.filter(h=>h.p===p),HW=H.filter(h=>W.includes(h.d)),tgt=sp.wk[p]||3;
+ const min=HW.reduce((a,h)=>a+h.min,0),kc=HW.reduce((a,h)=>a+h.kcal,0),S=sp.steps[p]||{},sd=W.filter(d=>d<=today&&S[d]!=null),avg=sd.length?Math.round(sd.reduce((a,d)=>a+S[d],0)/sd.length):null;
+ const rec=H.slice().sort((a,b)=>b.at-a.at).slice(0,8);
+ return`<div class="sv-card sp-card" id="spWeek"><div class="sv-h"><h3>Cette semaine</h3><label class="sp-sel"><span>Objectif</span><select data-spwk aria-label="Séances par semaine">${[1,2,3,4,5,6].map(n=>`<option value="${n}"${n===tgt?" selected":""}>${n} séance${n>1?"s":""}</option>`).join("")}</select></label></div>
+ <div class="sp-wd">${W.map(d=>{const k=HW.filter(h=>h.d===d).length,dt=dateFromYmd(d);return`<span class="sp-wdd${k?" on":""}${d===today?" today":""}" aria-label="${fmtDate(dt,{weekday:"long"})} : ${k?k+" séance"+(k>1?"s":""):"rien"}"><i>${k?"✓":""}</i><small>${SP_INI[dt.getDay()]}</small></span>`}).join("")}</div>
+ <p class="sp-wsum"><b>${HW.length} / ${tgt}</b> séance${tgt>1?"s":""} · ${min} min · ≈ ${fmtInt(kc)} kcal${avg!=null?` · ${fmtInt(avg)} pas/jour en moyenne`:""}</p>
+ <p class="pn-help">Repère OMS : 150 à 300 min d'activité modérée par semaine, dont 2 séances de renforcement.</p>
+ ${rec.length?`<h4 class="sp-h4">Historique</h4><ul class="sp-hist">${rec.map(h=>`<li><span><b>${esc(h.t)}</b><small>${fmtDate(dateFromYmd(h.d),{weekday:"short",day:"numeric",month:"short"})} · ${h.min} min · ≈ ${fmtInt(h.kcal)} kcal</small></span><button type="button" class="sp-del" data-sphdel="${h.i}" aria-label="Supprimer la séance ${esc(h.t)}">×</button></li>`).join("")}</ul>`:`<p class="sp-mut">Les séances terminées apparaîtront ici.</p>`}</div>`}
+function renderSport(){const root=document.getElementById("sport");if(!root)return;const p=ui.spP||0;
+ const top=`<div class="sv-top"><div class="seg" role="group" aria-label="Personne">${[0,1].map(i=>`<button type="button" data-spp="${i}" aria-pressed="${i===p}">${pName(i)}</button>`).join("")}</div></div>`;
+ root.innerHTML=meCard()+top+spResumeHtml()+spStepsHtml(p)+spTodayHtml(p)+spTimerCard()+spListHtml(p)+spWeekHtml(p);try{syncJumpVis()}catch(e){}}
+renderAll=(f=>function(){f.apply(this,arguments);try{renderSport()}catch(e){}})(renderAll);
+// Suivi : bandeau d'activité du jour, choix du profil
+function spStripHtml(p,d){const sp=SPD(),n=(sp.steps[p]||{})[d],H=sp.hist.filter(h=>h.p===p&&h.d===d),min=H.reduce((a,h)=>a+h.min,0),kg=spKg(p);
+ const kc=H.reduce((a,h)=>a+h.kcal,0)+(n?n*spStride(p)/1000*0.5*kg:0);
+ return`<button type="button" class="sp-strip" data-spgo="1"><span>${SPI.steps}<b>${n!=null?fmtInt(n):"—"}</b> pas</span><span>${SPI.db}<b>${min}</b> min de sport</span><span>${SPI.flame}≈ <b>${fmtInt(Math.round(kc/5)*5)}</b> kcal</span><span class="sp-go">Sport ›</span></button>`}
+const renderSuiviV25=renderSuivi;
+renderSuivi=function(){const r=renderSuiviV25.apply(this,arguments);try{const root=document.getElementById("suivi");if(root){const mc=meCard();if(mc&&!root.querySelector(".me-card"))root.insertAdjacentHTML("afterbegin",mc);
+ const top=root.querySelector(".sv-top");if(top&&!root.querySelector(".sp-strip"))top.insertAdjacentHTML("afterend",spStripHtml(ui.ntP||0,ui.ntDay||DAYS[0][0]))}}catch(e){}return r};
+
+// --- 5. Lecteur de séance : séries, repos chronométré, bips, voix, écran allumé
+let SR=null,TM=null,SP_AC=null,spWL=null,spTH=0;const SP_C=2*Math.PI*54;
+const SPA_K=LS+"-spaudio";let SPA={snd:true,voice:true};try{const v=JSON.parse(localStorage.getItem(SPA_K)||"null");if(v)SPA={snd:v.snd!==false,voice:v.voice!==false}}catch(e){}
+function spAudioUnlock(){try{SP_AC=SP_AC||new (window.AudioContext||window.webkitAudioContext)();if(SP_AC.state==="suspended")SP_AC.resume();const b=SP_AC.createBuffer(1,1,22050),s=SP_AC.createBufferSource();s.buffer=b;s.connect(SP_AC.destination);s.start(0)}catch(e){}}
+function spBeep(f,d){if(!SPA.snd||!SP_AC)return;try{const t=SP_AC.currentTime,o=SP_AC.createOscillator(),g=SP_AC.createGain();o.type="sine";o.frequency.value=f;o.connect(g);g.connect(SP_AC.destination);
+ g.gain.setValueAtTime(0.0001,t);g.gain.exponentialRampToValueAtTime(0.5,t+0.02);g.gain.exponentialRampToValueAtTime(0.0001,t+d);o.start(t);o.stop(t+d+0.05)}catch(e){}}
+function spVib(p){try{navigator.vibrate&&navigator.vibrate(p)}catch(e){}}
+let spVoice=null;function spSay(t){if(!SPA.voice||!("speechSynthesis" in window))return;try{const S=speechSynthesis;S.cancel();const u=new SpeechSynthesisUtterance(t);u.lang="fr-FR";u.rate=1.05;
+ if(!spVoice)spVoice=(S.getVoices()||[]).find(v=>/^fr(-|_|$)/i.test(v.lang))||null;if(spVoice)u.voice=spVoice;S.speak(u)}catch(e){}}
+async function spWake(on){try{if(on&&navigator.wakeLock&&!spWL){spWL=await navigator.wakeLock.request("screen");spWL.addEventListener&&spWL.addEventListener("release",()=>{spWL=null})}if(!on&&spWL){const w=spWL;spWL=null;await w.release()}}catch(e){spWL=null}}
+document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible"&&((SR&&SR.ph==="run"&&!SR.paused&&ui.panel==="sport-run")||(TM&&ui.panel==="sport-timer")))spWake(true)});
+function spE(){if(!SR||!SR.t0)return 0;const now=SR.paused?SR.pAt:Date.now();return Math.max(0,(now-SR.t0-SR.pTot)/1000)}
+function spOpen(id){const S=SPS_MAP[id];if(!S)return;if(SR&&SR.ph==="run"&&SR.S.id!==id&&!confirm("Une séance est en pause : l'abandonner pour commencer celle-ci ?"))return;
+ if(!SR||SR.ph!=="run"||SR.S.id!==id){const p=ui.spP||0;SR={S,p,kg:spKg(p),L:spSteps(S),i:0,ph:"intro",t0:0,pTot:0,paused:false,pAt:0,sE:0,endE:null,lead:0,go:false,b3:"",kcal:0,n:0,km:0,ws:{},sheet:false}}
+ openPanel("sport-run")}
+function spGo(){spAudioUnlock();SR.ph="run";SR.t0=Date.now();SR.pTot=0;SR.paused=false;spWake(true);spBegin()}
+function spBegin(){const st=SR.L[SR.i];SR.sE=spE();SR.b3="";SR.go=false;SR.lead=(st.k==="work"&&st.sec)||(SR.i===0&&st.k==="run")?3:0;
+ SR.endE=st.sec?SR.sE+SR.lead+st.sec:null;spAnnounce(st);renderPanel();try{window.scrollTo(0,0)}catch(e){}}
+function spAnnounce(st){const E=SPX[st.e]||{};let t="";
+ if(st.k==="work")t=(st.round?`Tour ${st.round} sur ${st.rounds}. `:st.set?`Série ${st.set} sur ${st.sets}. `:"")+E.n+". "+(st.sec?`${st.sec} secondes.`:`${st.r} ${E.side?(E.leg?"par jambe":"par côté"):"répétitions"}.`);
+ else if(st.k==="rest"){const nx=SR.L[SR.i+1];t=`Repos, ${st.sec} secondes.`+(nx&&nx.k==="work"?` Ensuite : ${(SPX[nx.e]||{}).n}.`:"")}
+ else if(st.k==="run")t=`${st.t}. ${spNum(st.v)} kilomètres heure, pente ${spNum(st.g)} pour cent, pendant ${st.sec>=60?Math.round(st.sec/60)+" minute"+(st.sec>=120?"s":""):st.sec+" secondes"}.`;
+ spSay(t)}
+function spAcc(){const st=SR.L[SR.i];if(!st)return;const plan=spDur(st)+(SR.lead||0);const d=Math.max(0,Math.min(spE()-SR.sE,Math.max(plan*3,180)));
+ SR.kcal+=d/60*spRate(st,SR.kg);if(st.k==="work"&&!st.auto)SR.n++;if(st.k==="run")SR.km+=st.v*d/3600}
+function spAdvance(){spAcc();SR.i++;if(SR.i>=SR.L.length)spFinish(true);else spBegin()}
+function spPause(){if(!SR||SR.paused||SR.ph!=="run")return;SR.paused=true;SR.pAt=Date.now();spWake(false);try{speechSynthesis.cancel()}catch(e){}}
+function spResume(){if(!SR||!SR.paused)return;SR.pTot+=Date.now()-SR.pAt;SR.paused=false;SR.sheet=false;spAudioUnlock();spWake(true)}
+function spFinish(save){const S=SR.S,p=SR.p,min=Math.max(1,Math.round(spE()/60));if(SR.paused){SR.pTot+=Date.now()-SR.pAt;SR.paused=false}
+ SR.ph="done";SR.sheet=false;SR.res={min,kcal:Math.round(SR.kcal),n:SR.n,km:SR.km};
+ if(save&&(SR.n>0||spE()>=120)){const sp=SPD();sp.hist=[...sp.hist,{i:Math.random().toString(36).slice(2,10).padEnd(6,"0"),p,d:spToday(),s:S.id,t:S.t,min,kcal:SR.res.kcal,n:SR.n,at:Date.now()}].slice(-400);
+  if(Object.keys(SR.ws).length){const W={...(sp.w[p]||{}),...SR.ws};sp.w={...sp.w,[p]:W}}commit();SR.saved=true;spSay("Séance terminée. Bravo !");try{npCelebrate(false)}catch(e){}}
+ spWake(false);renderPanel();renderSport();try{renderSuivi()}catch(e){}}
+function spWeight(e){const v=SR.ws[e]!=null?SR.ws[e]:((SPD().w[SR.p]||{})[e]);return v!=null?+v:null}
+function spNextTxt(){const nx=SR.L[SR.i+1];if(!nx)return"Dernière étape !";const E=SPX[nx.e]||{};
+ if(nx.k==="rest")return`Ensuite : repos ${spDurTxt(nx.sec)}`;if(nx.k==="run")return`Ensuite : ${nx.t} · ${spNum(nx.v)} km/h · pente ${spNum(nx.g)} % · ${spDurTxt(nx.sec)}`;
+ const w=E.load?spWeight(nx.e):null;return`Ensuite : ${E.n}${nx.set?` · série ${nx.set}/${nx.sets}`:nx.round?` · tour ${nx.round}/${nx.rounds}`:""} · ${spRepTxt(nx)}${w?` · ${spNum(w)} kg`:""}`}
+function spRing(lab){return`<div class="sp-big" aria-live="off"><svg viewBox="0 0 128 128" aria-hidden="true"><circle cx="64" cy="64" r="54" class="sp-tr"/><circle id="spRing" cx="64" cy="64" r="54" class="sp-pr" style="stroke-dasharray:${SP_C.toFixed(1)};stroke-dashoffset:0"/></svg><span class="sp-bigv"><b id="spNum">—</b><small id="spLab">${lab||""}</small></span></div>`}
+function spHowHtml(E,open){return E.how?`<details class="sp-how"${open?" open":""}><summary>Comment faire</summary><ul>${E.how.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></details>`:""}
+function panelSpRun(){if(!SR)return`<p class="pn-help">Aucune séance en cours.</p>`;const S=SR.S,nm=pName(SR.p);
+ const aud=`<div class="sp-aud" role="group" aria-label="Son">${[["snd","Bips"],["voice","Voix"]].map(([k,l])=>`<button type="button" class="chip" data-spa="${k}" aria-pressed="${SPA[k]}">${l} : ${SPA[k]?"oui":"non"}</button>`).join("")}</div>`;
+ if(SR.ph==="intro"){const e=spEst(S,SR.kg),W=SPD().w[SR.p]||{};
+  const blk=S.b.map(B=>{let h="",sub="";
+   if(B.k==="seq")sub=B.it.map(([x,d])=>`${(SPX[x]||{}).n} ${spDurTxt(parseInt(d,10))}`).join(" · ");
+   else if(B.k==="run")h=`<ul class="sp-ph">${B.it.map(x=>x.x?`<li><b>${x.x} ×</b> ${x.it.map(([t,s,v,g])=>`${esc(t)} ${spDurTxt(s)} à ${spNum(v)} km/h, pente ${spNum(g)} %`).join(" + ")}</li>`:`<li><b>${spDurTxt(x[1])}</b> ${esc(x[0])} · ${spNum(x[2])} km/h · pente ${spNum(x[3])} %</li>`).join("")}</ul>`;
+   else{sub=B.k==="sets"?`${B.sets} séries par exercice · repos ${spDurTxt(B.rest)}`:`${B.rounds} tours · ${B.rest} s entre exercices · ${spDurTxt(B.rrest)} entre les tours`;
+    h=`<ul class="sp-ex-l">${B.it.map(([x,r])=>{const E=SPX[x]||{};return`<li><b>${esc(E.n)}</b> <span>${typeof r==="string"?parseInt(r,10)+" s":r+(E.side?(E.leg?" par jambe":" par côté"):" rép.")}${E.load&&W[x]?` · ${spNum(W[x])} kg la dernière fois`:""}</span></li>`}).join("")}</ul>`}
+   return`<div class="sp-blk"><h3>${esc(B.t)}</h3>${sub?`<p class="sp-mut">${sub}</p>`:""}${h}</div>`}).join("");
+  return`<h2 class="pn-title">${esc(S.t)}</h2><p class="pn-help">Pour <b>${nm}</b> · ${S.lvl} · ≈ ${e.min} min · ≈ ${fmtInt(e.kcal)} kcal</p><p>${esc(S.d)}</p>${blk}
+  ${aud}<p class="pn-help">L'écran reste allumé pendant la séance. Douleur, vertige ou gêne inhabituelle : arrête-toi. Ces séances ne remplacent pas un avis médical.</p>
+  <button type="button" class="btn primary sp-start" data-spgo-run="1">Démarrer</button>`}
+ if(SR.ph==="done"){const r=SR.res;return`<div class="sp-end"><h2 class="pn-title">Séance terminée</h2><p class="pn-help">${esc(S.t)} · ${nm}</p>
+  <div class="sp-sum"><div><b>${r.min}</b><span>min</span></div><div><b>≈ ${fmtInt(r.kcal)}</b><span>kcal</span></div>${r.n?`<div><b>${r.n}</b><span>séries</span></div>`:""}${r.km>=0.1?`<div><b>${spNum(r.km.toFixed(1))}</b><span>km</span></div>`:""}</div>
+  <p class="pn-help">${SR.saved?"Enregistrée dans l'historique et dans Suivi.":"Trop courte pour être enregistrée."}</p>${(()=>{const g=SR.saved&&spSuggest(SR.p);return g?`<p class="sp-nextup">Prochaine fois : <b>${esc(g.S.t)}</b></p>`:""})()}<div class="pf-actions"><button type="button" class="btn primary sp-fin" data-act="panel-close">Terminer</button></div></div>`}
+ const st=SR.L[SR.i],E=SPX[st.e]||{},B=S.b[st.bi],pct=Math.round(SR.i/SR.L.length*100);let body="";
+ if(st.k==="work"&&!st.sec){const w=E.load?spWeight(st.e):null,last=E.load?((SPD().w[SR.p]||{})[st.e]):null;
+  body=`<p class="sp-kick">${st.round?`Tour ${st.round} / ${st.rounds}`:`Série ${st.set} / ${st.sets}`} · exercice ${st.ex} / ${st.exn}</p><h2 class="sp-ex">${esc(E.n)}</h2>
+  <p class="sp-tg"><b>${st.r}</b> ${E.side?(E.leg?"par jambe":"par côté"):"répétitions"}</p>
+  ${E.load?`<div class="sp-load"><span>Haltère</span><button type="button" data-spw="-1" aria-label="Moins lourd">−</button><b id="spW">${w!=null?spNum(w)+" kg":"— kg"}</b><button type="button" data-spw="1" aria-label="Plus lourd">+</button></div>${last!=null?`<p class="sp-mut sp-lastw">La dernière fois : ${spNum(last)} kg. Facile sur les dernières répétitions ? Ajoute 1 à 2 kg.</p>`:""}`:""}
+  ${spHowHtml(E,st.set===1||st.round===1)}<button type="button" class="btn primary sp-done" data-spnav="next">${st.round?"Exercice terminé":"Série terminée"}</button>`}
+ else if(st.k==="work"){body=`<p class="sp-kick">${st.auto?esc(B.t):st.round?`Tour ${st.round} / ${st.rounds} · exercice ${st.ex} / ${st.exn}`:`Série ${st.set} / ${st.sets}`}</p><h2 class="sp-ex">${esc(E.n)}</h2>${spRing("")}${spHowHtml(E,!st.auto||st.e==="stretch")}`}
+ else if(st.k==="rest"){body=`<p class="sp-kick">${st.big?"Repos entre les tours":"Repos"}</p>${spRing("repos")}<div class="sp-adj"><button type="button" class="btn" data-sprest="-15">− 15 s</button><button type="button" class="btn" data-sprest="15">+ 15 s</button></div>`}
+ else body=`<p class="sp-kick">${esc(B.t)}${st.rn?` · intervalle ${st.ri} / ${st.rn}`:""}</p><h2 class="sp-ex">${esc(st.t)}</h2><p class="sp-tread"><b>${spNum(st.v)}</b> km/h<span>·</span>pente <b>${spNum(st.g)}</b> %</p>${spRing("")}`;
+ const sheet=SR.sheet?`<div class="sp-sheet" role="dialog" aria-modal="true" aria-labelledby="spShT"><div class="sp-sh-in"><h3 id="spShT">Séance en pause</h3><p class="sp-mut">${spClock(spE())} écoulées</p>
+  <button type="button" class="btn primary" data-spstop="resume">Reprendre</button><button type="button" class="btn" data-spstop="save">Terminer et enregistrer</button><button type="button" class="btn ghost" data-spstop="quit">Abandonner sans enregistrer</button></div></div>`:"";
+ return`<div class="sp-run sp-k-${st.k}"><div class="sp-rtop"><div class="sp-prog" role="progressbar" aria-valuenow="${pct}" aria-valuemin="0" aria-valuemax="100" aria-label="Avancement de la séance"><i style="width:${pct}%"></i></div>
+  <p class="sp-rmeta"><span>${esc(S.t)}</span><span id="spEl">${spClock(spE())}</span></p></div>
+ <div class="sp-body">${body}</div><p class="sp-next">${esc(spNextTxt())}</p>
+ <div class="sp-nav"><button type="button" class="btn" data-spnav="prev" aria-label="Étape précédente"${SR.i?"":" disabled"}>‹<span class="sp-nl"> Précédent</span></button><button type="button" class="btn${SR.paused?" primary":""}" data-spnav="${SR.paused?"resume":"pause"}">${SR.paused?"Reprendre":"Pause"}</button><button type="button" class="btn" data-spnav="next">Passer ›</button></div>
+ ${aud}${sheet}</div>`}
+function spTick(){if(ui.panel==="sport-timer"&&TM){tmTick();return}
+ if(ui.panel!=="sport-run"||!SR||SR.ph!=="run"||SR.paused||SR.sheet)return;const st=SR.L[SR.i],e=spE();
+ const el=document.getElementById("spEl");if(el)el.textContent=spClock(e);if(SR.endE==null)return;
+ const inLead=SR.lead&&e<SR.sE+SR.lead,rem=inLead?SR.sE+SR.lead-e:SR.endE-e,tot=inLead?SR.lead:SR.endE-SR.sE-SR.lead;
+ const num=document.getElementById("spNum"),ring=document.getElementById("spRing"),lab=document.getElementById("spLab");
+ if(num)num.textContent=inLead?String(Math.max(1,Math.ceil(rem))):tot>=60?spClock(Math.ceil(rem)):String(Math.max(0,Math.ceil(rem)));
+ if(lab)lab.textContent=inLead?"prêt ?":st.k==="rest"?"repos":st.k==="run"?"restant":"secondes";
+ if(ring)ring.style.strokeDashoffset=String((SP_C*(1-Math.max(0,Math.min(1,rem/tot)))).toFixed(1));
+ const c=Math.ceil(rem),key=(inLead?"L":"R")+c;if(c>=1&&c<=3&&SR.b3!==key){SR.b3=key;spBeep(700,.14)}
+ if(!inLead&&SR.lead&&!SR.go){SR.go=true;spBeep(1050,.3);spVib(120)}
+ if(!inLead&&rem<=0){spBeep(1050,.45);spVib([180,90,180]);spAdvance()}}
+function spTickOn(){if(!spTH)spTH=setInterval(spTick,200)}
+function spTickOff(){clearInterval(spTH);spTH=0}
+// chrono de repos libre
+function spTimerOpen(sec){spAudioUnlock();TM={sec,end:Date.now()+sec*1000,paused:false,left:0,n:1,b3:"",done:false};openPanel("sport-timer");spWake(true);spSay(`Repos, ${sec} secondes.`)}
+function tmRem(){return TM.paused?TM.left:(TM.end-Date.now())/1000}
+function tmTick(){if(TM.done||TM.paused)return;const rem=tmRem(),num=document.getElementById("spNum"),ring=document.getElementById("spRing");
+ if(num)num.textContent=TM.sec>=60?spClock(Math.ceil(rem)):String(Math.max(0,Math.ceil(rem)));if(ring)ring.style.strokeDashoffset=String((SP_C*(1-Math.max(0,Math.min(1,rem/TM.sec)))).toFixed(1));
+ const c=Math.ceil(rem);if(c>=1&&c<=3&&TM.b3!==c){TM.b3=c;spBeep(700,.14)}
+ if(rem<=0){TM.done=true;spBeep(1050,.5);spVib([200,100,200]);spSay("Repos terminé. C'est reparti !");spWake(false);renderPanel()}}
+function panelSpTimer(){if(!TM)return"";return`<h2 class="pn-title">Chrono repos</h2><p class="pn-help">${TM.done?`Série ${TM.n+1} : c'est parti !`:`Repos après la série ${TM.n}`}</p>
+ <div class="sp-run sp-k-rest">${TM.done?`<div class="sp-big sp-big-done"><span class="sp-bigv"><b>0:00</b><small>terminé</small></span></div>`:spRing("repos")}
+ ${TM.done?`<button type="button" class="btn primary sp-done" data-sptmr="again">Série terminée : relancer ${spDurTxt(TM.sec)}</button>`:`<div class="sp-adj"><button type="button" class="btn" data-sptmr="-15">− 15 s</button><button type="button" class="btn" data-sptmr="pause">${TM.paused?"Reprendre":"Pause"}</button><button type="button" class="btn" data-sptmr="15">+ 15 s</button></div>`}
+ <p class="sp-mut sp-tml">Durée du repos</p><div class="chips sp-chips">${[30,45,60,90,120,180].map(s=>`<button type="button" class="chip" data-sptm="${s}" aria-pressed="${s===TM.sec}">${spDurTxt(s)}</button>`).join("")}</div></div>`}
+// panneaux
+const renderPanelV25=renderPanel;
+renderPanel=function(){const b=document.getElementById("panelBody");
+ if(b&&ui.panel==="sport-run"){b.innerHTML=panelSpRun();spTickOn();spTick();return}
+ if(b&&ui.panel==="sport-timer"){b.innerHTML=panelSpTimer();spTickOn();spTick();return}
+ if(b&&ui.panel==="sport-steps"){b.innerHTML=panelSpSteps();return}
+ return renderPanelV25.apply(this,arguments)};
+const closePanelV25=closePanel;
+closePanel=function(){const k=ui.panel;if(k==="sport-run"&&SR){if(SR.ph==="run")spPause();else SR=null}if(k==="sport-timer")TM=null;
+ if(k==="sport-run"||k==="sport-timer"){spTickOff();spWake(false);try{speechSynthesis.cancel()}catch(e){}}
+ const r=closePanelV25.apply(this,arguments);if(k&&k.startsWith("sport"))renderSport();return r};
+// la croix pendant une séance : proposer pause / terminer / abandonner
+document.addEventListener("click",e=>{const t=e.target.closest&&e.target.closest('[data-act="panel-close"]');if(!t||ui.panel!=="sport-run"||!SR||SR.ph!=="run")return;
+ e.preventDefault();e.stopImmediatePropagation();spPause();SR.sheet=true;renderPanel();setTimeout(()=>{const b=document.querySelector('[data-spstop="resume"]');if(b)b.focus()},30)},true);
+document.addEventListener("click",e=>{const t=e.target.closest&&e.target.closest("[data-spp],[data-spday],[data-spsess],[data-spact],[data-speq],[data-spf],[data-sptm],[data-sphdel],[data-spgo-run],[data-spnav],[data-spw],[data-sprest],[data-spa],[data-spstop],[data-sptmr],[data-spcopy],[data-spgo],[data-spin]");if(!t)return;const d=t.dataset,sp=SPD();
+ if(d.spp!=null){ui.spP=+d.spp;ui.spDay=null;ui.spAlt=0;renderSport();return}
+ if(d.spday){ui.spDay=d.spday===spToday()?null:d.spday;renderSport();const i=document.getElementById("spStepIn");if(i)try{i.focus({preventScroll:true})}catch(x){}return}
+ if(d.spsess){spOpen(d.spsess);return}
+ if(d.spgo){if(ui.panel)closePanel();setTab("sport");renderSport();return}
+ if(d.speq){sp.eq={...sp.eq,[d.speq]:!sp.eq[d.speq]};commit();renderSport();return}
+ if(d.spf){ui.spF=d.spf;renderSport();return}
+ if(d.sptm){spTimerOpen(+d.sptm);return}
+ if(d.sphdel){if(t.dataset.armed!=="1"){t.dataset.armed="1";t.textContent="Supprimer ?";t.classList.add("armed");setTimeout(()=>{if(t.isConnected){t.dataset.armed="";t.textContent="×";t.classList.remove("armed")}},3000);return}
+  sp.hist=sp.hist.filter(h=>h.i!==d.sphdel);commit();renderSport();try{renderSuivi()}catch(x){}toast("Séance supprimée");return}
+ if(d.spact==="other"){ui.spAlt=(ui.spAlt||0)+1;renderSport();return}
+ if(d.spact==="steps-setup"){openPanel("sport-steps");return}
+ if(d.spact==="ios-run"){location.href="shortcuts://run-shortcut?name="+encodeURIComponent("Sano pas");return}
+ if(d.spact==="in-check"){spInT=0;spInboxPull().then(()=>{if(ui.panel==="sport-steps")renderPanel();toast(spInLast()[ui.spP||0]?"Pas reçus ✓":"Rien reçu pour l'instant")});return}
+ if(d.spact==="resume"){openPanel("sport-run");return}
+ if(d.spact==="sync"){openPanel("data");return}
+ if(d.spin){spInboxEnsure(ui.spP||0).then(()=>renderPanel());return}
+ if(d.spcopy){const i=document.getElementById(d.spcopy);if(i)copyText(i.value,d.spcopy,"Copié");return}
+ if(d.spa){SPA={...SPA,[d.spa]:!SPA[d.spa]};try{localStorage.setItem(SPA_K,JSON.stringify(SPA))}catch(x){}if(d.spa==="snd"&&SPA.snd){spAudioUnlock();spBeep(880,.12)}if(d.spa==="voice"&&!SPA.voice)try{speechSynthesis.cancel()}catch(x){}renderPanel();return}
+ if(!SR&&!TM)return;
+ if(d.spgoRun){spGo();return}
+ if(d.spnav&&SR&&SR.ph==="run"){const k=d.spnav;if(k==="pause"){spPause();renderPanel()}else if(k==="resume"){spResume();renderPanel();spAnnounce(SR.L[SR.i])}else if(k==="next"){if(SR.paused)spResume();spAdvance()}else if(k==="prev"&&SR.i>0){if(SR.paused)spResume();SR.i--;spBegin()}return}
+ if(d.spw&&SR){const st=SR.L[SR.i];if(!st||!st.e)return;const cur=spWeight(st.e),stp=cur!=null&&cur<5?0.5:1;let v=cur==null?(+d.spw>0?2:0):cur+(+d.spw)*stp;v=Math.max(0,Math.min(100,Math.round(v*2)/2));
+  if(v<=0)delete SR.ws[st.e];else SR.ws[st.e]=v;const el=document.getElementById("spW");if(el)el.textContent=v>0?spNum(v)+" kg":"— kg";return}
+ if(d.sprest&&SR&&SR.endE!=null){const add=+d.sprest;SR.endE=Math.max(spE()+1,SR.endE+add);SR.b3="";spTick();return}
+ if(d.spstop&&SR){if(d.spstop==="resume"){spResume();renderPanel()}else if(d.spstop==="save"){spAcc();spFinish(true)}else{SR=null;closePanel()}return}
+ if(d.sptmr&&TM){const k=d.sptmr;if(k==="again"){TM={...TM,end:Date.now()+TM.sec*1000,n:TM.n+1,done:false,paused:false,b3:""};spAudioUnlock();spWake(true);spSay(`Repos, ${TM.sec} secondes.`);renderPanel()}
+  else if(k==="pause"){if(TM.paused){TM.end=Date.now()+TM.left*1000;TM.paused=false;spWake(true)}else{TM.left=tmRem();TM.paused=true;spWake(false)}renderPanel()}
+  else{const add=+k;if(TM.paused)TM.left=Math.max(1,TM.left+add);else TM.end=Math.max(Date.now()+1000,TM.end+add*1000);TM.b3="";tmTick()}return}});
+// le chrono : un choix de durée relance le repos
+document.addEventListener("click",e=>{const t=e.target.closest&&e.target.closest("[data-sptm]");if(!t||ui.panel!=="sport-timer"||!TM)return;e.stopImmediatePropagation();const s=+t.dataset.sptm;spAudioUnlock();
+ TM={...TM,sec:s,end:Date.now()+s*1000,done:false,paused:false,b3:""};spWake(true);renderPanel()},true);
+document.addEventListener("change",e=>{const t=e.target;if(!t||!t.matches)return;const sp=SPD(),p=ui.spP||0;
+ if(t.matches("[data-spgoal]")){const g=[...sp.goal];g[p]=+t.value;sp.goal=g;commit();renderSport();return}
+ if(t.matches("[data-spwk]")){const w=[...sp.wk];w[p]=+t.value;sp.wk=w;commit();renderSport()}});
+document.addEventListener("submit",e=>{const f=e.target;if(!f||f.id!=="spStepForm")return;e.preventDefault();const raw=String(new FormData(f).get("n")||"").replace(/\D/g,""),p=ui.spP||0,day=ui.spDay||spToday(),sp=SPD();
+ const S={...(sp.steps[p]||{})};if(raw===""){delete S[day];sp.steps={...sp.steps,[p]:S};commit();renderSport();toast("Pas effacés");return}
+ const n=+raw;if(n>120000){toast("Ça fait beaucoup : vérifie le nombre");return}S[day]=n;sp.steps={...sp.steps,[p]:S};commit();renderSport();try{renderSuivi()}catch(x){}
+ toast(`${fmtInt(n)} pas notés${n>=(sp.goal[p]||8000)?" · objectif atteint 🎉":""}`)});
 
 setTab(ui.tab);renderAll();initDb();sbStart();
 
