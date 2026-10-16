@@ -1,0 +1,37 @@
+Fri Oct 16 16:49:06 UTC 2026
+== DNS
+104.18.38.10    zjsawjudrdneeptxbskd.supabase.co
+172.64.149.246  zjsawjudrdneeptxbskd.supabase.co
+== 1 racine REST
+401
+{"message":"Invalid API key","hint":"Only the `service_role` API key can be used for this endpoint."}
+== 2 lecture planner (foyer test)
+200
+[]
+== 3 écriture petite
+201
+
+== 4 relecture
+200
+[{"id":"d1a9000000000000000000000000beef","updated_at":"2026-10-16T16:49:07+00:00"}]
+== 5 écriture 300 Ko
+200
+
+== 5 écriture 900 Ko
+200
+
+== 5 écriture 2500 Ko
+200
+
+== 6 remise à petit
+200
+
+== 7 CORS (preflight depuis le site)
+HTTP/2 200 
+access-control-allow-origin: *
+access-control-allow-headers: apikey,authorization,x-foyer,content-type,prefer
+access-control-allow-methods: GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS,TRACE,CONNECT
+access-control-max-age: 3600
+== 8 fonction recipe-import
+400
+{"error":"action"}
