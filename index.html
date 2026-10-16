@@ -1868,6 +1868,28 @@ h1,h2,.sec-head h1,.block-title,.row-head h2,.m-body h2,.pn-title{color:var(--ti
 .sp-vr .seg{flex:1;display:flex}.sp-vr .seg button{flex:1;font-size:.8rem;padding-left:4px;padding-right:4px}
 .sp-var .sp-mut{margin:0}
 .sp-pref{margin:8px 0 0}
+/* ================= v31 : état de la synchro ================= */
+.sync[data-st="ok"] .sy-dot{background:#2E9B57}
+.sync[data-st="off"] .sy-dot{background:#E08A00;box-shadow:0 0 0 3px rgba(224,138,0,.22)}
+.sync[data-st="err"] .sy-dot{background:#C8372D;box-shadow:0 0 0 3px rgba(200,55,45,.2)}
+.sync[data-st="wait"] .sy-dot{background:#9C8F91;animation:syPulse 1.2s ease-in-out infinite}
+@keyframes syPulse{50%{opacity:.35}}
+.sy-card h3{display:flex;align-items:center;gap:8px}
+.sy-badge{width:10px;height:10px;border-radius:50%;flex:0 0 auto;background:#9C8F91}
+.sy-ok .sy-badge{background:#2E9B57}.sy-off .sy-badge{background:#E08A00}.sy-err .sy-badge{background:#C8372D}
+.sy-off{box-shadow:0 0 0 2px #F2C27A,var(--sh-1)!important}
+.sy-err{box-shadow:0 0 0 2px #EBA49C,var(--sh-1)!important}
+.sy-st{margin:0 0 8px}.sy-st.ok{color:#22703F}.sy-st.err{color:#A3362B}
+.sy-join{margin-top:12px;padding:12px;border-radius:var(--r-md);background:var(--surface-2)}
+.sy-join label{display:block;margin-bottom:6px}
+.sy-join .pf-row{display:flex;gap:8px;margin:0}.sy-join .pn-in{flex:1;min-width:0}
+.sy-go{width:100%;justify-content:center;margin-top:8px}
+.sy-new{margin-top:12px}.sy-new summary{cursor:pointer;font-weight:600;color:var(--coral-ink)}
+.sy-code code{font-size:.85em}
+.sy-banner{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin:0 0 14px;padding:12px 14px;border-radius:var(--r-md);background:#FFF4E2;border:1px solid #F2C27A}
+.sy-banner p{margin:0;font-size:.9rem;flex:1 1 220px}
+.sy-bact{display:flex;gap:8px}
+@media (prefers-reduced-motion:reduce){.sync[data-st="wait"] .sy-dot{animation:none}}
 
 </style>
 </head>
@@ -1973,7 +1995,7 @@ h1,h2,.sec-head h1,.block-title,.row-head h2,.m-body h2,.pn-title{color:var(--ti
 </div>
 <div id="timers" class="timers" hidden aria-live="polite"></div>
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
-<script>window.NS_CONFIG={"hosted": true, "sbUrl": "https://zjsawjudrdneeptxbskd.supabase.co", "sbKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpqc2F3anVkcmRuZWVwdHhic2tkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1NjUxMjcsImV4cCI6MjEwNzE0MTEyN30.Wn1bUy--5O78gGICTOyEGbnT6B-SdoNCG_XxBBaaUIY", "build": "20261015214247"}</script>
+<script>window.NS_CONFIG={"hosted": true, "sbUrl": "https://zjsawjudrdneeptxbskd.supabase.co", "sbKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpqc2F3anVkcmRuZWVwdHhic2tkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1NjUxMjcsImV4cCI6MjEwNzE0MTEyN30.Wn1bUy--5O78gGICTOyEGbnT6B-SdoNCG_XxBBaaUIY", "build": "20261016165605"}</script>
 <script>
 const AISLES={L:"Fruits & légumes",H:"Herbes fraîches",V:"Viandes & poissons",C:"Crèmerie & œufs",S:"Surgelés",F:"Féculents",B:"Conserves",E:"Épices & condiments"};
 const AISLE_ORDER=["L","H","V","C","S","F","B","E"];
@@ -7036,6 +7058,76 @@ figAt=function(X,ms){const n=X.fr.length,tot=X.ms.reduce((a,b)=>a+b,0);let t=((m
  return figMix2(X.fr[i],X.fr[(i+1)%n],figEase(u),front)};
 // le cadrage se recalcule avec les nouvelles trajectoires
 try{F3.frames={}}catch(e){}
+
+
+// ================= v31 : état de la synchro lisible (pastille 4 couleurs), relier un téléphone facilement =================
+// pastille : verte = synchronisé ; orange = téléphone non relié ; rouge = erreur ; grise clignotante = connexion
+sb.lastOk=0;sb.lastErr="";sb.errAt=0;
+const fetchV31=window.fetch.bind(window);
+window.fetch=function(input,init){const url=typeof input==="string"?input:(input&&input.url)||"";
+ if(!(SYNC_ON&&url.indexOf(NS.sbUrl+"/rest/v1/planner")===0))return fetchV31(input,init);
+ const h=(init&&init.headers)||{},mine=sb.code&&(h["x-foyer"]===sb.code);
+ return fetchV31(input,init).then(r=>{if(mine){if(r.ok){sb.lastOk=Date.now();sb.lastErr=""}else{sb.lastErr="le serveur répond "+r.status+(r.status===401||r.status===403?" (accès refusé)":r.status>=500?" (serveur indisponible)":"");sb.errAt=Date.now()}}return r},
+  e=>{if(mine){sb.lastErr=navigator.onLine===false?"pas de connexion internet":"le serveur ne répond pas";sb.errAt=Date.now()}throw e})};
+function syncSt(){if(!SYNC_ON)return(ref&&!readOnly)?"ok":"local";if(!sb.code)return"off";if(sb.ok)return"ok";if(sb.err)return"err";return"wait"}
+const SYNC_TXT={ok:"Synchronisé",off:"Téléphone non relié au foyer",err:"Synchro en erreur",wait:"Connexion…",local:"Sur cet appareil"};
+setSync=(f=>function(){f.apply(this,arguments);const el=document.getElementById("sync");if(!el)return;const st=syncSt();el.dataset.st=st;
+ el.setAttribute("aria-label","Réglages et données · "+SYNC_TXT[st]);el.title=SYNC_TXT[st];try{syncBanner()}catch(e){}})(setSync);
+// reprise immédiate quand le réseau revient ou que l'appli revient au premier plan
+window.addEventListener("online",()=>{if(SYNC_ON&&sb.code){if(sb.dirty&&!sb.pushing)sbPush();else sbPull(true)}});
+document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible"&&SYNC_ON&&sb.code&&sb.err&&!sb.pushing){if(sb.dirty)sbPush();else sbPull(true)}});
+// garder les données du site (le navigateur ne les efface pas pour faire de la place)
+function syncPersist(){try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist().catch(()=>{})}catch(e){}}
+if(SYNC_ON&&sb.code)syncPersist();
+const isStandalone=()=>{try{return matchMedia("(display-mode: standalone)").matches||navigator.standalone===true}catch(e){return false}};
+const ago=t=>{if(!t)return"";const s=Math.round((Date.now()-t)/1000);if(s<60)return"à l'instant";const m=Math.round(s/60);if(m<60)return`il y a ${m} min`;const h=Math.round(m/60);if(h<24)return`il y a ${h} h`;return"il y a "+Math.round(h/24)+" j"};
+// carte de synchro du panneau Réglages
+function syncCardHtml(){const st=syncSt(),ios=typeof isIOS==="function"&&isIOS();
+ const joinBox=`<div class="sy-join"><label for="foyerIn"><b>Relier ce téléphone</b> au foyer existant</label>
+  <div class="pf-row"><input class="pn-in" id="foyerIn" placeholder="Colle le lien du foyer" autocomplete="off" autocapitalize="off" spellcheck="false"><button type="button" class="btn" data-sy="paste">Coller</button></div>
+  <button type="button" class="btn primary sy-go" data-act="foyer-join">Relier ce téléphone</button>
+  <p class="pn-help">Le lien se trouve sur l'autre téléphone : Réglages → Synchronisation → <b>Copier</b>.${ios&&isStandalone()?" Colle-le ici : ouvrir le lien dans Safari relierait Safari, pas l'appli de l'écran d'accueil.":""}</p></div>`;
+ if(st==="off")return`<div class="pn-card sy-card sy-off" id="syncCard"><h3><i class="sy-badge" aria-hidden="true"></i>Ce téléphone n'est pas relié à votre foyer</h3>
+  <p>Ses changements restent sur ce téléphone et il ne reçoit pas ceux de ton/ta partenaire.</p>
+  ${ios?`<p class="pn-help">Sur iPhone, supprimer l'icône Sano de l'écran d'accueil efface le lien du foyer : il faut le recoller après l'avoir rajoutée.</p>`:""}
+  ${joinBox}
+  <details class="sy-new"><summary>Pas encore de foyer ?</summary><p class="pn-help">Crée-le sur un seul téléphone, puis relie l'autre avec le lien. Créer un deuxième foyer séparerait vos données.</p>
+  <button type="button" class="btn" data-sy="create">Créer un nouveau foyer</button></details></div>`;
+ const code=sb.code||"";
+ const status=st==="ok"?`<p class="sy-st ok">✓ Synchronisé${sb.lastOk?` · ${ago(sb.lastOk)}`:""}. Planning, stock, courses, suivi et sport sont partagés entre vos téléphones.</p>`
+  :st==="err"?`<p class="sy-st err">La synchro ne passe pas : ${esc(sb.lastErr||"connexion impossible")}${sb.lastOk?` (dernière réussite ${ago(sb.lastOk)})`:""}. Tes changements sont gardés sur ce téléphone et partiront dès que ça remarche.</p><div class="pf-actions"><button type="button" class="btn primary" data-sy="retry">Réessayer</button></div>`
+  :`<p class="sy-st">Connexion au foyer…</p>`;
+ return`<div class="pn-card sy-card sy-${st}" id="syncCard"><h3><i class="sy-badge" aria-hidden="true"></i>Synchronisation</h3>${status}
+  <p class="pn-help">Lien du foyer, à coller sur l'autre téléphone (Réglages → Relier ce téléphone). Garde-le aussi dans tes notes : il permet de tout récupérer.</p>
+  <input class="pn-in" id="foyerOut" readonly value="${esc(foyerLink())}">
+  <div class="pf-actions"><button type="button" class="btn" data-act="foyer-copy">Copier le lien</button><button type="button" class="btn" data-act="foyer-share">Partager</button></div>
+  <p class="pn-help sy-code">Code du foyer : <code>${esc(code.slice(0,4))}…${esc(code.slice(-4))}</code></p>
+  <button type="button" class="link" data-act="foyer-leave">Déconnecter cet appareil du foyer</button></div>`}
+const panelDataV31=panelData;
+panelData=function(){let h=panelDataV31.apply(this,arguments);if(!SYNC_ON)return h;
+ const a=h.indexOf('<div class="pn-card"><h3>Synchroni'),b=h.indexOf('<div class="pn-card"><h3>Exporter');
+ const card=syncCardHtml();if(a>=0&&b>a)h=h.slice(0,a)+card+"\n "+h.slice(b);else h=card+h;
+ // la synchro passe en premier quand le téléphone n'est pas relié ou en erreur
+ if(syncSt()!=="ok"){const t=h.indexOf("</h2>");const c0=h.indexOf(card);if(t>=0&&c0>t){h=h.slice(0,c0)+h.slice(c0+card.length);h=h.slice(0,t+5)+card+h.slice(t+5)}}
+ return h};
+document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-sy]");if(!b)return;const k=b.dataset.sy;
+ if(k==="paste"){(navigator.clipboard&&navigator.clipboard.readText?navigator.clipboard.readText():Promise.reject()).then(t=>{const i=document.getElementById("foyerIn");if(i){i.value=t||"";i.focus()}if(!/[a-f0-9]{24,64}/i.test(t||""))toast("Le presse-papiers ne contient pas de lien de foyer")}).catch(()=>{const i=document.getElementById("foyerIn");if(i)i.focus();toast("Appuie longuement dans le champ puis « Coller »")});return}
+ if(k==="retry"){sb.err=false;setSync();if(ui.panel==="data")renderPanel();(sb.dirty?sbPush():sbPull(true)).then(()=>{if(ui.panel==="data")renderPanel();toast(sb.ok?"Synchronisé ✓":"Toujours impossible : "+(sb.lastErr||"réessaie plus tard"))});return}
+ if(k==="create"){if(b.dataset.armed!=="1"){b.dataset.armed="1";b.textContent="Confirmer : créer un foyer séparé";setTimeout(()=>{if(b.isConnected){b.dataset.armed="";b.textContent="Créer un nouveau foyer"}},4000);return}
+  const c=document.createElement("button");c.dataset.act="foyer-create";c.hidden=true;document.body.appendChild(c);c.click();c.remove();syncPersist()}},true);
+document.addEventListener("click",e=>{if(e.target.closest&&e.target.closest('[data-act="foyer-join"]'))setTimeout(()=>{syncPersist();try{syncBanner()}catch(x){}},50)});
+// rafraîchir la carte quand l'état change pendant que le panneau est ouvert
+setSync=(f=>function(){const before=document.getElementById("sync")&&document.getElementById("sync").dataset.st;f.apply(this,arguments);const now=syncSt();
+ if(ui.panel==="data"&&before!==now&&!isTyping()){const c=document.getElementById("syncCard");if(c)c.outerHTML=syncCardHtml()}})(setSync);
+// bandeau discret quand ce téléphone n'est pas relié (rappel, masquable 7 jours)
+const SYB_K=LS+"-sybhide";
+function syncBanner(){let el=document.getElementById("syBanner");const show=SYNC_ON&&!sb.code&&(()=>{try{return Date.now()-(+localStorage.getItem(SYB_K)||0)>7*864e5}catch(e){return true}})();
+ if(!show){if(el)el.remove();return}
+ if(!el){el=document.createElement("div");el.id="syBanner";el.className="sy-banner";el.setAttribute("role","status");const m=document.querySelector("main");if(m)m.insertAdjacentElement("afterbegin",el);else return}
+ el.innerHTML=`<p><b>Ce téléphone n'est pas relié à votre foyer.</b> Vos changements ne sont pas partagés.</p><div class="sy-bact"><button type="button" class="btn primary" data-sy="open">Relier</button><button type="button" class="btn ghost" data-sy="later">Plus tard</button></div>`}
+document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest('[data-sy="open"],[data-sy="later"]');if(!b)return;
+ if(b.dataset.sy==="open"){openPanel("data");setTimeout(()=>{const i=document.getElementById("foyerIn");if(i)i.focus()},60)}else{try{localStorage.setItem(SYB_K,String(Date.now()))}catch(x){}const el=document.getElementById("syBanner");if(el)el.remove()}});
+try{setSync()}catch(e){}
 
 setTab(ui.tab);renderAll();initDb();sbStart();
 
