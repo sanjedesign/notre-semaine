@@ -1892,6 +1892,8 @@ h1,h2,.sec-head h1,.block-title,.row-head h2,.m-body h2,.pn-title{color:var(--ti
 @media (prefers-reduced-motion:reduce){.sync[data-st="wait"] .sy-dot{animation:none}}
 
 .sy-diag{margin:8px 0 0;font-size:.78rem;word-break:break-word}
+.app-err{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin:0 0 14px;padding:12px 14px;border-radius:var(--r-md);background:#FDECEA;border:1px solid #EBA49C}
+.app-err p{margin:0;font-size:.88rem;flex:1 1 220px}
 </style>
 </head>
 <body>
@@ -1996,7 +1998,7 @@ h1,h2,.sec-head h1,.block-title,.row-head h2,.m-body h2,.pn-title{color:var(--ti
 </div>
 <div id="timers" class="timers" hidden aria-live="polite"></div>
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
-<script>window.NS_CONFIG={"hosted": true, "sbUrl": "https://zjsawjudrdneeptxbskd.supabase.co", "sbKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpqc2F3anVkcmRuZWVwdHhic2tkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1NjUxMjcsImV4cCI6MjEwNzE0MTEyN30.Wn1bUy--5O78gGICTOyEGbnT6B-SdoNCG_XxBBaaUIY", "build": "20261016172203"}</script>
+<script>window.NS_CONFIG={"hosted": true, "sbUrl": "https://zjsawjudrdneeptxbskd.supabase.co", "sbKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpqc2F3anVkcmRuZWVwdHhic2tkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1NjUxMjcsImV4cCI6MjEwNzE0MTEyN30.Wn1bUy--5O78gGICTOyEGbnT6B-SdoNCG_XxBBaaUIY", "build": "20261016184226"}</script>
 <script>
 const AISLES={L:"Fruits & légumes",H:"Herbes fraîches",V:"Viandes & poissons",C:"Crèmerie & œufs",S:"Surgelés",F:"Féculents",B:"Conserves",E:"Épices & condiments"};
 const AISLE_ORDER=["L","H","V","C","S","F","B","E"];
@@ -4677,7 +4679,7 @@ function lineCost(g,store,refOnly){const main=g.main||g.items[0];const pe=priceE
  let eur,detail;
  if(stapleOnly){eur=kind==="u"?unitPrice:unitPrice*(kind==="pack"?pack:500)/1000;detail="1 "+(kind==="u"?"pièce":"paquet")}
  else if(kind==="u"){const lot=pack||1;const n=Math.ceil(Math.max(1,Math.ceil(units-0.05))/lot)*lot;eur=n*unitPrice;detail=n+" pièce"+(n>1?"s":"")}
- else if(kind==="pack"){const np=Math.max(1,Math.ceil(grams/pack-0.08));eur=np*pack/1000*unitPrice;detail=np+" × "+(pack>=1000?(pack/1000)+(cat.includes("milk")||cat.includes("oil")||cat.includes("wine")?" L":" kg"):pack+(cat.includes("milk")||cat.includes("oil")||cat.includes("wine")||cat.includes("coconut")?" ml":" g"))}
+ else if(kind==="pack"){const np=Math.max(1,Math.ceil(grams/pack-0.08));eur=np*pack/1000*unitPrice;detail=np+" × "+(pack>=1000?(pack/1000)+((cat||"").includes("milk")||(cat||"").includes("oil")||(cat||"").includes("wine")?" L":" kg"):pack+((cat||"").includes("milk")||(cat||"").includes("oil")||(cat||"").includes("wine")||(cat||"").includes("coconut")?" ml":" g"))}
  else{if(!grams)return null;eur=Math.max(0.1,grams/1000*unitPrice);detail=fmtApprox(grams).replace("≈ ","")+" au poids"}
  return{eur,src,detail,cat,kind,n:op?op.n:0}}
 function budgetOf(groups,store,refOnly){let tot=0,op=0,ref=0,unk=0;const cats=new Set();for(const g of groups){const c=lineCost(g,store,refOnly);if(!c){unk++;continue}tot+=c.eur;if(c.src==="op")op++;else ref++;cats.add(c.cat+"|"+c.kind)}return{tot,op,ref,unk,cats:[...cats]}}
@@ -7183,6 +7185,25 @@ syncCardHtml=function(){let h=syncCardHtmlV32.apply(this,arguments);const st=syn
 document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest('[data-sy="diag"]');if(!b)return;const t=sbDiagText();
  const done=()=>toast("Diagnostic copié : colle-le dans la conversation"),fb=()=>{const i=document.createElement("textarea");i.value=t;i.setAttribute("readonly","");i.style.cssText="position:fixed;left:-9999px;top:0";document.body.appendChild(i);i.select();try{document.execCommand("copy");done()}catch(x){toast("Copie impossible")}i.remove()};
  try{navigator.clipboard.writeText(t).then(done,fb)}catch(x){fb()}});
+
+
+// ================= v33 : un onglet qui plante n'emporte plus les autres =================
+// Chaque partie de l'appli s'affiche séparément ; en cas de souci, un encadré l'indique dans l'onglet concerné
+// avec « Copier le diagnostic », et le reste de l'appli continue de fonctionner.
+const APP_ERR={};
+const SAFE_TAB={renderRecipes:"recettes",renderWeek:"semaine",renderSnacks:"recettes",renderShop:"courses",renderBudget:"courses",renderStock:"stock",renderSport:"sport",renderSuivi:"suivi"};
+function appErrBox(fn){const tab=SAFE_TAB[fn];const sec=tab&&document.getElementById("tab-"+tab);if(!sec)return;let el=sec.querySelector('.app-err[data-fn="'+fn+'"]');const E=APP_ERR[fn];
+ if(!E){if(el)el.remove();return}
+ if(!el){el=document.createElement("div");el.className="app-err";el.dataset.fn=fn;el.setAttribute("role","alert");const h=sec.querySelector(".sec-head");if(h)h.insertAdjacentElement("afterend",el);else sec.prepend(el)}
+ el.innerHTML=`<p><b>Une partie de cet onglet n'a pas pu s'afficher.</b> Le reste de l'appli fonctionne. Envoie le diagnostic pour que ce soit corrigé.</p><button type="button" class="btn small" data-sy="diag">Copier le diagnostic</button>`}
+function safeWrap(name,f){if(typeof f!=="function")return f;
+ return function(){try{const r=f.apply(this,arguments);if(APP_ERR[name]){delete APP_ERR[name];appErrBox(name)}return r}
+  catch(e){APP_ERR[name]={msg:String(e&&e.message||e).slice(0,200),stack:String(e&&e.stack||"").split("\n").slice(0,5).map(x=>x.replace(/https?:\/\/[^\s)]+\//g,"")).join("\n"),at:Date.now()};try{appErrBox(name)}catch(x){}}}}
+renderRecipes=safeWrap("renderRecipes",renderRecipes);renderWeek=safeWrap("renderWeek",renderWeek);renderSnacks=safeWrap("renderSnacks",renderSnacks);
+renderShop=safeWrap("renderShop",renderShop);renderBudget=safeWrap("renderBudget",renderBudget);renderStock=safeWrap("renderStock",renderStock);
+renderSport=safeWrap("renderSport",renderSport);renderSuivi=safeWrap("renderSuivi",renderSuivi);
+// le diagnostic inclut ces erreurs d'affichage
+const sbDiagTextV33=sbDiagText;sbDiagText=function(){try{const o=JSON.parse(sbDiagTextV33());o.affichage=APP_ERR;o.magasin=state.store||"";return JSON.stringify(o,null,1)}catch(e){return sbDiagTextV33()}};
 
 try{setTab(ui.tab);renderAll()}catch(e){try{sbDiag("affichage au démarrage",e)}catch(x){}}try{initDb()}catch(e){}sbStart();
 
