@@ -1,0 +1,44 @@
+name: Diagnostic synchro
+on:
+  push:
+    branches: [diag-sync]
+permissions:
+  contents: write
+jobs:
+  diag:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Tester Supabase
+        env:
+          SB: https://zjsawjudrdneeptxbskd.supabase.co
+          KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpqc2F3anVkcmRuZWVwdHhic2tkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1NjUxMjcsImV4cCI6MjEwNzE0MTEyN30.Wn1bUy--5O78gGICTOyEGbnT6B-SdoNCG_XxBBaaUIY
+        run: |
+          set +e
+          T=d1a9000000000000000000000000beef
+          o=out.txt; date -u > $o
+          echo "== DNS" >> $o; getent hosts zjsawjudrdneeptxbskd.supabase.co >> $o 2>&1
+          echo "== 1 racine REST" >> $o
+          curl -sS -m 20 -o b1 -w "%{http_code}\n" "$SB/rest/v1/" -H "apikey: $KEY" -H "Authorization: Bearer $KEY" >> $o 2>&1; head -c 300 b1 >> $o; echo >> $o
+          echo "== 2 lecture planner (foyer test)" >> $o
+          curl -sS -m 20 -o b2 -w "%{http_code}\n" "$SB/rest/v1/planner?id=eq.$T&select=id,updated_at" -H "apikey: $KEY" -H "Authorization: Bearer $KEY" -H "x-foyer: $T" >> $o 2>&1; head -c 300 b2 >> $o; echo >> $o
+          echo "== 3 écriture petite" >> $o
+          curl -sS -m 20 -o b3 -w "%{http_code}\n" -X POST "$SB/rest/v1/planner" -H "apikey: $KEY" -H "Authorization: Bearer $KEY" -H "x-foyer: $T" -H "Content-Type: application/json" -H "Prefer: resolution=merge-duplicates,return=minimal" -d "{\"id\":\"$T\",\"data\":{\"diag\":1},\"updated_at\":\"$(date -u +%FT%TZ)\"}" >> $o 2>&1; head -c 300 b3 >> $o; echo >> $o
+          echo "== 4 relecture" >> $o
+          curl -sS -m 20 -o b4 -w "%{http_code}\n" "$SB/rest/v1/planner?id=eq.$T&select=id,updated_at" -H "apikey: $KEY" -H "Authorization: Bearer $KEY" -H "x-foyer: $T" >> $o 2>&1; head -c 300 b4 >> $o; echo >> $o
+          for kb in 300 900 2500; do
+            python3 -c "import json,sys;print(json.dumps({'id':'$T','data':{'diag':1,'pad':'x'*($kb*1024)},'updated_at':'2026-10-16T00:00:00Z'}))" > big.json
+            echo "== 5 écriture ${kb} Ko" >> $o
+            curl -sS -m 60 -o b5 -w "%{http_code}\n" -X POST "$SB/rest/v1/planner" -H "apikey: $KEY" -H "Authorization: Bearer $KEY" -H "x-foyer: $T" -H "Content-Type: application/json" -H "Prefer: resolution=merge-duplicates,return=minimal" --data-binary @big.json >> $o 2>&1; head -c 300 b5 >> $o; echo >> $o
+          done
+          echo "== 6 remise à petit" >> $o
+          curl -sS -m 20 -o b6 -w "%{http_code}\n" -X POST "$SB/rest/v1/planner" -H "apikey: $KEY" -H "Authorization: Bearer $KEY" -H "x-foyer: $T" -H "Content-Type: application/json" -H "Prefer: resolution=merge-duplicates,return=minimal" -d "{\"id\":\"$T\",\"data\":{\"diag\":1},\"updated_at\":\"$(date -u +%FT%TZ)\"}" >> $o 2>&1; echo >> $o
+          echo "== 7 CORS (preflight depuis le site)" >> $o
+          curl -sS -m 20 -o /dev/null -D h7 -X OPTIONS "$SB/rest/v1/planner" -H "Origin: https://sanjedesign.github.io" -H "Access-Control-Request-Method: POST" -H "Access-Control-Request-Headers: apikey,authorization,x-foyer,content-type,prefer" >> $o 2>&1; grep -i "^HTTP\|access-control" h7 >> $o
+          echo "== 8 fonction recipe-import" >> $o
+          curl -sS -m 20 -o b8 -w "%{http_code}\n" -X POST "$SB/functions/v1/recipe-import" -H "apikey: $KEY" -H "Authorization: Bearer $KEY" -H "x-foyer: $T" -H "Content-Type: application/json" -d '{"action":"ping"}' >> $o 2>&1; head -c 200 b8 >> $o; echo >> $o
+          cat $o
+      - name: Publier le résultat
+        run: |
+          mkdir pub && cp out.txt pub/ && cd pub && git init -q -b diag-out && git config user.name "github-actions[bot]" && git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add out.txt && git commit -q -m "diag" && git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" diag-out
