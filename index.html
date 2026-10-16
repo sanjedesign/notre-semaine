@@ -1891,6 +1891,7 @@ h1,h2,.sec-head h1,.block-title,.row-head h2,.m-body h2,.pn-title{color:var(--ti
 .sy-bact{display:flex;gap:8px}
 @media (prefers-reduced-motion:reduce){.sync[data-st="wait"] .sy-dot{animation:none}}
 
+.sy-diag{margin:8px 0 0;font-size:.78rem;word-break:break-word}
 </style>
 </head>
 <body>
@@ -1995,7 +1996,7 @@ h1,h2,.sec-head h1,.block-title,.row-head h2,.m-body h2,.pn-title{color:var(--ti
 </div>
 <div id="timers" class="timers" hidden aria-live="polite"></div>
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
-<script>window.NS_CONFIG={"hosted": true, "sbUrl": "https://zjsawjudrdneeptxbskd.supabase.co", "sbKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpqc2F3anVkcmRuZWVwdHhic2tkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1NjUxMjcsImV4cCI6MjEwNzE0MTEyN30.Wn1bUy--5O78gGICTOyEGbnT6B-SdoNCG_XxBBaaUIY", "build": "20261016165605"}</script>
+<script>window.NS_CONFIG={"hosted": true, "sbUrl": "https://zjsawjudrdneeptxbskd.supabase.co", "sbKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpqc2F3anVkcmRuZWVwdHhic2tkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1NjUxMjcsImV4cCI6MjEwNzE0MTEyN30.Wn1bUy--5O78gGICTOyEGbnT6B-SdoNCG_XxBBaaUIY", "build": "20261016172203"}</script>
 <script>
 const AISLES={L:"Fruits & légumes",H:"Herbes fraîches",V:"Viandes & poissons",C:"Crèmerie & œufs",S:"Surgelés",F:"Féculents",B:"Conserves",E:"Épices & condiments"};
 const AISLE_ORDER=["L","H","V","C","S","F","B","E"];
@@ -7129,7 +7130,61 @@ document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest
  if(b.dataset.sy==="open"){openPanel("data");setTimeout(()=>{const i=document.getElementById("foyerIn");if(i)i.focus()},60)}else{try{localStorage.setItem(SYB_K,String(Date.now()))}catch(x){}const el=document.getElementById("syBanner");if(el)el.remove()}});
 try{setSync()}catch(e){}
 
-setTab(ui.tab);renderAll();initDb();sbStart();
+
+// ================= v32 : synchro robuste et diagnostic précis =================
+// Les erreurs réseau, de préparation des données, de lecture et d'affichage sont séparées : un souci d'affichage ne bloque
+// plus la synchro, des données non sérialisables sont nettoyées, et le détail exact peut être copié.
+sb.diag=null;sb.hold=false;let lastJsErr=null;
+window.addEventListener("error",e=>{lastJsErr={msg:String(e.message||""),src:String(e.filename||"").split("/").pop()+":"+(e.lineno||0)+":"+(e.colno||0),at:Date.now()}});
+window.addEventListener("unhandledrejection",e=>{const r=e.reason;lastJsErr={msg:"promesse : "+String(r&&r.message||r),src:String(r&&r.stack||"").split("\n")[1]||"",at:Date.now()}});
+function sbDiag(stage,e){sb.diag={stage,msg:String(e&&e.message||e).slice(0,300),stack:String(e&&e.stack||"").split("\n").slice(0,6).map(x=>x.replace(/https?:\/\/[^\s)]+\//g,"")).join("\n"),at:Date.now()}}
+// sérialisation sûre : en cas de boucle ou de valeur non convertible, on retire la partie fautive et on note où
+function sbCyclePath(o){const seen=new WeakSet();let found="";(function walk(v,p,d){if(found||d>40||!v||typeof v!=="object")return;if(seen.has(v)){found=p||"(racine)";return}seen.add(v);
+ for(const k of Object.keys(v)){const x=v[k];if(typeof x==="bigint"){found=p+"."+k+" (bigint)";return}walk(x,p+"."+k,d+1);if(found)return}seen.delete(v)})(o,"state",0);return found}
+function safeJSON(o){try{return JSON.stringify(o)}catch(e){const where=sbCyclePath(o&&o.data!==undefined?o.data:o);sbDiag("préparation des données ("+where+")",e);const stack=[];
+ return JSON.stringify(o,function(k,v){if(typeof v==="bigint")return Number(v);if(typeof v==="function")return undefined;if(v&&typeof v==="object"){while(stack.length&&stack[stack.length-1]!==this)stack.pop();if(stack.includes(v))return undefined;stack.push(v)}return v})}}
+saveLocal=function(){try{localStorage.setItem(LS,safeJSON(state))}catch(e){sb.storeErr=String(e&&e.name||e)}};
+sbPull=async function(force){if(!SYNC_ON||!sb.code)return;if(sb.pushing||sb.pushT||sb.dirty)return;if(!force&&isTyping())return;let stage="réseau";
+ try{const r0=await fetch(`${NS.sbUrl}/rest/v1/planner?id=eq.${sb.code}&select=updated_at`,{headers:sbHeaders(),cache:"no-store"});if(!r0.ok)throw new Error("http "+r0.status);
+  stage="réponse du serveur";const rows0=await r0.json();
+  if(!Array.isArray(rows0)||!rows0.length){sb.ok=true;sb.err=false;setSync();await sbPush();return}
+  if((Date.parse(rows0[0].updated_at)||0)!==sb.last){stage="réseau";const r=await fetch(`${NS.sbUrl}/rest/v1/planner?id=eq.${sb.code}&select=data,updated_at`,{headers:sbHeaders(),cache:"no-store"});if(!r.ok)throw new Error("http "+r.status);
+   stage="réponse du serveur";const rows=await r.json();
+   if(rows.length){const row=rows[0],ts=Date.parse(row.updated_at)||0;if(ts!==sb.last&&!sb.pushT&&!sb.dirty&&!sb.pushing){
+    stage="lecture des données reçues";const s2=normalize(row.data);state=s2;sb.last=ts;sb.hold=false;saveLocal();
+    if(sb.diag&&/lecture/.test(sb.diag.stage))sb.diag=null;
+    try{renderAll();if(ui.panel==="data")renderPanel()}catch(e){sbDiag("affichage après synchro",e)}}}}
+  sb.ok=true;sb.err=false;if(sb.diag&&/réseau|réponse/.test(sb.diag.stage))sb.diag=null}
+ catch(e){sb.ok=false;sb.err=true;if(stage!=="réseau")sbDiag(stage,e);if(/lecture/.test(stage))sb.hold=true}
+ setSync()};
+sbPush=async function(){sb.pushT=null;if(!SYNC_ON||!sb.code)return;if(sb.pushing){sb.again=true;return}
+ // données distantes illisibles : on ne les écrase pas avec celles de ce téléphone, on retente la lecture
+ if(sb.hold){sb.dirty=false;await sbPull(true);if(sb.hold){sb.dirty=true;setSync();return}}
+ sb.pushing=true;sb.dirty=false;const now=new Date().toISOString();let stage="préparation des données";
+ try{const body=safeJSON({id:sb.code,data:state,updated_at:now});stage="réseau";
+  const r=await fetch(`${NS.sbUrl}/rest/v1/planner`,{method:"POST",headers:{...sbHeaders(),Prefer:"resolution=merge-duplicates,return=minimal"},body});if(!r.ok)throw new Error("http "+r.status);
+  sb.last=Date.parse(now);sb.ok=true;sb.err=false;if(sb.diag&&/réseau|réponse|envoi/.test(sb.diag.stage))sb.diag=null}
+ catch(e){sb.ok=false;sb.err=true;sb.dirty=true;if(stage!=="réseau")sbDiag("envoi : "+stage,e)}
+ sb.pushing=false;setSync();if(sb.again){sb.again=false;sbPush()}};
+// diagnostic à copier (aucune donnée personnelle : seulement la forme des données)
+function sbShape(){const o={};try{for(const k of Object.keys(state||{})){const v=state[k];let n;try{n=JSON.stringify(v).length}catch(e){n="non sérialisable"}o[k]=(Array.isArray(v)?"liste "+v.length:typeof v==="object"&&v?"objet "+Object.keys(v).length:typeof v)+" · "+n}}catch(e){}return o}
+function sbDiagText(){return JSON.stringify({app:(NS.build||""),quand:new Date().toISOString(),navigateur:navigator.userAgent,appliEcranAccueil:typeof isStandalone==="function"&&isStandalone(),
+ etat:syncSt&&syncSt(),erreurReseau:sb.lastErr||"",derniereReussite:sb.lastOk?new Date(sb.lastOk).toISOString():"",diag:sb.diag,stockageLocal:sb.storeErr||"",bloque:sb.hold,
+ derniereErreurJS:lastJsErr,taille:(()=>{try{return JSON.stringify(state).length}catch(e){return"non sérialisable"}})(),forme:sbShape()},null,1)}
+const syncCardHtmlV32=syncCardHtml;
+syncCardHtml=function(){let h=syncCardHtmlV32.apply(this,arguments);const st=syncSt();
+ if(st==="err"&&!sb.lastErr&&sb.diag)h=h.replace(/La synchro ne passe pas : [^(.<]*/,`La synchro ne passe pas : erreur de l'appli pendant « ${esc(sb.diag.stage)} » `);
+ if(st==="err"&&sb.hold)h=h.replace("Tes changements sont gardés sur ce téléphone et partiront dès que ça remarche.","Les données du foyer n'ont pas pu être lues : ce téléphone ne les écrase pas en attendant.");
+ if(sb.diag||st==="err"){const d=sb.diag?`<p class="pn-help sy-diag">Détail : ${esc(sb.diag.stage)} — ${esc(sb.diag.msg)}</p>`:"";
+  const add=`${d}<div class="pf-actions"><button type="button" class="btn" data-sy="diag">Copier le diagnostic</button></div>`;
+  if(h.includes('data-sy="retry">Réessayer</button></div>'))h=h.replace('data-sy="retry">Réessayer</button></div>','data-sy="retry">Réessayer</button></div>'+add);
+  else h=h.replace(/(<p class="sy-st[^"]*">[\s\S]*?<\/p>)/,"$1"+add)}
+ return h};
+document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest('[data-sy="diag"]');if(!b)return;const t=sbDiagText();
+ const done=()=>toast("Diagnostic copié : colle-le dans la conversation"),fb=()=>{const i=document.createElement("textarea");i.value=t;i.setAttribute("readonly","");i.style.cssText="position:fixed;left:-9999px;top:0";document.body.appendChild(i);i.select();try{document.execCommand("copy");done()}catch(x){toast("Copie impossible")}i.remove()};
+ try{navigator.clipboard.writeText(t).then(done,fb)}catch(x){fb()}});
+
+try{setTab(ui.tab);renderAll()}catch(e){try{sbDiag("affichage au démarrage",e)}catch(x){}}try{initDb()}catch(e){}sbStart();
 
 </script>
 </body>
