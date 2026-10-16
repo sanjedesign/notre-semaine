@@ -8,7 +8,7 @@ plan marmiton 200 https://www.marmiton.org/wsitemap_recipes_5.xml → 5000
 plan marmiton 200 https://www.marmiton.org/wsitemap_recipes_6.xml → 5000
 plan marmiton 200 https://www.marmiton.org/wsitemap_recipes_7.xml → 5000
 plan marmiton 200 https://www.marmiton.org/wsitemap_recipes_8.xml → 5000
-plan marmiton 200 https://www.marmiton.org/wsitemap_recipes_9.xml → 3896
+plan marmiton 200 https://www.marmiton.org/wsitemap_recipes_9.xml → 3897
 à lire : 353 fiches (38 pistes d'encas)
-gardées : 38 · écartées : {"nutrition absente":14,"protéines # g":74,"kcal #":111,"plat trop riche (nom)":66,"catégorie dessert":12,"encas pas assez protéiné":19,"lipides # g":14,"fiche incomplète":3,"catégorie boisson":1,"catégorie cocktail":1}
-pages créées : 4 · total 33 pages, 330 recettes · en attente 0
+gardées : 43 · écartées : {"protéines # g":65,"plat trop riche (nom)":66,"kcal #":103,"lipides # g":24,"catégorie boisson":2,"catégorie dessert":20,"catégorie dessert sans cuisson":2,"nutrition absente":11,"encas trop gras":1,"encas pas assez protéiné":11,"catégorie cocktail":2,"fiche incomplète":1,"catégorie confiserie":1,"catégorie boisson chaude":1}
+pages créées : 4 · total 37 pages, 370 recettes · en attente 3
