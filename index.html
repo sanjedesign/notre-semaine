@@ -1894,6 +1894,7 @@ h1,h2,.sec-head h1,.block-title,.row-head h2,.m-body h2,.pn-title{color:var(--ti
 .sy-diag{margin:8px 0 0;font-size:.78rem;word-break:break-word}
 .app-err{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin:0 0 14px;padding:12px 14px;border-radius:var(--r-md);background:#FDECEA;border:1px solid #EBA49C}
 .app-err p{margin:0;font-size:.88rem;flex:1 1 220px}
+.mg-over .mg-v em{color:var(--danger)}
 </style>
 </head>
 <body>
@@ -1998,7 +1999,7 @@ h1,h2,.sec-head h1,.block-title,.row-head h2,.m-body h2,.pn-title{color:var(--ti
 </div>
 <div id="timers" class="timers" hidden aria-live="polite"></div>
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
-<script>window.NS_CONFIG={"hosted": true, "sbUrl": "https://zjsawjudrdneeptxbskd.supabase.co", "sbKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpqc2F3anVkcmRuZWVwdHhic2tkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1NjUxMjcsImV4cCI6MjEwNzE0MTEyN30.Wn1bUy--5O78gGICTOyEGbnT6B-SdoNCG_XxBBaaUIY", "build": "20261016203311"}</script>
+<script>window.NS_CONFIG={"hosted": true, "sbUrl": "https://zjsawjudrdneeptxbskd.supabase.co", "sbKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpqc2F3anVkcmRuZWVwdHhic2tkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1NjUxMjcsImV4cCI6MjEwNzE0MTEyN30.Wn1bUy--5O78gGICTOyEGbnT6B-SdoNCG_XxBBaaUIY", "build": "20261017195532"}</script>
 <script>
 const AISLES={L:"Fruits & légumes",H:"Herbes fraîches",V:"Viandes & poissons",C:"Crèmerie & œufs",S:"Surgelés",F:"Féculents",B:"Conserves",E:"Épices & condiments"};
 const AISLE_ORDER=["L","H","V","C","S","F","B","E"];
@@ -4197,7 +4198,7 @@ function renderSuivi(){const el=document.getElementById("suivi");if(!el)return;
  const sel=S.find(it=>it.d===ui.chSel);const pastV=S.filter(it=>it.i<=0&&it.v);const av=k=>avg(pastV.map(it=>Number(it.v[k])||0));
  const trendC=`<div class="sv-card"><div class="sv-h"><h3>Tendance</h3><div class="seg sm" role="group" aria-label="Indicateur">${Object.entries(METRICS).map(([k,[l]])=>`<button type="button" data-chm="${k}" aria-pressed="${k===m}">${l}</button>`).join("")}</div></div>
   ${chartBars(S,m,tgt)}
-  <div class="sv-leg"><span><i class="dash"></i>objectif ${m==="k"||m==="s"?fmtInt(tgt):fmtG(tgt)}${METRICS[m][1]}</span><span><i class="dot ok"></i>${m==="k"?"dans la cible (±10 %)":m==="s"?"70 ou plus":"objectif atteint"}</span><span><i class="dot low"></i>${m==="k"?"en dessous":m==="s"?"50 à 69":"en dessous"}</span>${m==="k"||m==="s"?`<span><i class="dot high"></i>${m==="k"?"au-dessus":"moins de 50"}</span>`:""}</div>
+  <div class="sv-leg"><span><i class="dash"></i>objectif ${m==="k"||m==="s"?fmtInt(tgt):fmtG(tgt)}${METRICS[m][1]}</span><span><i class="dot ok"></i>${m==="k"?scKLbl():m==="s"?"70 ou plus":m==="f"||m==="c"?"dans la cible":"objectif atteint"}</span><span><i class="dot low"></i>${m==="k"?"en dessous":m==="s"?"50 à 69":"en dessous"}</span>${m!=="p"&&m!=="fi"?`<span><i class="dot high"></i>${m==="s"?"moins de 50":"au-dessus"}</span>`:""}</div>
   <p class="sv-detail">${sel?`<b>${esc(sel.date.toLocaleDateString("fr-FR",{weekday:"long",day:"numeric",month:"long"}))}${sel.fut?" (prévu)":""}</b> : `+(sel.v?`${fmtInt(sel.v.k)} kcal · protéines ${fmtG(sel.v.p)} g · lipides ${fmtG(sel.v.f)} g · glucides ${fmtG(sel.v.c)} g · fibres ${fmtG(sel.v.fi)} g${sel.v.s!=null?` · score ${sel.v.s}`:""}`:"aucune donnée"):""}</p>
   <p class="sv-avg">${pastV.length?`Moyenne sur ${pastV.length} jour${pastV.length>1?"s":""} suivi${pastV.length>1?"s":""} : <b>${fmtInt(av("k"))} kcal</b> / jour (objectif ${fmtInt(t.k)}) · <b>${fmtG(r1(av("p")))} g</b> de protéines · <b>${fmtG(r1(av("fi")))} g</b> de fibres`:"Les jours passés apparaîtront ici au fil de la semaine."}</p></div>`;
  // poids
@@ -7205,6 +7206,75 @@ renderShop=safeWrap("renderShop",renderShop);renderBudget=safeWrap("renderBudget
 renderSport=safeWrap("renderSport",renderSport);renderSuivi=safeWrap("renderSuivi",renderSuivi);
 // le diagnostic inclut ces erreurs d'affichage
 const sbDiagTextV33=sbDiagText;sbDiagText=function(){try{const o=JSON.parse(sbDiagTextV33());o.affichage=APP_ERR;o.magasin=state.store||"";return JSON.stringify(o,null,1)}catch(e){return sbDiagTextV33()}};
+
+
+// ================= v35 : score réaliste selon l'objectif (dépasser n'est plus « parfait ») =================
+// 5 indicateurs notés selon une zone cible, avec pénalité des deux côtés quand c'est pertinent, et un plafond
+// quand les calories ou un nutriment sortent nettement de la cible.
+const SC_W={k:35,p:25,f:15,c:15,fi:10};
+// zones par objectif : [début pleine note, fin pleine note, 0 point en dessous à, 0 point au-dessus à] (ratio à la cible)
+const SC_Z={
+ perte:{k:[0.9,1.02,0.6,1.2],p:[0.95,1.8,0.5,3],f:[0.6,1.05,0.2,1.5],c:[0.5,1.05,0.15,1.5],fi:[0.95,9,0.3,99]},
+ seche:{k:[0.9,1.02,0.6,1.18],p:[1,1.9,0.55,3],f:[0.6,1.05,0.2,1.45],c:[0.45,1.05,0.15,1.45],fi:[0.95,9,0.3,99]},
+ maintien:{k:[0.95,1.05,0.7,1.25],p:[0.95,1.7,0.5,3],f:[0.75,1.1,0.3,1.5],c:[0.8,1.1,0.4,1.5],fi:[0.95,9,0.3,99]},
+ masse:{k:[0.97,1.12,0.75,1.35],p:[0.95,1.7,0.5,3],f:[0.75,1.15,0.3,1.55],c:[0.85,1.2,0.45,1.6],fi:[0.9,9,0.3,99]}};
+function scGoal(t){const P=t&&(state.people||[]).find(p=>p&&p.t===t);let g=P&&P.prof&&P.prof.goal;if(!SC_Z[g])try{g=goalNow()}catch(e){}return SC_Z[g]?g:"perte"}
+// note d'un indicateur (0..1) : pleine dans [a,b], décroît linéairement jusqu'à lo (en dessous) et hi (au-dessus) ; au-dessus de b pour les protéines : pénalité douce (moitié max)
+function scZone(r,z,soft){const[a,b,lo,hi]=z;if(r>=a&&r<=b)return 1;if(r<a)return Math.max(0,(r-lo)/(a-lo));const v=Math.max(0,1-(r-b)/(hi-b));return soft?0.5+0.5*v:v}
+function scRatios(T,t){const R=x=>!(t[x]>0)||T[x]==null?1:(Number(T[x])||0)/t[x];return{k:R("k"),p:R("p"),f:R("f"),c:R("c"),fi:R("fi")}}
+scoreParts=function(T,t,goal){const g=goal||scGoal(t),Z=SC_Z[g],r=scRatios(T,t),o={};
+ for(const x in SC_W)o[x]=SC_W[x]*scZone(r[x],Z[x],x==="p");return o};
+// plafond : un dépassement net empêche d'afficher une très bonne note
+function scCap(T,t,goal){const g=goal||scGoal(t),r=scRatios(T,t);let cap=100,why="";const set=(c,w)=>{if(c<cap){cap=c;why=w}};
+ if(g==="masse"){if(r.k<0.85)set(69,"calories trop basses pour une prise de masse")}
+ else if(g==="maintien"){if(Math.abs(r.k-1)>0.15)set(69,r.k>1?"calories au-dessus de la cible":"calories en dessous de la cible")}
+ else{if(r.k>1.2)set(49,"calories nettement au-dessus de l'objectif");else if(r.k>1.1)set(69,"calories au-dessus de l'objectif");if(r.k<0.6)set(59,"trop peu mangé")}
+ if(r.f>1.3)set(79,"lipides nettement dépassés");if(r.c>1.3)set(79,"glucides nettement dépassés");
+ return{cap,why}}
+dayScore=function(T,t){return scScore(T,t,scGoal(t))};
+// historique : les jours passés sont recalculés avec la nouvelle règle
+function scPersonGoal(P){const g=P&&P.prof&&P.prof.goal;return SC_Z[g]?g:scGoal(null)}
+function scScore(T,t,g){if(!T||!(T.k>0))return null;const s=scoreParts(T,t,g);return Math.min(Math.round(s.k+s.p+s.f+s.c+s.fi),scCap(T,t,g).cap)}
+function scRehist(st){const H=st.hist||{};for(const d in H){const row=H[d];if(!Array.isArray(row))continue;row.forEach((v,pi)=>{const P=(st.people||[])[pi];if(v&&v.k>0&&P&&P.t)v.s=scScore(v,P.t,scPersonGoal(P))})}}
+try{scRehist(state)}catch(e){}
+const normalizeV35=normalize;normalize=function(d){const s=normalizeV35.apply(this,arguments);try{scRehist(s)}catch(e){}return s};
+// couleurs du graphique Tendance alignées sur les mêmes zones
+function scZoneOf(m){const P=state.people[ui.ntP||0];return(SC_Z[scPersonGoal(P)]||SC_Z.perte)[m]}
+mState=function(m,v,t){if(m==="s")return v>=70?"ok":v>=50?"low":"high";const Z=scZoneOf(m);if(!Z||!(t>0))return"ok";const r=v/t;
+ if(r<Z[0])return"low";if((m==="f"||m==="c"||m==="k")&&r>Z[1])return"high";return"ok"};
+const scPct=x=>(x>=1?"+":"−")+Math.round(Math.abs(x-1)*100)+" %";
+function scKLbl(){const Z=scZoneOf("k");return`dans la cible (${scPct(Z[0])} à ${scPct(Z[1])})`}
+// « Pourquoi ce score ? » : les 5 indicateurs, avec ce qui est dépassé
+whyCard=function(d,pi){const P=state.people[pi],t=P.t,today=DAYS[0][0],fut=d>today;const{rows,tot}=dayData(d,pi);const T={k:tot.k||0,p:tot.p||0,f:tot.f||0,c:tot.c||0,fi:tot.fi||0};
+ const goal=scGoal(t),Z=SC_Z[goal],sc=dayScore(T,t),S=scoreParts(T,t,goal),cap=scCap(T,t,goal),raw=Math.round(S.k+S.p+S.f+S.c+S.fi);
+ const top=key=>rows.map(r=>r.type==="meal"?(r.on?{n:short(r.r),v:r.n[key]}:null):{n:r.it.n,v:r.it[key]}).filter(x=>x&&x.v!=null).sort((a,b)=>b.v-a.v)[0];
+ const line=(x,txt)=>{const pts=S[x],max=SC_W[x];return`<div class="why-row" style="--c:${MC[x][2]}"><span class="why-l">${mdot(x)}${MC[x][0]}</span><span class="why-d">${txt}</span><b>${Math.round(pts)}<small>/${max}</small></b><span class="mg-bar" aria-hidden="true"><i style="width:${(pts/max*100).toFixed(0)}%"></i></span></div>`};
+ const g=x=>fmtG(r1(x)),r=scRatios(T,t);
+ const kTxt=r.k>Z.k[1]?`+${fmtInt(T.k-t.k)} kcal de trop`:r.k<Z.k[0]?`−${fmtInt(t.k-T.k)} kcal`:"✓ dans la cible";
+ const pTxt=r.p<Z.p[0]?`−${g(t.p-T.p)} g`:r.p>Z.p[1]?`+${g(T.p-t.p)} g, inutile`:r.p>1.05?`✓ +${g(T.p-t.p)} g, c'est bien`:"✓";
+ const ft=top("f"),ct=top("c");
+ const fTxt=r.f>Z.f[1]?`+${g(T.f-t.f)} g de trop${ft?` · ${esc(ft.n)}`:""}`:r.f<Z.f[0]?"un peu bas":"✓";
+ const cTxt=r.c>Z.c[1]?`+${g(T.c-t.c)} g de trop${ct?` · ${esc(ct.n)}`:""}`:r.c<Z.c[0]?"bas":"✓";
+ const fiTxt=r.fi<Z.fi[0]?`−${g(t.fi-T.fi)} g`:"✓";
+ const L=(state.log[d]&&state.log[d][pi])||[];const notes=[];
+ if(cap.cap<raw&&sc!=null)notes.push(`Score plafonné à ${cap.cap} : ${cap.why}.`);
+ if(atCant(d+"-midi",pi)&&!L.some(it=>it.src==="cant"))notes.push("Plateau de cantine non noté.");{const PT=pendTot(rows);if(PT.k>0)notes.push("Repas prévus à confirmer : +"+fmtInt(PT.k)+" kcal.")}
+ const sug=[];ui.why={d,pi,picks:[]};const slots=slotSuggest(d,pi,T,t);let T2=addT(T,pendTot(rows));
+ slots.forEach(x=>{const n=nutOr(rNut(x.r));T2=addT(T2,n);sug.push(`<li><span class="why-t">🍽️ <b>${x.ml}</b> · ${esc(short(x.r))} <small>${Math.round(n.k)} kcal</small></span><button type="button" class="btn small" data-whyplan="${x.k}|${x.r.id}">Ajouter</button></li>`)});
+ const sw=swapSuggest(d,pi,T,t);if(sw)sug.push(`<li><span class="why-t">🔁 <b>${sw.ml}</b> · ${esc(short(sw.r))} <small>${sw.dk<0?"−":"+"}${fmtInt(Math.abs(sw.dk))} kcal</small></span><button type="button" class="btn small" data-whyswap="${sw.k}|${sw.r.id}">Remplacer</button></li>`);
+ const B=boostPlan(T2,t,goal);ui.why.picks=B.picks;
+ B.picks.forEach((it,i)=>sug.push(`<li><span class="why-t">➕ ${esc(it.n)} <small>${Math.round(it.k)} kcal · ${Math.round(it.p)} g prot.</small></span><button type="button" class="btn small" data-whyboost="${i}">${fut?"Prévoir":"Noter"}</button></li>`));
+ const est=dayScore(B.T,t);const better=(slots.length||B.picks.length)&&est!=null&&est>(sc||0);
+ const over=r.k>Z.k[1];
+ return`<details class="sv-card sv-why" id="whyCard"${sc!=null&&sc<85?" open":""}><summary><b>Pourquoi ce score ?</b><span class="why-badge">${sc==null?"–":sc}<small>/100</small></span></summary>
+  <div class="why-parts">${line("k",kTxt)}${line("p",pTxt)}${line("f",fTxt)}${line("c",cTxt)}${line("fi",fiTxt)}</div>
+  ${notes.length?`<p class="sv-mini">⚠️ ${notes.join(" ")}</p>`:""}
+  <p class="sv-mini why-rule">Objectif « ${esc((GOALS[goal]||{}).l||goal)} » : chaque indicateur rapporte ses points dans sa zone cible et en perd s'il est trop bas ou trop haut.</p>
+  ${over?`<h4 class="why-h4">Pour la suite</h4>${sw?`<ul class="why-sugg">${sug.filter(x=>x.includes("data-whyswap")).join("")}</ul>`:""}<p class="sv-mini">Calories déjà dépassées : pour le reste de la journée, légumes et protéines maigres, sans matières grasses ajoutées.</p>`
+   :sug.length?`<h4 class="why-h4">Pour atteindre la cible</h4><ul class="why-sugg">${sug.join("")}</ul>${better?`<p class="sv-mini">→ score estimé <b>${est}</b></p>`:""}`:""}</details>`};
+// jauges du jour : ✓ dans la zone, ↑ au-dessus (lipides, glucides), selon l'objectif
+gaugeRow=function(x,v,t){const pct=t?v/t:0,Z=scZoneOf(x);const flag=!Z?"":(x==="f"||x==="c")&&pct>Z[1]?"↑":pct>=Z[0]?"✓":"";
+ return`<div class="mg${flag==="↑"?" mg-over":""}" style="--c:${MC[x][2]}"><span class="mg-l">${mdot(x)}${MC[x][0]}</span><span class="mg-bar" aria-hidden="true"><i style="width:${Math.min(100,pct*100).toFixed(1)}%"></i></span><span class="mg-v">${fmtG(r1(v))}<small>/${t} g</small>${flag?`<em>${flag}</em>`:""}</span></div>`};
 
 try{setTab(ui.tab);renderAll()}catch(e){try{sbDiag("affichage au démarrage",e)}catch(x){}}try{initDb()}catch(e){}sbStart();
 
