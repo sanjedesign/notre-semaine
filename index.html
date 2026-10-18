@@ -1987,6 +1987,28 @@ h1,h2,.sec-head h1,.block-title,.row-head h2,.m-body h2,.pn-title{color:var(--ti
 .ml-opt .mp-add{margin-left:auto;flex:0 0 auto;width:30px;height:30px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;font-style:normal;font-weight:700}
 .ml-opt.in{border-color:var(--accent);background:var(--accent-soft)}
 .ml-opt.in .mp-add{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+/* v38 : tickets annulables, page des quantités avant de cuisiner */
+.tk-tlist li{align-items:center;gap:10px}
+.tk-tlist li span{flex:1}
+.tk-x{width:30px;height:30px}
+.tk-x.armed,.tk-undo.armed{width:auto;padding:0 12px;border-radius:999px;color:var(--danger);border-color:var(--danger);font-size:.8rem;font-weight:700}
+.tk-xhelp{margin-top:8px;font-size:.8rem}
+.tk-undo{display:block;margin:14px auto 0;color:var(--danger)}
+.cp-h{font-size:1.15rem;margin:6px 0 8px}
+.cp-serv{display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--surface-2);border-radius:var(--r-md);padding:8px 12px;margin:8px 0 6px;font-weight:700;font-size:.92rem}
+.cp-list li{padding:0}
+.cp-list label{display:flex;align-items:center;gap:12px;width:100%;padding:9px 12px;cursor:pointer}
+.cp-list input{width:22px;height:22px;flex:0 0 auto;accent-color:var(--accent)}
+.cp-list li.on .ix b{text-decoration:line-through;color:var(--muted)}
+.cp-list li.on .ico{opacity:.5}
+.pill.miss{background:transparent;border:1px dashed var(--line);color:var(--muted)}
+.cp-miss{font-size:.86rem;color:var(--muted);margin:10px 0 0}
+.cp-list .ix{flex-direction:column;align-items:flex-start;justify-content:center;gap:2px}
+.cp-list .ix b{font-size:.95rem;line-height:1.25}
+.cp-list .qt{font-weight:700;font-size:.98rem;color:var(--ink);display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px}
+.cp-list .qt .pill{font-size:.72rem;font-weight:600}
+.cook-prep .cm-nav .btn:first-child{flex:0 0 auto}
+.cook-prep .cm-nav .btn.primary{flex:1 1 auto}
 </style>
 </head>
 <body>
@@ -2091,7 +2113,7 @@ h1,h2,.sec-head h1,.block-title,.row-head h2,.m-body h2,.pn-title{color:var(--ti
 </div>
 <div id="timers" class="timers" hidden aria-live="polite"></div>
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
-<script>window.NS_CONFIG={"hosted": true, "sbUrl": "https://zjsawjudrdneeptxbskd.supabase.co", "sbKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpqc2F3anVkcmRuZWVwdHhic2tkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1NjUxMjcsImV4cCI6MjEwNzE0MTEyN30.Wn1bUy--5O78gGICTOyEGbnT6B-SdoNCG_XxBBaaUIY", "build": "20261018105705"}</script>
+<script>window.NS_CONFIG={"hosted": true, "sbUrl": "https://zjsawjudrdneeptxbskd.supabase.co", "sbKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpqc2F3anVkcmRuZWVwdHhic2tkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1NjUxMjcsImV4cCI6MjEwNzE0MTEyN30.Wn1bUy--5O78gGICTOyEGbnT6B-SdoNCG_XxBBaaUIY", "build": "20261018155505"}</script>
 <script>
 const AISLES={L:"Fruits & légumes",H:"Herbes fraîches",V:"Viandes & poissons",C:"Crèmerie & œufs",S:"Surgelés",F:"Féculents",B:"Conserves",E:"Épices & condiments"};
 const AISLE_ORDER=["L","H","V","C","S","F","B","E"];
@@ -3622,6 +3644,19 @@ normalize=function(d){const s=normalizeV37.apply(this,arguments);try{const src=d
  for(const k in s.ate){const v=s.ate[k],o=src[k];if(!v||v.none||!o||!Array.isArray(o.x))continue;const x=[];
   for(const it of o.x.slice(0,5)){if(!it||!RMAP[it.r])continue;const sv=Number(it.s);x.push({r:it.r,s:isFinite(sv)&&sv>=0.25&&sv<=4?Math.round(sv*4)/4:1})}
   if(x.length)v.x=x}}catch(e){}return s};
+
+
+// ================= v38 (avant l'état) : tickets annulables (chaque prix sait de quel ticket il vient) =================
+// prix : t = identifiant du ticket ; ticket : u = prix d'avant ce ticket (pour revenir en arrière), gardé pour les 8 derniers tickets
+function tkCleanRec(r){if(!r||typeof r!=="object")return null;const num=(v,max)=>{v=Number(v);return isFinite(v)&&v>=0&&v<max?Math.round(v*1000)/1000:0};const okD=d=>typeof d==="string"&&/^\d{4}-\d{2}-\d{2}$/.test(d);
+ const q={k:r.k==="u"?"u":"kg",v:num(r.v,2000),p:num(r.p,2000),g:Math.round(num(r.g,100000)),c:Math.round(num(r.c,500)),d:okD(r.d)?r.d:"",l:typeof r.l==="string"?r.l.slice(0,60):"",pr:num(r.pr,1000),
+  h:Array.isArray(r.h)?r.h.filter(x=>Array.isArray(x)&&okD(x[0])&&num(x[1],2000)>0).slice(-8).map(x=>[x[0],num(x[1],2000)]):[]};
+ if(typeof r.t==="string"&&r.t.length<=40)q.t=r.t;return q.v>0&&q.d?q:null}
+const normalizeV38=normalize;
+normalize=function(d){const s=normalizeV38.apply(this,arguments);try{const src=d&&typeof d==="object"&&d.tk&&typeof d.tk==="object"?d.tk:null;if(!src||!s.tk)return s;
+ for(const st in s.tk.p){const S=s.tk.p[st],O=src.p&&src.p[st];if(!O)continue;for(const id in S){const o=O[id];if(o&&typeof o.t==="string"&&o.t.length<=40)S[id].t=o.t}}
+ const ST=Array.isArray(src.t)?src.t:[];for(const x of s.tk.t){const o=ST.find(y=>y&&y.id===x.id);if(!o||!o.u||typeof o.u!=="object")continue;const u={};let n=0;
+  for(const id in o.u){if(n>=80||!ING[id])continue;u[id]=o.u[id]===null?null:tkCleanRec(o.u[id]);n++}x.u=u}}catch(e){}return s};
 
 // ---------- état ----------
 const dayOf=k=>k.split("-")[0];
@@ -7904,6 +7939,67 @@ document.addEventListener("click",e=>{const t=e.target.closest&&e.target.closest
 document.addEventListener("input",e=>{const t=e.target;if(!t||t.id!=="mealQ"||ui.panel!=="meal"||ui.mealMode!=="mix")return;e.stopImmediatePropagation();ui.mealQ=t.value;
  const q=nrmS(t.value||"").trim();const box=document.getElementById("mealRes");if(!box)return;const res=q.length>=2?RECIPES.filter(r=>!r.snack&&!(state.removed&&state.removed[r.id])&&nrmS(r.n).includes(q)).slice(0,8):[];
  box.innerHTML=q.length>=2?(res.length?res.map(r=>mpOpt(r)).join(""):`<p class="pn-help">Aucune recette trouvée.</p>`):""},true);
+
+
+// ================= v38 : supprimer un ticket importé par erreur ; batch cooking : page des quantités avant de cuisiner =================
+// ---------- tickets ----------
+const tkSaveV38=tkSave;
+tkSave=function(){const T=ui.tk;if(!T||T.step!=="review"||!T.store)return tkSaveV38.apply(this,arguments);const st=T.store;
+ const before=JSON.parse(JSON.stringify((state.tk&&state.tk.p&&state.tk.p[st])||{}));
+ tkSaveV38.apply(this,arguments);
+ try{const D=ui.tk;if(!D||D.step!=="done")return;const tid=D.date+"|"+st+"|"+Math.round(D.tot*100);const S=(state.tk.p[st])||{};const u={};
+  for(const id in S){const R=S[id],b=before[id];if(!b||JSON.stringify(b)!==JSON.stringify(R)){R.t=tid;u[id]=b||null}}
+  const tk=state.tk.t.find(x=>x.id===tid);if(tk)tk.u=u;state.tk.t.slice(0,-8).forEach(x=>{delete x.u});D.tid=tid;commit();renderPanel()}catch(e){}};
+function tkDelTicket(tid){const T=(state.tk&&state.tk.t||[]).find(x=>x.id===tid);if(!T)return 0;const S=state.tk.p[T.s]||{};let n=0;
+ const back=(id,R)=>{const h=(R.h||[]).slice(),last=h.pop();if(last&&last[0]!==T.d){S[id]={...R,v:last[1],p:R.v>0?Math.round(R.p*last[1]/R.v*1000)/1000:R.p,d:last[0],h,l:"",t:""}}else delete S[id]};
+ for(const id of Object.keys(S)){const R=S[id];const from=R.t?R.t===tid:(R.d===T.d);if(!from)continue;n++;
+  const has=T.u&&Object.prototype.hasOwnProperty.call(T.u,id);const prev=has?T.u[id]:undefined;
+  if(prev&&prev.t!==tid)S[id]=prev;else if(has&&prev===null)delete S[id];else back(id,R)}
+ // les sauvegardes des autres tickets ne doivent plus pointer vers ce ticket
+ for(const x of state.tk.t){if(x===T||!x.u)continue;for(const id in x.u){const v=x.u[id];if(v&&v.t===tid)x.u[id]=T.u&&T.u[id]!==undefined?T.u[id]:null}}
+ if(!Object.keys(S).length)delete state.tk.p[T.s];state.tk.t=state.tk.t.filter(x=>x!==T);commit();return n}
+const tkTicketLbl=x=>`${tkDd(x.d)} · ${x.s&&STORES[x.s]?STORES[x.s][0]:"Magasin"} · ${fmtEur(x.tot)}`;
+const panelTicketV38=panelTicket;
+panelTicket=function(){let h=panelTicketV38.apply(this,arguments);const T=ui.tk||{};if(T.step&&T.step!=="home")return h;
+ const tks=(state.tk&&state.tk.t)||[];if(!tks.length)return h;
+ const list=`<ul class="tk-tlist">${tks.slice(-10).reverse().map(x=>`<li><span>${esc(tkDd(x.d))} · ${esc(x.s&&STORES[x.s]?STORES[x.s][0]:"Magasin")}</span><b>${fmtEur(x.tot)}</b><button type="button" class="nt-del tk-x" data-tkx="${esc(x.id)}" aria-label="Supprimer le ticket du ${esc(tkTicketLbl(x))}">×</button></li>`).join("")}</ul><p class="pn-help tk-xhelp">Ticket importé par erreur ? Touche × : ses prix sont retirés et les prix d'avant reviennent.</p>`;
+ return h.replace(/<ul class="tk-tlist">[\s\S]*?<\/ul>/,list)};
+const tkDoneHtmlV38=tkDoneHtml;
+tkDoneHtml=function(T){const h=tkDoneHtmlV38.apply(this,arguments);return T&&T.tid?h+`<button type="button" class="link tk-undo" data-tkx="${esc(T.tid)}">Annuler ce ticket (importé par erreur)</button>`:h};
+document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-tkx]");if(!b)return;e.stopPropagation();const tid=b.dataset.tkx;
+ if(b.dataset.armed!=="1"){b.dataset.armed="1";b._txt=b.textContent;b.classList.add("armed");b.textContent=b.classList.contains("tk-x")?"Supprimer ?":"Confirmer : annuler ce ticket";clearTimeout(b._t);b._t=setTimeout(()=>{if(b.isConnected){b.dataset.armed="";b.classList.remove("armed");b.textContent=b._txt}},4000);return}
+ const T=(state.tk&&state.tk.t||[]).find(x=>x.id===tid);const lbl=T?tkTicketLbl(T):"";const n=tkDelTicket(tid);ui.tk={step:"home"};renderAll();if(ui.panel==="ticket")renderPanel();toast("Ticket supprimé"+(lbl?" ("+lbl+")":"")+(n?" · "+n+" prix retirés":""))},true);
+
+// ---------- cuisiner : d'abord les quantités pour les portions à cuisiner ----------
+function cookPrepHtml(){const r=RMAP[ui.modal];const sv=curServ(),fct=sv/(r.base||2);const n=r.st.length;const ck=(ui.cookKeys||[]).filter(k=>state.plan[k]===r.id&&!state.done[k]);const C=ui.cpChk||{};
+ const ckList=ck.map(k=>`${esc(slotLabel(k))} <b>${servOf(k)} p.</b>`).join(" · ");
+ const row=([id,q,tx,nm],i)=>{const c=eqCover(id,isStaple(id)||typeof q!=="number"?null:q*fct*0.8);const on=!!C[i];
+  return`<li class="cp-i${on?" on":""}"><label><input type="checkbox" data-cpchk="${i}"${on?" checked":""}><span class="ico" aria-hidden="true">${icon(id)}</span><span class="ix"><b>${esc(nm||ING[id][0])}</b><span class="qt">${esc(scaledQty(id,q,fct,tx))}${c.ok?` <span class="pill ok">${c.via&&c.via.length?"en stock : "+esc(eqNames(c.via)):"en stock"}</span>`:isStaple(id)?"":` <span class="pill miss">pas en stock</span>`}</span></span></label></li>`};
+ const idx=r.i.map((x,i)=>[x,i]);const fresh=idx.filter(([x])=>!isStaple(x[0])),pantry=idx.filter(([x])=>isStaple(x[0]));
+ const miss=fresh.filter(([x])=>{const[id,q]=x;return!eqCover(id,typeof q!=="number"?null:q*fct*0.8).ok}).map(([x])=>x[3]||ING[x[0]][0]);
+ const done=Object.values(C).filter(Boolean).length,tot=r.i.length;
+ const unit=r.snack?`${sv} fournée${sv>1?"s":""} · ${sv*r.yieldN} ${esc(r.yieldU)}`:`${sv} portion${sv>1?"s":""}`;
+ return`<div class="cook-mode cook-prep"><div class="cm-head"><span class="cm-title">${esc(short(r))}</span><span class="cm-serv">${r.snack?unit:ck.length>1?sv+" portions · "+ck.length+" repas":sv+" pers."}</span></div>
+ <p class="cm-count">Avant de commencer</p>
+ <h3 class="cp-h">Ingrédients pour ${unit}</h3>
+ ${ck.length>1?`<p class="cm-batch"><b>Batch cooking</b> : une seule préparation pour ${ck.length} repas (${ckList}). Prévois ${ck.length} boîtes.</p>`:""}
+ <div class="cp-serv"><span>${r.snack?"Fournées à préparer":"Portions à cuisiner"}</span><span class="serv"><button type="button" data-cpserv="-1" aria-label="Une portion de moins"${sv<=1?" disabled":""}>−</button><span class="serv-n">${sv}</span><button type="button" data-cpserv="1" aria-label="Une portion de plus"${sv>=40?" disabled":""}>+</button></span></div>
+ <p class="pn-help">Sors tout avant de commencer et coche au fur et à mesure.${done?` <b>${done}/${tot} prêts</b>`:""}</p>
+ <ul class="ingx cp-list">${fresh.map(([x,i])=>row(x,i)).join("")}</ul>
+ ${pantry.length?`<h4 class="ing-sub">Placard</h4><ul class="ingx small cp-list">${pantry.map(([x,i])=>row(x,i)).join("")}</ul>`:""}
+
+ <div class="cm-nav"><button type="button" class="btn" data-act="cook-exit">Quitter</button><button type="button" class="btn primary" data-act="cook-go">Commencer : ${n} étape${n>1?"s":""}</button></div></div>`}
+const renderModalV38=renderModal;
+renderModal=function(){if(!ui.modal||ui.cook==null)ui.cookPrep=false;renderModalV38.apply(this,arguments);
+ try{if(ui.modal&&ui.cook!=null){if(ui.cookPrep){const c=document.getElementById("mContent");if(c)c.innerHTML=cookPrepHtml()}
+  else if(ui.cook===0){const b=document.querySelector('#mContent [data-act="cook-prev"]');if(b){b.disabled=false;b.dataset.act="cook-prep";b.setAttribute("aria-label","Revenir aux ingrédients")}}}}catch(e){}};
+document.addEventListener("click",e=>{const t=e.target.closest&&e.target.closest("button");if(!t||!ui.modal)return;const a=t.dataset.act;
+ if(a==="cook-start"||a==="cook-batch"||a==="cook-one"){ui.cookPrep=true;ui.cpChk={};renderModal();try{window.scrollTo(0,0)}catch(x){}return}
+ if(a==="cook-go"){ui.cookPrep=false;ui.cook=0;renderModal();try{window.scrollTo(0,0)}catch(x){}return}
+ if(a==="cook-prep"){ui.cookPrep=true;renderModal();try{window.scrollTo(0,0)}catch(x){}return}
+ if(t.dataset.cpserv){ui.mServ=Math.min(40,Math.max(1,curServ()+Number(t.dataset.cpserv)));renderModal();return}});
+document.addEventListener("change",e=>{const t=e.target;if(!t||!t.dataset||t.dataset.cpchk==null)return;ui.cpChk=ui.cpChk||{};ui.cpChk[t.dataset.cpchk]=t.checked;const li=t.closest("li");if(li)li.classList.toggle("on",t.checked);
+ const r=RMAP[ui.modal];const h=document.querySelector(".cook-prep .pn-help");if(h&&r){const done=Object.values(ui.cpChk).filter(Boolean).length;const b=h.querySelector("b");const txt=done?`${done}/${r.i.length} prêts`:"";if(b)b.textContent=txt;else if(txt)h.insertAdjacentHTML("beforeend",` <b>${txt}</b>`)}});
 
 try{setTab(ui.tab);renderAll()}catch(e){try{sbDiag("affichage au démarrage",e)}catch(x){}}try{initDb()}catch(e){}sbStart();
 
