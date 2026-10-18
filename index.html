@@ -1968,6 +1968,25 @@ h1,h2,.sec-head h1,.block-title,.row-head h2,.m-body h2,.pn-title{color:var(--ti
 .ai-list li>span:first-of-type{flex:1}
 .ai-mv{display:flex;gap:6px}
 .ai-mv .btn{min-width:40px;justify-content:center}
+/* v37 : assiette composée */
+.mp-mode{margin:4px 0 12px;display:flex}
+.mp-mode button{flex:1}
+.mp-card h3{margin-bottom:8px}
+.mp-row{display:grid;grid-template-columns:44px 1fr auto auto;grid-template-areas:"img name name del" "img meta step step";gap:2px 10px;align-items:center;padding:10px 0;border-top:1px solid var(--line)}
+.mp-row:first-of-type{border-top:0}
+.mp-img{grid-area:img;width:44px;height:44px;border-radius:10px;object-fit:cover;align-self:start}
+.mp-name{grid-area:name;font-size:.92rem;line-height:1.25;min-width:0}
+.mp-del{grid-area:del;justify-self:end}
+.mp-meta{grid-area:meta;color:var(--muted);font-size:.78rem}
+.mp-step{grid-area:step;display:flex;align-items:center;gap:6px;justify-self:end}
+.mp-step b{min-width:4.6em;text-align:center;font-size:.92rem;white-space:nowrap}
+.mp-b{width:34px;height:34px;border-radius:50%;border:1px solid var(--line);background:var(--surface);font-size:1.1rem;font-weight:700;display:grid;place-items:center}
+.mp-b:disabled{opacity:.35}
+.mp-tot{margin:10px 0 0;padding-top:10px;border-top:1px dashed var(--line);font-size:.9rem}
+.mp-save{width:100%;margin-top:6px}
+.ml-opt .mp-add{margin-left:auto;flex:0 0 auto;width:30px;height:30px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;font-style:normal;font-weight:700}
+.ml-opt.in{border-color:var(--accent);background:var(--accent-soft)}
+.ml-opt.in .mp-add{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
 </style>
 </head>
 <body>
@@ -2072,7 +2091,7 @@ h1,h2,.sec-head h1,.block-title,.row-head h2,.m-body h2,.pn-title{color:var(--ti
 </div>
 <div id="timers" class="timers" hidden aria-live="polite"></div>
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
-<script>window.NS_CONFIG={"hosted": true, "sbUrl": "https://zjsawjudrdneeptxbskd.supabase.co", "sbKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpqc2F3anVkcmRuZWVwdHhic2tkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1NjUxMjcsImV4cCI6MjEwNzE0MTEyN30.Wn1bUy--5O78gGICTOyEGbnT6B-SdoNCG_XxBBaaUIY", "build": "20261017204330"}</script>
+<script>window.NS_CONFIG={"hosted": true, "sbUrl": "https://zjsawjudrdneeptxbskd.supabase.co", "sbKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpqc2F3anVkcmRuZWVwdHhic2tkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1NjUxMjcsImV4cCI6MjEwNzE0MTEyN30.Wn1bUy--5O78gGICTOyEGbnT6B-SdoNCG_XxBBaaUIY", "build": "20261018105705"}</script>
 <script>
 const AISLES={L:"Fruits & légumes",H:"Herbes fraîches",V:"Viandes & poissons",C:"Crèmerie & œufs",S:"Surgelés",F:"Féculents",B:"Conserves",E:"Épices & condiments"};
 const AISLE_ORDER=["L","H","V","C","S","F","B","E"];
@@ -3594,6 +3613,15 @@ function aiCleanState(src){const o={};if(!src||typeof src!=="object")return o;
  return o}
 const normalizeV36=normalize;
 normalize=function(d){const s=normalizeV36.apply(this,arguments);const src=d&&typeof d==="object"?d:{};s.tk=tkCleanState(src.tk);s.aisle=aiCleanState(src.aisle);return s};
+
+
+// ================= v37 (avant l'état) : assiette composée (plusieurs plats dans un même repas) =================
+// state.ate["AAAAMMJJ-midi-0"] = {r, s, x:[{r, s}…]} : x = autres plats de l'assiette (ex. ½ hachis + ½ lasagnes)
+const normalizeV37=normalize;
+normalize=function(d){const s=normalizeV37.apply(this,arguments);try{const src=d&&typeof d==="object"&&d.ate&&typeof d.ate==="object"?d.ate:{};
+ for(const k in s.ate){const v=s.ate[k],o=src[k];if(!v||v.none||!o||!Array.isArray(o.x))continue;const x=[];
+  for(const it of o.x.slice(0,5)){if(!it||!RMAP[it.r])continue;const sv=Number(it.s);x.push({r:it.r,s:isFinite(sv)&&sv>=0.25&&sv<=4?Math.round(sv*4)/4:1})}
+  if(x.length)v.x=x}}catch(e){}return s};
 
 // ---------- état ----------
 const dayOf=k=>k.split("-")[0];
@@ -7811,6 +7839,71 @@ function panelAisle(){const st=aiStore(),S=state.aisle&&state.aisle[st],ord=aiCa
 // texte copié de la liste : même ordre
 // (au démarrage : un parcours terminé depuis longtemps est appris)
 setTimeout(()=>{try{const t=aiTrip();if(t&&Date.now()-t.t1>AI_GAP)aiFinish(t)}catch(e){}},1500);
+
+
+// ================= v37 : assiette composée — plusieurs plats dans un même repas, chacun avec sa portion =================
+// Ex. ½ hachis parmentier + ½ lasagnes. Dans « Qu'as-tu mangé ? » : mode « Plusieurs plats », on touche les plats,
+// on ajuste la portion de chacun (¼ à 3), puis « Valider l'assiette ».
+const MP_STEPS=[0.25,0.5,0.75,1,1.25,1.5,2,2.5,3];
+function ateParts(A){if(!A||A.none)return[];return[{r:A.r,s:A.s||1}].concat(A.x||[]).filter(p=>RMAP[p.r])}
+function partsNut(parts){const n={k:0,p:0,f:0,c:0,fi:0};let partial=false;
+ for(const p of parts){const b=rNut(RMAP[p.r]);n.k+=(b.k||0)*p.s;n.p+=(b.p||0)*p.s;for(const x of ["f","c","fi"]){if(b[x]==null)partial=true;else n[x]+=b[x]*p.s}}
+ return{n,partial}}
+const partsTxt=parts=>parts.map(p=>(p.s!==1?fmtM(p.s)+" ":"")+short(RMAP[p.r])).join(" + ");
+// totaux du jour : l'assiette entière est comptée
+const dayDataV37=dayData;
+dayData=function(day,pi){const D=dayDataV37.apply(this,arguments);try{for(const row of D.rows){if(row.type!=="meal"||!row.conf)continue;const A=state.ate&&state.ate[row.k+"-"+pi];
+  if(!A||!A.x||!A.x.length)continue;const parts=ateParts(A);const{n,partial}=partsNut(parts);
+  for(const x of ["k","p","f","c","fi"]){if(row.n&&row.n[x]!=null)D.tot[x]-=row.n[x];D.tot[x]+=n[x]||0}
+  if(partial)D.partial=true;row.n=n;row.parts=parts}}catch(e){}return D};
+const dayRowsHtmlV37=dayRowsHtml;
+dayRowsHtml=function(rows,pi){if(!rows.length||!rows.some(r=>r.parts))return dayRowsHtmlV37.apply(this,arguments);
+ return rows.map(row=>{if(!row.parts)return dayRowsHtmlV37([row],pi);
+  return`<li>${`<span class="nt-tag">${row.ml}</span>`}<span class="nt-name">${esc(partsTxt(row.parts))}<small>assiette · ${Math.round(row.n.k)} kcal · ${Math.round(row.n.p)} g prot.</small></span><span class="nt-btns"><button type="button" class="nt-ch" data-mealpick="${row.k}">Modifier</button><button type="button" class="nt-del" data-mealundo="${row.k}" aria-label="Annuler ce repas">×</button></span></li>`}).join("")};
+// ---------- panneau « Qu'as-tu mangé ? » ----------
+function mpOpt(r,from){const n=rNut(r);const inP=(ui.plate||[]).some(p=>p.r===r.id);
+ return`<button type="button" class="ml-opt${inP?" in":""}" data-mealset="${r.id}|${from||""}" aria-pressed="${inP}"><img src="${imgSrc(r)}" alt="" loading="lazy"><span><b>${esc(short(r))}</b><small>${from?esc(slotLabel(from))+" · ":""}${Math.round(n.k||0)} kcal la portion</small></span><i class="mp-add" aria-hidden="true">${inP?"✓":"+"}</i></button>`}
+function mpPlateHtml(){const P=ui.plate||[];const{n}=partsNut(P);const O=state.people[1-(ui.ntP||0)];
+ return`<div class="pn-card mp-card" id="mpCard"><h3>Ton assiette</h3>
+ ${P.length?P.map((p,i)=>{const r=RMAP[p.r],b=rNut(r);return`<div class="mp-row"><img class="mp-img" src="${imgSrc(r)}" alt="" loading="lazy"><b class="mp-name">${esc(short(r))}</b><button type="button" class="nt-del mp-del" data-mprm="${i}" aria-label="Retirer ${esc(short(r))}">×</button>
+  <small class="mp-meta">${Math.round((b.k||0)*p.s)} kcal · ${Math.round((b.p||0)*p.s)} g prot.</small>
+  <span class="mp-step" role="group" aria-label="Portion de ${esc(short(r))}"><button type="button" class="mp-b" data-mpm="${i}|-1"${p.s<=MP_STEPS[0]?" disabled":""} aria-label="Moins">−</button><b>${fmtM(p.s)} portion</b><button type="button" class="mp-b" data-mpm="${i}|1"${p.s>=MP_STEPS[MP_STEPS.length-1]?" disabled":""} aria-label="Plus">+</button></span></div>`}).join("")
+  +`<p class="mp-tot">Total : <b>${fmtInt(n.k)} kcal</b> · ${fmtG(r1(n.p))} g prot. · ${P.reduce((a,p)=>a+p.s,0)===1?"1 portion au total":fmtM(P.reduce((a,p)=>a+p.s,0))+" portion"+(P.reduce((a,p)=>a+p.s,0)>1?"s":"")+" au total"}</p>`
+  :`<p class="pn-help">Touche les plats ci-dessous pour les ajouter (½ portion chacun), puis ajuste les portions.</p>`}
+ <label class="chk"><input type="checkbox" id="mealBoth"${ui.mealBoth?" checked":""}> Aussi pour ${esc(O.n)}</label>
+ <button type="button" class="btn primary mp-save" data-act="mp-save"${P.length?"":" disabled"}>Valider l'assiette</button></div>`}
+function panelMealV37(){const d=ui.pdata||{},k=d.k,pi=ui.ntP||0;const[day,m]=k.split("-");const ml=(MEALS.find(x=>x[0]===m)||[])[1]||"";const P=state.people[pi];
+ if(ui.mealMode!=="mix"){const h=panelMeal();return h.replace(/(<p class="pn-help">Qu'a mangé[\s\S]*?<\/p>)/,`$1${mpModeSeg()}`)}
+ const planned=RMAP[state.plan[k]];const seen=new Set(planned?[planned.id]:[]);
+ const week=SLOTS.filter(x=>x!==k&&RMAP[state.plan[x]]&&!state.done[x]).filter(x=>{const id=state.plan[x];if(seen.has(id))return false;seen.add(id);return true});
+ const q=nrmS(ui.mealQ||"").trim();const res=q.length>=2?RECIPES.filter(r=>!r.snack&&!(state.removed&&state.removed[r.id])&&nrmS(r.n).includes(q)).slice(0,8):[];
+ return`<h2 class="pn-title">${ml} · ${esc(dayLabel(day))}</h2><p class="pn-help">Qu'a mangé <b>${esc(P.n)}</b> ?</p>${mpModeSeg()}
+ ${mpPlateHtml()}
+ ${planned?`<div class="pn-card"><h3>Prévu</h3>${mpOpt(planned)}</div>`:""}
+ ${week.length?`<div class="pn-card"><h3>Autres repas de la semaine</h3>${week.map(x=>mpOpt(RMAP[state.plan[x]],x)).join("")}</div>`:""}
+ <div class="pn-card"><h3>Autre recette</h3><input class="pn-in" id="mealQ" placeholder="Chercher une recette (ex. lasagnes)" value="${esc(ui.mealQ||"")}" autocomplete="off"><div id="mealRes">${q.length>=2?(res.length?res.map(r=>mpOpt(r)).join(""):`<p class="pn-help">Aucune recette trouvée.</p>`):""}</div></div>
+ <div class="pf-actions"><button type="button" class="btn" data-mealnone="${k}">Pas de repas</button><button type="button" class="btn" data-act="cant-open">🍽️ Cantine / dehors</button></div>`}
+function mpModeSeg(){const mix=ui.mealMode==="mix";return`<div class="seg mp-mode" role="group" aria-label="Type de repas"><button type="button" data-mpmode="one" aria-pressed="${!mix}">Un plat</button><button type="button" data-mpmode="mix" aria-pressed="${mix}">Plusieurs plats</button></div>`}
+const renderPanelV37=renderPanel;
+renderPanel=function(){const b=document.getElementById("panelBody");if(b&&ui.panel==="meal"){b.innerHTML=panelMealV37();return}return renderPanelV37.apply(this,arguments)};
+function mpRefresh(){const c=document.getElementById("mpCard");if(c)c.outerHTML=mpPlateHtml();document.querySelectorAll("#panelBody [data-mealset]").forEach(btn=>{const id=btn.dataset.mealset.split("|")[0];const inP=(ui.plate||[]).some(p=>p.r===id);btn.classList.toggle("in",inP);btn.setAttribute("aria-pressed",inP);const i=btn.querySelector(".mp-add");if(i)i.textContent=inP?"✓":"+"})}
+// ouverture : un repas déjà composé s'ouvre en mode « Plusieurs plats »
+document.addEventListener("click",e=>{const t=e.target.closest&&e.target.closest("button");if(!t)return;
+ if(t.dataset.mealpick){const k=t.dataset.mealpick,pi=ui.ntP||0;const A=state.ate&&state.ate[k+"-"+pi];
+  if(A&&A.x&&A.x.length){ui.mealMode="mix";ui.plate=ateParts(A).map(p=>({r:p.r,s:p.s}))}else{ui.mealMode="one";ui.plate=[]}return}
+ if(ui.panel!=="meal")return;
+ if(t.dataset.mpmode){const mix=t.dataset.mpmode==="mix";if(mix&&ui.mealMode!=="mix"){ui.plate=ui.plate&&ui.plate.length?ui.plate:[];ui.mealS=1}ui.mealMode=mix?"mix":"one";renderPanel();return}
+ if(ui.mealMode!=="mix")return;
+ if(t.dataset.mealset){e.stopPropagation();e.preventDefault();const rid=t.dataset.mealset.split("|")[0];if(!RMAP[rid])return;ui.plate=ui.plate||[];const i=ui.plate.findIndex(p=>p.r===rid);
+  if(i>=0){ui.plate.splice(i,1)}else{if(ui.plate.length>=5){toast("5 plats maximum");return}ui.plate.push({r:rid,s:0.5})}mpRefresh();return}
+ if(t.dataset.mpm){e.stopPropagation();const[i,d]=t.dataset.mpm.split("|").map(Number);const p=(ui.plate||[])[i];if(!p)return;const j=MP_STEPS.indexOf(p.s);p.s=MP_STEPS[Math.max(0,Math.min(MP_STEPS.length-1,(j<0?1:j)+d))];mpRefresh();return}
+ if(t.dataset.mprm){e.stopPropagation();(ui.plate||[]).splice(+t.dataset.mprm,1);mpRefresh();return}
+ if(t.dataset.act==="mp-save"){e.stopPropagation();const P=ui.plate||[];if(!P.length)return;const k=(ui.pdata||{}).k,pi=ui.ntP||0;if(!k)return;
+  const both=!!(document.getElementById("mealBoth")||{}).checked;const val={r:P[0].r,s:P[0].s};if(P.length>1)val.x=P.slice(1).map(p=>({r:p.r,s:p.s}));
+  mealConfirm(k,both?[pi,1-pi]:[pi],val);commit();closePanel();renderAll();const{n}=partsNut(P);toast(partsTxt(P)+" : "+fmtInt(n.k)+" kcal"+(both?" pour vous deux":""));return}},true);
+document.addEventListener("input",e=>{const t=e.target;if(!t||t.id!=="mealQ"||ui.panel!=="meal"||ui.mealMode!=="mix")return;e.stopImmediatePropagation();ui.mealQ=t.value;
+ const q=nrmS(t.value||"").trim();const box=document.getElementById("mealRes");if(!box)return;const res=q.length>=2?RECIPES.filter(r=>!r.snack&&!(state.removed&&state.removed[r.id])&&nrmS(r.n).includes(q)).slice(0,8):[];
+ box.innerHTML=q.length>=2?(res.length?res.map(r=>mpOpt(r)).join(""):`<p class="pn-help">Aucune recette trouvée.</p>`):""},true);
 
 try{setTab(ui.tab);renderAll()}catch(e){try{sbDiag("affichage au démarrage",e)}catch(x){}}try{initDb()}catch(e){}sbStart();
 
