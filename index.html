@@ -2113,7 +2113,7 @@ h1,h2,.sec-head h1,.block-title,.row-head h2,.m-body h2,.pn-title{color:var(--ti
 </div>
 <div id="timers" class="timers" hidden aria-live="polite"></div>
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
-<script>window.NS_CONFIG={"hosted": true, "sbUrl": "https://zjsawjudrdneeptxbskd.supabase.co", "sbKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpqc2F3anVkcmRuZWVwdHhic2tkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1NjUxMjcsImV4cCI6MjEwNzE0MTEyN30.Wn1bUy--5O78gGICTOyEGbnT6B-SdoNCG_XxBBaaUIY", "build": "20261018155505"}</script>
+<script>window.NS_CONFIG={"hosted": true, "sbUrl": "https://zjsawjudrdneeptxbskd.supabase.co", "sbKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpqc2F3anVkcmRuZWVwdHhic2tkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1NjUxMjcsImV4cCI6MjEwNzE0MTEyN30.Wn1bUy--5O78gGICTOyEGbnT6B-SdoNCG_XxBBaaUIY", "build": "20261020190238"}</script>
 <script>
 const AISLES={L:"Fruits & légumes",H:"Herbes fraîches",V:"Viandes & poissons",C:"Crèmerie & œufs",S:"Surgelés",F:"Féculents",B:"Conserves",E:"Épices & condiments"};
 const AISLE_ORDER=["L","H","V","C","S","F","B","E"];
@@ -6855,7 +6855,7 @@ panelSpRun=function(){let h=panelSpRunV27.apply(this,arguments);if(!SR)return h;
 // Tant que three.js n'est pas chargé (ou sans WebGL), la silhouette 2D reste affichée.
 const F3={T:null,p:null,fail:false,ok:false,frames:{},thumbs:{},slot:null,w:0,h:0};
 const F3_CDN="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.min.js";
-function f3Load(){if(F3.p||F3.fail)return F3.p;const loc=HOSTED?new URL("three-sano.min.js",location.href).href:null;
+function f3Load(){if(F3.p||F3.fail)return F3.p;const loc=HOSTED?new URL("three-sano2.min.js",location.href).href:null;
  F3.p=(loc?import(loc).catch(()=>import(F3_CDN)):import(F3_CDN)).then(T=>{F3.T=T;f3Init();F3.ok=true;figKick();return T}).catch(e=>{F3.fail=true;F3.p=null});return F3.p}
 const F3K=58;// unités de la silhouette par mètre
 const f3V=(T,x,y,z)=>new T.Vector3((x-80)/F3K,(FG.FL-y)/F3K,z);
@@ -8000,6 +8000,160 @@ document.addEventListener("click",e=>{const t=e.target.closest&&e.target.closest
  if(t.dataset.cpserv){ui.mServ=Math.min(40,Math.max(1,curServ()+Number(t.dataset.cpserv)));renderModal();return}});
 document.addEventListener("change",e=>{const t=e.target;if(!t||!t.dataset||t.dataset.cpchk==null)return;ui.cpChk=ui.cpChk||{};ui.cpChk[t.dataset.cpchk]=t.checked;const li=t.closest("li");if(li)li.classList.toggle("on",t.checked);
  const r=RMAP[ui.modal];const h=document.querySelector(".cook-prep .pn-help");if(h&&r){const done=Object.values(ui.cpChk).filter(Boolean).length;const b=h.querySelector("b");const txt=done?`${done}/${r.i.length} prêts`:"";if(b)b.textContent=txt;else if(txt)h.insertAdjacentHTML("beforeend",` <b>${txt}</b>`)}});
+
+
+// ================= v39 : nouveau personnage 3D articulé (Perso_Sport) et mouvements plus fluides =================
+// Le personnage (glTF, squelette de 53 os) est animé à partir des mêmes positions clés que la silhouette :
+// bassin et buste orientés, bras et jambes placés par cinématique inverse à deux os (coude et genou dans le bon plan),
+// pieds à plat, mains qui serrent les haltères, coudes et genoux écartés pour ne pas traverser le ventre,
+// appuis au sol recalés sur le tapis, puis lissage des rotations d'une image à l'autre.
+const F3R_S=0.897/0.62;// échelle : hauteur de hanche du personnage = celle de la silhouette
+const F3R_URL="perso.glb";let F3R_P=null;
+function f3RigLoad(){if(F3R_P)return F3R_P;const T=F3.T;if(!T||!T.GLTFLoader||!HOSTED)return Promise.reject(new Error("pas de chargeur glTF"));
+ F3R_P=new T.GLTFLoader().loadAsync(new URL(F3R_URL,location.href).href).then(g=>{f3RigInit(g);return true});return F3R_P}
+function f3RigInit(g){const T=F3.T,root=g.scene;root.scale.setScalar(F3R_S);const B={};
+ root.traverse(o=>{if(o.isBone)B[o.name]=o;if(o.isMesh){o.castShadow=true;o.receiveShadow=true;o.frustumCulled=false;const m=o.material;if(m){m.roughness=Math.max(0.5,m.roughness==null?0.6:m.roughness);m.metalness=0}}});
+ if(!B.Hips||!B.LeftArm||!B.RightUpLeg)throw new Error("squelette inattendu");
+ F3.S.add(root);root.updateMatrixWorld(true);const V=n=>B[n].getWorldPosition(new T.Vector3()),Q=n=>B[n].getWorldQuaternion(new T.Quaternion());
+ const rest={};for(const n in B)rest[n]={q:B[n].quaternion.clone(),p:B[n].position.clone(),wq:Q(n)};
+ const loc=(n,p)=>B[n].worldToLocal(p.clone()),S=F3R_S,fwd=new T.Vector3(0,0,1);
+ const R={root,B,rest,legs:{},arms:{},fing:{},prev:null};
+ for(const s of ["Left","Right"]){const x=s==="Left"?1:-1;
+  const hp=V(s+"UpLeg"),kn=V(s+"Leg"),an=V(s+"Foot");
+  R.legs[s]={la:hp.distanceTo(kn),lb:kn.distanceTo(an),d0u:kn.clone().sub(hp).normalize(),d0l:an.clone().sub(kn).normalize(),ankH:an.y,
+   heel:loc(s+"Foot",new T.Vector3(0.16*x*S,0.004*S,-0.13*S)),toe:loc(s+"Foot",new T.Vector3(0.175*x*S,0.004*S,0.23*S))};
+  const sh=V(s+"Arm"),el=V(s+"ForeArm"),wr=V(s+"Hand"),mid=V(s+"HandMiddle1");const d0u=el.clone().sub(sh).normalize(),d0l=wr.clone().sub(el).normalize();
+  R.arms[s]={la:sh.distanceTo(el),lb:el.distanceTo(wr),d0u,d0l,h0:new T.Vector3().crossVectors(d0u,fwd).normalize(),palm:loc(s+"Hand",wr.clone().lerp(mid,0.6))};
+  R.fing[s]=Object.keys(B).filter(n=>n.startsWith(s+"Hand")&&/(Index|Middle|Ring|Pinky|Thumb)\d$/.test(n))}
+ R.kA=(R.arms.Left.la+R.arms.Left.lb)/((FG.UA+FG.FA)/F3K);
+ // volumes du corps (unités du modèle, repères locaux des os) : ventre, short, tête
+ R.belly={c:loc("Spine1",new T.Vector3(0,0.9*S,0)),r:[0.345,0.315,0.305]};R.shorts={c:loc("Hips",new T.Vector3(0,0.74*S,0)),r:[0.335,0.2,0.3]};R.head={c:loc("Head",new T.Vector3(0,1.44*S,0.02*S)),r:[0.235,0.25,0.24]};
+ R.dirs=[];for(let i=0;i<26;i++){const th=Math.acos(1-2*(i+0.5)/26),ph=i*2.39996;R.dirs.push([Math.sin(th)*Math.cos(ph),Math.cos(th),Math.sin(th)*Math.sin(ph)])}
+ F3.rig=R;if(F3.man)F3.man.visible=false;if(F3.body)F3.body.m.visible=false;F3.frames={};F3.thumbs={}}
+// angles de pied présents dans toutes les positions clés : l'interpolation reste continue (avant, le pied sautait)
+(function(){for(const id in FIGX){const X=FIGX[id],def=X.front?90:4;for(const f of X.fr){const tN=f.tN;if(f.tF===undefined)f.tF=tN!==undefined?tN:def;if(tN===undefined)f.tN=def}}})();
+// ---------- outils ----------
+const rSm=(a,b,x)=>{const t=Math.max(0,Math.min(1,(x-a)/(b-a)));return t*t*(3-2*t)};
+const rPerp=(v,ax)=>v.clone().addScaledVector(ax,-v.dot(ax));
+
+const F3V=(x,y,z)=>new F3.T.Vector3(x,y,z);
+function rBasis(m,d,p){const T=F3.T,D=d.clone().normalize();let P=p.clone().addScaledVector(D,-p.dot(D));
+ if(P.lengthSq()<1e-8){P=Math.abs(D.y)<0.9?new T.Vector3(0,1,0):new T.Vector3(1,0,0);P.addScaledVector(D,-P.dot(D))}P.normalize();return m.makeBasis(D,P,new T.Vector3().crossVectors(D,P))}
+function rAim(name,d0,p0,d1,p1){const T=F3.T,R=F3.rig,b=R.B[name],m0=rBasis(new T.Matrix4(),d0,p0),m1=rBasis(new T.Matrix4(),d1,p1);
+ const dq=new T.Quaternion().setFromRotationMatrix(m1.multiply(m0.transpose())),wq=dq.multiply(R.rest[name].wq);
+ const pq=b.parent.getWorldQuaternion(new T.Quaternion());b.quaternion.copy(pq.invert().multiply(wq));b.updateMatrixWorld(true)}
+// cinématique inverse à deux os : renvoie le coude/genou M et l'extrémité atteinte E
+function rIK(Pa,Tg,la,lb,pole){const T=F3.T,ax=Tg.clone().sub(Pa);let d=ax.length();const dir=d>1e-6?ax.multiplyScalar(1/d):new T.Vector3(0,-1,0);
+ d=Math.max(Math.abs(la-lb)+1e-3,Math.min(la+lb-1e-4,d));const ca=(la*la+d*d-lb*lb)/(2*la*d),sa=Math.sqrt(Math.max(0,1-ca*ca));
+ let n=pole.clone().addScaledVector(dir,-pole.dot(dir));if(n.lengthSq()<1e-8)n=new T.Vector3(0,0,1).addScaledVector(dir,-dir.z);n.normalize();
+ return{M:Pa.clone().addScaledVector(dir,la*ca).addScaledVector(n,la*sa),E:Pa.clone().addScaledVector(dir,d),h:new T.Vector3().crossVectors(n,dir).normalize()}}
+// un point (main, coude, genou) ne doit pas entrer dans le ventre : on l'écarte à l'horizontale (côté et avant)
+function rOut(p,m,keepSide){const R=F3.rig,b=R.B.Spine1,E=R.belly,l=b.worldToLocal(p.clone()).sub(E.c);const rx=E.r[0]+m,ry=E.r[1]+m*0.6,rz=E.r[2]+m;
+ const yn=l.y/ry;if(Math.abs(yn)>=1)return null;const Rh=Math.sqrt(1-yn*yn);let hn=Math.hypot(l.x/rx,l.z/rz);if(hn>=Rh)return null;
+ if(hn<1e-3){l.x=(keepSide||1)*0.01;hn=Math.abs(l.x/rx)}const k=Rh/hn;l.x*=k;l.z*=k;return b.localToWorld(l.add(E.c))}
+function rPush(p,m,side){const q=rOut(p,m,side);return q||p}
+function rDepth(p,m){const R=F3.rig,E=R.belly,l=R.B.Spine1.worldToLocal(p.clone()).sub(E.c);const rho=Math.hypot(l.x/(E.r[0]+m),l.y/(E.r[1]+m*0.6),l.z/(E.r[2]+m));return rSm(1.2,0.75,rho)}
+// points les plus bas du corps (volumes) et appuis (semelles, paumes)
+function rLow(){const R=F3.rig,B=R.B;let tor=9,all=9;const vol=(bn,E)=>{for(const d of R.dirs){const p=B[bn].localToWorld(F3V(E.c.x+d[0]*E.r[0],E.c.y+d[1]*E.r[1],E.c.z+d[2]*E.r[2]));if(p.y<tor)tor=p.y}};
+ vol("Spine1",R.belly);vol("Hips",R.shorts);vol("Head",R.head);all=tor;
+ for(const s of ["Left","Right"]){const G=R.legs[s];for(const k of ["heel","toe"]){const y=B[s+"Foot"].localToWorld(G[k].clone()).y;if(y<all)all=y}
+  const y=B[s+"Hand"].localToWorld(R.arms[s].palm.clone()).y-0.035*F3R_S;if(y<all)all=y}
+ return{tor,all}}
+// direction habituelle des coudes pour chaque exercice (repère du buste : avant, haut, extérieur), moyenne des positions clés
+function rPoleDef(X,id){F3.poleDef=F3.poleDef||{};const c=F3.poleDef[id];if(c)return c;const o={N:[-1,-0.2,0.35],F:[-1,-0.2,0.35]};
+ if(!X.front){const T=F3.T,tot=X.ms.reduce((a,b)=>a+b,0),acc={N:[0,0,0],F:[0,0,0]};
+  for(let i=0;i<24;i++){const J=f3Joints(X,figAt(X,tot*i/24)),u=J.nk.clone().sub(J.hip).normalize(),f=F3V(u.y,-u.x,0).normalize(),L=new T.Vector3().crossVectors(u,f);
+   for(const s of ["N","F"]){const sh=J["sh"+s],wr=J["wr"+s],ax=wr.clone().sub(sh).normalize(),v=rPerp(J["el"+s].clone().sub(sh),ax);const m=v.length();if(m<0.03)continue;
+    const out=L.clone().multiplyScalar(J["sh"+s].clone().sub(J.nk).dot(L)>=0?1:-1);acc[s][0]+=v.dot(f);acc[s][1]+=v.dot(u);acc[s][2]+=v.dot(out)}}
+  for(const s of ["N","F"]){const a=acc[s],m=Math.hypot(...a);if(m>0.05)o[s]=[a[0]/m,a[1]/m,Math.max(0.2,a[2]/m)]}}
+ return F3.poleDef[id]=o}
+// ---------- pose complète ----------
+function rPose(X,J,dy,Pz,id){const T=F3.T,R=F3.rig,B=R.B,front=!!X.front;
+ for(const n in B){B[n].quaternion.copy(R.rest[n].q);B[n].position.copy(R.rest[n].p)}
+ const Y=F3V(0,1,0),Z=F3V(0,0,1),X0=F3V(1,0,0);
+ const u=J.nk.clone().sub(J.hip).normalize(),f=front?F3V(0,0,1):F3V(u.y,-u.x,0).normalize(),L=new T.Vector3().crossVectors(u,f).normalize();
+ // bassin et buste
+ const Ph=J.hip.clone();Ph.y+=dy||0;B.Hips.position.copy(B.Hips.parent.worldToLocal(Ph));B.Hips.updateMatrixWorld(true);
+ rAim("Hips",Y,Z,u,f);
+ // tête : suit le cou, regard un peu stabilisé
+ let dh=u.clone();if(!front&&Pz){const ht=(Pz.t+(Pz.hd||0))*Math.PI/180;dh=F3V(Math.cos(ht),-Math.sin(ht),0).lerp(u,0.25).normalize()}rAim("Neck",Y,Z,dh,f);
+ // côtés : qui, de N (proche) ou F (loin), est la gauche du personnage
+ const nLeft=J.hpN.clone().sub(J.hip).dot(L)>=J.hpF.clone().sub(J.hip).dot(L);const map={Left:nLeft?"N":"F",Right:nLeft?"F":"N"};
+ for(const side of ["Left","Right"]){const s=map[side],G=R.legs[side],out=L.clone().multiplyScalar(side==="Left"?1:-1);
+  // --- jambe
+  const Pa=B[side+"UpLeg"].getWorldPosition(new T.Vector3());
+  const sole=J["to"+s].clone().sub(J["an"+s]).normalize();if(!front)sole.addScaledVector(new T.Vector3().crossVectors(L,sole),-0.07).normalize();
+  const nS=new T.Vector3().crossVectors(sole,L).normalize();
+  const Ta=J["an"+s].clone().addScaledVector(nS,G.ankH-0.052);
+  const hp=J["hp"+s],kn=J["kn"+s],an=J["an"+s],ax=an.clone().sub(hp).normalize();let pole=kn.clone().sub(hp);pole.addScaledVector(ax,-pole.dot(ax));
+  {const axT=Ta.clone().sub(Pa).normalize();pole=new T.Vector3().crossVectors(axT,L).addScaledVector(rPerp(out,axT),0.08).normalize()}
+  let ik=rIK(Pa,Ta,G.la,G.lb,pole);const dk=rDepth(ik.M,0.07);
+  if(dk>0){pole.addScaledVector(out,1.6*dk).normalize();ik=rIK(Pa,Ta,G.la,G.lb,pole)}
+  const h=ik.h;
+  rAim(side+"UpLeg",G.d0u,X0,ik.M.clone().sub(Pa),h);rAim(side+"Leg",G.d0l,X0,ik.E.clone().sub(ik.M),h);
+  rAim(side+"Foot",Z,X0,sole,L.clone().lerp(h,0.25).normalize());
+  // --- bras
+  const A=R.arms[side],Pb=B[side+"Arm"].getWorldPosition(new T.Vector3());
+  const sh=J["sh"+s],el=J["el"+s],wr=J["wr"+s];
+  let Tw=Pb.clone().addScaledVector(wr.clone().sub(sh),R.kA);
+  // main en appui (sol, banc) : position absolue de la silhouette
+  const wFloor=Math.max(0,Math.min(1,(0.17-wr.y)/0.09)),wBench=X.prop==="bench"&&wr.x>0?Math.max(0,Math.min(1,(0.12-Math.abs(wr.y-0.3))/0.06)):0,wA=Math.max(wFloor,wBench);
+  if(wA>0)Tw.lerp(wr.clone().add(F3V(0,0.035,0)),wA);
+  Tw=rPush(Tw,0.11,side==="Left"?1:-1);
+  const ax2=wr.clone().sub(sh).normalize();let pa=el.clone().sub(sh);pa.addScaledVector(ax2,-pa.dot(ax2));
+  {const axA=Tw.clone().sub(Pb).normalize(),pd=rPoleDef(X,id)[s],dw=f.clone().multiplyScalar(pd[0]).addScaledVector(u,pd[1]).addScaledVector(out,pd[2]);
+   const dflt=rPerp(dw,axA).add(rPerp(out,axA).multiplyScalar(0.35));const m=front?0:pa.length(),w=rSm(0.03,0.1,m)*(pa.dot(dw)>0?1:0.25);
+   pa=(m>1e-6?pa.multiplyScalar(w/m):pa.set(0,0,0)).addScaledVector(dflt.normalize(),1-w+0.03).addScaledVector(rPerp(out,axA),0.2*w).normalize()}
+  let ia=rIK(Pb,Tw,A.la,A.lb,pa);const de=rDepth(ia.M,0.09);
+  if(de>0){pa.addScaledVector(out,3*de).normalize();ia=rIK(Pb,Tw,A.la,A.lb,pa)}
+  const ha=ia.h;
+  rAim(side+"Arm",A.d0u,A.h0,ia.M.clone().sub(Pb),ha);rAim(side+"ForeArm",A.d0l,A.h0,ia.E.clone().sub(ia.M),ha);
+  // doigts : serrés sur l'haltère, détendus sinon
+  const grip=X.db&&(!X.dbN||s==="N")&&X.dbAt!=="hip"?1:(X.db&&X.dbAt==="hip"?0.8:0);
+  for(const n of R.fing[side]){const th=/Thumb/.test(n),k=+n.slice(-1);const a=grip?(th?(k===1?0.25:0.5):1.15):(th?0.1:0.22+0.06*k);B[n].quaternion.multiply(new T.Quaternion().setFromAxisAngle(X0,a))}}
+ R.root.updateMatrixWorld(true);return{u,f,L,map}}
+function rDB(X,J,P){const T=F3.T,R=F3.rig,B=R.B,DB=F3.DB;DB[0].visible=!!X.db;DB[1].visible=!!X.db&&!X.dbN;if(!X.db)return;
+ const palm=s=>B[s+"Hand"].localToWorld(R.arms[s].palm.clone()),across=s=>B[s+"HandIndex1"].getWorldPosition(new T.Vector3()).sub(B[s+"HandPinky1"].getWorldPosition(new T.Vector3())).normalize();
+ const sc=1.75;DB.forEach(d=>d.scale.setScalar(sc));
+ if(X.dbAt==="hip"){const m=palm("Left").lerp(palm("Right"),0.5);DB[0].position.copy(m);DB[0].quaternion.setFromUnitVectors(F3V(0,1,0),P.L.clone());DB[1].visible=false;return}
+ if(X.dbOne){const m=palm("Left").lerp(palm("Right"),0.5).addScaledVector(P.f,0.03);DB[0].position.copy(m);DB[0].quaternion.setFromUnitVectors(F3V(0,1,0),X.dbAx==="v"?P.u.clone():across("Left"));DB[1].visible=false;return}
+ const sides=X.dbN?[[0,P.map.Left==="N"?"Left":"Right"]]:[[0,"Left"],[1,"Right"]];
+ for(const[i,s] of sides){DB[i].position.copy(palm(s));DB[i].quaternion.setFromUnitVectors(F3V(0,1,0),across(s))}}
+// lissage : chaque rotation rejoint sa cible en douceur (≈ 45 ms), ce qui gomme les à-coups entre positions clés
+function rSmooth(id){const R=F3.rig,now=performance.now(),P=R.prev;const keys=Object.keys(R.B);
+ if(F3.live&&P&&P.id===id&&now-P.t>0&&now-P.t<250){const a=1-Math.exp(-(now-P.t)/45);
+  for(const n of keys){const b=R.B[n];b.quaternion.copy(P.q[n].clone().slerp(b.quaternion,a))}R.B.Hips.position.copy(P.hp.clone().lerp(R.B.Hips.position,a));R.root.updateMatrixWorld(true)}
+ if(F3.live){const q={};for(const n of keys)q[n]=R.B[n].quaternion.clone();R.prev={id,t:now,q,hp:R.B.Hips.position.clone()}}}
+const f3PoseV39=f3Pose;
+f3Pose=function(X,Pz,id){if(!F3.rig)return f3PoseV39(X,Pz,id);const J=f3Joints(X,Pz);
+ let P=rPose(X,J,0,Pz,id);
+ if(X.prop==="mat"){const lo=rLow(),mh=0.012;let dy=0;if(lo.tor<mh)dy=mh-lo.tor;else if(lo.all>mh+0.004)dy=mh-lo.all;if(Math.abs(dy)>0.002)P=rPose(X,J,dy,Pz,id)}
+ else{const lo=rLow();if(lo.tor<0)P=rPose(X,J,-lo.tor,Pz,id)}
+ rSmooth(id);rDB(X,J,P);return J};
+// cadrage : volume réellement occupé par le personnage pendant tout le mouvement
+const f3FrameV39=f3Frame;
+f3Frame=function(id,g,aspect){if(!F3.rig)return f3FrameV39(id,g,aspect);const key="r|"+id+"|"+(g||0)+"|"+aspect.toFixed(2);if(F3.frames[key])return F3.frames[key];
+ const X=FIGX[id],R=F3.rig,B=R.B,tot=X.ms.reduce((a,b)=>a+b,0);let mn=[9,9,9],mx=[-9,-9,-9];const live=F3.live;F3.live=false;
+ const addP=p=>{mn=[Math.min(mn[0],p.x),Math.min(mn[1],p.y),Math.min(mn[2],p.z)];mx=[Math.max(mx[0],p.x),Math.max(mx[1],p.y),Math.max(mx[2],p.z)]};
+ for(let i=0;i<16;i++){let Pz=figAt(X,tot*i/16);if(X.prop==="tread")Pz=figTread(Pz,g||0);f3Pose(X,Pz,id);
+  for(const [bn,E] of [["Spine1",R.belly],["Head",R.head],["Hips",R.shorts]])for(const d of [[1,0,0],[-1,0,0],[0,1,0],[0,-1,0],[0,0,1],[0,0,-1]])addP(B[bn].localToWorld(F3V(E.c.x+d[0]*E.r[0],E.c.y+d[1]*E.r[1],E.c.z+d[2]*E.r[2])));
+  for(const s of ["Left","Right"]){addP(B[s+"Hand"].localToWorld(R.arms[s].palm.clone()));addP(B[s+"Foot"].localToWorld(R.legs[s].toe.clone()));addP(B[s+"Foot"].localToWorld(R.legs[s].heel.clone()));addP(B[s+"ForeArm"].getWorldPosition(new F3.T.Vector3()))}}
+ F3.live=live;
+ mn[1]=Math.min(mn[1],-0.05);mx[1]+=0.06;mn[0]-=0.1;mx[0]+=0.1;if(X.prop==="tread"){mn[0]=Math.min(mn[0],-0.9);mx[0]=Math.max(mx[0],0.95);mx[1]=Math.max(mx[1],1.25)}
+ const lying=(mx[1]-mn[1])<1.0,az=X.front?0.32:(lying?0.62:0.55),el=lying?0.4:0.12;
+ const c=[(mn[0]+mx[0])/2,(mn[1]+mx[1])/2,(mn[2]+mx[2])/2],w=mx[0]-mn[0],h=mx[1]-mn[1],dz=mx[2]-mn[2];
+ const fov=26*Math.PI/180,need=Math.max(h*1.02,(w*Math.cos(az)+dz*Math.sin(az))*1.02/aspect)/2,dist=need/Math.tan(fov/2)+dz*0.35;
+ return F3.frames[key]={c,dist,az,el}};
+// rendu en direct : lissage actif seulement pour la grande vignette animée
+const f3RenderV39=f3Render;
+f3Render=function(id,g,ms,cw,ch){if(F3.rig&&F3.rig.prev&&F3.rig.prev.id!==id)F3.rig.prev=null;return f3RenderV39.apply(this,arguments)};
+const f3StepV39=f3Step;
+f3Step=function(now){if(!F3.rig&&!F3.rigFail)return false;F3.live=true;try{return F3.rig?f3StepV30(now):f3StepV39(now)}finally{F3.live=false}};
+const f3ThumbsV39=f3Thumbs;
+f3Thumbs=function(){if(!F3.rig&&!F3.rigFail)return;if(F3.rig){const L=document.querySelectorAll(".sp-xs svg.fig[data-fig]");if(!L.length)return;F3.live=false;return f3ThumbsV30()}return f3ThumbsV39()};
+// chargement : le personnage remplace le corps lisse ; en cas d'échec, l'ancien corps reste en secours
+f3Init=function(){f3InitV30();f3RigLoad().then(()=>{figKick()}).catch(()=>{F3.rigFail=true;
+ f3BodyData().then(d=>{if(!d){F3.bodyFail=true;figKick();return}if(F3.T&&!F3.body){try{f3BodyInit(d);F3.frames={};figKick()}catch(e){F3.body=null;F3.bodyFail=true;F3.man.visible=true;figKick()}}}).catch(()=>{F3.bodyFail=true;figKick()})})};
 
 try{setTab(ui.tab);renderAll()}catch(e){try{sbDiag("affichage au démarrage",e)}catch(x){}}try{initDb()}catch(e){}sbStart();
 
