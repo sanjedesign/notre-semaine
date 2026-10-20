@@ -2113,7 +2113,7 @@ h1,h2,.sec-head h1,.block-title,.row-head h2,.m-body h2,.pn-title{color:var(--ti
 </div>
 <div id="timers" class="timers" hidden aria-live="polite"></div>
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
-<script>window.NS_CONFIG={"hosted": true, "sbUrl": "https://zjsawjudrdneeptxbskd.supabase.co", "sbKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpqc2F3anVkcmRuZWVwdHhic2tkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1NjUxMjcsImV4cCI6MjEwNzE0MTEyN30.Wn1bUy--5O78gGICTOyEGbnT6B-SdoNCG_XxBBaaUIY", "build": "20261020190238"}</script>
+<script>window.NS_CONFIG={"hosted": true, "sbUrl": "https://zjsawjudrdneeptxbskd.supabase.co", "sbKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpqc2F3anVkcmRuZWVwdHhic2tkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1NjUxMjcsImV4cCI6MjEwNzE0MTEyN30.Wn1bUy--5O78gGICTOyEGbnT6B-SdoNCG_XxBBaaUIY", "build": "20261020191748"}</script>
 <script>
 const AISLES={L:"Fruits & légumes",H:"Herbes fraîches",V:"Viandes & poissons",C:"Crèmerie & œufs",S:"Surgelés",F:"Féculents",B:"Conserves",E:"Épices & condiments"};
 const AISLE_ORDER=["L","H","V","C","S","F","B","E"];
@@ -8029,6 +8029,9 @@ function f3RigInit(g){const T=F3.T,root=g.scene;root.scale.setScalar(F3R_S);cons
  // volumes du corps (unités du modèle, repères locaux des os) : ventre, short, tête
  R.belly={c:loc("Spine1",new T.Vector3(0,0.9*S,0)),r:[0.345,0.315,0.305]};R.shorts={c:loc("Hips",new T.Vector3(0,0.74*S,0)),r:[0.335,0.2,0.3]};R.head={c:loc("Head",new T.Vector3(0,1.44*S,0.02*S)),r:[0.235,0.25,0.24]};
  R.dirs=[];for(let i=0;i<26;i++){const th=Math.acos(1-2*(i+0.5)/26),ph=i*2.39996;R.dirs.push([Math.sin(th)*Math.cos(ph),Math.cos(th),Math.sin(th)*Math.sin(ph)])}
+ {const pm=new T.MeshStandardMaterial({color:0x2F343B,roughness:0.45,metalness:0.25}),bm=new T.MeshStandardMaterial({color:0xC9CDD3,roughness:0.3,metalness:0.7});
+  for(const g of F3.DB||[])g.children.forEach((c,i)=>{c.material=i?pm:bm})}
+ {const g=new T.Mesh(new T.CircleGeometry(0.85,48),new T.MeshStandardMaterial({color:0xF6E7E3,roughness:1,metalness:0}));g.rotation.x=-Math.PI/2;g.position.y=0.002;g.receiveShadow=true;F3.S.add(g);R.ground=g}
  F3.rig=R;if(F3.man)F3.man.visible=false;if(F3.body)F3.body.m.visible=false;F3.frames={};F3.thumbs={}}
 // angles de pied présents dans toutes les positions clés : l'interpolation reste continue (avant, le pied sautait)
 (function(){for(const id in FIGX){const X=FIGX[id],def=X.front?90:4;for(const f of X.fr){const tN=f.tN;if(f.tF===undefined)f.tF=tN!==undefined?tN:def;if(tN===undefined)f.tN=def}}})();
@@ -8100,11 +8103,17 @@ function rPose(X,J,dy,Pz,id){const T=F3.T,R=F3.rig,B=R.B,front=!!X.front;
   const wFloor=Math.max(0,Math.min(1,(0.17-wr.y)/0.09)),wBench=X.prop==="bench"&&wr.x>0?Math.max(0,Math.min(1,(0.12-Math.abs(wr.y-0.3))/0.06)):0,wA=Math.max(wFloor,wBench);
   if(wA>0)Tw.lerp(wr.clone().add(F3V(0,0.035,0)),wA);
   Tw=rPush(Tw,0.11,side==="Left"?1:-1);
+  // extension triceps : bras à la verticale au-dessus de chaque épaule (la grosse tête ne cache plus les mains)
+  if(X.r3two){const lat=Tw.clone().sub(Pb).dot(out);Tw.addScaledVector(out,0.07-lat)}
+  // squat gobelet : les deux mains tiennent l'haltère debout devant la poitrine, coudes vers le bas
+  const gob=X.dbOne&&X.dbAx==="v";if(gob){const E=R.belly;Tw=B.Spine1.localToWorld(F3V(E.c.x+0.055*(side==="Left"?1:-1),E.c.y+0.2,E.c.z+0.36))}
   const ax2=wr.clone().sub(sh).normalize();let pa=el.clone().sub(sh);pa.addScaledVector(ax2,-pa.dot(ax2));
   {const axA=Tw.clone().sub(Pb).normalize(),pd=rPoleDef(X,id)[s],dw=f.clone().multiplyScalar(pd[0]).addScaledVector(u,pd[1]).addScaledVector(out,pd[2]);
    const dflt=rPerp(dw,axA).add(rPerp(out,axA).multiplyScalar(0.35));const m=front?0:pa.length(),w=rSm(0.03,0.1,m)*(pa.dot(dw)>0?1:0.25);
    pa=(m>1e-6?pa.multiplyScalar(w/m):pa.set(0,0,0)).addScaledVector(dflt.normalize(),1-w+0.03).addScaledVector(rPerp(out,axA),0.2*w).normalize()}
-  let ia=rIK(Pb,Tw,A.la,A.lb,pa);const de=rDepth(ia.M,0.09);
+  if(gob){const axG=Tw.clone().sub(Pb).normalize();pa=rPerp(u.clone().negate().addScaledVector(out,0.45),axG).normalize()}
+  if(X.r3two){const axG=Tw.clone().sub(Pb).normalize();pa=rPerp(u.clone().addScaledVector(f,0.25).addScaledVector(out,0.15),axG).normalize()}
+  let ia=rIK(Pb,Tw,A.la,A.lb,pa);const de=gob?0:rDepth(ia.M,0.09);
   if(de>0){pa.addScaledVector(out,3*de).normalize();ia=rIK(Pb,Tw,A.la,A.lb,pa)}
   const ha=ia.h;
   rAim(side+"Arm",A.d0u,A.h0,ia.M.clone().sub(Pb),ha);rAim(side+"ForeArm",A.d0l,A.h0,ia.E.clone().sub(ia.M),ha);
@@ -8114,9 +8123,11 @@ function rPose(X,J,dy,Pz,id){const T=F3.T,R=F3.rig,B=R.B,front=!!X.front;
  R.root.updateMatrixWorld(true);return{u,f,L,map}}
 function rDB(X,J,P){const T=F3.T,R=F3.rig,B=R.B,DB=F3.DB;DB[0].visible=!!X.db;DB[1].visible=!!X.db&&!X.dbN;if(!X.db)return;
  const palm=s=>B[s+"Hand"].localToWorld(R.arms[s].palm.clone()),across=s=>B[s+"HandIndex1"].getWorldPosition(new T.Vector3()).sub(B[s+"HandPinky1"].getWorldPosition(new T.Vector3())).normalize();
- const sc=1.75;DB.forEach(d=>d.scale.setScalar(sc));
+ const sc=1.9;DB.forEach(d=>d.scale.setScalar(sc));
  if(X.dbAt==="hip"){const m=palm("Left").lerp(palm("Right"),0.5);DB[0].position.copy(m);DB[0].quaternion.setFromUnitVectors(F3V(0,1,0),P.L.clone());DB[1].visible=false;return}
- if(X.dbOne){const m=palm("Left").lerp(palm("Right"),0.5).addScaledVector(P.f,0.03);DB[0].position.copy(m);DB[0].quaternion.setFromUnitVectors(F3V(0,1,0),X.dbAx==="v"?P.u.clone():across("Left"));DB[1].visible=false;return}
+ if(X.dbOne&&!X.r3two&&X.dbAx!=="v"){// extension triceps : un haltère tenu à deux mains sous le disque du haut, il pend verticalement
+  const m=palm("Left").lerp(palm("Right"),0.5);m.y-=0.15;DB[0].position.copy(m);DB[0].quaternion.identity();DB[1].visible=false;return}
+ if(X.dbOne&&!X.r3two){const v=X.dbAx==="v",m=palm("Left").lerp(palm("Right"),0.5).addScaledVector(P.f,v?0.05:0.03);if(v)m.addScaledVector(P.u,-0.11);DB[0].position.copy(m);DB[0].quaternion.setFromUnitVectors(F3V(0,1,0),v?P.u.clone().add(F3V(0,1.4,0)).normalize():across("Left"));DB[1].visible=false;return}
  const sides=X.dbN?[[0,P.map.Left==="N"?"Left":"Right"]]:[[0,"Left"],[1,"Right"]];
  for(const[i,s] of sides){DB[i].position.copy(palm(s));DB[i].quaternion.setFromUnitVectors(F3V(0,1,0),across(s))}}
 // lissage : chaque rotation rejoint sa cible en douceur (≈ 45 ms), ce qui gomme les à-coups entre positions clés
@@ -8130,6 +8141,12 @@ f3Pose=function(X,Pz,id){if(!F3.rig)return f3PoseV39(X,Pz,id);const J=f3Joints(X
  if(X.prop==="mat"){const lo=rLow(),mh=0.012;let dy=0;if(lo.tor<mh)dy=mh-lo.tor;else if(lo.all>mh+0.004)dy=mh-lo.all;if(Math.abs(dy)>0.002)P=rPose(X,J,dy,Pz,id)}
  else{const lo=rLow();if(lo.tor<0)P=rPose(X,J,-lo.tor,Pz,id)}
  rSmooth(id);rDB(X,J,P);return J};
+if(FIGX.tri)FIGX.tri.r3two=1;// en 3D : un haltère dans chaque main
+// angle de vue choisi pour chaque exercice : celui où le mouvement se lit le mieux (azimut, élévation)
+const F3CAM={squat_gob:[0.95],squat:[0.85],thruster:[0.85],rdl:[0.75],hinge:[0.75],row:[0.55],press_floor:[0.55],ohp:[0.85],lunge:[0.7,0.1],
+ bridge_w:[0.55],bridge:[0.55],curl:[0.85],tri:[0.3,0.14],farmer:[0.7],walk:[0.6],run:[0.6],pushup:[0.4],plank:[0.35],deadbug:[0.6],mountain:[0.45],jacks:[0.35],knees:[0.7],arms:[0.9],stretch:[-0.5]};
+// fente : grand pas, genou arrière près du sol, pied arrière sur la pointe, mains le long du corps
+(function(){const X=FIGX.lunge;if(!X)return;const B=X.fr.find(f=>f.h&&f.h[1]>100);if(B)Object.assign(B,{h:[60,116],t:-88,fN:[35,135],tN:58,kN:1,fF:[87,139],tF:4,kF:1,wN:[64,121],wF:[62,121]})})();
 // cadrage : volume réellement occupé par le personnage pendant tout le mouvement
 const f3FrameV39=f3Frame;
 f3Frame=function(id,g,aspect){if(!F3.rig)return f3FrameV39(id,g,aspect);const key="r|"+id+"|"+(g||0)+"|"+aspect.toFixed(2);if(F3.frames[key])return F3.frames[key];
@@ -8140,13 +8157,14 @@ f3Frame=function(id,g,aspect){if(!F3.rig)return f3FrameV39(id,g,aspect);const ke
   for(const s of ["Left","Right"]){addP(B[s+"Hand"].localToWorld(R.arms[s].palm.clone()));addP(B[s+"Foot"].localToWorld(R.legs[s].toe.clone()));addP(B[s+"Foot"].localToWorld(R.legs[s].heel.clone()));addP(B[s+"ForeArm"].getWorldPosition(new F3.T.Vector3()))}}
  F3.live=live;
  mn[1]=Math.min(mn[1],-0.05);mx[1]+=0.06;mn[0]-=0.1;mx[0]+=0.1;if(X.prop==="tread"){mn[0]=Math.min(mn[0],-0.9);mx[0]=Math.max(mx[0],0.95);mx[1]=Math.max(mx[1],1.25)}
- const lying=(mx[1]-mn[1])<1.0,az=X.front?0.32:(lying?0.62:0.55),el=lying?0.4:0.12;
+ const lying=(mx[1]-mn[1])<1.0,cam=F3CAM[id]||[],az=cam[0]!=null?cam[0]:X.front?0.32:(lying?0.62:0.75),el=cam[1]!=null?cam[1]:lying?0.4:0.12;
  const c=[(mn[0]+mx[0])/2,(mn[1]+mx[1])/2,(mn[2]+mx[2])/2],w=mx[0]-mn[0],h=mx[1]-mn[1],dz=mx[2]-mn[2];
- const fov=26*Math.PI/180,need=Math.max(h*1.02,(w*Math.cos(az)+dz*Math.sin(az))*1.02/aspect)/2,dist=need/Math.tan(fov/2)+dz*0.35;
+ const fov=26*Math.PI/180,need=Math.max(h*1.02,(w*Math.abs(Math.cos(az))+dz*Math.abs(Math.sin(az)))*1.02/aspect)/2,dist=need/Math.tan(fov/2)+dz*0.35;
  return F3.frames[key]={c,dist,az,el}};
 // rendu en direct : lissage actif seulement pour la grande vignette animée
 const f3RenderV39=f3Render;
-f3Render=function(id,g,ms,cw,ch){if(F3.rig&&F3.rig.prev&&F3.rig.prev.id!==id)F3.rig.prev=null;return f3RenderV39.apply(this,arguments)};
+f3Render=function(id,g,ms,cw,ch){if(F3.rig&&FIGX[id]){const W=Math.max(60,Math.round(cw)),H=Math.max(60,Math.round(ch)),fr=f3Frame(id,g,W/H),X=FIGX[id];const G=F3.rig.ground;if(G){G.visible=!X.prop||X.prop==="bench";G.position.x=fr.c[0];G.position.z=fr.c[2]}}// cadrage calculé avant la pose (sinon la 1re image montrait la dernière pose échantillonnée)
+ if(F3.rig&&F3.rig.prev&&F3.rig.prev.id!==id)F3.rig.prev=null;return f3RenderV39.apply(this,arguments)};
 const f3StepV39=f3Step;
 f3Step=function(now){if(!F3.rig&&!F3.rigFail)return false;F3.live=true;try{return F3.rig?f3StepV30(now):f3StepV39(now)}finally{F3.live=false}};
 const f3ThumbsV39=f3Thumbs;
