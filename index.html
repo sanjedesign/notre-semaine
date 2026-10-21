@@ -2009,6 +2009,10 @@ h1,h2,.sec-head h1,.block-title,.row-head h2,.m-body h2,.pn-title{color:var(--ti
 .cp-list .qt .pill{font-size:.72rem;font-weight:600}
 .cook-prep .cm-nav .btn:first-child{flex:0 0 auto}
 .cook-prep .cm-nav .btn.primary{flex:1 1 auto}
+/* v40 : équivalents en grammes */
+.dc-q b{font-weight:600;color:var(--ink)}
+.dc-q small{display:block;font-size:.76rem;color:var(--muted);margin-top:1px;font-weight:400}
+.eq-note{margin-top:10px}
 </style>
 </head>
 <body>
@@ -2113,7 +2117,7 @@ h1,h2,.sec-head h1,.block-title,.row-head h2,.m-body h2,.pn-title{color:var(--ti
 </div>
 <div id="timers" class="timers" hidden aria-live="polite"></div>
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
-<script>window.NS_CONFIG={"hosted": true, "sbUrl": "https://zjsawjudrdneeptxbskd.supabase.co", "sbKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpqc2F3anVkcmRuZWVwdHhic2tkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1NjUxMjcsImV4cCI6MjEwNzE0MTEyN30.Wn1bUy--5O78gGICTOyEGbnT6B-SdoNCG_XxBBaaUIY", "build": "20261020191748"}</script>
+<script>window.NS_CONFIG={"hosted": true, "sbUrl": "https://zjsawjudrdneeptxbskd.supabase.co", "sbKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpqc2F3anVkcmRuZWVwdHhic2tkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1NjUxMjcsImV4cCI6MjEwNzE0MTEyN30.Wn1bUy--5O78gGICTOyEGbnT6B-SdoNCG_XxBBaaUIY", "build": "20261021182958"}</script>
 <script>
 const AISLES={L:"Fruits & légumes",H:"Herbes fraîches",V:"Viandes & poissons",C:"Crèmerie & œufs",S:"Surgelés",F:"Féculents",B:"Conserves",E:"Épices & condiments"};
 const AISLE_ORDER=["L","H","V","C","S","F","B","E"];
@@ -4738,7 +4742,7 @@ function renderShop(){
  rb.innerHTML=nCart?`<span><b>${nCart} article${nCart>1?"s":""} dans le panier</b><br>De retour à la maison ? Range-les : ils passent dans le stock.</span><button type="button" class="btn primary" data-act="range">Ranger mes courses</button>`:"";
  const how=groups.length?`<ol class="howto"><li>Coche ce que tu mets dans le panier.</li><li>De retour, touche « Ranger mes courses ».</li><li>Le stock se met à jour, la liste se vide.</li></ol>`:"";
  const row=(g,done)=>{const one=g.items.length===1?g.items[0]:null,id0=g.ids[0];const st=g.items.every(e=>isStaple(e.id));const recs=[...new Set(g.items.flatMap(e=>(e.recs||[]).filter(x=>x!=="__extra")))];
-  const isX=!!(one&&state.extras&&state.extras[one.id]&&!recs.length);const cimg=one&&state.catalog&&state.catalog[one.id]&&state.catalog[one.id].img;const Q=one?{txt:st?"":fmtQty(one.id,one.buy)+(approxG(one.id,one.buy)?" ("+fmtApprox(approxG(one.id,one.buy))+")":""),parts:""}:groupQty(g.items);const C=state.store?lineCost(g,state.store):null;const names=[...new Set(g.items.map(e=>ING[e.id][0]))];
+  const isX=!!(one&&state.extras&&state.extras[one.id]&&!recs.length);const cimg=one&&state.catalog&&state.catalog[one.id]&&state.catalog[one.id].img;const Q=one?{txt:st?"":fmtQty(one.id,one.buy)+eqShopApprox(one.id,one.buy),parts:""}:groupQty(g.items);const C=state.store?lineCost(g,state.store):null;const names=[...new Set(g.items.map(e=>ING[e.id][0]))];
   const pour=recs.length?`Pour ${recs.length>2?recs.slice(0,2).join(", ")+"…":recs.join(", ")}`:"";
   const detail=one?(st?"Produit de placard":one.partial?`Il en faut ${fmtQty(one.id,one.q)}, tu en as ${fmtQty(one.id,one.hq||0)}`:pour||(isX?"Ajouté à la liste":"")):[names.length>1?"Regroupe : "+names.join(", "):"",Q.parts&&Q.txt!==Q.parts?"("+Q.parts+")":"",pour].filter(Boolean).join(" · ");
   const ids=g.ids.join(","),amts=g.items.map(e=>e.staple?1:e.buy).join(","),need=g.items.map(e=>isStaple(e.id)?1:e.q).join(",");
@@ -8172,6 +8176,187 @@ f3Thumbs=function(){if(!F3.rig&&!F3.rigFail)return;if(F3.rig){const L=document.q
 // chargement : le personnage remplace le corps lisse ; en cas d'échec, l'ancien corps reste en secours
 f3Init=function(){f3InitV30();f3RigLoad().then(()=>{figKick()}).catch(()=>{F3.rigFail=true;
  f3BodyData().then(d=>{if(!d){F3.bodyFail=true;figKick();return}if(F3.T&&!F3.body){try{f3BodyInit(d);F3.frames={};figKick()}catch(e){F3.body=null;F3.bodyFail=true;F3.man.visible=true;figKick()}}}).catch(()=>{F3.bodyFail=true;figKick()})})};
+
+
+// ================= v40 : équivalents en grammes pour les sachets, paquets, pots, boîtes, bottes… =================
+// Recettes récupérées (Découvrir, lien) : « ½ sachet Haricots verts » devient « 75 g Haricots verts ».
+// Ailleurs (anciennes recettes, liste de courses, préparation) : « 1 boîte (≈ 400 g) », « ¼ sachet (≈ ½ c. à café, 1 g) ».
+// Tailles courantes en France ; les sachets et paquets HelloFresh ont leurs propres tailles (kit pour 2).
+const EQ_N=s=>nrmS(String(s||"")).replace(/[^a-z0-9 ]+/g," ").replace(/\s+/g," ").trim();
+const EQ_HERB=/\b(persil|coriandre|basilic|aneth|ciboulette|menthe|estragon|cerfeuil|thym|romarin|sauge|origan|marjolaine|sarriette|livech|herbes?|laurier|citronnelle)/;
+const EQ_GROUND=/\b(moulus?|moulues?|en poudre|poudre)\b/;
+const EQ_DRYH=/\b(seche|sechee|seches|sechees|deshydrate\w*|lyophilise\w*|provence|italien\w*|fines herbes|origan|sarriette|marjolaine|laurier)\b/;
+const EQ_SPICE=/\b(cumin|curry|curcuma|paprika|piment|piri|cannelle|muscade|ras el hanout|garam|masala|tandoori|cajun|epices?|assaisonnement|sumac|zaatar|za atar|cardamome|clous? de girofle|fenugrec|colombo|chili|chipotle|poivre|sel|bouillon en poudre|gingembre moulu|ail en poudre|oignon en poudre|cinq baies)\b/;
+const EQ_PASTE=/\b(curry (rouge|vert|jaune|massaman|panang|thai)|pate (de curry|epicee|de piment|javanaise|de sesame|de gingembre)|pate \w+ (epicee|javanaise)|harissa|sambal)\b/;
+// [motif, quantité pour 1 unité (nombre, ou [kit HelloFresh, commerce])], unité "g" par défaut ; "ml" pour les liquides
+const EQ_T={
+ sachet:[[/levure (de )?boulang|levure seche|levure fraiche/,5.5],[/levure|poudre a lever/,11],[/vanill/,7.5],[/gelatine/,9],[/agar/,2],
+  [/huile/,10,"ml"],[/sauce soja|soja|tamari/,20,"ml"],[/sauce poisson|nuoc|vinaigre|mirin|jus de citron/,15,"ml"],
+  [/aioli|mayonnaise|ketchup|moutarde|tartare|sauce burger|sauce barbecue|bbq/,25],[/sriracha|sauce piquante|tabasco/,15],
+  [/miso/,20],[/puree de gingembre|puree d ail|gingembre|ail (ecrase|en puree)/,15],[/sauce/,30],
+  [/concentre/,30],[/haricots? verts?/,150],[/epinard/,100],[/salade|mesclun|roquette|mache|laitue|jeunes pousses|pousses/,[100,125]],
+  [/carotte.*chou|chou.*carotte|coleslaw|julienne|legumes|chou/,150],[/broccolini|brocoli/,200],[/champignon/,250],
+  [/oignons? (frits|croustillants)|echalotes? frites/,20],[/croutons?/,40],[/chapelure|panko/,30],
+  [/amandes?|noisettes?|noix|cacahuetes?|arachides?|cajou|pistaches?|pignons?|pecan/,[20,125]],[/graines?|sesame|\blin\b|chia|courge|tournesol/,[10,100]],
+  [/raisins? secs?|cranberr|canneberge|abricots? secs?|dattes?/,[25,125]],
+  [/copeaux|grana|parmesan|parmigiano|pecorino/,[25,80]],[/rape|gouda|emmental|cheddar|comte/,[50,150]],[/mozzarella/,125],[/feta/,[50,200]],
+  [/riz/,[150,125]],[/quinoa|boulgour|semoule|couscous|lentilles?/,[150,500]],[/nouilles?|vermicelles?|pates?\b|spaghetti|penne|tagliatelle/,[150,500]]],
+ paquet:[[/lardons?/,150],[/lait de coco|creme de coco/,[250,200],"ml"],[/creme (liquide|fleurette|de cuisine|semi|legere|entiere)|creme\b(?!.*(epaisse|fraiche))/,[100,200],"ml"],[/creme/,[100,200]],
+  [/haricots?|pois chiches|flageolets?|feves/,230],[/lentilles?/,250],
+  [/miettes|saumon fume|truite fumee/,[100,120]],[/crevettes?|gambas/,[180,200]],
+  [/boeuf|porc|dinde|poulet|veau|agneau|volaille|viande|hache|emince|des de|aiguillettes?|escalopes?|saucisses?|merguez|chipolatas?|steak/,250],
+  [/tomates? (semi|sechee|confite)/,[60,100]],[/concentre/,70],[/olives?/,[40,150]],
+  [/gnocchi/,[300,500]],[/ravioli|tortellini|pates? fraiches?|fraiches?/,250],[/pates?\b|spaghetti|penne|fusilli|tagliatelles?|linguines?|macaroni|coquillettes?|nouilles?|vermicelles?/,[180,500]],
+  [/riz|semoule|couscous|boulgour|quinoa/,[150,500]],[/feta/,200],[/mozzarella/,125],[/tofu/,200],[/halloumi/,[200,225]],
+  [/fromage frais|chevre frais|boursin|philadelphia|cream cheese|ricotta|mascarpone|fromage a la grecque/,[100,150]],
+  [/pate (feuilletee|brisee|sablee)|pate a pizza/,230],[/beurre/,250],[/levure/,11],[/vanill/,7.5],[/chocolat/,200],
+  [/epinards?|salade|roquette|mache|pousses/,[100,125]],[/amandes?|noisettes?|noix|cacahuetes?|cajou|pistaches?|pignons?/,[20,125]],[/graines?|sesame/,[10,100]],
+  [/rape|gouda|emmental|cheddar|comte|parmesan/,[50,150]]],
+ pot:[[/yaourt.*gre|grecque|yogourt grec/,[100,150]],[/yaourt|yogourt|skyr/,125],[/fromage blanc|faisselle/,100],
+  [/creme (liquide|fleurette)/,[100,200],"ml"],[/creme/,[100,200]],[/concentre/,70],[/pesto|creme de basilic/,[100,190]],
+  [/houmous|hummus|tzatziki|tapenade|guacamole|caviar d aubergine/,[100,200]],[/ricotta/,[125,250]],[/mascarpone/,250],[/compote/,100],[/moutarde/,[25,200]]],
+ boite:[[/lait de coco|creme de coco/,400,"ml"],[/thon/,140],[/sardines?/,135],[/maquereaux?/,170],
+  [/pois chiches/,265],[/flageolets?|lentilles?/,265],[/haricots? verts?/,400],[/haricots?|feves/,250],[/mais/,140],[/petits? pois/,280],
+  [/champignons?/,230],[/artichauts?/,240],[/ananas/,340],[/tomates?|pulpe|concass|pelees?|coulis/,400]],
+ brique:[[/lait de coco|creme de coco/,200,"ml"],[/creme/,200,"ml"],[/coulis|passata|pulpe|tomates?/,500],[/bouillon|soupe|veloute|gaspacho/,1000,"ml"],[/lait|boisson|jus/,1000,"ml"]],
+ botte:[[/radis/,250],[/carottes?/,700],[/asperges?/,500],[/navets?|betteraves?/,500],[/oignons?|cebettes?|ciboules?/,100],[/cresson/,200],[EQ_HERB,40]],
+ bouquet:[[/garni|thym|romarin|sauge/,15],[EQ_HERB,30]],
+ barquette:[[/champignons?/,250],[/tomates?/,250],[/fraises?/,250],[/framboises?|myrtilles?|mures?|groseilles?|fruits? rouges?/,125],[/cerises?|raisins?/,500],
+  [/mache|roquette|jeunes pousses|salade|epinards?|pousses/,100],[/lardons?/,150],[/haricots? verts?/,300],[/pois gourmands?/,150]],
+ bocal:[[/pesto/,190],[/sauce tomate|coulis|passata|tomates? (concass|pelee)/,400],[/pois chiches|haricots?|lentilles?/,230],[/olives?/,150],[/poivrons?/,200],[/cornichons?/,200],[/artichauts?/,180],[/tomates? sechees?/,150]],
+ bouteille:[[/vin|cidre/,750,"ml"],[/lait/,1000,"ml"],[/biere/,330,"ml"]],
+ tablette:[[/patissier|dessert|cuisine/,200],[/chocolat/,100]],
+ plaque:[[/lasagne/,20],[/pate (feuilletee|brisee|sablee)/,230],[/chocolat/,100]],
+ rouleau:[[/pate/,230]],
+ tranche:[[/jambon (cru|sec|serrano|de parme|de bayonne)|serrano|parme|bayonne|speck|coppa|bresaola|grisons/,15],[/jambon|blanc de (poulet|dinde)|dinde|poulet/,40],
+  [/bacon|poitrine/,12],[/lard/,20],[/saumon fume|truite fumee/,25],[/pain de mie/,25],[/pain/,35],[/brioche/,30],
+  [/raclette/,25],[/fromage|emmental|cheddar|gouda|comte|mozzarella|edam|maasdam|chevre/,20],[/chorizo|salami|saucisson|pepperoni/,4]],
+ branche:[[/celeri/,40],[/citronnelle/,15],[EQ_HERB,2]],
+ tige:[[/citronnelle/,15],[/celeri/,40],[EQ_HERB,1]],
+ pave:[[/boeuf|rumsteck|steak|thon/,150],[/./,125]],
+ cube:[[/bouillon|fond/,10],[/sucre/,5],[/levure/,42]],
+ gousse:[[/vanille/,3],[/./,5]],
+ poignee:[[EQ_HERB,10],[/germ/,15],[/./,30]],
+ brin:[[/./,1]],
+ cm:[[/gingembre|curcuma|galanga/,5]],
+ feuille:[[/brick|filo|phyllo/,10],[/lasagne/,20],[/gelatine/,2],[/nori/,3],[/chou/,30],[/salade|laitue/,15],[/basilic|menthe|sauge|persil|coriandre|blette/,0.5]],
+ piece:[[/gousse d ail/,5],[/tete d ail/,50],[/bouillon|\bcube/,10],[/parmigiano|parmesan|grana|pecorino/,25],[/citronnelle/,15],[/gingembre/,20],[/piment/,10],[/bouquet garni/,15],[/feuilles? de laurier/,0.2]]
+};
+const EQ_UNIT={sachet:"sachet",sachets:"sachet",paquet:"paquet",paquets:"paquet",pot:"pot",pots:"pot",boite:"boite",boites:"boite",brique:"brique",briques:"brique",botte:"botte",bottes:"botte",bouquet:"bouquet",bouquets:"bouquet",barquette:"barquette",barquettes:"barquette",bocal:"bocal",bocaux:"bocal",bouteille:"bouteille",bouteilles:"bouteille",tablette:"tablette",tablettes:"tablette",plaque:"plaque",plaques:"plaque",rouleau:"rouleau",rouleaux:"rouleau",tranche:"tranche",tranches:"tranche",branche:"branche",branches:"branche",tige:"tige",tiges:"tige",pave:"pave",paves:"pave",cube:"cube",cubes:"cube",gousse:"gousse",gousses:"gousse",poignee:"poignee",poignees:"poignee",brin:"brin",brins:"brin",cm:"cm",feuille:"feuille",feuilles:"feuille",piece:"piece",pieces:"piece","":"piece"};
+const EQ_CONT=new Set(["sachet","paquet","pot","boite","brique","botte","bouquet","barquette","bocal","bouteille","tablette","plaque","rouleau"]);
+const EQ_UW="sachets?|paquets?|pots?|bo[iî]tes?|briques?|bottes?|bouquets?|barquettes?|bocal|bocaux|bouteilles?|tablettes?|plaques?|rouleaux?|tranches?|branches?|tiges?|pav[ée]s?|cubes?|gousses?|poign[ée]es?|brins?|cm|feuilles?";
+const EQ_MOD="petite?s?|grosse?s?|gros|grande?s?|grand|belles?|bonnes?";
+const eqU=u=>{const k=nrm4(u||"").replace(/[^a-z]/g,"");return k in EQ_UNIT?EQ_UNIT[k]:null};
+const eqModF=(m,u)=>{if(!m)return 1;m=nrm4(m);if(/^petit/.test(m))return u==="boite"||u==="pot"?0.5:0.6;return 1.5};
+// sachet : herbes séchées et épices → cuillères à café (1 c. à café ≈ 1 g d'herbes séchées, ≈ 2 g d'épices moulues)
+function eqSachet(n,hf){if(EQ_PASTE.test(n)&&!EQ_GROUND.test(n))return{v:25,k:"g"};
+ if(EQ_GROUND.test(n)&&(EQ_SPICE.test(n)||EQ_HERB.test(n)||/gingembre|ail|oignon/.test(n)))return{v:hf?3:5,k:"cc",gpc:2};
+ if(EQ_HERB.test(n)&&EQ_DRYH.test(n)&&!/frai/.test(n))return{v:hf?2:10,k:"cc",gpc:1};
+ if(EQ_SPICE.test(n)&&!/sauce|huile|pate|bouillon cube/.test(n))return{v:hf?3:5,k:"cc",gpc:2};
+ return null}
+// équivalent pour 1 unité : {v: grammes (ou ml), k: "g" | "ml" | "cc", gpc: g par c. à café}
+function eqFind(name,unit,hf,mod){let n=EQ_N(name);let u=EQ_UNIT[unit]!=null?EQ_UNIT[unit]:eqU(unit);if(!n||!u)return null;
+ // unité restée dans le nom : « Botte de coriandre », « Petite boite de petits pois », « Bouquet de thym »
+ if(u==="piece"){const m=n.match(new RegExp("^(?:("+EQ_MOD+") )?("+EQ_UW.replace(/\[[^\]]*\]/g,"[a-z]")+") (?:de |d |du |des )?(.+)$"));
+  if(m&&eqU(m[2])&&eqU(m[2])!=="piece")return eqFind(m[3],eqU(m[2]),hf,m[1]);if(/\b(en )?conserves?\b/.test(n))u="boite"}
+ const f=eqModF(mod,u);
+ // taille écrite dans le nom : « Yaourt à la grecque de 200g », « Tomates concassées (400 g) », « (environ 125 g chacun) »
+ const sz=nrmS(String(name||"")).match(/(\d+(?:[.,]\d+)?)\s*(kg|g|gr|grammes?|ml|cl|l)(?![a-z])/);
+ if(sz&&(EQ_CONT.has(u)||/chacun|chacune|piece|l unite/.test(n))){const k=sz[2],x=parseFloat(sz[1].replace(",","."));const v=x*({kg:1000,cl:10,l:1000}[k]||1);if(v>0)return{v,k:/^(ml|cl|l)$/.test(k)?"ml":"g",sz:true}}
+ if(u==="sachet"){const s=eqSachet(n,hf);if(s)return s}
+ const T=EQ_T[u];if(!T)return null;
+ for(const[re,a,k]of T){if(!re.test(n))continue;const v=Array.isArray(a)?(hf?a[0]:a[1]):a;if(v==null)return null;
+  return{v:v*f,k:k||"g"}}
+ if(u==="sachet"&&EQ_HERB.test(n))return{v:10,k:"g"};
+ return null}
+// recettes HelloFresh (kit) : tailles de sachets propres au kit
+let EQ_HF=null,EQ_HFK="";
+function eqIsHF(id){if(/^hf_/.test(id))return true;const L=state.myrec||[];const key=L.length+":"+(L[0]&&L[0].id);if(key!==EQ_HFK){EQ_HFK=key;EQ_HF=new Set();
+  for(const d of L){if(!/hellofresh/i.test(d.u||""))continue;const r=RMAP[d.id];if(r)for(const it of r.i)EQ_HF.add(it[0])}}
+ return EQ_HF.has(id)}
+const eqSrcHF=(...a)=>a.some(x=>/hellofresh/i.test(String(x||"")));
+// affichage
+function eqNum(v){if(v<1)return String(Math.max(0.1,Math.round(v*10)/10)).replace(".",",");if(v<20)return String(Math.round(v));if(v<1000)return String(Math.round(v/5)*5);return String(Math.round(v/100)/10).replace(".",",")}
+function eqNumL(v){if(v<1)return String(Math.max(0.1,Math.round(v*10)/10));if(v<20)return String(Math.round(v));if(v<1000)return String(Math.round(v/5)*5);return String(Math.round(v/50)*50)}
+function eqMass(v,k){if(k==="ml")return v>=1000?eqNum(v)+" L":eqNum(v)+" ml";return v>=1000?eqNum(v)+" kg":eqNum(v)+" g"}
+function eqSpoon(v,gpc,short){const c=v/gpc;if(c<0.2)return short?"1 pincée":"1 pincée";if(c>=3){const s=c/3;return fmtNum4(s)+(short?" cs":" c. à soupe")}return fmtNum4(c)+(short?" cc":" c. à café")}
+function eqDisp(v,e){if(!(v>0))return"";if(e.k==="cc")return"≈ "+eqSpoon(v,e.gpc)+", "+eqMass(v,"g");return"≈ "+eqMass(v,e.k)}
+// petites quantités : « ≈ 2 g » au lieu de « ≈ 5 g »
+const fmtApproxV40=fmtApprox;
+fmtApprox=function(g){if(g!=null&&g>0&&g<10)return"≈ "+eqNum(g)+" g";return fmtApproxV40(g)};
+// équivalent d'une ligne de recette dont la quantité est un texte (« 2 gousses », « 1 poignée », « 3 brins », « 1 cm »)
+function eqTxt(name,s){const t=String(s||"").trim();const qm=t.match(Q_RE);if(!qm)return"";let v=qVal(qm[1].replace(/\s+/g,""));if(v==null)v=qVal(qm[1]);if(v==null)return"";
+ if(qm[2]){const b=parseFloat(qm[2].replace(",","."));if(isFinite(b)&&b>v)v=(v+b)/2}
+ const m=nrm4(t.slice(qm[0].length)).match(new RegExp("^(?:(?:de|d)\\s+)?(?:("+EQ_MOD+")\\s+)?("+EQ_UW.replace(/\[[^\]]*\]/g,"[a-z]")+")(?![a-z])"));if(!m)return"";
+ const u=eqU(m[2]);if(!u||/^(piece|gousse|cube|feuille)$/.test(u))return"";
+ // un sachet écrit en texte vient des recettes HelloFresh intégrées (origan, thym…)
+ const e=eqFind(name,u,u==="sachet"||u==="paquet",m[1]);return e?eqDisp(v*e.v,e):""}
+// ---------- une ligne d'ingrédient récupérée : « ½ sachet(s) Haricots verts », « 1 sachet de levure chimique »… ----------
+const EQ_LINE=new RegExp("^(?:environ\\s+|env\\.?\\s+)?(\\d+\\s?\\/\\s?\\d+|\\d+(?:[.,]\\d+)?\\s?[½¼¾⅓⅔]?|[½¼¾⅓⅔]|une?|deux|trois|quatre|cinq|six|demie?)\\s*(?:\\(s\\))?\\s*(?:de\\s+|d['’]\\s*)?(?:("+EQ_MOD+")\\s+)?("+EQ_UW+")(?:\\s?\\(s\\))?(?![a-zà-ÿ])\\.?\\s*(?:de\\s+|d['’]\\s*|du\\s+|des\\s+)?(.+)$","i");
+function eqParse(line){const s=String(line||"").replace(/\s+/g," ").trim();const m=s.match(EQ_LINE);if(!m)return null;let q=qVal(m[1].replace(/\s+/g,""));if(q==null)q=qVal(m[1]);
+ const u=eqU(m[3]);const name=cleanName(m[4]);if(q==null||!(q>0)||!u||!name)return null;
+ return{q,u,mod:m[2]||"",name,from:(m[1]+" "+(m[2]?m[2]+" ":"")+m[3]).replace(/\s+/g," ").trim()}}
+// hf : recette HelloFresh ; force : tout convertir (estimation nutritionnelle)
+function eqConvLine(line,hf,force){const raw=String(line||"");const s=raw.replace(/\bcuill?\.\s*/gi,"c. ").replace(/\s+/g," ").trim();
+ let p=eqParse(s);const out={line:s,conv:false};
+ if(!p){const x=parseIngLine(s);const u=x&&x.unit?eqU(x.unit):null;if(u&&u!=="piece"&&x.qty>0)p={q:x.qty,u,mod:"",name:x.name,from:x.txt||""}}
+ if(!p)return out;
+ const e=eqFind(p.name,p.u,hf,p.mod);if(!e)return out;const tot=p.q*e.v;out.e=e;out.tot=tot;out.from=p.from;out.name=p.name;
+ const doIt=force||(EQ_CONT.has(p.u)&&(p.u==="sachet"||p.u==="paquet"||hf||Math.abs(p.q-Math.round(p.q))>1e-6));
+ if(!doIt){out.eq=eqDisp(tot,e);return out}
+ const q=e.k==="cc"?eqSpoon(tot,e.gpc,true):eqNumL(tot)+" "+e.k;
+ out.line=q+" "+p.name;out.q=e.k==="cc"?eqSpoon(tot,e.gpc):eqMass(tot,e.k);out.conv=true;return out}
+function eqConvList(il,hf){let n=0;const L=(il||[]).map(l=>{const c=eqConvLine(l,hf);if(c.conv)n++;return c.line});return{L,n}}
+// ---------- branchements ----------
+// 1) quantités affichées (recette, préparation, cuisine)
+const approxGV40=approxG;
+approxG=function(id,q){if(!ING[id]||typeof q!=="number"||!(q>0))return approxGV40(id,q);const u=ING[id][2];
+ if(u==null||u==="g"||u==="ml")return approxGV40(id,q);if(APPROX_G[id])return q*APPROX_G[id];
+ const piece=u===""||u==="pièce";if(!piece){const e=eqFind(ING[id][0],u,eqIsHF(id));if(e)return q*e.v}
+ const r=approxGV40(id,q);if(r!=null)return r;const e=eqFind(ING[id][0],u,eqIsHF(id));return e?q*e.v:null};
+function eqFor(id){if(APPROX_G[id])return{v:APPROX_G[id],k:"g"};const u=ING[id][2];const e=eqFind(ING[id][0],u,eqIsHF(id));if(e)return e;const g=approxGV40(id,1);return g?{v:g,k:"g"}:null}
+const scaledQtyV40=scaledQty;
+scaledQty=function(id,q,fct,tx){
+ try{if(ING[id]){const u=ING[id][2],nm=ING[id][0];
+  if(typeof q==="number"&&u&&u!=="g"&&u!=="ml"&&u!=="pièce"&&!isStaple(id)){const e=eqFor(id);if(e)return scaledQty0(id,q,fct,tx)+" ("+eqDisp(q*fct*e.v,e)+")"}
+  // pièce écrite avec une mesure (« 1 cm » de gingembre) : la mesure prime sur le poids d'une pièce
+  if(typeof q==="number"&&(u===""||u==="pièce")&&typeof tx==="string"&&/[a-z]/i.test(tx)){const b=scaledQty0(id,q,fct,tx);const t=eqTxt(nm,b);if(t)return b+" ("+t+")"}
+  const s=scaledQtyV40.apply(this,arguments);if(/≈/.test(s))return s;
+  if(typeof q==="string"||typeof tx==="string"){const t=eqTxt(nm,s);return t?s+" ("+t+")":s}
+  return s}}catch(e){}
+ return scaledQtyV40.apply(this,arguments)};
+// liste de courses : les liquides en ml
+const groupQtyV40=groupQty;
+groupQty=function(items){const r=groupQtyV40.apply(this,arguments);
+ try{if(r&&r.txt&&/≈ [\d,]+ k?g\)/.test(r.txt)&&items.length&&items.every(e=>{const u=ING[e.id]&&ING[e.id][2];if(!u||u==="g"||u==="ml"||u==="pièce")return false;const q=eqFor(e.id);return!!q&&q.k==="ml"}))
+  r.txt=r.txt.replace(/≈ ([\d,]+) g\)/,"≈ $1 ml)").replace(/≈ ([\d,]+) kg\)/,"≈ $1 L)")}catch(e){}return r};
+function eqShopApprox(id,q){const g=approxG(id,q);if(!g)return"";const u=ING[id][2];
+ if(u&&u!=="pièce"&&u!=="g"&&u!=="ml"){const e=eqFor(id);if(e&&e.k==="ml")return" ("+eqDisp(g,{k:"ml"})+")"}return" ("+fmtApprox(g)+")"}
+// 2) estimation des valeurs nutritionnelles : les sachets et paquets comptent pour leur poids
+const nutEstimateV40=nutEstimate;
+nutEstimate=function(il,div){let L=il;try{L=(il||[]).map(l=>eqConvLine(l,false,true).line)}catch(e){L=il}return nutEstimateV40.call(this,L,div)};
+// 3) récupération : Découvrir et import par lien → quantités en grammes
+const discDraftV40=discDraft;
+discDraft=function(e,j){const d=discDraftV40.apply(this,arguments);try{const r=eqConvList(d.il,eqSrcHF(e&&e.src,e&&e.u));d.il=r.L;if(r.n)d._eqn=r.n}catch(x){}return d};
+const draftFromImportV40=draftFromImport;
+draftFromImport=function(j,url){const d=draftFromImportV40.apply(this,arguments);try{const r=eqConvList(d.il,eqSrcHF(url,d.u));d.il=r.L;if(r.n)d._eqn=r.n}catch(x){}return d};
+const openPanelV40=openPanel;
+openPanel=function(kind,data){try{const d=data&&data.draft;if(kind==="recform"&&d&&d._eqn&&!/grammes/.test(d.note||"")){d.note=(d.note?d.note+" ":"")+(d._eqn>1?d._eqn+" quantités en sachet, paquet ou pot ont été converties en grammes.":"1 quantité en sachet, paquet ou pot a été convertie en grammes.");delete d._eqn}}catch(x){}
+ return openPanelV40.apply(this,arguments)};
+// 4) fiche Découvrir : la quantité en grammes, l'unité du site en dessous
+function eqPieceG(name,q){const n=EQ_N(name);if(/\boeufs?\b/.test(n))return null;const f=/\bpetite?s?\b/.test(n)?0.6:/\b(gros|grosses?|grande?s?|grand)\b/.test(n)?1.5:1;
+ const e=NUTDB.find(z=>z[0].test(n));if(e&&e[6])return q*e[6]*f;const t=eqFind(name,"piece",false);return t?q*t.v:null}
+const panelDiscOneV40=panelDiscOne;
+panelDiscOne=function(e){const h=panelDiscOneV40.apply(this,arguments);if((ui.dtab||"ing")!=="ing")return h;
+ try{const hf=eqSrcHF(e.src,e.u);let nc=0;
+  const rows=e.ing.map(l=>{const c=eqConvLine(l,hf);const x=parseIngLine(c.line);const nm=x&&x.name?x.name:l;let q="",sub="";
+   if(c.conv){nc++;q=c.q;sub=c.from+(c.e.k==="cc"?" · "+eqMass(c.tot,"g"):"")}
+   else{q=x&&x.txt&&x.txt!=="selon le goût"&&x.name?x.txt:(x&&x.txt==="selon le goût"?"selon le goût":"");
+    const t=x&&x.txt&&x.unit!=null&&x.unit!==""?"":(x&&x.txt?eqTxt(x.name,x.txt):"");
+    if(c.eq)sub=c.eq;else if(t)sub=t;else if(x&&x.unit===""&&x.qty>0){const g=eqPieceG(x.name,x.qty);if(g&&g>=5)sub=fmtApprox(g)}}
+   return`<li><span class="dc-ico" aria-hidden="true">${discIco(nm)}</span><span class="dc-in">${esc(nm.charAt(0).toUpperCase()+nm.slice(1))}</span><span class="dc-q">${c.conv?`<b>${esc(q)}</b>`:esc(q)}${sub?`<small>${esc(sub)}</small>`:""}</span></li>`}).join("");
+  let out=h.replace(/<ul class="dc-ing">[\s\S]*?<\/ul>/,()=>`<ul class="dc-ing">${rows}</ul>`+(nc?`<p class="dc-note eq-note">Les sachets et paquets du site sont convertis en grammes (tailles habituelles). La recette est ajoutée avec ces quantités.</p>`:""));
+  return out}catch(x){return h}};
 
 try{setTab(ui.tab);renderAll()}catch(e){try{sbDiag("affichage au démarrage",e)}catch(x){}}try{initDb()}catch(e){}sbStart();
 
