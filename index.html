@@ -2073,6 +2073,112 @@ h1,h2,.sec-head h1,.block-title,.row-head h2,.m-body h2,.pn-title{color:var(--ti
 .bud-c .bud-v{font-size:1.55rem!important}
 .bud-c:not(.open) .bud-top,.bud-c:not(.open) .bud-sub,.bud-c:not(.open) .tk-cta,.bud-c:not(.open) .bud-cmp,.bud-c:not(.open) .bud-note,.bud-c:not(.open) [data-act="bud-refresh"]{display:none!important}
 .bud-c .bud-main .btn{white-space:nowrap}
+/* ================= v43 : vues réduites, cuisiné et stock restant ================= */
+.tab[data-view="progres"] [data-v]:not([data-v~="progres"]),.tab[data-view="activite"] [data-v]:not([data-v~="activite"]){display:none!important}
+#discBanner{display:none!important}
+#cookT,#cookT+p,#cookList{display:none!important}
+#tab-semaine .wk-title{font-size:1.15rem;margin:22px 0 2px}
+#tab-semaine .wk-hint{margin:0 0 8px;font-size:.84rem;color:var(--muted)}
+/* repas cuisiné : bien visible dans le planning */
+.slot.is-done{position:relative}
+.slot.is-done::after{content:"✓ Cuisiné";position:absolute;top:8px;left:8px;padding:2px 8px;border-radius:999px;background:#2F8F5B;color:#fff;font-size:.7rem;font-weight:700;letter-spacing:.01em;pointer-events:none;box-shadow:0 2px 6px rgba(0,0,0,.15)}
+.slot.is-done .slot-done[aria-pressed="true"]{background:#2F8F5B!important;border-color:#2F8F5B!important;color:#fff!important}
+.slot-done:active{transform:scale(.94)}
+/* relevé du stock après la cuisine */
+.ss-box{max-height:min(78vh,640px);overflow:auto;gap:10px;padding-top:16px}
+.ss-h{display:flex;gap:12px;align-items:flex-start;padding:2px 6px 4px}
+.ss-h h3{margin:0;font-size:1.08rem}
+.ss-h p{margin:2px 0 0;font-size:.84rem;color:var(--muted)}
+.ss-ok{flex:0 0 38px;height:38px;border-radius:50%;display:grid;place-items:center;background:#2F8F5B;color:#fff;font-weight:800;font-size:1.1rem;animation:ssPop .45s cubic-bezier(.2,1.6,.4,1)}
+@keyframes ssPop{from{transform:scale(.3);opacity:0}to{transform:none;opacity:1}}
+.ss-list{list-style:none;margin:0;padding:0;display:grid;gap:2px}
+.ss-list li{display:grid;grid-template-columns:28px 1fr auto;align-items:center;gap:10px;padding:8px 8px;border-radius:12px;font-size:.92rem;animation:vIn .25s ease-out both}
+.ss-n small{display:block;font-size:.78rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ss-list li:nth-child(odd){background:var(--surface-2,#F8F3F2)}
+.ss-ic{font-size:1.1rem;text-align:center}
+.ss-n{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600}
+.ss-d{color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+.ss-l{white-space:nowrap;font-size:.86rem;color:#2F8F5B}
+.ss-l.out{color:var(--coral-ink,#C0453A)}
+.ss-act{display:flex;gap:8px;justify-content:flex-end;padding:6px 4px 0}
+@media (prefers-reduced-motion:reduce){.ss-ok,.ss-list li{animation:none}}
+.ss-act .more-x{border-radius:999px!important;border-top:0!important;margin:0!important;text-align:center;color:var(--accent-ink,#fff)!important;min-height:44px;padding:0 22px}
+.ss-act .btn{min-height:44px}
+.ss-l{text-align:right}
+
+/* ================= v43 (suite) : défis, repères, animations ================= */
+.gq-chip{display:inline-flex;align-items:center;gap:6px}
+.gq-card{background:linear-gradient(135deg,#FFF6E4 0%,var(--surface) 62%)}
+.gq-n,.pn-sc{font-family:var(--f-sub);font-weight:800;font-size:.95rem;padding:3px 10px;border-radius:999px;background:var(--surface-2,#F6ECEA);color:var(--ink)}
+.gq-n.all,.pn-sc.ok{background:#2F8F5B;color:#fff}
+.gq-list,.pn-list,.co2-list,.bmi-list{list-style:none;margin:10px 0 0;padding:0;display:grid;gap:10px}
+.gq-list li,.pn-list li{display:grid;grid-template-columns:34px 1fr auto;align-items:center;gap:10px}
+.gq-ic,.pn-ic{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:var(--surface-2,#F6ECEA);font-size:1.05rem}
+.gq-list li.ok .gq-ic,.pn-list li.ok .pn-ic{background:#DDF1E4;animation:gqPop .5s cubic-bezier(.2,1.6,.4,1)}
+.gq-list b,.pn-list b{display:block;font-size:.92rem}
+.gq-list small,.pn-list small{display:block;font-size:.78rem;color:var(--muted);margin-top:3px}
+.gq-list .sv-bar,.pn-list .sv-bar{margin-top:5px;height:7px}
+.gq-list .sv-bar i,.pn-list .sv-bar i{background:var(--coral,#EB6456);animation:barIn .7s cubic-bezier(.2,.8,.2,1) both}
+.gq-list li.ok .sv-bar i,.pn-list li.ok .sv-bar i{background:#2F8F5B}
+.gq-st,.pn-st{font-family:var(--f-sub);font-weight:800;font-size:.85rem;color:var(--muted);min-width:34px;text-align:right}
+.gq-list li.ok .gq-st,.pn-list li.ok .pn-st{color:#2F8F5B;font-size:1.05rem}
+@keyframes barIn{from{transform:scaleX(0);transform-origin:left}to{transform:scaleX(1);transform-origin:left}}
+@keyframes gqPop{0%{transform:scale(.6)}60%{transform:scale(1.15)}100%{transform:none}}
+.pn-src{margin:12px 0 0;font-size:.74rem;line-height:1.4;color:var(--muted)}
+/* empreinte carbone */
+.co2-b{font-size:.76rem;font-weight:700;padding:3px 10px;border-radius:999px;background:var(--surface-2,#F6ECEA)}
+.co2-b.low{background:#DDF1E4;color:#1F6E43}.co2-b.mid{background:#FFF0D2;color:#8A5A00}.co2-b.high{background:#FFE0DA;color:#A8372A}
+.co2-main{display:flex;align-items:center;gap:12px;margin-top:6px}
+.co2-main b{font-family:var(--f-title,inherit);font-size:2.2rem;font-weight:800;line-height:1}
+.co2-main span{font-size:.86rem;color:var(--muted);line-height:1.35}
+.co2-main small{font-size:.78rem}
+.co2-list li{display:flex;justify-content:space-between;gap:10px;font-size:.88rem}
+.co2-list li span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.co2-list b.low{color:#1F6E43}.co2-list b.mid{color:#8A5A00}.co2-list b.high{color:#A8372A}
+.co2-best{border-top:1px dashed var(--line);padding-top:8px}
+/* poids */
+.bmi-row{display:flex;align-items:center;gap:16px;margin-top:8px}
+.bmi-v{display:flex;flex-direction:column;align-items:center;min-width:64px}
+.bmi-v b{font-family:var(--f-title,inherit);font-size:2rem;font-weight:800;line-height:1}
+.bmi-v span{font-size:.74rem;color:var(--muted)}
+.bmi-g{position:relative;flex:1;height:34px}
+.bmi-z{position:absolute;left:0;right:0;top:6px;height:10px;border-radius:99px;background:linear-gradient(90deg,#8FB8E8 0%,#8FB8E8 14%,#7CCB97 14%,#7CCB97 40%,#F2C46B 40%,#F2C46B 60%,#EE8E7A 60%)}
+.bmi-g i{position:absolute;top:0;width:4px;height:22px;margin-left:-2px;border-radius:2px;background:var(--ink);box-shadow:0 0 0 2px var(--surface);animation:gqPop .6s ease-out}
+.bmi-g small{position:absolute;left:0;right:0;top:20px;font-size:.66rem;color:var(--muted)}
+.bmi-g small span{position:absolute;transform:translateX(-50%)}
+.bmi-g small span:nth-child(1){left:14%}.bmi-g small span:nth-child(2){left:40%}.bmi-g small span:nth-child(3){left:60%}
+.bmi-list li{display:flex;justify-content:space-between;gap:10px;font-size:.88rem}
+.bmi-list li b{white-space:nowrap}
+.bmi-list b.high{color:#A8372A}
+.bmi-proj{margin:10px 0 0;font-size:.88rem;font-weight:600}
+.bmi-warn{margin:8px 0 0;font-size:.82rem;color:#A8372A}
+/* série en cours : flamme animée */
+.sv-stats b.flame{display:inline-block;animation:flame 1.6s ease-in-out infinite;transform-origin:50% 90%}
+@keyframes flame{0%,100%{transform:scale(1) rotate(0)}30%{transform:scale(1.08) rotate(-3deg)}60%{transform:scale(.97) rotate(2deg)}}
+/* animations de récompense */
+.fx{position:fixed;inset:0;z-index:95;pointer-events:none;display:flex;align-items:center;justify-content:center}
+.fx-xp{align-items:flex-end;padding-bottom:calc(120px + env(safe-area-inset-bottom,0px))}
+.fx-xp span{font-family:var(--f-sub);font-weight:800;font-size:1.05rem;color:#7A4B00;background:linear-gradient(135deg,#FFE7A6,#FFD36B);padding:10px 18px;border-radius:999px;box-shadow:0 10px 26px -10px rgba(140,90,0,.6);opacity:0;transform:translateY(16px) scale(.9)}
+.fx-xp.on span{animation:xpUp 1.7s cubic-bezier(.2,.8,.2,1) forwards}
+@keyframes xpUp{0%{opacity:0;transform:translateY(16px) scale(.9)}18%{opacity:1;transform:translateY(0) scale(1.06)}30%{transform:scale(1)}75%{opacity:1;transform:translateY(-26px)}100%{opacity:0;transform:translateY(-50px)}}
+.fx-big,.fx-badge{pointer-events:auto;background:rgba(30,20,18,0);transition:background-color .25s}
+.fx-big.on{background:rgba(30,20,18,.38)}
+.fx-badge{align-items:flex-start;padding-top:calc(76px + env(safe-area-inset-top,0px));background:transparent}
+.fx-card{background:var(--surface);border-radius:26px;padding:26px 28px;text-align:center;max-width:320px;width:calc(100% - 48px);box-shadow:0 30px 60px -20px rgba(0,0,0,.45);transform:scale(.6);opacity:0;transition:transform .45s cubic-bezier(.2,1.5,.4,1),opacity .25s}
+.fx.on .fx-card{transform:none;opacity:1}
+.fx.off .fx-card{transform:scale(.9);opacity:0}
+.fx-card h3{margin:4px 0 0;font-size:1.3rem}
+.fx-k{margin:12px 0 0;font-family:var(--f-sub);font-weight:700;font-size:.82rem;letter-spacing:.02em;color:var(--coral-ink,#C0453A)}
+.fx-s{margin:6px 0 0;font-size:.88rem;color:var(--muted)}
+.fx-card.sm{display:flex;align-items:center;gap:14px;text-align:left;padding:14px 18px;border-radius:20px}
+.fx-card.sm .fx-k{margin:0}.fx-card.sm h3{font-size:1.02rem;margin:2px 0 0}.fx-card.sm .fx-s{margin:2px 0 0;font-size:.8rem}
+.fx-emo{font-size:2.2rem;display:inline-block;animation:emo 1s cubic-bezier(.2,1.6,.4,1) both}
+.fx-emo.big{font-size:3.4rem}
+@keyframes emo{0%{transform:scale(0) rotate(-30deg)}60%{transform:scale(1.25) rotate(8deg)}100%{transform:none}}
+.fx-ring{width:96px;height:96px;margin:0 auto;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--coral,#EB6456) 0 100%);box-shadow:0 0 0 6px #FFE3DD;animation:ring 1.1s cubic-bezier(.2,.8,.2,1) both}
+.fx-ring b{width:76px;height:76px;border-radius:50%;display:grid;place-items:center;background:var(--surface);font-family:var(--f-title,inherit);font-size:2.2rem;font-weight:800;color:var(--coral-ink,#C0453A)}
+@keyframes ring{0%{transform:scale(.3) rotate(-120deg);opacity:0}70%{transform:scale(1.08) rotate(8deg);opacity:1}100%{transform:none}}
+@media (prefers-reduced-motion:reduce){.fx-card,.fx-xp span,.fx-emo,.fx-ring,.gq-list .sv-bar i,.pn-list .sv-bar i,.sv-stats b.flame,.gq-list li.ok .gq-ic,.pn-list li.ok .pn-ic,.bmi-g i{animation:none!important;transition:none!important}.fx-xp span{opacity:1;transform:none}}
 </style>
 </head>
 <body>
@@ -2093,10 +2199,10 @@ h1,h2,.sec-head h1,.block-title,.row-head h2,.m-body h2,.pn-title{color:var(--ti
   
   <div class="sec-head"><div><h1>Recettes</h1></div>
    <div class="head-actions"><button type="button" class="btn primary" data-act="rec-add">+ Ajouter une recette</button><button type="button" class="btn" data-tab="semaine" id="planCount">0 / 14 repas planifiés</button></div></div>
-  <nav class="subtabs views" aria-label="Affichage des recettes"><button type="button" data-view="idees">Pour vous</button><button type="button" data-view="toutes">Toutes</button><button type="button" data-view="snk">Encas</button><button type="button" class="vgo" data-dsc="open">Découvrir</button></nav>
+  <nav class="subtabs views" aria-label="Affichage des recettes"><button type="button" data-view="toutes">Recettes</button><button type="button" data-view="snk">Encas</button><button type="button" class="vgo" data-dsc="open">Découvrir<span class="vc" id="vcDisc" hidden></span></button></nav>
   <div id="pending" class="pending" hidden></div>
     <div id="discBanner" data-v="idees" hidden></div>
-    <div id="suggest" class="suggest" data-v="idees"></div>
+    <div id="suggest" class="suggest" data-v="toutes"></div>
 
   <h2 class="block-title all-title vh" id="allT" data-v="toutes">Toutes les recettes</h2>
   <div class="tools" data-v="toutes"><input id="q" class="search" type="search" placeholder="Rechercher une recette ou un ingrédient" aria-label="Rechercher une recette ou un ingrédient"><button type="button" class="btn filt-btn" data-act="filt" aria-expanded="false" aria-controls="chipsP chipsS">Filtres<b id="filtN" hidden></b></button></div>
@@ -2114,11 +2220,11 @@ h1,h2,.sec-head h1,.block-title,.row-head h2,.m-body h2,.pn-title{color:var(--ti
   
   <div class="sec-head"><div><h1 id="weekTitle">Semaine</h1><p class="sub" id="weekSub"></p></div>
    <div class="head-actions"><button type="button" class="btn primary" data-act="fill-goal"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 3.5l1.8 4.9 4.9 1.8-4.9 1.8L11 16.9l-1.8-4.9-4.9-1.8 4.9-1.8z"/><path d="M18.5 14.5l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8z"/></svg>Compléter selon nos objectifs</button></div></div>
-  <nav class="subtabs views" aria-label="Affichage de la semaine"><button type="button" data-view="plan">Planning</button><button type="button" data-view="encas">Encas<span class="vc" id="vcEncas" hidden></span></button><button type="button" data-view="cuisiner">À cuisiner<span class="vc" id="vcCook" hidden></span></button></nav>
-  <div class="tt" id="tt" data-v="plan"></div>
-  <div class="plan-foot" data-v="plan"><button type="button" class="btn ghost" data-act="new-week">Vider le planning</button></div>
-  <h2 class="block-title vh" id="wkSnkT" data-v="encas">Encas de la semaine</h2>
-  <div class="wk-snk" id="wkSnk" data-v="encas"></div>
+  <div class="tt" id="tt"></div>
+  <h2 class="block-title wk-title" id="wkSnkT">Encas de la semaine</h2>
+  <p class="wk-hint">Une ou deux fournées suffisent : leurs ingrédients s'ajoutent aux courses.</p>
+  <div class="wk-snk" id="wkSnk"></div>
+  <div class="plan-foot"><button type="button" class="btn ghost" data-act="new-week">Vider le planning</button></div>
   <h2 class="block-title vh" id="cookT" data-v="cuisiner">À cuisiner</h2>
   <p class="sub" data-v="cuisiner">Une recette prévue plusieurs fois se cuisine en une fois.</p>
   <div class="cooklist" id="cookList" data-v="cuisiner"></div>
@@ -2126,7 +2232,7 @@ h1,h2,.sec-head h1,.block-title,.row-head h2,.m-body h2,.pn-title{color:var(--ti
 
  <section id="tab-suivi" class="tab" hidden>
   <div class="sec-head"><div><h1>Suivi</h1></div></div>
-  <nav class="subtabs views" aria-label="Affichage du suivi"><button type="button" data-view="jour">Jour</button><button type="button" data-view="tendance">Tendance</button><button type="button" data-view="poids">Poids</button><button type="button" data-view="profil">Profil</button></nav>
+  <nav class="subtabs views" aria-label="Affichage du suivi"><button type="button" data-view="jour">Aujourd'hui</button><button type="button" data-view="progres">Progrès</button><button type="button" data-view="profil">Profil</button></nav>
   <div id="suivi"></div>
  </section>
 
@@ -2155,7 +2261,7 @@ h1,h2,.sec-head h1,.block-title,.row-head h2,.m-body h2,.pn-title{color:var(--ti
  </section>
  <section id="tab-sport" class="tab" hidden>
   <div class="sec-head"><div><h1>Sport</h1></div></div>
-  <nav class="subtabs views" aria-label="Affichage du sport"><button type="button" data-view="pas">Pas</button><button type="button" data-view="seance">Séance</button><button type="button" data-view="stats">Stats</button></nav>
+  <nav class="subtabs views" aria-label="Affichage du sport"><button type="button" data-view="seance">Séance</button><button type="button" data-view="activite">Activité</button></nav>
   <div id="sport"></div>
  </section>
 </main>
@@ -2178,7 +2284,7 @@ h1,h2,.sec-head h1,.block-title,.row-head h2,.m-body h2,.pn-title{color:var(--ti
 </div>
 <div id="timers" class="timers" hidden aria-live="polite"></div>
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
-<script>window.NS_CONFIG={"hosted": true, "sbUrl": "https://zjsawjudrdneeptxbskd.supabase.co", "sbKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpqc2F3anVkcmRuZWVwdHhic2tkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1NjUxMjcsImV4cCI6MjEwNzE0MTEyN30.Wn1bUy--5O78gGICTOyEGbnT6B-SdoNCG_XxBBaaUIY", "build": "20261021191421"}</script>
+<script>window.NS_CONFIG={"hosted": true, "sbUrl": "https://zjsawjudrdneeptxbskd.supabase.co", "sbKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpqc2F3anVkcmRuZWVwdHhic2tkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1NjUxMjcsImV4cCI6MjEwNzE0MTEyN30.Wn1bUy--5O78gGICTOyEGbnT6B-SdoNCG_XxBBaaUIY", "build": "20261021215300"}</script>
 <script>
 const AISLES={L:"Fruits & légumes",H:"Herbes fraîches",V:"Viandes & poissons",C:"Crèmerie & œufs",S:"Surgelés",F:"Féculents",B:"Conserves",E:"Épices & condiments"};
 const AISLE_ORDER=["L","H","V","C","S","F","B","E"];
@@ -3722,6 +3828,16 @@ normalize=function(d){const s=normalizeV38.apply(this,arguments);try{const src=d
  for(const st in s.tk.p){const S=s.tk.p[st],O=src.p&&src.p[st];if(!O)continue;for(const id in S){const o=O[id];if(o&&typeof o.t==="string"&&o.t.length<=40)S[id].t=o.t}}
  const ST=Array.isArray(src.t)?src.t:[];for(const x of s.tk.t){const o=ST.find(y=>y&&y.id===x.id);if(!o||!o.u||typeof o.u!=="object")continue;const u={};let n=0;
   for(const id in o.u){if(n>=80||!ING[id])continue;u[id]=o.u[id]===null?null:tkCleanRec(o.u[id]);n++}x.u=u}}catch(e){}return s};
+
+
+// ================= v43 (avant l'état) : défis de la semaine =================
+// state.gq["AAAAMMJJ" du lundi] = {c: repas cuisinés dans la semaine, ok: {cook, score, sport, fish, all}}
+const normalizeV43=normalize;
+normalize=function(d){const s=normalizeV43.apply(this,arguments);
+ try{const src=d&&typeof d==="object"&&d.gq&&typeof d.gq==="object"?d.gq:{};const o={};
+  for(const k of Object.keys(src).filter(k=>/^20\d{6}$/.test(k)).sort().slice(-16)){const v=src[k];if(!v||typeof v!=="object")continue;const ok={};
+   if(v.ok&&typeof v.ok==="object")for(const q in v.ok)if(/^[a-z]{2,12}$/.test(q)&&v.ok[q])ok[q]=1;o[k]={c:Math.max(0,Math.min(99,Math.round(+v.c||0))),ok}}
+  s.gq=o}catch(e){s.gq={}}return s};
 
 // ---------- état ----------
 const dayOf=k=>k.split("-")[0];
@@ -5493,7 +5609,7 @@ const renderSuiviV18=renderSuivi;
 renderSuivi=function(){renderSuiviV18.apply(this,arguments);try{const root=document.getElementById("suivi");if(!root)return;
  const who=String(ui.ntP||0),names=[...root.querySelectorAll(".badge-c.on b")].map(b=>b.textContent);if(!root.querySelector(".badges"))return;
  const prev=NPA.badges[who];NPA.badges[who]=names;if(!prev||ui.tab!=="suivi"||Date.now()-NPA.act>2500)return;const nw=names.filter(n=>!prev.includes(n));
- if(nw.length){npCelebrate(false);setTimeout(()=>toast("🏅 Nouveau badge : "+nw[0]),1400);
+ if(nw.length){npCelebrate(false);
   npAfter(()=>root.querySelectorAll(".sv-got .sv-chip2").forEach(c=>{if(nw.some(n=>c.textContent.includes(n)))npPop(c,1.15)}))}}catch(e){}};
 document.addEventListener("submit",e=>{const f=e.target;if(!f||f.id!=="wForm")return;const pi=ui.ntP||0,p=state.people[pi];if(!p)return;
  const w0=(p.w||[]).slice(),prev=w0.length?w0[w0.length-1][1]:null;
@@ -8533,6 +8649,207 @@ dqValid=function(e){const o=dqValidV42.apply(this,arguments);if(!o)return o;if(D
  o.t=o.t.replace(/\s*-\s*que du bon\b.*$/i,"").replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}\u{FE0F}]/gu,"").replace(/\s*\(\d+\)\s*$/,"").replace(/\s{2,}/g," ").trim()||o.t;return o};
 // recettes déjà chargées sur ce téléphone : on retire celles écrites pour un robot de cuisine
 try{DQ=DQ.filter(e=>!DQ_ROBOT.test(e.t)&&!DQ_ROBOT.test(e.u));for(let i=DISC.length-1;i>=0;i--){const e=DISC[i];if(/^x/.test(e.id)&&(DQ_ROBOT.test(e.t)||DQ_ROBOT.test(e.u))){DISC.splice(i,1);delete DISC_MAP[e.id]}}}catch(e){}
+// pages de la collecte : d'abord les plus récentes (nouvelles sources, autant d'encas que de plats), puis les anciennes
+const DRD_KEY="sano-discrd";
+let DRD=(()=>{const v=lsGetJ(DRD_KEY,null);if(v&&v.g===DG&&Array.isArray(v.p))return new Set(v.p.map(Number));const s=new Set();for(let i=1;i<=DP;i++)s.add(i);return s})(),DRDg=DG;
+dqFetch=async function(need,tag){const ix=await dqIndex();if(DRDg!==DG){DRD=new Set();DRDg=DG}const N=+ix.pages||0;let got=0,pages=0;const urls=new Set(DISC.map(e=>e.u));
+ while(pages<8){let n=0;for(let i=N;i>=1;i--)if(!DRD.has(i)){n=i;break}if(!n)break;
+  const r=await fetch(DREM+"p/"+n+".json");if(!r.ok)throw new Error("page");const L=await r.json();DRD.add(n);pages++;
+  const dz=state.disc||{},mine=new Set((state.myrec||[]).map(x=>x.u).filter(Boolean));
+  const fresh=(Array.isArray(L)?L:[]).map(dqValid).filter(e=>e&&!dz[e.id]&&!DISC_MAP[e.id]&&!urls.has(e.u)&&!mine.has(e.u));
+  fresh.forEach(e=>urls.add(e.u));DQ.push(...fresh);dqRegister(fresh);got+=fresh.filter(e=>tag==="all"||discTag(e).p===tag).length;if(got>=need)break}
+ DP=DRD.size;lsSetJ(DRD_KEY,{g:DG,p:[...DRD]});dqSave();return{got,left:Math.max(0,N-DRD.size)}};
+
+
+// ================= v43 : 2 ou 3 vues par onglet, état « cuisiné » et stock restant =================
+// Semaine = le planning seul (les encas en bas, « cuisiner » se lance depuis un repas) ;
+// Recettes = Recettes / Encas (+ Découvrir) ; Suivi = Aujourd'hui / Progrès / Profil ; Sport = Séance / Activité.
+delete VIEWS.semaine;VIEWS.recettes=["toutes","snk"];VIEWS.suivi=["jour","progres","profil"];VIEWS.sport=["seance","activite"];
+tagSuivi=function(){const root=document.getElementById("suivi");if(!root)return;
+ for(const c of root.children){if(c.dataset.v)continue;const h=c.querySelector("h2,h3,summary");const n=h?nrmS(h.textContent).trim():"";let v="";
+  if(c.id==="whyCard")v="jour";else if(/^(tendance|poids|progression|badges)/.test(n))v="progres";else if(/^besoins/.test(n))v="profil";
+  else if(c.classList.contains("sv-disc"))v="jour profil";else if(c.classList.contains("sv-card")&&!c.classList.contains("me-card")&&!c.classList.contains("sv-cta"))v="jour";
+  if(v)c.dataset.v=v}};
+tagSport=function(){const root=document.getElementById("sport");if(!root)return;const m={spSteps:"activite",spSess:"seance",spStats:"activite",spWeek:"activite"};
+ for(const c of root.children)if(m[c.id])c.dataset.v=m[c.id];else if(c.classList.contains("sp-list"))c.dataset.v="seance"};
+// compteur sur « Découvrir »
+const vcUpdateV43=vcUpdate;
+vcUpdate=function(){vcUpdateV43.apply(this,arguments);try{const el=document.getElementById("vcDisc");if(el){const n=discLeft().length;el.textContent=n>99?"99+":n?String(n):"";el.hidden=!n}}catch(e){}};
+
+// ---------- cuisiné : ce qui a été retiré du stock et ce qu'il en reste ----------
+let STK=null;// relevé en cours (clic sur « Cuisiné ? » ou fin de la cuisine pas à pas)
+document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest('[data-done],[data-act="cook-finish"]');if(!b)return;
+ STK={rows:{},miss:{},sign:0};setTimeout(()=>{const R=STK;STK=null;try{if(R&&R.sign)stockSheet(R)}catch(x){}},0)},true);
+const applyRecipeV43=applyRecipe;
+applyRecipe=function(r,sign,servings){if(!STK||!r)return applyRecipeV43.apply(this,arguments);
+ const fct=(servings||2)/(r.base||2);STK.sign=sign;
+ for(const it of r.i){const[id,q]=it;if(!ING[id]||isStaple(id)||typeof q!=="number"){continue}
+  const before={...state.stock};applyRecipeV43({...r,i:[it]},sign,servings);
+  let moved=0;const ids=new Set([...Object.keys(before),...Object.keys(state.stock)]);
+  for(const x of ids){const d=(state.stock[x]||0)-(before[x]||0);if(Math.abs(d)<1e-6)continue;moved+=Math.abs(d);const o=STK.rows[x]||(STK.rows[x]={d:0});o.d+=d}
+  const need=q*fct;if(sign<0&&need-moved>0.01){STK.miss[id]=(STK.miss[id]||0)+need-moved}}};
+function stockSheet(R){const ids=Object.keys(R.rows).filter(id=>ING[id]),mis=Object.keys(R.miss).filter(id=>ING[id]);if(!ids.length&&!mis.length)return;
+ const q=(id,v)=>{const u=ING[id][2];if(v<0.001)return"0";if(u==="g"||u==="ml")return fmtQty(id,v);const r=Math.max(0.25,Math.round(v*4)/4);return fmtQty(id,r)+eqShopApprox(id,v)};
+ const rows=ids.sort((a,b)=>ING[a][0].localeCompare(ING[b][0],"fr")).map(id=>{const d=R.rows[id].d,left=have(id);
+  return`<li><span class="ss-ic" aria-hidden="true">${icon(id)}</span><span class="ss-n">${esc(ING[id][0])}<small>${d<0?"retiré":"remis"} : ${d<0?"−":"+"}${esc(q(id,Math.abs(d)))}</small></span><b class="ss-l${left<0.001?" out":""}">${left<0.001?"épuisé":"reste "+esc(q(id,left))}</b></li>`}).join("");
+ const miss=mis.map(id=>`<li class="ss-miss"><span class="ss-ic" aria-hidden="true">${icon(id)}</span><span class="ss-n">${esc(ING[id][0])}<small>il en fallait ${esc(q(id,R.miss[id]))} de plus</small></span><b class="ss-l out">pas en stock</b></li>`).join("");
+ moreClose();try{document.getElementById("toast").classList.remove("show")}catch(e){}const d=document.createElement("div");d.className="more-sheet ss-sheet";d.setAttribute("role","dialog");d.setAttribute("aria-label","Stock mis à jour");
+ d.innerHTML=`<div class="more-box ss-box"><div class="ss-h"><span class="ss-ok" aria-hidden="true">${R.sign<0?"✓":"↺"}</span><div><h3>${R.sign<0?"Cuisiné : stock mis à jour":"Ingrédients remis dans le stock"}</h3><p>${R.sign<0?"Ce qui a été retiré et ce qu'il reste à la maison.":"Le repas n'est plus marqué cuisiné."}</p></div></div>
+  <ul class="ss-list">${rows}${miss}</ul>
+  <div class="ss-act"><button type="button" class="btn" data-ss="stock">Voir le stock</button><button type="button" class="btn primary more-x">OK</button></div></div>`;
+ document.body.appendChild(d);NV.menu=d;requestAnimationFrame(()=>d.classList.add("on"));navArm();
+ const ok=d.querySelector(".more-x");if(ok)try{ok.focus({preventScroll:true})}catch(e){}}
+document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest('[data-ss="stock"]');if(!b)return;moreClose();if(ui.modal)try{closeModal()}catch(x){}setTab("stock");renderAll()});
+
+
+// ================= v43 (suite) : défis de la semaine, repères officiels, animations =================
+// ---------- défis de la semaine, à deux (du lundi au dimanche) ----------
+const GQ_XP=50,GQ_ALL=100,GQ_IDS=["cook","score","sport","fish"];
+const gqKey=()=>spWeekKeys()[0];
+function gqW(){state.gq=state.gq||{};const k=gqKey();return state.gq[k]||(state.gq[k]={c:0,ok:{}})}
+const applyRecipeV43b=applyRecipe;
+applyRecipe=function(r,sign){const on=!!STK;const res=applyRecipeV43b.apply(this,arguments);if(on&&r&&!r.snack){const w=gqW();w.c=Math.max(0,(w.c||0)+(sign<0?1:-1))}return res};
+const FISH_P=new Set(["poisson","crevettes"]);
+function gqList(){const W=spWeekKeys(),today=DAYS[0][0],w=gqW(),H=state.hist||{};let good=0;
+ for(const d of W){if(d>today)continue;for(const pi of [0,1]){let s=null;if(d===today){try{s=dayScore(dayData(d,pi).tot,state.people[pi].t)}catch(e){}}else s=H[d]&&H[d][pi]&&H[d][pi].s;if(s!=null&&s>=70)good++}}
+ let min=0;try{min=SPD().hist.filter(h=>W.includes(h.d)).reduce((a,h)=>a+(+h.min||0),0)}catch(e){}
+ const fish=SLOTS.filter(k=>{const r=RMAP[state.plan[k]];return r&&!r.snack&&(FISH_P.has(r.p)||pnMeal(r).fish)}).length;
+ return[{id:"cook",ic:"🍳",t:"Cuisiner 4 repas",v:w.c||0,n:4,u:"repas"},{id:"score",ic:"🎯",t:"6 journées à 70+ à vous deux",v:good,n:6,u:"journées"},
+  {id:"sport",ic:"🏃",t:"150 min de sport à vous deux",v:Math.round(min),n:150,u:"min"},{id:"fish",ic:"🐟",t:"2 repas de poisson au planning",v:fish,n:2,u:"repas"}]}
+function gqCheck(silent){const L=gqList(),w=gqW(),fresh=[];for(const q of L)if(q.v>=q.n&&!w.ok[q.id]){w.ok[q.id]=1;fresh.push(q)}
+ if(!w.ok.all&&GQ_IDS.every(id=>w.ok[id])){w.ok.all=1;fresh.push({id:"all",ic:"👑",t:"Les 4 défis de la semaine",all:true})}
+ if(fresh.length)commitV43();return silent?[]:fresh}
+const gqDone=()=>{const w=gqW();return GQ_IDS.filter(id=>w.ok[id]).length};
+// XP et badges des défis
+const gameOfV43=gameOf;
+gameOf=function(pi){const G=gameOfV43.apply(this,arguments);
+ try{let qx=0,nq=0,all=0;for(const k in state.gq||{}){const ok=state.gq[k].ok||{};const n=GQ_IDS.filter(x=>ok[x]).length;nq+=n;if(ok.all)all++;qx+=n*GQ_XP+(ok.all?GQ_ALL:0)}
+  const nb=[["🏅","Défi relevé","Un défi de la semaine réussi",nq>=1,""],["🎖️","10 défis","10 défis de la semaine réussis",nq>=10,Math.min(nq,10)+"/10"],["👑","Semaine 4/4","Les 4 défis d'une même semaine",all>=1,""]];
+  const add=nb.filter(b=>b[3]).length;G.B=G.B.concat(nb);G.earned+=add;G.xp+=qx+add*50;G.nq=nq;let L=1;while(G.xp>=lvlXp(L+1))L++;G.L=L}catch(e){}return G};
+
+// ---------- repères PNNS (Santé publique France) sur les repas prévus ----------
+const PN_RE={charc:/\b(jambon|lardons?|bacon|chorizo|saucisses?|saucisson|merguez|salami|pancetta|coppa|speck|rillettes?|knacki|cervelas|andouillettes?|pate de campagne)\b/,
+ fish:/\b(saumon|cabillaud|thon|merlu|lieu|colin|truite|sardines?|maquereaux?|dorade|bar|poissons?|haddock|eglefin|merlan|sole|lotte|hareng|anchois|crevettes?|gambas|moules?|calamars?|encornets?|saint jacques|st jacques|crabe|surimi|tilapia|pangasius|limande|fletan|daurade)\b/,
+ fat:/\b(saumon|truite|maquereaux?|sardines?|hareng|anchois)\b/,
+ red:/\b(boeuf|veau|agneau|mouton|porc|steaks?|hache|bavette|rumsteck|entrecote|gigot|filet mignon|echine|paleron|basse cote|kefta|onglet|tournedos)\b/,
+ notred:/\b(poulet|dinde|volaille|canard|vegetale?|soja|thon|saumon)\b/,
+ leg:/\b(lentilles?|pois chiches?|haricots? (rouges?|blancs?|noirs?|coco|lingots?|azuki|mungo|borlotti)|flageolets?|feves?|pois casses?|edamames?|houmous|hummus|dh?al)\b/,
+ full:/\b(complete?s?|integrale?s?|sarrasin|quinoa|avoine|boulgour|epeautre|seigle|riz (brun|rouge|noir|sauvage)|pain noir)\b/,
+ veg:/\b(tomates?|pulpe|concass\w*|coulis|epinards?|haricots? verts?|petits pois|poivrons?|courgettes?|brocolis?|chou\w*|carottes?|mais|artichauts?|champignons?|ratatouille|legumes?|poelee|aubergines?|poireaux?|potiron|butternut|courges?|betteraves?|fenouils?|celeri|navets?|asperges?)\b/,
+ potato:/\b(pommes? de terre|patates?|pdt|grenailles?)\b/};
+const pnG=(id,q)=>{const u=ING[id]&&ING[id][2];if(typeof q!=="number")return 0;if(u==="g"||u==="ml")return q;return approxG(id,q)||0};
+const PN_C={};
+function pnMeal(r){if(PN_C[r.id])return PN_C[r.id];const f=1/(r.base||2);const o={fl:0,leg:0,fish:0,fat:0,red:0,charc:0,full:false};
+ for(const[id,q]of r.i){if(!ING[id])continue;const n=" "+nrmS(ING[id][0]).replace(/[^a-z ]+/g," ")+" ",a=ING[id][1],g=pnG(id,q)*f;
+  if(PN_RE.full.test(n))o.full=true;if(!g)continue;
+  if(PN_RE.charc.test(n))o.charc+=g;else if(PN_RE.fish.test(n)){o.fish+=g;if(PN_RE.fat.test(n))o.fat+=g}
+  else if(PN_RE.red.test(n)&&!PN_RE.notred.test(n))o.red+=g;else if(PN_RE.leg.test(n))o.leg+=g;
+  else if(!PN_RE.potato.test(n)&&(a==="L"||(/^[BS]$/.test(a)&&PN_RE.veg.test(n))))o.fl+=g}
+ o.fishMeal=o.fish>=40||FISH_P.has(r.p);o.fatMeal=o.fat>=40;o.legMeal=o.leg>=30;return PN_C[r.id]=o}
+function pnWeek(pi){const S={fl:0,leg:0,fish:0,fat:0,red:0,charc:0,full:0,n:0};
+ for(const k of SLOTS){const r=RMAP[state.plan[k]];if(!r||r.snack)continue;let e=true;try{e=eats(k,pi)}catch(x){}if(!e)continue;const m=pnMeal(r);S.n++;
+  S.fl+=m.fl;S.red+=m.red;S.charc+=m.charc;if(m.legMeal)S.leg++;if(m.fishMeal)S.fish++;if(m.fatMeal)S.fat++;if(m.full)S.full++}return S}
+function pnCard(pi){const S=pnWeek(pi);if(!S.n)return`<div class="sv-card pn-card" data-v="progres"><div class="sv-h"><h3>Repères santé de la semaine</h3></div><p class="pn-help">Planifie des repas dans Semaine pour voir les repères du Programme national nutrition santé.</p></div>`;
+ const fl=S.fl/80/7;const R=[["🥦","Fruits et légumes",`${String(Math.round(fl*10)/10).replace(".",",")} portion${fl>=2?"s":""}/jour dans les repas`,"3 dans les repas + 2 fruits = 5/jour",Math.min(1,fl/3),fl>=3],
+  ["🫘","Légumes secs",`${S.leg} repas`,"au moins 2 par semaine",Math.min(1,S.leg/2),S.leg>=2],
+  ["🐟","Poisson",`${S.fish} repas${S.fat?` dont ${S.fat} gras`:""}`,"2 par semaine, dont 1 gras",Math.min(1,(Math.min(S.fish,2)+(S.fat?0:-.5))/2),S.fish>=2&&S.fat>=1],
+  ["🥩","Viande (hors volaille)",`${Math.round(S.red)} g`,"500 g maximum par semaine",S.red<=500?1:Math.max(0,1-(S.red-500)/500),S.red<=500],
+  ["🥓","Charcuterie",`${Math.round(S.charc)} g`,"150 g maximum par semaine",S.charc<=150?1:Math.max(0,1-(S.charc-150)/150),S.charc<=150],
+  ["🌾","Féculents complets",`${S.full} repas sur ${S.n}`,"au moins 1 par jour",Math.min(1,S.full/7),S.full>=7]];
+ const ok=R.filter(x=>x[5]).length;
+ return`<div class="sv-card pn-card" data-v="progres"><div class="sv-h"><h3>Repères santé de la semaine</h3><span class="pn-sc${ok>=5?" ok":""}">${ok}/6</span></div>
+  <p class="pn-help">Repas prévus sur les 7 prochains jours pour ${pName(pi)}.</p>
+  <ul class="pn-list">${R.map(([ic,l,v,t,p,good])=>`<li class="${good?"ok":""}"><span class="pn-ic" aria-hidden="true">${ic}</span><div><b>${l}</b><small>${esc(v)} · ${t}</small><span class="sv-bar" aria-hidden="true"><i style="width:${Math.round(Math.max(0,p)*100)}%"></i></span></div><span class="pn-st" aria-label="${good?"repère atteint":"à améliorer"}">${good?"✓":"·"}</span></li>`).join("")}</ul>
+  <p class="pn-src">Repères du Programme national nutrition santé (Santé publique France, mangerbouger.fr).</p></div>`}
+
+// ---------- empreinte carbone (Agribalyse, ADEME — API ouverte data.ademe.fr) ----------
+const AGB_URL=DREM.replace(/discover\/$/,"")+"official/agribalyse.json";
+let AGB=null,AGBp=null;const AGB_C={};
+function agbLoad(){if(AGB)return Promise.resolve(AGB);if(AGBp)return AGBp;
+ const set=d=>{const m={};for(const x of d.f||[])m[nrmS(x[0]).replace(/\s+/g," ").trim()]=x[1];AGB={m,src:d.src||{},n:(d.f||[]).length};return AGB};
+ try{const c=JSON.parse(localStorage.getItem("sano-agb")||"null");if(c&&c.t>Date.now()-30*864e5&&c.d)return AGBp=Promise.resolve(set(c.d))}catch(e){}
+ AGBp=fetch(AGB_URL,{cache:"no-store"}).then(r=>{if(!r.ok)throw new Error("agb");return r.json()}).then(d=>{try{localStorage.setItem("sano-agb",JSON.stringify({t:Date.now(),d}))}catch(e){}return set(d)}).catch(()=>{AGBp=null;return null});return AGBp}
+// rapprochement : d'abord l'aliment Ciqual reconnu (même nom dans Agribalyse), sinon les mots du nom
+const agbStem=a=>a.map(w=>w.length>4?w.replace(/e$/,""):w);
+function agbIdx(){if(AGB.ix)return AGB.ix;return AGB.ix=Object.keys(AGB.m).map(n=>({n,t:agbStem(cqTok(n)),mt:agbStem(cqTok(n.split(",")[0])),v:AGB.m[n]}))}
+function agbFind(name){const qt=agbStem(cqTok(String(name).replace(/\([^)]*\)/g," ")));if(!qt.length)return null;const qs=new Set(qt),qj=" "+qt.join(" ")+" ";const cooked=/ (cuit|cuite|grille|grillee|roti|rotie|poele|vapeur|bouilli) /.test(qj);let best=null,bs=-1e9;
+ for(const F of agbIdx()){if(!F.t.includes(qt[0]))continue;let sc=0,miss=0;for(const w of qt){if(F.mt.includes(w))sc+=3;else if(F.t.includes(w))sc+=1;else miss++}
+  sc-=2*miss;if(F.mt[0]===qt[0])sc+=4;sc-=1.5*F.mt.filter(x=>!qs.has(x)).length;sc-=0.3*F.t.filter(x=>!qs.has(x)).length;const fn=" "+F.t.join(" ")+" ";
+  if(!cooked&&/ (cru|crue|frai|fraiche) /.test(fn))sc+=1.5;if(/ (appertise|appertisee|conserve|surgele|surgelee|deshydrate|deshydratee|poudre|seche|sechee|preemballe|preemballee|fume|fumee|prepare|preparee) /.test(fn)&&!/conserv|surgel|sech|poudre|fum|deshydrat/.test(qj))sc-=1.5;
+  if(sc>bs){bs=sc;best=F}}if(best&&bs>=2)return best;
+ // « Pavés de saumon », « Steak de thon » : on réessaie sans le mot de la découpe
+ return qt.length>1&&/^(pave|filet|steak|escalope|tranche|de|emince|cuisse|blanc|morceau|feuille|nouille|aiguillette|dos)$/.test(qt[0])?agbFind(qt.slice(1).join(" ")):null}
+function agbOf(id){if(id in AGB_C)return AGB_C[id];let v=null;
+ try{const F=cqFind(ING[id][0]);if(F)v=AGB.m[nrmS(F.n).replace(/\s+/g," ").trim()];if(v==null){const A=agbFind(ING[id][0]);if(A)v=A.v}}catch(e){}return AGB_C[id]=v==null?null:v}
+function co2Meal(r){const f=1/(r.base||2);let kg=0,gT=0,gK=0;for(const[id,q]of r.i){if(!ING[id]||isStaple(id))continue;const g=pnG(id,q)*f;if(!g)continue;gT+=g;const c=agbOf(id);if(c==null)continue;gK+=g;kg+=g/1000*c}
+ return{kg:gK?kg*gT/gK:0,cov:gT?gK/gT:0}}
+function co2Card(pi){if(!AGB||!CQ){return`<div class="sv-card co2-card" data-v="progres" id="co2Card"><div class="sv-h"><h3>Empreinte carbone des repas</h3></div><p class="pn-help">Chargement des données Agribalyse (ADEME)…</p></div>`}
+ const L=[];for(const k of SLOTS){const r=RMAP[state.plan[k]];if(!r||r.snack)continue;let e=true;try{e=eats(k,pi)}catch(x){}if(!e)continue;L.push([r,co2Meal(r)])}
+ if(!L.length)return`<div class="sv-card co2-card" data-v="progres" id="co2Card"><div class="sv-h"><h3>Empreinte carbone des repas</h3></div><p class="pn-help">Planifie des repas pour voir leur impact climat.</p></div>`;
+ const tot=L.reduce((a,x)=>a+x[1].kg,0),avg=tot/L.length,cov=L.reduce((a,x)=>a+x[1].cov,0)/L.length;const cls=v=>v<1?"low":v<2.5?"mid":"high",lab={low:"faible",mid:"moyenne",high:"élevée"};
+ const seen=new Set(),top=L.filter(([r])=>!seen.has(r.id)&&seen.add(r.id)).sort((a,b)=>b[1].kg-a[1].kg);const f1=v=>String(Math.round(v*10)/10).replace(".",",");
+ return`<div class="sv-card co2-card" data-v="progres" id="co2Card"><div class="sv-h"><h3>Empreinte carbone des repas</h3><span class="co2-b ${cls(avg)}">${lab[cls(avg)]}</span></div>
+  <div class="co2-main"><b>${f1(avg)}</b><span>kg CO₂e par repas en moyenne<br><small>${f1(tot)} kg pour les ${L.length} repas prévus de ${pName(pi)}</small></span></div>
+  <ul class="co2-list">${top.slice(0,3).map(([r,c])=>`<li><span>${esc(short(r))}</span><b class="${cls(c.kg)}">${f1(c.kg)} kg</b></li>`).concat(top.length>3?[`<li class="co2-best"><span>Le plus léger : ${esc(short(top[top.length-1][0]))}</span><b class="low">${f1(top[top.length-1][1].kg)} kg</b></li>`]:[]).join("")}</ul>
+  <p class="pn-src">Repères Sano : faible sous 1 kg, élevée au-dessus de 2,5 kg par repas. Données Agribalyse (ADEME), reliées aux aliments de la table Ciqual (Anses)${cov<0.85?` ; ${Math.round(cov*100)} % du poids des ingrédients reconnu`:""}.</p></div>`}
+
+// ---------- poids : IMC (OMS), tendance, projection ----------
+function bmiCard(pi){const P=state.people[pi],pr=P.prof,w=P.w||[];if(!pr||!pr.cm)return"";const cur=w.length?w[w.length-1][1]:pr.kg;if(!cur)return"";
+ const h=pr.cm/100,bmi=cur/(h*h);const cat=bmi<18.5?["Maigreur","low"]:bmi<25?["Corpulence normale","ok"]:bmi<30?["Surpoids","mid"]:["Obésité","high"];
+ const lo=Math.round(18.5*h*h),hi=Math.round(24.9*h*h);const pos=Math.max(0,Math.min(100,(bmi-15)/(40-15)*100));
+ const last7=w.filter(e=>dateFromYmd(e[0]).getTime()>=Date.now()-7*864e5).map(e=>e[1]);const m7=last7.length?last7.reduce((a,b)=>a+b,0)/last7.length:null;
+ const tr=wTrend(w);const wk=tr!=null?tr*7:null;const goal=pr.goalKg;let proj="";
+ if(goal&&wk&&Math.abs(goal-cur)>0.3&&Math.sign(goal-cur)===Math.sign(wk)&&Math.abs(wk)>=0.05){const weeks=Math.abs(goal-cur)/Math.abs(wk);if(weeks<=104){const d=new Date(Date.now()+weeks*7*864e5);proj=`À ce rythme, ${fmtG(goal)} kg vers le ${d.toLocaleDateString("fr-FR",{day:"numeric",month:"long"})}.`}}
+ const fast=wk!=null&&wk<-1;
+ return`<div class="sv-card bmi-card" data-v="progres"><div class="sv-h"><h3>Repères poids</h3><span class="co2-b ${cat[1]==="ok"?"low":cat[1]}">${cat[0]}</span></div>
+  <div class="bmi-row"><div class="bmi-v"><b>${String(Math.round(bmi*10)/10).replace(".",",")}</b><span>IMC</span></div><div class="bmi-g" aria-hidden="true"><span class="bmi-z"></span><i style="left:${pos.toFixed(1)}%"></i><small><span>18,5</span><span>25</span><span>30</span></small></div></div>
+  <ul class="bmi-list"><li><span>Poids de forme pour ${pr.cm} cm</span><b>${lo} à ${hi} kg</b></li>${m7?`<li><span>Moyenne des 7 derniers jours</span><b>${fmtG(r1(m7))} kg</b></li>`:""}</ul>
+  ${fast?`<p class="bmi-warn">Perte rapide : au-delà d'1 kg par semaine, parles-en à un professionnel de santé.</p>`:""}
+  <p class="pn-src">IMC : classification de l'Organisation mondiale de la santé (OMS). Indicatif, sans valeur de diagnostic.</p></div>`}
+
+// ---------- défis : carte et bouton dans Semaine ----------
+function gqCard(){const L=gqList(),w=gqW(),n=gqDone();const W=spWeekKeys();const f=d=>dateFromYmd(d).toLocaleDateString("fr-FR",{day:"numeric",month:"short"});
+ return`<div class="sv-card gq-card" data-v="progres" id="gqCard"><div class="sv-h"><h3>Défis de la semaine</h3><span class="gq-n${n===4?" all":""}">${n}/4</span></div>
+  <p class="pn-help">À relever à deux, du ${f(W[0])} au ${f(W[6])}. Chaque défi : +${GQ_XP} XP pour chacun, +${GQ_ALL} XP pour les quatre.</p>
+  <ul class="gq-list">${L.map(q=>{const ok=!!w.ok[q.id];const p=Math.min(100,Math.round(q.v/q.n*100));return`<li class="${ok?"ok":""}"><span class="gq-ic" aria-hidden="true">${q.ic}</span><div><b>${q.t}</b><span class="sv-bar" aria-hidden="true"><i style="width:${ok?100:p}%"></i></span><small>${Math.min(q.v,q.n)}/${q.n} ${q.u}</small></div><span class="gq-st" aria-label="${ok?"réussi":"en cours"}">${ok?"✓":p+" %"}</span></li>`}).join("")}</ul></div>`}
+function gqChip(){const box=document.querySelector("#tab-semaine .head-actions");if(!box)return;let b=box.querySelector(".gq-chip");
+ if(!b){b=document.createElement("button");b.type="button";b.className="btn gq-chip";b.dataset.act="gq-open";box.appendChild(b)}const n=gqDone();b.innerHTML=`<span aria-hidden="true">🏆</span> Défis ${n}/4`;b.setAttribute("aria-label",`Défis de la semaine : ${n} sur 4 réussis`)}
+document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest('[data-act="gq-open"]');if(!b)return;setTab("suivi");setView("suivi","progres");try{renderSuivi()}catch(x){}});
+const renderWeekV43=renderWeek;renderWeek=function(){const r=renderWeekV43.apply(this,arguments);try{gqChip()}catch(e){}return r};
+
+// ---------- Suivi > Progrès : nouvelles cartes ----------
+const renderSuiviV43=renderSuivi;
+renderSuivi=function(){const r=renderSuiviV43.apply(this,arguments);
+ try{const root=document.getElementById("suivi");if(!root)return r;const pi=ui.ntP||0;
+  const first=root.querySelector('[data-v~="progres"]');const at=(el,html,pos)=>{if(el)el.insertAdjacentHTML(pos,html);else root.insertAdjacentHTML("beforeend",html)};
+  at(first,gqCard(),"beforebegin");
+  const wc=[...root.children].find(c=>/^poids/.test(nrmS((c.querySelector("h2,h3")||{}).textContent||"").trim()));
+  at(wc,bmiCard(pi)+pnCard(pi)+co2Card(pi),"afterend");
+  // texte de la progression
+  const gh=root.querySelector(".sv-card.game .pn-help");if(gh&&!/défi/.test(gh.textContent))gh.textContent=gh.textContent.replace(/\.$/,"")+", chaque défi de la semaine "+GQ_XP+" XP.";
+  const fl=root.querySelector(".sv-card.game .sv-stats b");if(fl&&/🔥\s*[1-9]/.test(fl.textContent))fl.classList.add("flame");
+  applyView("suivi");
+  if(!AGB||!CQ)Promise.all([agbLoad(),new Promise(res=>cqReady(res))]).then(([a])=>{if(!a)return;const c=document.getElementById("co2Card");if(c)c.outerHTML=co2Card(ui.ntP||0);applyView("suivi")})}catch(e){try{console.warn(e)}catch(x){}}
+ return r};
+
+// ---------- animations : XP gagné, niveau, badge, défi réussi ----------
+function fxLayer(cls,html,ms){const d=document.createElement("div");d.className="fx "+cls;d.innerHTML=html;document.body.appendChild(d);requestAnimationFrame(()=>d.classList.add("on"));
+ const bye=()=>{d.classList.remove("on");d.classList.add("off");setTimeout(()=>d.remove(),400)};const t=setTimeout(bye,ms||2600);d.addEventListener("click",()=>{clearTimeout(t);bye()});return d}
+function xpFloat(n){if(!(n>0))return;fxLayer("fx-xp",`<span>✨ +${fmtInt(n)} XP</span>`,1700)}
+function levelUp(L){try{npCelebrate(true)}catch(e){}fxLayer("fx-big",`<div class="fx-card"><div class="fx-ring"><b>${L}</b></div><p class="fx-k">Niveau supérieur !</p><h3>${esc(LVL_T[Math.min(L-1,LVL_T.length-1)])}</h3><p class="fx-s">Bravo, continuez comme ça.</p></div>`,3800)}
+function badgePop(name,s){const G=gameOf(s.pi);const b=G.B.find(x=>x[1]===name);if(!b)return;fxLayer("fx-badge",`<div class="fx-card sm"><span class="fx-emo">${b[0]}</span><div><p class="fx-k">Badge débloqué</p><h3>${esc(b[1])}</h3><p class="fx-s">${esc(b[2])} · +50 XP</p></div></div>`,3200)}
+function celebrateQuest(q){try{npCelebrate(!!q.all)}catch(e){}fxLayer("fx-big",`<div class="fx-card"><span class="fx-emo big">${q.ic}</span><p class="fx-k">${q.all?"Semaine parfaite !":"Défi réussi !"}</p><h3>${esc(q.t)}</h3><p class="fx-s">+${q.all?GQ_ALL:GQ_XP} XP pour chacun</p></div>`,3400)}
+let GW=null,gwT=0;
+function gwSnap(){const pi=ME!=null?ME:(ui.ntP||0);const G=gameOf(pi);return{pi,xp:G.xp,L:G.L,B:G.B.filter(b=>b[3]).map(b=>b[1])}}
+function gwTick(){try{const fresh=gqCheck();const s=gwSnap();
+  if(GW&&GW.pi===s.pi){fresh.forEach((q,i)=>setTimeout(()=>celebrateQuest(q),i*1800));
+   if(!fresh.length&&s.xp>GW.xp)xpFloat(s.xp-GW.xp);
+   const nb=s.B.filter(n=>!GW.B.includes(n)&&!/^(Défi relevé|10 défis|Semaine 4\/4)$/.test(n));if(nb.length)setTimeout(()=>badgePop(nb[0],s),fresh.length?fresh.length*1800:700);
+   if(s.L>GW.L)setTimeout(()=>levelUp(s.L),(fresh.length?fresh.length*1800:0)+(nb.length?1800:400))}
+  GW=s;if(fresh.length){try{gqChip()}catch(e){}if(ui.tab==="suivi")try{renderSuivi()}catch(e){}}}catch(e){}}
+const commitV43=commit;
+commit=function(){const r=commitV43.apply(this,arguments);clearTimeout(gwT);gwT=setTimeout(gwTick,450);return r};
+setTimeout(()=>{try{gqCheck(true);GW=gwSnap();gqChip()}catch(e){}},1200);
 
 try{setTab(ui.tab);renderAll()}catch(e){try{sbDiag("affichage au démarrage",e)}catch(x){}}try{initDb()}catch(e){}sbStart();
 
