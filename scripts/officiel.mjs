@@ -14,7 +14,7 @@ const nrm = (s) => String(s || "").toLowerCase().normalize("NFD").replace(/[̀-�
 const cat = await getJ(`${API}/datasets?q=agribalyse&size=100&select=id,title,updatedAt`);
 const sets = (cat.results || []).filter((d) => /agribalyse/i.test(d.title) && /synth/i.test(nrm(d.title)));
 say("jeux trouvés : " + sets.map((d) => `${d.id} « ${d.title} »`).join(" | "));
-const ver = (d) => { const m = String(d.title).match(/(\d+)[.,](\d+)/); return m ? +m[1] * 100 + +m[2] : 0; };
+const ver = (d) => { const m = (String(d.title) + " " + d.id).match(/agribalyse[\s-]*(\d)(?:[.,]?(\d))?/i); return m ? +m[1] * 100 + +(m[2] || 0) : 0; };
 sets.sort((a, b) => ver(b) - ver(a) || String(b.updatedAt).localeCompare(String(a.updatedAt)));
 const ds = sets[0]; if (!ds) throw new Error("jeu Agribalyse introuvable");
 const meta = await getJ(`${API}/datasets/${ds.id}`);
