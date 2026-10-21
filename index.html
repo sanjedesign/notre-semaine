@@ -2178,7 +2178,7 @@ h1,h2,.sec-head h1,.block-title,.row-head h2,.m-body h2,.pn-title{color:var(--ti
 </div>
 <div id="timers" class="timers" hidden aria-live="polite"></div>
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
-<script>window.NS_CONFIG={"hosted": true, "sbUrl": "https://zjsawjudrdneeptxbskd.supabase.co", "sbKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpqc2F3anVkcmRuZWVwdHhic2tkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1NjUxMjcsImV4cCI6MjEwNzE0MTEyN30.Wn1bUy--5O78gGICTOyEGbnT6B-SdoNCG_XxBBaaUIY", "build": "20261021185222"}</script>
+<script>window.NS_CONFIG={"hosted": true, "sbUrl": "https://zjsawjudrdneeptxbskd.supabase.co", "sbKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpqc2F3anVkcmRuZWVwdHhic2tkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1NjUxMjcsImV4cCI6MjEwNzE0MTEyN30.Wn1bUy--5O78gGICTOyEGbnT6B-SdoNCG_XxBBaaUIY", "build": "20261021191421"}</script>
 <script>
 const AISLES={L:"Fruits & légumes",H:"Herbes fraîches",V:"Viandes & poissons",C:"Crèmerie & œufs",S:"Surgelés",F:"Féculents",B:"Conserves",E:"Épices & condiments"};
 const AISLE_ORDER=["L","H","V","C","S","F","B","E"];
@@ -6020,8 +6020,8 @@ discSorted=function(tag){let L=discLeft();if(tag&&tag!=="all")L=L.filter(e=>disc
 // --- ajout d'un encas : il rejoint les encas (cuisinés par fournée)
 discDraft=(f=>function(e,j){const d=f(e,j);if(e.k==="encas"){d.kind="encas";d.base=1;d.yieldN=e.y||1;d.yieldU=e.yU||"pièces";d.unitS=e.uS||"pièce";d.emoji=PEMOJI.includes(e.emo)?e.emo:"🍪";d.p="vege";d.s=""}return d})(discDraft);
 
-// --- séries de 10 propositions, renouvelées avec « Actualiser »
-const D_N=10;
+// --- séries de 20 propositions (moitié plats, moitié encas), renouvelées avec « Actualiser »
+const D_N=20;
 const dShuffle=a=>{for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
 function discPool(tag){return discLeft().filter(e=>!(ui.dpend&&ui.dpend.has(e.id))&&(tag==="all"||discTag(e).p===tag))}
 function discMakeBatch(tag){const seen=ui.dseen||(ui.dseen=new Set());const pool=discPool(tag);let fresh=pool.filter(e=>!seen.has(e.id)),cycled=false;
@@ -6029,9 +6029,9 @@ function discMakeBatch(tag){const seen=ui.dseen||(ui.dseen=new Set());const pool
  const G={};for(const e of fresh){const p=discTag(e).p;(G[p]=G[p]||[]).push(e)}
  for(const p in G){G[p].forEach(e=>e._r=discScore(e)+Math.random()*0.3);G[p].sort((a,b)=>b._r-a._r)}
  const out=[];
- if(tag==="all"){const cats=dShuffle(Object.keys(G).filter(p=>p!=="encas")),nM=D_N-2;
+ if(tag==="all"){const cats=dShuffle(Object.keys(G).filter(p=>p!=="encas")),nM=D_N-Math.min(D_N/2,(G.encas||[]).length);
   for(let i=0;out.length<nM;i++){let any=false;for(const p of cats){const g=G[p];if(g&&g[i]){out.push(g[i]);any=true;if(out.length>=nM)break}}if(!any)break}
-  (G.encas||[]).slice(0,D_N-out.length).forEach((e,k)=>out.splice(Math.min(out.length,3+k*4),0,e))}
+  (G.encas||[]).slice(0,D_N-out.length).forEach((e,k)=>out.splice(Math.min(out.length,1+k*2),0,e))}
  else for(const p in G)out.push(...G[p].slice(0,D_N));
  ui.dbatch=out.slice(0,D_N).map(e=>e.id);ui.dbatch.forEach(id=>seen.add(id));ui.dbatchTag=tag;ui.dstats={ok:0,no:0};ui.dlast=null;return cycled}
 function discDeck(){const dz=state.disc||{},mine=new Set((state.myrec||[]).map(x=>x.u).filter(Boolean));
@@ -6132,7 +6132,7 @@ document.addEventListener("keydown",ev=>{if(ui.panel!=="decouvrir"||ui.dsel||(ui
 // --- bannière : recettes et encas
 renderDiscBanner=(f=>function(){f.apply(this,arguments);const el=document.getElementById("discBanner");if(!el||el.hidden)return;const L=discLeft(),nS=L.filter(e=>e.k==="encas").length;
  const h=el.querySelector(".dc-banner h2"),p=el.querySelector(".dc-banner .dc-b-txt>p:not(.dc-kick)");
- if(h)h.textContent=`${L.length-nS} recettes et ${nS} encas protéinés à découvrir`;if(p)p.textContent="HelloFresh, chefs, Santé Canada, Manger Bouger, WW… Glisse la carte pour ajouter ou écarter, « Actualiser » pour d'autres idées."})(renderDiscBanner);
+ if(h)h.textContent=`${L.length-nS} recettes et ${nS} encas protéinés à découvrir`;if(p)p.textContent="HelloFresh, Jow, Marmiton, Betty Bossi, Fourchette & Bikini, Isabelle Huot… Glisse la carte pour ajouter ou écarter, « Actualiser » pour 20 nouvelles idées."})(renderDiscBanner);
 try{renderDiscBanner()}catch(e){}
 
 
@@ -6167,9 +6167,9 @@ async function dqFetch(need,tag){const ix=await dqIndex();let got=0,pages=0;cons
 // série : d'abord les recettes chargées à distance, une catégorie à tour de rôle, 2 encas dans « Tout »
 function dqPick(arr,n,tag){const G={};for(const e of arr){const p=discTag(e).p;(G[p]=G[p]||[]).push(e)}const out=[];
  if(tag!=="all"){for(const p in G)out.push(...G[p]);return out.slice(0,n)}
- const cats=Object.keys(G).filter(p=>p!=="encas").sort(()=>Math.random()-0.5),nM=Math.max(0,n-Math.min(2,(G.encas||[]).length));
+ const cats=Object.keys(G).filter(p=>p!=="encas").sort(()=>Math.random()-0.5),nM=Math.max(0,n-Math.min(Math.floor(n/2),(G.encas||[]).length));
  for(let i=0;out.length<nM;i++){let any=false;for(const p of cats){const g=G[p];if(g[i]&&out.length<nM){out.push(g[i]);any=true}}if(!any)break}
- (G.encas||[]).slice(0,n-out.length).forEach((e,k)=>out.splice(Math.min(out.length,3+k*4),0,e));return out}
+ (G.encas||[]).slice(0,n-out.length).forEach((e,k)=>out.splice(Math.min(out.length,1+k*2),0,e));return out}
 discMakeBatch=function(tag){const pool=discPool(tag),rem=new Set(DQ.map(e=>e.id));
  let out=dqPick(pool.filter(e=>rem.has(e.id)),D_N,tag);if(out.length<D_N){const have=new Set(out.map(e=>e.id));out=out.concat(dqPick(pool.filter(e=>!rem.has(e.id)&&!have.has(e.id)).sort((a,b)=>discScore(b)-discScore(a)),D_N-out.length,tag))}
  ui.dbatch=out.map(e=>e.id);ui.dbatchTag=tag;ui.dstats={ok:0,no:0};ui.dlast=null;ui.dshown=new Set();return false};
@@ -6199,11 +6199,11 @@ panelDisc=function(){if(!ui.dsel&&(!ui.dbatch||ui.dbatchTag!==(ui.dtag||"all")))
  if(ui.dload)h=h.replace('<button type="button" class="btn sw-ref" data-sw="refresh">','<button type="button" class="btn sw-ref" data-sw="refresh" aria-busy="true" disabled>').replace(/(data-sw="refresh"[^>]*>)(<svg[\s\S]*?<\/svg>)Actualiser/,"$1$2Chargement…");
  if(deck.length<D_N&&!ui.dtried)setTimeout(discTopUp,0);return h};
 swEnd=function(st){const pages=DIX?Math.max(0,(+DIX.pages||0)-DP):1;return`<div class="sw-end"><p class="sw-end-t">${st.ok||st.no?`Série terminée : ${st.ok} ajoutée${st.ok>1?"s":""}, ${st.no} écartée${st.no>1?"s":""}.`:"Série terminée."}</p>
- <p class="sw-end-s">${pages||discPool(ui.dtag||"all").length?"« Actualiser » charge 10 nouvelles recettes que tu n'as encore jamais vues.":"Tu as vu toutes les recettes disponibles. De nouvelles arrivent chaque jour."}</p>
- <button type="button" class="btn primary dc-big" data-sw="refresh"${ui.dload?" disabled":""}>${SW_I.ref}${ui.dload?"Chargement…":"Actualiser : 10 nouvelles recettes"}</button></div>`};
+ <p class="sw-end-s">${pages||discPool(ui.dtag||"all").length?"« Actualiser » charge 20 nouvelles recettes (moitié plats, moitié encas) que tu n'as encore jamais vues.":"Tu as vu toutes les recettes disponibles. De nouvelles arrivent chaque jour."}</p>
+ <button type="button" class="btn primary dc-big" data-sw="refresh"${ui.dload?" disabled":""}>${SW_I.ref}${ui.dload?"Chargement…":"Actualiser : 20 nouvelles recettes"}</button></div>`};
 // bannière : toujours visible (de nouvelles recettes peuvent être chargées)
 renderDiscBanner=function(){const el=document.getElementById("discBanner");if(!el)return;const L=discSorted("all");const th=L.concat(DQ).filter(e=>e.img).slice(0,3);el.hidden=false;
- el.innerHTML=`<div class="dc-banner"><div class="dc-b-txt"><p class="dc-kick">${DI.spark}À valider</p><h2>Recettes et encas protéinés à découvrir</h2><p>HelloFresh, Jow, Marmiton, chefs… 10 nouvelles idées saines à chaque « Actualiser », jamais deux fois les mêmes.</p><button type="button" class="btn primary dc-go" data-dsc="open">Découvrir</button></div>
+ el.innerHTML=`<div class="dc-banner"><div class="dc-b-txt"><p class="dc-kick">${DI.spark}À valider</p><h2>Recettes et encas protéinés à découvrir</h2><p>HelloFresh, Jow, Marmiton, Betty Bossi, Fourchette &amp; Bikini, Isabelle Huot… 20 nouvelles idées à chaque « Actualiser », autant d'encas que de plats, jamais deux fois les mêmes.</p><button type="button" class="btn primary dc-go" data-dsc="open">Découvrir</button></div>
  <div class="dc-b-art" aria-hidden="true">${th.map((e,i)=>`<span class="dc-b-ph p${i}"><img src="${esc(e.img)}" alt="" loading="lazy" referrerpolicy="no-referrer"></span>`).join("")}</div></div>`};
 try{renderDiscBanner()}catch(e){}
 document.addEventListener("click",ev=>{if(ev.target.closest&&ev.target.closest('[data-dsc="open"]'))ui.dtried=false},true);
@@ -7057,7 +7057,7 @@ dqFetch=async function(need,tag){const ix=await dqIndex();let got=0,pages=0;cons
 const dfOpt=t=>DF_OPTS.find(o=>o[0]===t)||DF_OPTS[0];
 function dfSheet(){const tag=ui.dtag||"all";return`<div class="df-sheet" role="dialog" aria-modal="true" aria-labelledby="dfT"><div class="df-in"><div class="df-h"><h3 id="dfT">Je veux découvrir</h3><button type="button" class="m-close df-x" data-df="close" aria-label="Fermer">×</button></div>
  <div class="df-grid">${DF_OPTS.map(([t,l,ic])=>{const n=discPool(t).length;return`<button type="button" class="df-o${t===tag?" on":""}" data-df="${t}" aria-pressed="${t===tag}"><span class="df-ic" aria-hidden="true">${ic}</span><span class="df-tx"><b>${l}</b><small>${n?`${n} prête${n>1?"s":""}`:"à charger"}</small></span></button>`}).join("")}</div>
- <p class="pn-help">Les recettes déjà vues, écartées ou ajoutées ne reviennent pas. « Actualiser » charge 10 nouvelles recettes du type choisi.</p></div></div>`}
+ <p class="pn-help">Les recettes déjà vues, écartées ou ajoutées ne reviennent pas. « Actualiser » charge 20 nouvelles recettes du type choisi.</p></div></div>`}
 const panelDiscV29=panelDisc;
 panelDisc=function(){let h=panelDiscV29.apply(this,arguments);if(ui.dsel)return h;const[t,l,ic]=dfOpt(ui.dtag||"all"),n=discPool(t).length;
  const btn=`<button type="button" class="df-btn" data-df="open" aria-haspopup="dialog"><span class="df-ic" aria-hidden="true">${ic}</span><span class="df-tx"><small>Je veux découvrir</small><b>${l}</b></span><span class="df-n">${n} prête${n>1?"s":""}</span><svg class="df-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>`;
@@ -8524,6 +8524,15 @@ renderShop=function(){const r=renderShopV41.apply(this,arguments);try{const bar=
 // ---------- démarrage ----------
 for(const t in VIEWS)try{applyView(t)}catch(e){}
 setTimeout(()=>{NV.ready=true},0);
+
+
+// ================= v42 : Découvrir — séries de 20, autant d'encas que de plats, sans recettes pour robot =================
+const DQ_ROBOT=/thermomix|cookeo|monsieur[- ]cuisine|companion|i-cook|magimix|cook-?expert|multicuiseur/i;
+const dqValidV42=dqValid;
+dqValid=function(e){const o=dqValidV42.apply(this,arguments);if(!o)return o;if(DQ_ROBOT.test(o.t)||DQ_ROBOT.test(o.u))return null;
+ o.t=o.t.replace(/\s*-\s*que du bon\b.*$/i,"").replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}\u{FE0F}]/gu,"").replace(/\s*\(\d+\)\s*$/,"").replace(/\s{2,}/g," ").trim()||o.t;return o};
+// recettes déjà chargées sur ce téléphone : on retire celles écrites pour un robot de cuisine
+try{DQ=DQ.filter(e=>!DQ_ROBOT.test(e.t)&&!DQ_ROBOT.test(e.u));for(let i=DISC.length-1;i>=0;i--){const e=DISC[i];if(/^x/.test(e.id)&&(DQ_ROBOT.test(e.t)||DQ_ROBOT.test(e.u))){DISC.splice(i,1);delete DISC_MAP[e.id]}}}catch(e){}
 
 try{setTab(ui.tab);renderAll()}catch(e){try{sbDiag("affichage au démarrage",e)}catch(x){}}try{initDb()}catch(e){}sbStart();
 
