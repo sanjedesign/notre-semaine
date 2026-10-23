@@ -13,7 +13,7 @@ jobs:
       - uses: actions/setup-node@v4
         with: { node-version: 20 }
       - name: Sonde
-        run: DRY_RUN=1 SOURCES=marmiton,ptitchef MAX_FETCH=140 node discover.mjs > report.txt 2>&1 || true; cp report.txt report_full.txt
+        run: DRY_RUN=1 MAX_FETCH=240 node discover.mjs > report.txt 2>&1 || true; cp report.txt report_full.txt
       - name: Publier le rapport
         run: |
           git config user.name "github-actions[bot]"
