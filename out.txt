@@ -1,0 +1,14 @@
+["1 POST upsert", "2026-10-23T20:00:35.956Z", [200, ""]]
+["2 GET", 200, "[{\"updated_at\":\"2026-10-23T20:00:35.956+00:00\"}]"]
+["3 PATCH ok (filtre = valeur serveur)", "2026-10-23T20:00:35.956+00:00", [200, "[{\"updated_at\":\"2026-10-23T20:00:36.786+00:00\"}]"]]
+["4 PATCH périmé (ancienne valeur)", "2026-10-23T20:00:35.956+00:00", [200, "[]"]]
+["5 PATCH filtre format Z envoyé", "2026-10-23T20:00:36.786Z", [200, "[{\"updated_at\":\"2026-10-23T20:00:37.145+00:00\"}]"]]
+["6 GET final", 200, "[{\"data\":{\"diag\": 4},\"updated_at\":\"2026-10-23T20:00:37.145+00:00\"}]"]
+["7 PATCH autre foyer (RLS)", [200, "[]"]]
+["8 GET après RLS", 200, "[{\"data\":{\"diag\": 4},\"updated_at\":\"2026-10-23T20:00:37.145+00:00\"}]"]
+["9 PATCH ligne inexistante", [200, "[]"]]
+HTTP/2 200 
+access-control-allow-origin: *
+access-control-allow-headers: apikey,authorization,x-foyer,content-type,prefer
+access-control-allow-methods: GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS,TRACE,CONNECT
+access-control-max-age: 3600
