@@ -1,6 +1,7 @@
-// Recettes à découvrir pour Sano — tourne deux fois par jour sur GitHub Actions.
-// Lit les plans de site de HelloFresh, Jow, Marmiton, Betty Bossi et Fourchette & Bikini,
-// ouvre des fiches au hasard, garde les recettes saines et riches en protéines (valeurs nutritionnelles publiées par le site)
+// Recettes à découvrir pour Sano — tourne trois fois par jour sur GitHub Actions.
+// Lit les plans de site de HelloFresh, Jow, Marmiton, Betty Bossi, Ptitchef et Fourchette & Bikini, plus des recherches Marmiton ciblées
+// (poulet, dinde, poisson, skyr, cottage…), ouvre d'abord les fiches dont l'adresse annonce des protéines,
+// garde les recettes saines et riches en protéines (valeurs nutritionnelles publiées par le site)
 // et les range par pages de 10 (5 plats variés : viandes, poissons, œufs, végé + 5 encas protéinés) dans la branche « data ».
 // DRY_RUN=1 : lit quelques fiches et affiche le résultat sans rien écrire (SOURCES=bettybossi,fourchette pour en choisir).
 // L'appli lit ces pages une par une avec le bouton « Actualiser ».
@@ -47,15 +48,28 @@ const iso = (d) => { const m = String(d ?? "").match(/P(?:(\d+)D)?T?(?:(\d+)H)?(
 const imgOf = (i) => !i ? "" : typeof i === "string" ? i : Array.isArray(i) ? imgOf(i.find((x) => /1024x768/.test(String(x?.url || x))) || i[0]) : typeof i.url === "string" ? i.url : "";
 const ytId = (u) => { const m = String(u || "").match(/(?:youtube\.com\/(?:embed\/|watch\?v=|shorts\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/); return m ? m[1] : ""; };
 
+// --- recherches Marmiton ciblées sur les protéines (pages de résultats au hasard à chaque passage)
+const MQ = ["blanc de poulet", "filet de poulet", "escalope de dinde", "dinde", "poulet léger", "cabillaud", "saumon", "thon", "crevettes", "colin", "merlu", "lieu noir",
+  "steak haché", "boeuf", "filet mignon de porc", "veau", "lentilles", "pois chiches", "tofu", "oeufs", "riche en protéines", "protéiné", "high protein",
+  "skyr", "fromage blanc", "cottage cheese", "pancakes protéinés", "muffins protéinés", "barre protéinée", "energy balls protéinées", "mug cake protéiné",
+  "porridge protéiné", "overnight oats protéiné", "rillettes de thon", "houmous", "edamame", "oeufs mimosa", "jambon de dinde", "quark", "whey"];
+const mqUrls = (n) => shuffle([...MQ]).slice(0, n).map((q) => { const pg = 1 + Math.floor(Math.random() * 4); return `https://www.marmiton.org/recettes/recherche.aspx?aqt=${encodeURIComponent(q)}${pg > 1 ? "&page=" + pg : ""}`; });
+
 // --- sources
 // w : part des fiches lues ; sub : sous-plans à suivre dans un plan d'index
 const SRC = {
   hellofresh: { name: "HelloFresh", maps: ["https://www.hellofresh.fr/sitemap_recipe_pages.xml"], re: /\/recipes\/[a-z0-9-]+-[0-9a-f]{24}$/, w: 3 },
   jow: { name: "Jow", maps: ["https://jow.fr/sitemap.xml"], re: /jow\.fr\/recipes\/[a-z0-9-]+$/, w: 2 },
-  marmiton: { name: "Marmiton", maps: [1, 2, 3, 4, 5, 6, 7, 8, 9].map((i) => `https://www.marmiton.org/wsitemap_recipes_${i}.xml`), re: /\/recettes\/recette_[a-z0-9-]+_\d+\.aspx$/, w: 2 },
+  marmiton: { name: "Marmiton", maps: [1, 2, 3, 4, 5, 6, 7, 8, 9].map((i) => `https://www.marmiton.org/wsitemap_recipes_${i}.xml`), lists: () => mqUrls(14), re: /\/recettes\/recette_[a-z0-9-]+_\d+\.aspx$/, w: 3 },
   bettybossi: { name: "Betty Bossi", maps: ["https://www.bettybossi.ch/sitemap.xml"], sub: /fr/i, re: /bettybossi\.ch\/fr\/recettes\/recette\/[a-z0-9-]+-\d+\/?$/, w: 3 },
+  ptitchef: { name: "Ptitchef", maps: ["https://www.ptitchef.com/upload_data/sitemaps/recipe-fr-1.xml", "https://www.ptitchef.com/upload_data/sitemaps/recipe-fr-2.xml"], re: /ptitchef\.com\/recettes\/(plat|entree|aperitif|brunch|petit-dejeuner|accompagnement|autre)\/[a-z0-9-]+-fid-\d+$/, w: 1 },
   fourchette: { name: "Fourchette & Bikini", maps: ["https://www.fourchette-et-bikini.fr/xml/sitemap.xml"], sub: /recette/i, re: /fourchette-et-bikini\.fr\/recettes\/[a-z0-9-]+-(?:[2-9]\d{4}|\d{6,})\.html$/, w: 3 },
 };
+// seuils protéines (les mêmes dans l'appli) : plat ≥ 28 g par portion et ≥ 24 % des calories ; encas ≥ 10 g et ≥ 25 %
+const PRULE = { plat: { p: 28, r: 0.24 }, encas: { p: 10, r: 0.25 } };
+const protOk = (e) => { const R = PRULE[e.k === "encas" ? "encas" : "plat"]; const n = e.n || {}; return n.k > 0 && n.p >= R.p && (n.p * 4) / n.k >= R.r; };
+// fiches visées en priorité : leur adresse annonce un aliment riche en protéines
+const PROT_SLUG = /(proteine|protein|poulet|dinde|volaille|boeuf|steak|bavette|veau|porc|filet-mignon|escalope|agneau|canard|kefta|boulette|saumon|cabillaud|thon|merlu|colin|lieu|truite|sardine|maquereau|dorade|poisson|crevette|gambas|moule|calamar|encornet|saint-jacques|oeuf|omelette|frittata|shakshuka|tofu|tempeh|seitan|lentille|pois-chiche|haricot|edamame|skyr|fromage-blanc|cottage|ricotta|quark|halloumi|jambon|whey)/;
 // recettes écrites pour un robot de cuisine : étapes inutilisables sans l'appareil
 const ROBOT = /thermomix|cookeo|monsieur[- ]cuisine|companion|i-cook|magimix|cook-?expert|multicuiseur/i;
 const SNACK_SLUG = /(proteine|skyr|fromage-blanc|cottage|energy-?ball|bouchee|muffin|pancake|barre|houmous|hummus|tzatziki|tatziki|edamame|pois-chiches?-(grilles|rotis|croustillants)|oeufs?-(mimosa|durs?|cocotte|farcis)|roules?-de-(jambon|saumon|dinde)|collation|encas|snack|mug-?cake|cheesecake|porridge|overnight|yaourt|trempette|tartinade|verrine|smoothie|gaufre|crackers?|bol-|bowl-cake|oeufs?-brouilles|omelette-roulee|mini-|brochettes?-apero|tartare-de-saumon|rillettes-de-(thon|saumon|sardine|maquereau))/;
@@ -101,20 +115,23 @@ function toRecipe(key, url, R, hint) {
   const ar = R.aggregateRating; if (ar && num(ar.ratingValue) && num(ar.ratingCount || ar.reviewCount)) o.r = [Math.round(num(ar.ratingValue) * 10) / 10, Math.round(num(ar.ratingCount || ar.reviewCount))];
   const vid = R.video && (Array.isArray(R.video) ? R.video[0] : R.video); const yv = ytId(vid && (vid.embedUrl || vid.contentUrl)); if (yv) o.v = yv;
   if (BAD.test(nrm(t))) return { why: "plat trop riche (nom)" };
+  if (/\b(langues?|ris de veau|rognons?|foies?|tripes?|cervelle|boudin|andouillettes?|gesiers?|coeurs? de (boeuf|volaille|poulet))\b/.test(nrm(t))) return { why: "abats" };
+  if (/\/recipe-type\//.test(o.img)) o.img = "";
+  if (key === "ptitchef" && !o.img) return { why: "sans photo" };
   if (/dessert|boisson|cocktail|sauce|confiserie/.test(cat) && !SNACK_T.test(nrm(t))) return { why: "catégorie " + cat };
   // encas sain et protéiné
   const tt = nrm(t);
   // piste d'encas (adresse de la fiche) ou titre / catégorie d'encas
   const snackLike = !MEAL_T.test(tt) && (SNACK_T.test(tt) || (hint && k <= 350) || /(petit[- ]dejeuner|brunch|gouter|collation|encas|snack|aperitif|amuse|en-cas)/.test(cat + " " + nrm(R.keywords || "")));
   if (snackLike && k <= 320 && !(/(cake|brownie|cookie|crepe|gaufre|madeleine)/.test(tt) && !/prot[eé]in/.test(tt))) {
-    if (k < 50 || p < 6 || pr < 0.16 || f > 16 || (sug != null && sug > 18)) return { why: "encas pas assez protéiné" };
+    if (k < 50 || p < PRULE.encas.p || pr < PRULE.encas.r || f > 16 || (sug != null && sug > 18)) return { why: "encas pas assez protéiné" };
     if (/(bacon|chorizo|saucisson|rillette|lardon|salami)/.test(tt)) return { why: "encas trop gras" };
     o.k = "encas"; const su = SNACK_UNIT.find(([re]) => re.test(nrm(t))); o.yU = su ? su[1] : y > 1 ? "portions" : "portion"; o.uS = su ? su[2] : "portion";
     o.emo = (SNACK_EMO.find(([re]) => re.test(nrm(t))) || [0, "🥚"])[1]; o.pt = "encas"; return { r: o };
   }
   // plat : léger et riche en protéines
   if (k < 280 || k > 680) return { why: `kcal ${Math.round(k)}` };
-  if (p < 24 || pr < 0.17) return { why: `protéines ${p} g` };
+  if (p < PRULE.plat.p || pr < PRULE.plat.r) return { why: `protéines ${p} g` };
   if (f > 30 || (f * 9) / k > 0.45) return { why: `lipides ${f} g` };
   o.pt = ptOf(t, ing); return { r: o };
 }
@@ -130,7 +147,10 @@ else if (!st || st.rules !== RULES) { if (st) say(`nouvelles règles (v${RULES})
 const IX = path.join(DIR, "index.json");
 
 async function urlsOf(key) {
-  const S = SRC[key]; const all = []; const q = [...S.maps]; const done = new Set(); let n = 0;
+  const S = SRC[key]; const all = [], pri = []; const q = [...S.maps]; const done = new Set(); let n = 0;
+  // pages de résultats de recherche : les liens de recettes passent en premier
+  for (const l of S.lists ? S.lists() : []) { const r = await get(l); const hits = [...new Set([...r.text.matchAll(/href="([^"]+)"/g)].map((m) => { try { return new URL(m[1].replace(/&amp;/g, "&"), l).href.split("#")[0]; } catch { return ""; } }).filter((u) => S.re.test(u) && !ROBOT.test(u)))];
+    pri.push(...hits); say(`recherche ${key} ${r.status} ${decodeURIComponent(l.split("aqt=")[1] || l)} → ${hits.length}`); await sleep(400); }
   while (q.length && n < 30) {
     const m = q.shift(); if (done.has(m)) continue; done.add(m); n++;
     const r = await get(m); const L = locs(r.text);
@@ -138,22 +158,24 @@ async function urlsOf(key) {
     const R = L.filter((u) => S.re.test(u) && !ROBOT.test(u)); all.push(...R); say(`plan ${key} ${r.status} ${m} → ${R.length}`);
     if (DRY && !R.length && L.length) say("   ex. " + L.filter((u) => !/\.xml/i.test(u)).slice(0, 4).join(" | ")); await sleep(400);
   }
-  return [...new Set(all)];
+  return { pri: [...new Set(pri)], all: [...new Set(all)] };
 }
 const shuffle = (a) => { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
 
-const cand = { main: [], snack: [] };
+const per = {};
 for (const key of Object.keys(SRC).filter((k) => !ONLY.length || ONLY.includes(k))) {
-  const L = shuffle((await urlsOf(key)).filter((u) => !st.seen[idOf(u)]));
-  const snack = L.filter((u) => SNACK_SLUG.test(nrm(u))), main = L.filter((u) => !SNACK_SLUG.test(nrm(u)));
-  const keys = Object.keys(SRC).filter((k) => !ONLY.length || ONLY.includes(k));
-  const wSum = keys.reduce((a, k) => a + SRC[k].w, 0), share = SRC[key].w / wSum;
-  // autant d'encas que de plats : la moitié des fiches lues sont des pistes d'encas
-  cand.main.push(...main.slice(0, Math.round(MAX * 0.5 * share)).map((u) => [key, u]));
-  cand.snack.push(...snack.slice(0, Math.round(MAX * 0.5 * share) + 4).map((u) => [key, u]));
+  const U = await urlsOf(key); const P = new Set(shuffle(U.pri.filter((u) => !st.seen[idOf(u)])));
+  const L = [...P, ...shuffle(U.all.filter((u) => !st.seen[idOf(u)] && !P.has(u)))];
+  const aim = (A) => { const pri = A.filter((u) => P.has(u)), B = A.filter((u) => !P.has(u)); const hit = B.filter((u) => PROT_SLUG.test(nrm(u))), rest = B.filter((u) => !PROT_SLUG.test(nrm(u))); const out = [...pri]; while (hit.length || rest.length) { for (let i = 0; i < 3 && hit.length; i++) out.push(hit.shift()); if (rest.length) out.push(rest.shift()); } return out; };
+  per[key] = { snack: aim(L.filter((u) => SNACK_SLUG.test(nrm(u)))), main: aim(L.filter((u) => !SNACK_SLUG.test(nrm(u)))) };
 }
-const queue = shuffle(process.env.SNACK_ONLY === "1" ? [...cand.snack] : [...cand.main, ...cand.snack]).slice(0, MAX);
-say(`à lire : ${queue.length} fiches (${cand.snack.length} pistes d'encas)`);
+// tirage pondéré entre les sources ; la moitié des fiches sont des pistes d'encas, et si une source ou un type manque, les autres complètent
+function take(kind, n) { const out = []; let more = true;
+  while (out.length < n && more) { more = false; for (const k of Object.keys(per)) for (let i = 0; i < SRC[k].w && out.length < n; i++) { const u = per[k][kind].shift(); if (u) { out.push([k, u]); more = true; } } }
+  return out; }
+const snacks = take("snack", process.env.SNACK_ONLY === "1" ? MAX : Math.round(MAX * 0.5));
+const queue = shuffle([...snacks, ...(process.env.SNACK_ONLY === "1" ? [] : take("main", MAX - snacks.length))]);
+say(`à lire : ${queue.length} fiches (${snacks.length} pistes d'encas)`);
 const why = {}; let ok = 0; const bySrc = {};
 for (const [key, url] of queue) {
   const r = await get(url); st.seen[idOf(url)] = 1;
@@ -173,6 +195,10 @@ if (DRY) process.exit(0);
 for (const f of fs.readdirSync(path.join(DIR, "p"))) { const fp = path.join(DIR, "p", f); try { const L = JSON.parse(fs.readFileSync(fp, "utf8")); let ch = false;
   for (const e of L) { if (e.k === "encas") continue; const pt = ptOf(e.t, e.ing); if (pt !== e.pt) { e.pt = pt; ch = true; } } if (ch) fs.writeFileSync(fp, JSON.stringify(L)); } catch { /* page illisible */ } }
 for (const e of st.pending) if (e.k !== "encas") e.pt = ptOf(e.t, e.ing);
+let pruned = 0;
+for (const f of fs.readdirSync(path.join(DIR, "p"))) { const fp = path.join(DIR, "p", f); try { const L = JSON.parse(fs.readFileSync(fp, "utf8")); const K = L.filter(protOk); if (K.length !== L.length) { pruned += L.length - K.length; fs.writeFileSync(fp, JSON.stringify(K)); } } catch { /* page illisible */ } }
+{ const n0 = st.pending.length; st.pending = st.pending.filter(protOk); pruned += n0 - st.pending.length; }
+if (pruned) say(`retirées (sous les seuils de protéines) : ${pruned}`);
 // --- pages de 10 : 5 plats (une catégorie à tour de rôle) et 5 encas, en alternance
 function takePage(force) {
   const P = st.pending; const sn = P.filter((r) => r.k === "encas"), mains = P.filter((r) => r.k !== "encas");

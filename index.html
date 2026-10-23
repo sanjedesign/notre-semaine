@@ -2186,6 +2186,10 @@ h1,h2,.sec-head h1,.block-title,.row-head h2,.m-body h2,.pn-title{color:var(--ti
 .tr-box .rm-row:last-child{border-bottom:0}
 .tr-n{min-width:0;font-size:.92rem}
 .tr-n small{display:block;margin-top:2px;font-size:.76rem;color:var(--muted)}
+/* ================= v45 : protéines bien visibles dans Découvrir ================= */
+.sw-prot{display:inline-flex;align-items:center;background:#fff;color:#1D6B39;border-radius:999px;padding:3px 10px;font-family:var(--f-sub);font-weight:700;font-size:.76rem;text-shadow:none}
+.sw-prot.top{background:#FFD36B;color:#5A3A00}
+.dc-f.dc-top{color:#1D6B39;font-weight:700}
 </style>
 </head>
 <body>
@@ -2291,7 +2295,7 @@ h1,h2,.sec-head h1,.block-title,.row-head h2,.m-body h2,.pn-title{color:var(--ti
 </div>
 <div id="timers" class="timers" hidden aria-live="polite"></div>
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
-<script>window.NS_CONFIG={"hosted": true, "sbUrl": "https://zjsawjudrdneeptxbskd.supabase.co", "sbKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpqc2F3anVkcmRuZWVwdHhic2tkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1NjUxMjcsImV4cCI6MjEwNzE0MTEyN30.Wn1bUy--5O78gGICTOyEGbnT6B-SdoNCG_XxBBaaUIY", "build": "20261023202004"}</script>
+<script>window.NS_CONFIG={"hosted": true, "sbUrl": "https://zjsawjudrdneeptxbskd.supabase.co", "sbKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpqc2F3anVkcmRuZWVwdHhic2tkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1NjUxMjcsImV4cCI6MjEwNzE0MTEyN30.Wn1bUy--5O78gGICTOyEGbnT6B-SdoNCG_XxBBaaUIY", "build": "20261023203638"}</script>
 <script>
 const AISLES={L:"Fruits & légumes",H:"Herbes fraîches",V:"Viandes & poissons",C:"Crèmerie & œufs",S:"Surgelés",F:"Féculents",B:"Conserves",E:"Épices & condiments"};
 const AISLE_ORDER=["L","H","V","C","S","F","B","E"];
@@ -6255,7 +6259,7 @@ document.addEventListener("keydown",ev=>{if(ui.panel!=="decouvrir"||ui.dsel||(ui
 // --- bannière : recettes et encas
 renderDiscBanner=(f=>function(){f.apply(this,arguments);const el=document.getElementById("discBanner");if(!el||el.hidden)return;const L=discLeft(),nS=L.filter(e=>e.k==="encas").length;
  const h=el.querySelector(".dc-banner h2"),p=el.querySelector(".dc-banner .dc-b-txt>p:not(.dc-kick)");
- if(h)h.textContent=`${L.length-nS} recettes et ${nS} encas protéinés à découvrir`;if(p)p.textContent="HelloFresh, Jow, Marmiton, Betty Bossi, Fourchette & Bikini, Isabelle Huot… Glisse la carte pour ajouter ou écarter, « Actualiser » pour 20 nouvelles idées."})(renderDiscBanner);
+ if(h)h.textContent=`${L.length-nS} recettes et ${nS} encas protéinés à découvrir`;if(p)p.textContent="Au moins 28 g de protéines par plat et 10 g par encas · HelloFresh, Jow, Marmiton, Betty Bossi, Ptitchef… Glisse la carte pour ajouter ou écarter."})(renderDiscBanner);
 try{renderDiscBanner()}catch(e){}
 
 
@@ -6326,7 +6330,7 @@ swEnd=function(st){const pages=DIX?Math.max(0,(+DIX.pages||0)-DP):1;return`<div 
  <button type="button" class="btn primary dc-big" data-sw="refresh"${ui.dload?" disabled":""}>${SW_I.ref}${ui.dload?"Chargement…":"Actualiser : 20 nouvelles recettes"}</button></div>`};
 // bannière : toujours visible (de nouvelles recettes peuvent être chargées)
 renderDiscBanner=function(){const el=document.getElementById("discBanner");if(!el)return;const L=discSorted("all");const th=L.concat(DQ).filter(e=>e.img).slice(0,3);el.hidden=false;
- el.innerHTML=`<div class="dc-banner"><div class="dc-b-txt"><p class="dc-kick">${DI.spark}À valider</p><h2>Recettes et encas protéinés à découvrir</h2><p>HelloFresh, Jow, Marmiton, Betty Bossi, Fourchette &amp; Bikini, Isabelle Huot… 20 nouvelles idées à chaque « Actualiser », autant d'encas que de plats, jamais deux fois les mêmes.</p><button type="button" class="btn primary dc-go" data-dsc="open">Découvrir</button></div>
+ el.innerHTML=`<div class="dc-banner"><div class="dc-b-txt"><p class="dc-kick">${DI.spark}À valider</p><h2>Recettes et encas protéinés à découvrir</h2><p>HelloFresh, Jow, Marmiton, Betty Bossi, Ptitchef, Fourchette &amp; Bikini… Au moins 28 g de protéines par plat et 10 g par encas, 20 nouvelles idées à chaque « Actualiser », jamais deux fois les mêmes.</p><button type="button" class="btn primary dc-go" data-dsc="open">Découvrir</button></div>
  <div class="dc-b-art" aria-hidden="true">${th.map((e,i)=>`<span class="dc-b-ph p${i}"><img src="${esc(e.img)}" alt="" loading="lazy" referrerpolicy="no-referrer"></span>`).join("")}</div></div>`};
 try{renderDiscBanner()}catch(e){}
 document.addEventListener("click",ev=>{if(ev.target.closest&&ev.target.closest('[data-dsc="open"]'))ui.dtried=false},true);
@@ -9033,6 +9037,38 @@ document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest
  const rec=cleanMyRec(x.r);if(!rec){toast("Impossible de restaurer cette recette");return}
  if((state.myrec||[]).length>=MYREC_MAX){toast("Nombre maximum de recettes atteint");return}
  const list=[rec,...(state.myrec||[])];state.myrec=list;regMyRecipes(list);TRASH=TRASH.filter(t=>t!==x);trSave();commit();renderAll();toast("Recette restaurée ✓")});
+
+
+// ================= v45 : Découvrir plus protéiné =================
+// Mêmes règles que la collecte : plat ≥ 28 g de protéines par portion et au moins 24 % des calories apportées par les protéines,
+// encas ≥ 10 g et 25 %. « Les plus protéinées » : plats ≥ 35 g, encas ≥ 15 g. Les recettes déjà chargées sous ces seuils ne sont plus proposées,
+// et chaque série commence par les plus protéinées (avec un peu de hasard pour varier).
+const PR_RULE={plat:{p:28,r:.24,top:35},encas:{p:10,r:.25,top:15}};
+const prKind=e=>e.k==="encas"||discTag(e).p==="encas"?"encas":"plat";
+function prOf(e){const n=discNut(e);if(!n||!(n.k>0)||!(n.p>=0))return null;return{p:n.p,r:n.p*4/n.k,est:!!n.est}}
+function prOk(e){if(e._prOk===undefined){const x=prOf(e),R=PR_RULE[prKind(e)];e._prOk=!x||(x.p>=R.p&&x.r>=R.r)}return e._prOk}
+function prTop(e){const x=prOf(e),R=PR_RULE[prKind(e)];return!!x&&x.p>=R.top&&x.r>=R.r}
+function prScore(e){const x=prOf(e);if(!x)return 0;const R=PR_RULE[prKind(e)];return Math.min(1.4,x.p/R.top)+Math.min(.45,x.r)*1.5-(x.est?.1:0)}
+function prSort(L){const k=new Map(L.map(e=>[e,prScore(e)+Math.random()*.35]));return L.sort((a,b)=>k.get(b)-k.get(a))}
+const discLeftV45=discLeft;
+discLeft=function(){return discLeftV45.apply(this,arguments).filter(prOk)};
+const dqValidV45=dqValid;
+dqValid=function(e){const o=dqValidV45.apply(this,arguments);return o&&prOk(o)?o:null};
+try{DQ=DQ.filter(prOk)}catch(e){}
+// choix « Les plus protéinées » dans « Je veux découvrir »
+DF_OPTS.splice(1,0,["top","Les plus protéinées","💪"]);
+try{if(localStorage.getItem(DF_K)==="top")ui.dtag="top"}catch(e){}
+const discPoolV45=discPool;
+discPool=function(tag){const L=tag==="top"?discLeft().filter(e=>!(ui.dpend&&ui.dpend.has(e.id))&&prTop(e)):discPoolV45.apply(this,arguments);return prSort(L)};
+const dqPickV45=dqPick;
+dqPick=function(arr,n,tag){return dqPickV45(arr,n,tag==="top"?"all":tag)};
+// carte : les protéines par portion bien visibles
+const swCardV45=swCard;
+swCard=function(e,cls){const h=swCardV45.apply(this,arguments);const x=prOf(e);if(!x)return h;const top=prTop(e);
+ const pill=`<span class="sw-prot${top?" top":""}">${top?"Très protéiné · ":""}${x.est?"≈ ":""}${fmtG(Math.round(x.p))} g de protéines</span>`;
+ return h.replace('<span class="sw-src">',pill+'<span class="sw-src">').replace(/ · (≈ )?[\d,.]+ g prot\.(?=<small>)/,"")};
+const discFactsV45=discFacts;
+discFacts=function(e,big){const h=discFactsV45.apply(this,arguments);return prTop(e)?h.replace('<span class="dc-f">'+DI.prot,'<span class="dc-f dc-top">'+DI.prot):h};
 
 try{setTab(ui.tab);renderAll()}catch(e){try{sbDiag("affichage au démarrage",e)}catch(x){}}try{initDb()}catch(e){}sbStart();
 

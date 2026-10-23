@@ -1,5 +1,5 @@
 name: Recettes à découvrir
-# Deux fois par jour : nouvelles recettes saines et protéinées (HelloFresh, Jow, Marmiton, Betty Bossi, Fourchette & Bikini)
+# Trois fois par jour : nouvelles recettes saines et riches en protéines (HelloFresh, Jow, Marmiton, Betty Bossi, Ptitchef, Fourchette & Bikini)
 # rangées par pages de 10 (5 plats + 5 encas)
 # dans la branche « data », lues par l'appli avec le bouton « Actualiser ».
 on:
@@ -12,7 +12,8 @@ on:
     paths: [".github/workflows/discover.yml", "scripts/discover.mjs"]
   schedule:
     - cron: "17 3 * * *"
-    - cron: "17 15 * * *"
+    - cron: "17 10 * * *"
+    - cron: "17 16 * * *"
 permissions:
   contents: write
 concurrency: { group: discover, cancel-in-progress: false }
@@ -32,7 +33,7 @@ jobs:
         run: node scripts/discover.mjs
         env:
           DATA_DIR: data/discover
-          MAX_FETCH: ${{ inputs.max_fetch || (github.event_name == 'schedule' && '700' || '760') }}
+          MAX_FETCH: ${{ inputs.max_fetch || (github.event_name == 'schedule' && '900' || '950') }}
           SNACK_ONLY: ${{ inputs.snack_only || '0' }}
       - name: Publier
         run: |
