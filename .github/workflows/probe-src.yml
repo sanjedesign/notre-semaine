@@ -1,0 +1,25 @@
+name: Sonde sources
+on:
+  push:
+    branches: [probe-src]
+permissions:
+  contents: write
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - name: Sonde
+        run: node probe.mjs > log.txt 2>&1 || true; cp log.txt report_full.txt
+      - name: Publier le rapport
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -q --orphan probe-out
+          git rm -rq --cached .
+          git add report.txt report_full.txt
+          git commit -q -m "rapport de sonde"
+          git push -f origin HEAD:probe-out
