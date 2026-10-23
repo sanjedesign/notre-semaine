@@ -1,0 +1,49 @@
+name: Diagnostic synchro
+on:
+  push:
+    branches: [diag-sync]
+permissions:
+  contents: write
+jobs:
+  diag:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Tester l'écriture conditionnelle
+        env:
+          SB: https://zjsawjudrdneeptxbskd.supabase.co
+          KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpqc2F3anVkcmRuZWVwdHhic2tkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1NjUxMjcsImV4cCI6MjEwNzE0MTEyN30.Wn1bUy--5O78gGICTOyEGbnT6B-SdoNCG_XxBBaaUIY
+        run: |
+          cat > t.py <<'PY'
+          import json,os,urllib.request,urllib.parse,datetime
+          SB=os.environ["SB"];KEY=os.environ["KEY"];T="d1a9000000000000000000000000beef"
+          H={"apikey":KEY,"Authorization":"Bearer "+KEY,"x-foyer":T,"Content-Type":"application/json"}
+          out=[]
+          def req(m,path,body=None,extra=None):
+            h=dict(H);h.update(extra or {})
+            r=urllib.request.Request(SB+path,method=m,headers=h,data=json.dumps(body).encode() if body is not None else None)
+            try:
+              with urllib.request.urlopen(r,timeout=30) as x: return x.status,x.read().decode()[:400]
+            except urllib.error.HTTPError as e: return e.code,e.read().decode()[:400]
+          def iso(): return datetime.datetime.now(datetime.timezone.utc).isoformat(timespec="milliseconds").replace("+00:00","Z")
+          t1=iso()
+          out.append(("1 POST upsert",t1,req("POST","/rest/v1/planner",{"id":T,"data":{"diag":1},"updated_at":t1},{"Prefer":"resolution=merge-duplicates,return=minimal"})))
+          st,b=req("GET",f"/rest/v1/planner?id=eq.{T}&select=updated_at");out.append(("2 GET",st,b))
+          srv=json.loads(b)[0]["updated_at"]
+          t2=iso()
+          out.append(("3 PATCH ok (filtre = valeur serveur)",srv,req("PATCH",f"/rest/v1/planner?id=eq.{T}&updated_at=eq.{urllib.parse.quote(srv,safe='')}&select=updated_at",{"data":{"diag":2},"updated_at":t2},{"Prefer":"return=representation"})))
+          t3=iso()
+          out.append(("4 PATCH périmé (ancienne valeur)",srv,req("PATCH",f"/rest/v1/planner?id=eq.{T}&updated_at=eq.{urllib.parse.quote(srv,safe='')}&select=updated_at",{"data":{"diag":3},"updated_at":t3},{"Prefer":"return=representation"})))
+          out.append(("5 PATCH filtre format Z envoyé",t2,req("PATCH",f"/rest/v1/planner?id=eq.{T}&updated_at=eq.{urllib.parse.quote(t2,safe='')}&select=updated_at",{"data":{"diag":4},"updated_at":t3},{"Prefer":"return=representation"})))
+          st,b=req("GET",f"/rest/v1/planner?id=eq.{T}&select=data,updated_at");out.append(("6 GET final",st,b))
+          out.append(("7 PATCH autre foyer (RLS)",req("PATCH",f"/rest/v1/planner?id=eq.{T}&select=updated_at",{"data":{"diag":9}},{"Prefer":"return=representation","x-foyer":"0000000000000000000000000000dead"})))
+          st,b=req("GET",f"/rest/v1/planner?id=eq.{T}&select=data,updated_at");out.append(("8 GET après RLS",st,b))
+          out.append(("9 PATCH ligne inexistante",req("PATCH","/rest/v1/planner?id=eq.0000000000000000000000000000f00d&select=updated_at",{"data":{"x":1}},{"Prefer":"return=representation","x-foyer":"0000000000000000000000000000f00d"})))
+          open("out.txt","w").write("\n".join(json.dumps(x,ensure_ascii=False) for x in out)+"\n")
+          PY
+          python3 t.py; cat out.txt
+          curl -sS -m 20 -o /dev/null -D h7 -X OPTIONS "$SB/rest/v1/planner" -H "Origin: https://sanjedesign.github.io" -H "Access-Control-Request-Method: PATCH" -H "Access-Control-Request-Headers: apikey,authorization,x-foyer,content-type,prefer"; grep -i "^HTTP\|access-control" h7 >> out.txt
+      - name: Publier le résultat
+        run: |
+          mkdir pub && cp out.txt pub/ && cd pub && git init -q -b diag-out && git config user.name "github-actions[bot]" && git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add out.txt && git commit -q -m "diag" && git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" diag-out
