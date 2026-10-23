@@ -2,18 +2,18 @@ plan hellofresh 200 https://www.hellofresh.fr/sitemap_recipe_pages.xml → 8358
 plan jow 200 https://jow.fr/sitemap.xml → 3718
 plan marmiton 200 https://www.marmiton.org/wsitemap_recipes_1.xml → 4869
 plan marmiton 200 https://www.marmiton.org/wsitemap_recipes_2.xml → 4186
-plan marmiton 200 https://www.marmiton.org/wsitemap_recipes_3.xml → 4945
-plan marmiton 200 https://www.marmiton.org/wsitemap_recipes_4.xml → 4997
-plan marmiton 200 https://www.marmiton.org/wsitemap_recipes_5.xml → 5000
-plan marmiton 200 https://www.marmiton.org/wsitemap_recipes_6.xml → 5000
-plan marmiton 200 https://www.marmiton.org/wsitemap_recipes_7.xml → 5000
+plan marmiton 200 https://www.marmiton.org/wsitemap_recipes_3.xml → 0
+plan marmiton 200 https://www.marmiton.org/wsitemap_recipes_4.xml → 0
+plan marmiton 200 https://www.marmiton.org/wsitemap_recipes_5.xml → 0
+plan marmiton 200 https://www.marmiton.org/wsitemap_recipes_6.xml → 0
+plan marmiton 200 https://www.marmiton.org/wsitemap_recipes_7.xml → 0
 plan marmiton 200 https://www.marmiton.org/wsitemap_recipes_8.xml → 5000
 plan marmiton 200 https://www.marmiton.org/wsitemap_recipes_9.xml → 3887
 plan bettybossi 200 https://www.bettybossi.ch/sitemap.xml → 0
 plan bettybossi 200 https://www.bettybossi.ch/sitemap-home-fr.xml → 0
 plan bettybossi 200 https://www.bettybossi.ch/sitemap-product-fr.xml → 0
 plan bettybossi 200 https://www.bettybossi.ch/sitemap-productCategory-fr.xml → 0
-plan bettybossi 200 https://www.bettybossi.ch/sitemap-recipe-fr.xml → 7361
+plan bettybossi 200 https://www.bettybossi.ch/sitemap-recipe-fr.xml → 7362
 plan bettybossi 200 https://www.bettybossi.ch/sitemap-recipeCategory-fr.xml → 0
 plan bettybossi 200 https://www.bettybossi.ch/sitemap-landingPage-fr.xml → 0
 plan bettybossi 200 https://www.bettybossi.ch/sitemap-article-fr.xml → 0
@@ -21,7 +21,7 @@ plan bettybossi 200 https://www.bettybossi.ch/sitemap-pdf-fr.xml → 0
 plan fourchette 200 https://www.fourchette-et-bikini.fr/xml/sitemap.xml → 0
 plan fourchette 200 https://www.fourchette-et-bikini.fr/xml/sitemap-fourchette-recette-1.xml → 2240
 plan fourchette 200 https://www.fourchette-et-bikini.fr/xml/sitemap-fourchette-recette-2.xml → 0
-à lire : 409 fiches (58 pistes d'encas)
-gardées : 32 · écartées : {"kcal #":116,"plat trop riche (nom)":57,"protéines # g":60,"fiche incomplète":16,"nutrition absente":31,"encas pas assez protéiné":33,"catégorie dessert":22,"lipides # g":17,"catégorie sauce":1,"catégorie cremes desserts":1,"catégorie dip, sauce, beurre aux herbes & co.":2,"catégorie boissons":1,"catégorie dessert, patisserie salee et sucree":2,"catégorie confiserie":2,"robot de cuisine":5,"catégorie dessert sans cuisson":2,"encas trop gras":2,"catégorie patisserie salee et sucree, dessert":5,"catégorie dip, sauce, beurre aux herbes & co., garniture":1,"catégorie garniture, dip, sauce, beurre aux herbes & co.":1}
-par source : {"fourchette":{"lu":81,"plats":0,"encas":1,"why":{"kcal #":36,"protéines # g":6,"plat trop riche (nom)":5,"fiche incomplète":12,"nutrition absente":14,"catégorie cremes desserts":1,"catégorie boissons":1,"encas pas assez protéiné":5}},"marmiton":{"lu":112,"plats":3,"encas":3,"why":{"plat trop riche (nom)":16,"fiche incomplète":1,"nutrition absente":7,"encas pas assez protéiné":26,"kcal #":19,"catégorie dessert":13,"protéines # g":14,"catégorie sauce":1,"lipides # g":5,"catégorie confiserie":2,"encas trop gras":2}},"bettybossi":{"lu":81,"plats":9,"encas":0,"why":{"plat trop riche (nom)":11,"protéines # g":15,"catégorie dessert":9,"lipides # g":7,"kcal #":9,"catégorie dip, sauce, beurre aux herbes & co.":2,"nutrition absente":8,"catégorie dessert, patisserie salee et sucree":2,"encas pas assez protéiné":2,"catégorie patisserie salee et sucree, dessert":5,"catégorie dip, sauce, beurre aux herbes & co., garniture":1,"catégorie garniture, dip, sauce, beurre aux herbes & co.":1}},"hellofresh":{"lu":81,"plats":4,"encas":0,"why":{"fiche incomplète":3,"kcal #":40,"lipides # g":3,"protéines # g":12,"plat trop riche (nom)":17,"nutrition absente":2}},"jow":{"lu":54,"plats":11,"encas":1,"why":{"kcal #":12,"protéines # g":13,"plat trop riche (nom)":8,"robot de cuisine":5,"catégorie dessert sans cuisson":2,"lipides # g":2}}}
-pages créées : 3 · total 101 pages, 1010 recettes · en attente 9
+à lire : 410 fiches (59 pistes d'encas)
+gardées : 29 · écartées : {"kcal #":118,"catégorie dessert, patisserie salee et sucree":4,"protéines # g":59,"lipides # g":19,"plat trop riche (nom)":69,"nutrition absente":54,"fiche incomplète":18,"robot de cuisine":7,"catégorie dessert":15,"catégorie boisson":3,"encas pas assez protéiné":7,"catégorie dessert, amuse-bouche, patisserie salee et sucree":1,"catégorie dip, sauce, beurre aux herbes & co.":1,"catégorie patisserie salee et sucree, amuse-bouche, dessert":1,"catégorie dessert sans cuisson":1,"catégorie confiserie":1,"encas trop gras":1,"catégorie cocktail":1,"catégorie patisserie salee et sucree, dessert":1}
+par source : {"fourchette":{"lu":81,"plats":0,"encas":0,"why":{"kcal #":38,"plat trop riche (nom)":4,"fiche incomplète":17,"protéines # g":7,"nutrition absente":15}},"bettybossi":{"lu":81,"plats":6,"encas":0,"why":{"catégorie dessert, patisserie salee et sucree":4,"protéines # g":12,"catégorie dessert":8,"catégorie boisson":1,"encas pas assez protéiné":2,"catégorie dessert, amuse-bouche, patisserie salee et sucree":1,"plat trop riche (nom)":11,"lipides # g":6,"catégorie dip, sauce, beurre aux herbes & co.":1,"kcal #":17,"catégorie patisserie salee et sucree, amuse-bouche, dessert":1,"nutrition absente":10,"catégorie patisserie salee et sucree, dessert":1}},"jow":{"lu":55,"plats":4,"encas":0,"why":{"protéines # g":18,"robot de cuisine":7,"kcal #":9,"encas pas assez protéiné":1,"plat trop riche (nom)":11,"lipides # g":3,"catégorie dessert sans cuisson":1,"catégorie cocktail":1}},"marmiton":{"lu":112,"plats":6,"encas":4,"why":{"lipides # g":5,"nutrition absente":27,"protéines # g":12,"kcal #":20,"plat trop riche (nom)":23,"catégorie dessert":7,"catégorie boisson":2,"encas pas assez protéiné":4,"catégorie confiserie":1,"encas trop gras":1}},"hellofresh":{"lu":81,"plats":9,"encas":0,"why":{"plat trop riche (nom)":20,"protéines # g":10,"kcal #":34,"lipides # g":5,"fiche incomplète":1,"nutrition absente":2}}}
+pages créées : 3 · total 104 pages, 1040 recettes · en attente 8
