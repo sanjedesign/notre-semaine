@@ -2178,6 +2178,14 @@ h1,h2,.sec-head h1,.block-title,.row-head h2,.m-body h2,.pn-title{color:var(--ti
 .fx-ring b{width:76px;height:76px;border-radius:50%;display:grid;place-items:center;background:var(--surface);font-family:var(--f-title,inherit);font-size:2.2rem;font-weight:800;color:var(--coral-ink,#C0453A)}
 @keyframes ring{0%{transform:scale(.3) rotate(-120deg);opacity:0}70%{transform:scale(1.08) rotate(8deg);opacity:1}100%{transform:none}}
 @media (prefers-reduced-motion:reduce){.fx-card,.fx-xp span,.fx-emo,.fx-ring,.gq-list .sv-bar i,.pn-list .sv-bar i,.sv-stats b.flame,.gq-list li.ok .gq-ic,.pn-list li.ok .pn-ic,.bmi-g i{animation:none!important;transition:none!important}.fx-xp span{opacity:1;transform:none}}
+/* ================= v44 : recettes supprimées récemment ================= */
+.tr-box{margin:26px 0 6px;padding:4px 16px;border:1px solid var(--line);border-radius:16px;background:var(--surface)}
+.tr-box summary{cursor:pointer;padding:12px 0;font-family:var(--f-sub);font-weight:700;font-size:.95rem;list-style-position:inside}
+.tr-box summary b{display:inline-grid;place-items:center;min-width:22px;height:22px;margin-left:6px;padding:0 6px;border-radius:999px;background:var(--surface-2,#F6ECEA);font-size:.78rem}
+.tr-note{margin:0 0 4px;font-size:.8rem;color:var(--muted);line-height:1.4}
+.tr-box .rm-row:last-child{border-bottom:0}
+.tr-n{min-width:0;font-size:.92rem}
+.tr-n small{display:block;margin-top:2px;font-size:.76rem;color:var(--muted)}
 </style>
 </head>
 <body>
@@ -2283,7 +2291,7 @@ h1,h2,.sec-head h1,.block-title,.row-head h2,.m-body h2,.pn-title{color:var(--ti
 </div>
 <div id="timers" class="timers" hidden aria-live="polite"></div>
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
-<script>window.NS_CONFIG={"hosted": true, "sbUrl": "https://zjsawjudrdneeptxbskd.supabase.co", "sbKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpqc2F3anVkcmRuZWVwdHhic2tkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1NjUxMjcsImV4cCI6MjEwNzE0MTEyN30.Wn1bUy--5O78gGICTOyEGbnT6B-SdoNCG_XxBBaaUIY", "build": "20261021215620"}</script>
+<script>window.NS_CONFIG={"hosted": true, "sbUrl": "https://zjsawjudrdneeptxbskd.supabase.co", "sbKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpqc2F3anVkcmRuZWVwdHhic2tkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1NjUxMjcsImV4cCI6MjEwNzE0MTEyN30.Wn1bUy--5O78gGICTOyEGbnT6B-SdoNCG_XxBBaaUIY", "build": "20261023202004"}</script>
 <script>
 const AISLES={L:"Fruits & légumes",H:"Herbes fraîches",V:"Viandes & poissons",C:"Crèmerie & œufs",S:"Surgelés",F:"Féculents",B:"Conserves",E:"Épices & condiments"};
 const AISLE_ORDER=["L","H","V","C","S","F","B","E"];
@@ -8849,6 +8857,182 @@ function gwTick(){try{const fresh=gqCheck();const s=gwSnap();
 const commitV43=commit;
 commit=function(){const r=commitV43.apply(this,arguments);clearTimeout(gwT);gwT=setTimeout(gwTick,450);return r};
 setTimeout(()=>{try{gqCheck(true);GW=gwSnap();gqChip()}catch(e){}},1200);
+
+
+// ================= v44 : synchro sans perte entre les téléphones =================
+// Avant : chaque envoi remplaçait toute la ligne du foyer (le dernier téléphone à écrire l'emportait) et chaque lecture
+// remplaçait tout ce téléphone. Une recette ajoutée pouvait disparaître si l'autre téléphone écrivait juste après,
+// ou si l'appli était fermée avant l'envoi. Maintenant :
+// - écriture conditionnelle : elle ne passe que si personne n'a écrit depuis notre dernière lecture, sinon on fusionne et on réessaie ;
+// - fusion à trois (base = dernière version commune, gardée sur le téléphone) : les ajouts et suppressions des deux côtés sont gardés ;
+// - les changements pas encore envoyés sont notés sur le téléphone : à la réouverture ils sont fusionnés puis envoyés ;
+// - rien n'est envoyé avant la première lecture ; envoi immédiat quand l'appli passe en arrière-plan.
+const SBK_BASE=LS+"-sbbase",SBK_DIRTY=LS+"-sbdirty";
+let SBB=null,SBG=0,SBB_P=null,SBB_Pc=null;// SBB = {c: foyer, iso: date serveur, d: dernière version commune}
+sb.readyFor=null;sb.lastIso=null;sb.pulling=false;
+const sbReady=()=>sb.readyFor===sb.code;
+const sbClone=o=>JSON.parse(safeJSON(o));
+// texte stable (clés triées) pour comparer deux versions
+// (mémo actif seulement pendant une comparaison : les données peuvent changer entre deux)
+let SJ=null;const sjRun=f=>{SJ=new WeakMap();try{return f()}finally{SJ=null}};
+function sj(v){if(v===undefined)return"~";if(v===null||typeof v!=="object")return JSON.stringify(v);const c=SJ?SJ.get(v):undefined;if(c!==undefined)return c;
+ const s=Array.isArray(v)?"["+v.map(sj).join(",")+"]":"{"+Object.keys(v).filter(k=>v[k]!==undefined).sort().map(k=>JSON.stringify(k)+":"+sj(v[k])).join(",")+"}";if(SJ)SJ.set(v,s);return s}
+// listes rangées par position (une case par personne)
+const SB_POS=/^(people|log\.[^.]+|hist\.[^.]+|sport\.(goal|wk))$/;
+// listes ordonnées d'une recette (ingrédients, étapes) : prises en entier d'un côté
+const SB_ATOM=/^myrec\[\]\.(il|st)$/;
+const isObj=x=>x!==null&&typeof x==="object"&&!Array.isArray(x);
+function merge3(b,l,r,p){
+ const sl=sj(l),sr=sj(r);if(sl===sr)return l;
+ if(b!==undefined){const s0=sj(b);if(sl===s0)return r;if(sr===s0)return l}
+ if(isObj(l)&&isObj(r)){const B=isObj(b)?b:{};const o={};for(const k of new Set([...Object.keys(r),...Object.keys(l)])){const v=merge3(B[k],l[k],r[k],p?p+"."+k:k);if(v!==undefined)o[k]=v}return o}
+ if(Array.isArray(l)&&Array.isArray(r)){const B=Array.isArray(b)?b:[];
+  if(SB_ATOM.test(p))return l;
+  if(SB_POS.test(p)){const n=Math.max(l.length,r.length),o=[];for(let i=0;i<n;i++){const v=merge3(B[i],l[i],r[i],p+"[]");o.push(v===undefined?null:v)}return o}
+  const idd=a=>a.every(x=>isObj(x)&&typeof x.id==="string");
+  if(idd(l)&&idd(r)&&idd(B)){const bm=new Map(B.map(x=>[x.id,x])),lm=new Map(l.map(x=>[x.id,x])),rm=new Map(r.map(x=>[x.id,x]));const out=[];
+   for(const id of [...r.filter(x=>!lm.has(x.id)).map(x=>x.id),...l.map(x=>x.id)]){const v=merge3(bm.get(id),lm.get(id),rm.get(id),p+"[]");if(v!==undefined)out.push(v)}return out}
+  // liste simple : ajouts des deux côtés gardés, suppressions des deux côtés appliquées
+  const bs=new Set(B.map(sj)),ls=new Set(l.map(sj)),rs=new Set(r.map(sj));const out=l.filter(x=>{const k=sj(x);return rs.has(k)||!bs.has(k)});
+  for(const x of r){const k=sj(x);if(!ls.has(k)&&!bs.has(k))out.push(x)}return out}
+ // supprimé d'un côté, modifié de l'autre : on garde la version modifiée ; modifié des deux côtés : ce téléphone l'emporte
+ if(l===undefined)return b===undefined||(r!==undefined&&sj(r)!==sj(b))?r:undefined;
+ if(r===undefined)return l;
+ return l}
+
+// ---------- base commune : IndexedDB (beaucoup de place), sinon localStorage si elle est petite ----------
+const SBDB=(()=>{let p=null;const open=()=>p||(p=new Promise(res=>{let done=false;const fin=v=>{if(!done){done=true;res(v)}};setTimeout(()=>fin(null),2500);
+  try{const rq=indexedDB.open("sano-sync",1);rq.onupgradeneeded=()=>{try{rq.result.createObjectStore("kv")}catch(e){}};rq.onsuccess=()=>fin(rq.result);rq.onerror=()=>fin(null);rq.onblocked=()=>fin(null)}catch(e){fin(null)}}));
+ return{get:async k=>{const db=await open();if(!db)return undefined;return new Promise(res=>{try{const rq=db.transaction("kv","readonly").objectStore("kv").get(k);rq.onsuccess=()=>res(rq.result);rq.onerror=()=>res(undefined)}catch(e){res(undefined)}})},
+  put:async(k,v)=>{const db=await open();if(!db)return false;return new Promise(res=>{try{const tx=db.transaction("kv","readwrite");tx.objectStore("kv").put(v,k);tx.oncomplete=()=>res(true);tx.onerror=tx.onabort=()=>res(false)}catch(e){res(false)}})}}})();
+function sbIsoSet(iso){sb.lastIso=iso||null;sb.last=Date.parse(iso)||0}
+function sbBaseSet(d,iso){SBG++;SBB={c:sb.code,iso:iso||null,d:sbClone(d)};sbIsoSet(iso);const rec={c:SBB.c,iso:SBB.iso,t:safeJSON(SBB.d)};
+ SBDB.put(SBK_BASE,rec).then(ok=>{try{if(ok)localStorage.removeItem(SBK_BASE);else if(rec.t.length<1.2e6)localStorage.setItem(SBK_BASE,JSON.stringify(rec));else localStorage.removeItem(SBK_BASE)}catch(e){try{localStorage.removeItem(SBK_BASE)}catch(x){}}})}
+const sbFlag=()=>{try{return localStorage.getItem(SBK_DIRTY)}catch(e){return null}};
+function sbFlagSet(){try{localStorage.setItem(SBK_DIRTY,sb.code)}catch(e){}}
+function sbFlagClear(){try{if(localStorage.getItem(SBK_DIRTY)!==null)localStorage.removeItem(SBK_DIRTY)}catch(e){}}
+function sbLoadBase(){if(SBB_P&&SBB_Pc===sb.code)return SBB_P;SBB_Pc=sb.code;
+ return SBB_P=(async()=>{const code=sb.code;if(!code)return;if(SBB&&SBB.c!==code)SBB=null;let rec=null;try{rec=await SBDB.get(SBK_BASE)}catch(e){}
+  if(!rec)try{rec=JSON.parse(localStorage.getItem(SBK_BASE)||"null")}catch(e){}
+  if(code!==sb.code||SBB&&SBB.c===code)return;
+  if(rec&&rec.c===code&&typeof rec.t==="string")try{SBB={c:code,iso:rec.iso||null,d:JSON.parse(rec.t)};sbIsoSet(SBB.iso)}catch(e){SBB=null}
+  if(!SBB)return;
+  // changements faits ici mais jamais envoyés (appli fermée trop tôt, pas de réseau) : on les fusionnera puis enverra
+  if(sbFlag()===code){sb.dirty=true;return}
+  // ce téléphone ne correspond pas à la dernière version commune sans changement noté : on se fie au serveur
+  try{if(sjRun(()=>sj(sbClone(state))!==sj(SBB.d)))sb.last=0}catch(e){sb.last=0}})()}
+const sbFetchRow=async()=>{const r=await fetch(`${NS.sbUrl}/rest/v1/planner?id=eq.${sb.code}&select=data,updated_at`,{headers:sbHeaders(),cache:"no-store"});if(!r.ok)throw new Error("http "+r.status);
+ const rows=await r.json();if(!Array.isArray(rows)||!rows.length)return null;return{data:rows[0].data,iso:rows[0].updated_at,ts:Date.parse(rows[0].updated_at)||0}};
+// affichage après une synchro, sans déranger une saisie en cours
+let sbRenderLater=false;
+function sbRender(){if(isTyping()){sbRenderLater=true;return}sbRenderLater=false;try{renderAll();if(ui.panel==="data")renderPanel()}catch(e){sbDiag("affichage après synchro",e)}}
+document.addEventListener("focusout",()=>{if(sbRenderLater)setTimeout(()=>{if(sbRenderLater&&!isTyping())sbRender()},400)});
+// le serveur a changé et ce téléphone n'a rien en attente : on prend la version du serveur
+function sbReplace(R){state=normalize(sbClone(R.data));sbBaseSet(state,R.iso);sb.hold=false;sb.dirty=false;clearTimeout(sb.pushT);sb.pushT=null;sbFlagClear();saveLocal();sbRender()}
+// les deux ont changé : fusion à trois ; renvoie true si le résultat est déjà identique au serveur
+function sbMergeIn(R){const remote=normalize(sbClone(R.data));const base=SBB&&SBB.c===sb.code?SBB.d:undefined;
+ const merged=sjRun(()=>merge3(base,sbClone(state),sbClone(remote),""));sbBaseSet(remote,R.iso);state=normalize(merged);sb.hold=false;
+ const same=sjRun(()=>sj(sbClone(state))===sj(SBB.d));saveLocal();sbRender();return same}
+sbPull=async function(force){if(!SYNC_ON||!sb.code)return;await sbLoadBase();if(!sb.code||sb.pushing)return;if(sb.pulling)return sb.pullP;if(!force&&sbReady()&&isTyping())return;
+ sb.pulling=true;return sb.pullP=sbPullRun().finally(()=>{sb.pulling=false;sb.pullP=null})};
+async function sbPullRun(){const g=SBG,code=sb.code;let stage="réseau";
+ try{const r0=await fetch(`${NS.sbUrl}/rest/v1/planner?id=eq.${code}&select=updated_at`,{headers:sbHeaders(),cache:"no-store"});if(!r0.ok)throw new Error("http "+r0.status);
+  stage="réponse du serveur";const rows0=await r0.json();
+  if(!Array.isArray(rows0)||!rows0.length){sb.readyFor=code;sb.ok=true;sb.err=false;sb.lastIso=null;sb.dirty=true;sb.pulling=false;setSync();await sbPush();return}
+  const ts=Date.parse(rows0[0].updated_at)||0;
+  if(ts!==sb.last){const R=await sbFetchRow();stage="lecture des données reçues";
+   // un envoi ou une autre lecture a eu lieu pendant ce temps : ce résultat est déjà dépassé
+   if(R&&g===SBG&&code===sb.code&&!sb.pushing&&R.ts!==sb.last){
+    if((sb.dirty||sb.pushT)&&SBB&&SBB.c===code){const same=sbMergeIn(R);if(same){sb.dirty=false;clearTimeout(sb.pushT);sb.pushT=null;sbFlagClear()}else sb.dirty=true}
+    else sbReplace(R)}}
+  if(code===sb.code)sb.readyFor=code;sb.ok=true;sb.err=false;if(sb.diag&&/réseau|réponse|lecture/.test(sb.diag.stage))sb.diag=null}
+ catch(e){sb.ok=false;sb.err=true;if(stage!=="réseau")sbDiag(stage,e);if(/lecture/.test(stage))sb.hold=true}
+ sb.pulling=false;setSync();if(sbReady()&&sb.dirty&&!sb.pushT&&!sb.pushing)sbSchedule()}
+sbPush=async function(){sb.pushT=null;if(!SYNC_ON||!sb.code)return;
+ if(!sbReady()){sb.dirty=true;await sbPull(true);return}
+ if(sb.pushing||sb.pulling){sb.again=true;return}
+ // données distantes illisibles : on ne les écrase pas avec celles de ce téléphone, on retente la lecture
+ if(sb.hold){await sbPull(true);if(sb.hold){sb.dirty=true;setSync();return}}
+ sb.pushing=true;sb.dirty=false;const code=sb.code;let stage="préparation des données";
+ try{for(let n=0;;n++){if(n>4)throw new Error("conflits répétés");const now=new Date().toISOString();const snap=sbClone(state);
+   if(sb.lastIso){stage="réseau";
+    const r=await fetch(`${NS.sbUrl}/rest/v1/planner?id=eq.${code}&updated_at=eq.${encodeURIComponent(sb.lastIso)}&select=updated_at`,{method:"PATCH",headers:{...sbHeaders(),Prefer:"return=representation"},body:safeJSON({data:snap,updated_at:now})});
+    if(!r.ok)throw new Error("http "+r.status);stage="réponse du serveur";const rows=await r.json();
+    if(Array.isArray(rows)&&rows.length){sbBaseSet(snap,rows[0].updated_at||now);break}}
+   // quelqu'un a écrit entre-temps (ou c'est la première écriture) : lecture, fusion, nouvel essai
+   stage="réseau";const R=await sbFetchRow();
+   if(!R){const r=await fetch(`${NS.sbUrl}/rest/v1/planner`,{method:"POST",headers:{...sbHeaders(),Prefer:"resolution=merge-duplicates,return=minimal"},body:safeJSON({id:code,data:snap,updated_at:now})});
+    if(!r.ok)throw new Error("http "+r.status);sbBaseSet(snap,now);break}
+   stage="lecture des données reçues";if(sbMergeIn(R))break}
+  if(!sb.dirty&&!sb.pushT)sbFlagClear();
+  sb.ok=true;sb.err=false;if(sb.diag&&/réseau|réponse|envoi|lecture/.test(sb.diag.stage))sb.diag=null}
+ catch(e){sb.ok=false;sb.err=true;sb.dirty=true;if(stage!=="réseau")sbDiag("envoi : "+stage,e)}
+ sb.pushing=false;setSync();if(sb.again){sb.again=false;if(sb.dirty&&!sb.pushT)sbSchedule()}};
+// chaque modification est notée tout de suite sur le téléphone (elle survit à une fermeture avant l'envoi)
+const sbScheduleV44=sbSchedule;
+sbSchedule=function(){if(SYNC_ON&&sb.code)sbFlagSet();return sbScheduleV44.apply(this,arguments)};
+const sbStartV44=sbStart;
+sbStart=function(){if(SYNC_ON){try{foyerInit()}catch(e){}if(sb.code)sbLoadBase()}return sbStartV44.apply(this,arguments)};
+// l'appli passe en arrière-plan : envoi tout de suite
+const sbFlushNow=()=>{if(SYNC_ON&&sb.code&&sbReady()&&(sb.dirty||sb.pushT)&&!sb.pushing){clearTimeout(sb.pushT);sbPush()}};
+document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="hidden")sbFlushNow()});
+window.addEventListener("pagehide",sbFlushNow);
+// téléphone plein : on libère les caches (ils se rechargent) avant d'abandonner l'enregistrement local
+const saveLocalV44=saveLocal;
+saveLocal=function(){sb.storeErr="";saveLocalV44.apply(this,arguments);if(sb.storeErr){for(const k of ["sano-agb",SBK_BASE])try{localStorage.removeItem(k)}catch(e){}sb.storeErr="";saveLocalV44.apply(this,arguments)}};
+
+// ---------- Découvrir : la recette est enregistrée tout de suite, les étapes du site arrivent ensuite ----------
+// (avant : chaque ajout attendait la lecture du site, jusqu'à 15 s, et les suivants faisaient la queue ;
+//  si l'appli était fermée ou rechargée avant la fin, ces recettes n'étaient jamais enregistrées)
+let DA_Q=Promise.resolve();const TR_NEW=new Map();
+const discAddV44=discAdd;
+discAdd=async function(id,edit){if(edit)return discAddV44.apply(this,arguments);const e=DISC_MAP[id];if(!e)return;
+ const done=()=>{if(ui.dsel===id)ui.dsel=null;try{renderAll()}catch(x){}if(ui.panel==="decouvrir")try{renderPanel()}catch(x){}};
+ if(e.u&&(state.myrec||[]).some(x=>x.u===e.u)){state.disc={...(state.disc||{}),[id]:"ok"};commit();done();toast("Déjà dans tes recettes");return}
+ const rid="u_"+Date.now().toString(36)+Math.random().toString(36).slice(2,6);const rec=cleanMyRec({...discDraft(e,null),id:rid,ad:ymd(new Date())});
+ if(!rec){toast("Impossible d'ajouter cette recette");done();return}
+ const list=(state.myrec||[]).slice();if(list.length>=MYREC_MAX){toast("Nombre maximum de recettes atteint");done();return}
+ list.unshift(rec);state.myrec=list;regMyRecipes(list);state.disc={...(state.disc||{}),[id]:"ok"};TR_NEW.set(rid,Date.now());commit();done();toast("Ajoutée à tes recettes ✓");
+ if(SYNC_ON&&sb.code)DA_Q=DA_Q.then(()=>discEnrich(e,rid)).catch(()=>{})};
+// étapes, vidéo et photo lues sur le site d'origine, une recette à la fois, en arrière-plan
+async function discEnrich(e,rid){let j=null;try{j=await fnCall({action:"import",url:e.u},15000)}catch(x){return}
+ const cur=(state.myrec||[]).find(x=>x.id===rid);if(!cur)return;const d2=discDraft(e,j);
+ const st=cur.st&&cur.st.length?cur.st:d2.st,vid=cur.vid||d2.vid,img=cur.img||d2.img;
+ if(JSON.stringify(st)===JSON.stringify(cur.st)&&vid===cur.vid&&img===cur.img)return;
+ const upd=cleanMyRec({...cur,st,vid,img});if(!upd)return;
+ state.myrec=state.myrec.map(x=>x.id===rid?upd:x);regMyRecipes(state.myrec);commit();
+ try{if(!isTyping())renderAll()}catch(x){}if(ui.panel==="decouvrir"&&!isTyping())try{renderPanel()}catch(x){}}
+
+// ---------- recettes supprimées : gardées 60 jours sur ce téléphone, quelle que soit la cause (suppression, synchro) ----------
+const TR_K=LS+"-trash",TR_DAYS=60,TR_MAX=40;let TRASH=[];
+let TR_PREV=new Map((state.myrec||[]).map(x=>[x.id,x]));
+function trSave(){const a=TRASH.slice(0,TR_MAX);SBDB.put(TR_K,a).then(ok=>{try{if(ok)localStorage.removeItem(TR_K);else localStorage.setItem(TR_K,JSON.stringify(a.map(x=>({t:x.t,r:{...x.r,img:/^data:/.test(x.r.img||"")?"":x.r.img}}))))}catch(e){}})}
+function trTrack(){const cur=new Map((state.myrec||[]).map(x=>[x.id,x]));let ch=false;
+ for(const[id,r]of TR_PREV){if(cur.has(id))continue;const t=TR_NEW.get(id);if(t&&Date.now()-t<12e4)continue;
+  TRASH=TRASH.filter(x=>x.r.id!==id);try{TRASH.unshift({t:Date.now(),r:JSON.parse(JSON.stringify(r))});ch=true}catch(e){}}
+ TR_PREV=cur;if(ch){TRASH=TRASH.slice(0,TR_MAX);trSave()}}
+const saveLocalV44b=saveLocal;
+saveLocal=function(){const r=saveLocalV44b.apply(this,arguments);try{trTrack()}catch(e){}return r};
+SBDB.get(TR_K).then(v=>{let a=Array.isArray(v)?v:null;if(!a)try{a=JSON.parse(localStorage.getItem(TR_K)||"[]")}catch(e){a=[]}
+ const lim=Date.now()-TR_DAYS*864e5,have=new Set(TRASH.map(x=>x.r.id));for(const x of a||[])if(x&&x.r&&typeof x.r.id==="string"&&x.t>lim&&!have.has(x.r.id))TRASH.push(x);
+ TRASH.sort((a,b)=>b.t-a.t);TRASH=TRASH.slice(0,TR_MAX);try{trRender()}catch(e){}});
+function trWhen(t){const d=new Date(t),today=ymd(new Date()),y=new Date();y.setDate(y.getDate()-1);const k=ymd(d);
+ return k===today?"aujourd'hui":k===ymd(y)?"hier":"le "+fmtDate(d,{day:"numeric",month:"short"})}
+function trRender(){const sec=document.getElementById("tab-recettes");if(!sec)return;let el=document.getElementById("trashBox");
+ const mine=new Set((state.myrec||[]).map(x=>x.id)),T=TRASH.filter(x=>!mine.has(x.r.id));
+ if(!T.length){if(el){el.hidden=true;el.innerHTML=""}return}
+ if(!el){el=document.createElement("details");el.id="trashBox";el.className="tr-box";el.dataset.v="toutes snk";sec.appendChild(el)}
+ const open=el.open;el.hidden=false;
+ el.innerHTML=`<summary>Recettes supprimées récemment <b>${T.length}</b></summary><p class="tr-note">Gardées ${TR_DAYS} jours sur ce téléphone, même si elles ont disparu à cause de la synchro.</p>`+
+  T.map(x=>`<div class="rm-row"><span class="tr-n">${esc(x.r.n)}<small>${x.r.kind==="encas"?"Encas · ":""}supprimée ${trWhen(x.t)}</small></span><button type="button" class="btn small" data-trrestore="${esc(x.r.id)}">Restaurer</button></div>`).join("");
+ el.open=open}
+const renderRecipesV44=renderRecipes;
+renderRecipes=function(){const r=renderRecipesV44.apply(this,arguments);try{trRender()}catch(e){}return r};
+document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-trrestore]");if(!b)return;const id=b.dataset.trrestore;const x=TRASH.find(t=>t.r.id===id);if(!x)return;
+ if((state.myrec||[]).some(r=>r.id===id)){TRASH=TRASH.filter(t=>t!==x);trSave();renderAll();return}
+ const rec=cleanMyRec(x.r);if(!rec){toast("Impossible de restaurer cette recette");return}
+ if((state.myrec||[]).length>=MYREC_MAX){toast("Nombre maximum de recettes atteint");return}
+ const list=[rec,...(state.myrec||[])];state.myrec=list;regMyRecipes(list);TRASH=TRASH.filter(t=>t!==x);trSave();commit();renderAll();toast("Recette restaurée ✓")});
 
 try{setTab(ui.tab);renderAll()}catch(e){try{sbDiag("affichage au démarrage",e)}catch(x){}}try{initDb()}catch(e){}sbStart();
 
