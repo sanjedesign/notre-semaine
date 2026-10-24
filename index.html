@@ -2190,6 +2190,40 @@ h1,h2,.sec-head h1,.block-title,.row-head h2,.m-body h2,.pn-title{color:var(--ti
 .sw-prot{display:inline-flex;align-items:center;background:#fff;color:#1D6B39;border-radius:999px;padding:3px 10px;font-family:var(--f-sub);font-weight:700;font-size:.76rem;text-shadow:none}
 .sw-prot.top{background:#FFD36B;color:#5A3A00}
 .dc-f.dc-top{color:#1D6B39;font-weight:700}
+/* ================= v46 : courses pour les repas choisis ================= */
+.sf{margin:4px 0 14px;padding:14px 14px 10px;border:1px solid var(--line);border-radius:18px;background:var(--surface)}
+.sf-h{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.sf-ht{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;min-width:0}
+.sf-h h2{margin:0;font-family:var(--f-sub);font-size:.98rem;font-weight:700}
+.sf-n{font-size:.84rem;color:var(--muted)}
+.sf-all{flex:none;font-size:.84rem;white-space:nowrap}
+.sf-days{display:flex;gap:6px;margin-top:10px}
+.sf-d{flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:center;gap:1px;padding:7px 0 6px;border:1.5px solid var(--line);border-radius:14px;background:var(--surface);color:var(--muted);font:inherit;cursor:pointer;transition:background-color .15s,border-color .15s,color .15s}
+.sf-d .sf-w{font-size:.68rem;font-weight:600;line-height:1.2}
+.sf-d b{font-family:var(--f-sub);font-size:1.02rem;line-height:1.25;color:var(--muted)}
+.sf-d.on{background:#FFE9E4;border-color:var(--coral,#EB6456);color:var(--coral-ink,#C0453A)}
+.sf-d.on b{color:var(--coral-ink,#C0453A)}
+.sf-d.part{border-style:dashed}
+.sf-d.none{opacity:.45;cursor:default}
+.sf-d:not(.on):not(.none) b{text-decoration:line-through;text-decoration-thickness:1.5px}
+.sf-d.sf-snk b{text-decoration:none!important;font-size:.95rem}
+.sf-d.sf-snk:not(.on){filter:grayscale(1)}
+.sf-m{display:flex;gap:3px;margin-top:2px;height:6px}
+.sf-m i{width:6px;height:6px;border-radius:50%;box-sizing:border-box}
+.sf-m i.in{background:var(--coral,#EB6456)}
+.sf-m i.out{border:1.5px solid currentColor;opacity:.7}
+.sf-m i.done{background:#2F8F5B}
+.sf-m i.no{background:var(--line)}
+.sf-d:focus-visible{outline:3px solid var(--coral,#EB6456);outline-offset:2px}
+.sf-hint{margin:8px 0 0;font-size:.78rem;color:var(--muted)}
+.sf-more{margin-top:6px}
+.sf-more summary{cursor:pointer;padding:6px 0;font-size:.86rem;font-weight:600;color:var(--coral-ink,#C0453A)}
+.sf-more ul{list-style:none;margin:2px 0 4px;padding:0}
+.sf-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-top:1px solid var(--line);cursor:pointer}
+.sf-row input{width:20px;height:20px;accent-color:var(--coral,#EB6456);flex:none}
+.sf-rt{min-width:0;display:flex;flex-direction:column}
+.sf-rt b{font-size:.86rem;font-weight:600}
+.sf-rt small{font-size:.8rem;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 </style>
 </head>
 <body>
@@ -2295,7 +2329,7 @@ h1,h2,.sec-head h1,.block-title,.row-head h2,.m-body h2,.pn-title{color:var(--ti
 </div>
 <div id="timers" class="timers" hidden aria-live="polite"></div>
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
-<script>window.NS_CONFIG={"hosted": true, "sbUrl": "https://zjsawjudrdneeptxbskd.supabase.co", "sbKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpqc2F3anVkcmRuZWVwdHhic2tkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1NjUxMjcsImV4cCI6MjEwNzE0MTEyN30.Wn1bUy--5O78gGICTOyEGbnT6B-SdoNCG_XxBBaaUIY", "build": "20261023203638"}</script>
+<script>window.NS_CONFIG={"hosted": true, "sbUrl": "https://zjsawjudrdneeptxbskd.supabase.co", "sbKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpqc2F3anVkcmRuZWVwdHhic2tkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1NjUxMjcsImV4cCI6MjEwNzE0MTEyN30.Wn1bUy--5O78gGICTOyEGbnT6B-SdoNCG_XxBBaaUIY", "build": "20261024090511"}</script>
 <script>
 const AISLES={L:"Fruits & légumes",H:"Herbes fraîches",V:"Viandes & poissons",C:"Crèmerie & œufs",S:"Surgelés",F:"Féculents",B:"Conserves",E:"Épices & condiments"};
 const AISLE_ORDER=["L","H","V","C","S","F","B","E"];
@@ -3849,6 +3883,18 @@ normalize=function(d){const s=normalizeV43.apply(this,arguments);
   for(const k of Object.keys(src).filter(k=>/^20\d{6}$/.test(k)).sort().slice(-16)){const v=src[k];if(!v||typeof v!=="object")continue;const ok={};
    if(v.ok&&typeof v.ok==="object")for(const q in v.ok)if(/^[a-z]{2,12}$/.test(q)&&v.ok[q])ok[q]=1;o[k]={c:Math.max(0,Math.min(99,Math.round(+v.c||0))),ok}}
   s.gq=o}catch(e){s.gq={}}return s};
+
+
+// ================= v46 (avant l'état) : repas couverts par la liste de courses =================
+// state.shopOff["AAAAMMJJ-midi|soir"] = 1 : ce repas n'est pas dans la liste (on l'achètera plus tard) ; state.shopOff.snk = jour où les encas ont été retirés.
+// Par défaut tout est coché ; les jours passés sont oubliés et le choix des encas revient au bout de 6 jours.
+const normalizeV46=normalize;
+normalize=function(d){const s=normalizeV46.apply(this,arguments);
+ try{const src=d&&typeof d==="object"&&d.shopOff&&typeof d.shopOff==="object"?d.shopOff:{};const o={};const t=new Date();t.setHours(12,0,0,0);
+  const today=t.getFullYear()+String(t.getMonth()+1).padStart(2,"0")+String(t.getDate()).padStart(2,"0");const old=new Date(t);old.setDate(t.getDate()-6);
+  const lim=old.getFullYear()+String(old.getMonth()+1).padStart(2,"0")+String(old.getDate()).padStart(2,"0");
+  for(const k in src){if(/^\d{8}-(midi|soir)$/.test(k)&&k.slice(0,8)>=today&&src[k])o[k]=1;else if(k==="snk"&&/^\d{8}$/.test(String(src[k]))&&String(src[k])>=lim)o.snk=String(src[k])}
+  s.shopOff=o}catch(e){s.shopOff={}}return s};
 
 // ---------- état ----------
 const dayOf=k=>k.split("-")[0];
@@ -9069,6 +9115,53 @@ swCard=function(e,cls){const h=swCardV45.apply(this,arguments);const x=prOf(e);i
  return h.replace('<span class="sw-src">',pill+'<span class="sw-src">').replace(/ · (≈ )?[\d,.]+ g prot\.(?=<small>)/,"")};
 const discFactsV45=discFacts;
 discFacts=function(e,big){const h=discFactsV45.apply(this,arguments);return prTop(e)?h.replace('<span class="dc-f">'+DI.prot,'<span class="dc-f dc-top">'+DI.prot):h};
+
+
+// ================= v46 : courses pour les repas choisis =================
+// Par défaut la liste couvre tous les repas à venir ; on peut retirer des jours (ou des repas, ou les encas)
+// qu'on achètera lors d'une autre course. Le choix est partagé entre les téléphones.
+let SHOP_SEL=false;
+const shopOff=()=>state.shopOff||(state.shopOff={});
+const sfOpen=k=>!!(state.plan[k]&&RMAP[state.plan[k]]&&!state.done[k]);// repas prévu, pas encore cuisiné
+const sfIn=k=>sfOpen(k)&&!shopOff()[k];
+const sfSnk=()=>Object.keys(state.snacks||{}).some(id=>state.snacks[id]&&RMAP[id]);
+const needsForV46=needsFor;
+needsFor=function(plan,done,serv){if(!SHOP_SEL)return needsForV46.apply(this,arguments);const off=shopOff(),d2={...(done||{})};for(const k in off)if(/-/.test(k))d2[k]=1;return needsForV46.call(this,plan,d2,serv)};
+const addSnackNeedsV46=addSnackNeeds;
+addSnackNeeds=function(m){if(SHOP_SEL&&shopOff().snk)return;return addSnackNeedsV46.apply(this,arguments)};
+const shopListV46=shopList;
+shopList=function(){SHOP_SEL=true;try{return shopListV46.apply(this,arguments)}finally{SHOP_SEL=false}};
+const SF_W=["dim.","lun.","mar.","mer.","jeu.","ven.","sam."];
+function sfRender(){const tab=document.getElementById("tab-courses");if(!tab)return;let el=document.getElementById("shopFor");
+ if(!el){el=document.createElement("div");el.id="shopFor";el.className="sf";const at=document.getElementById("budget")||tab.querySelector(".progress-row");tab.insertBefore(el,at||null)}
+ const open=SLOTS.filter(sfOpen),inc=open.filter(sfIn),snk=sfSnk(),off=shopOff();
+ if(!open.length&&!snk){el.hidden=true;el.innerHTML="";return}el.hidden=false;
+ const partial=inc.length<open.length||(snk&&off.snk);
+ const days=DAYS.map(([d])=>{const ks=MEALS.map(([m])=>d+"-"+m),op=ks.filter(sfOpen),n=op.filter(sfIn).length,dt=dateFromYmd(d);
+  const cls=!op.length?" none":n===op.length?" on":n?" on part":"";
+  const dots=ks.map(k=>`<i class="${sfOpen(k)?(sfIn(k)?"in":"out"):state.done[k]?"done":"no"}"></i>`).join("");
+  const lab=`${WEEKDAYS[dt.getDay()]} ${dt.getDate()}${!op.length?" : aucun repas à acheter":n===op.length?" : inclus":n?" : en partie":" : pas dans la liste"}`;
+  return`<button type="button" class="sf-d${cls}" data-sf="d|${d}"${op.length?"":" disabled"} aria-pressed="${!!n}" aria-label="${esc(lab)}"><span class="sf-w">${SF_W[dt.getDay()]}</span><b>${dt.getDate()}</b><span class="sf-m" aria-hidden="true">${dots}</span></button>`}).join("");
+ const sk=snk?`<button type="button" class="sf-d sf-snk${off.snk?"":" on"}" data-sf="snk" aria-pressed="${!off.snk}" aria-label="Encas de la semaine${off.snk?" : pas dans la liste":" : inclus"}"><span class="sf-w">encas</span><b aria-hidden="true">🍪</b><span class="sf-m" aria-hidden="true"><i class="${off.snk?"out":"in"}"></i></span></button>`:"";
+ const rows=open.map(k=>{const[d,m]=k.split("-"),dt=dateFromYmd(d),r=RMAP[state.plan[k]];
+  return`<li><label class="sf-row"><input type="checkbox" data-sfk="${k}"${sfIn(k)?" checked":""}><span class="sf-rt"><b>${SF_W[dt.getDay()]} ${dt.getDate()} · ${m==="midi"?"midi":"soir"}</b><small>${esc(r?r.n:"")}</small></span></label></li>`}).join("");
+ const was=el.querySelector("details");const detOpen=!!(was&&was.open);
+ el.innerHTML=`<div class="sf-h"><div class="sf-ht"><h2>Courses pour</h2><span class="sf-n">${partial?`${inc.length} repas sur ${open.length}${snk?off.snk?", sans les encas":" + encas":""}`:`tous les repas${snk?" + encas":""}`}</span></div>${partial?`<button type="button" class="link sf-all" data-sf="all">Tout cocher</button>`:""}</div>
+ <div class="sf-days" role="group" aria-label="Jours couverts par la liste de courses">${days}${sk}</div>
+ <p class="sf-hint">${partial?"Les repas décochés seront dans une prochaine liste.":"Touche un jour pour le garder pour une autre course."}</p>
+ ${open.length>1?`<details class="sf-more"${detOpen?" open":""}><summary>Choisir repas par repas</summary><ul>${rows}</ul></details>`:""}`}
+function sfToggleDay(d){const off={...shopOff()},ks=MEALS.map(([m])=>d+"-"+m).filter(sfOpen);if(!ks.length)return;const anyIn=ks.some(k=>!off[k]);
+ for(const k of ks){if(anyIn)off[k]=1;else delete off[k]}state.shopOff=off;return anyIn}
+document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-sf]");if(!b||b.disabled)return;const[a,v]=b.dataset.sf.split("|");
+ if(a==="d"){const out=sfToggleDay(v);commit();renderShop();try{vcUpdate()}catch(x){}const dt=dateFromYmd(v);toast(out?`${WEEKDAYS[dt.getDay()]} retiré de la liste`:`${WEEKDAYS[dt.getDay()]} ajouté à la liste`);return}
+ if(a==="snk"){const off={...shopOff()};if(off.snk)delete off.snk;else off.snk=ymd(new Date());state.shopOff=off;commit();renderShop();toast(off.snk?"Encas retirés de la liste":"Encas ajoutés à la liste");return}
+ if(a==="all"){state.shopOff={};commit();renderShop();toast("Tous les repas sont dans la liste");return}});
+document.addEventListener("change",e=>{const t=e.target;if(!t||!t.dataset||!t.dataset.sfk)return;const off={...shopOff()};if(t.checked)delete off[t.dataset.sfk];else off[t.dataset.sfk]=1;state.shopOff=off;commit();renderShop()});
+const renderShopV46=renderShop;
+renderShop=function(){const r=renderShopV46.apply(this,arguments);try{sfRender();
+  const off=shopOff(),open=SLOTS.filter(sfOpen),inc=open.filter(sfIn).length,sub=document.getElementById("shopSub");
+  if(sub&&(inc<open.length||off.snk))sub.textContent=sub.textContent.replace(/^Pour \d+ repas à venir( et tes encas)?/,()=>`Pour ${inc} repas sur ${open.length}${sfSnk()&&!off.snk?" et tes encas":""}`).replace(/^Pour tes encas/,inc?`Pour ${inc} repas`:"Pour tes encas");
+  if(sub&&open.length&&!inc&&(!sfSnk()||off.snk))sub.textContent="Aucun repas coché : choisis ci-dessous les jours à acheter."}catch(e){}return r};
 
 try{setTab(ui.tab);renderAll()}catch(e){try{sbDiag("affichage au démarrage",e)}catch(x){}}try{initDb()}catch(e){}sbStart();
 
