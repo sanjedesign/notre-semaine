@@ -1,19 +1,19 @@
-plan hellofresh 403 https://www.hellofresh.fr/sitemap_recipe_pages.xml → 0
+plan hellofresh 200 https://www.hellofresh.fr/sitemap_recipe_pages.xml → 8503
 plan jow 200 https://jow.fr/sitemap.xml → 3718
-recherche marmiton 200 boeuf&page=3 → 23
-recherche marmiton 200 steak haché → 21
-recherche marmiton 200 thon → 21
-recherche marmiton 200 lieu noir → 21
-recherche marmiton 200 rillettes de thon&page=4 → 13
-recherche marmiton 200 filet mignon de porc&page=2 → 21
-recherche marmiton 404 barre protéinée&page=4 → 0
-recherche marmiton 200 tofu&page=4 → 21
-recherche marmiton 200 riche en protéines&page=2 → 6
-recherche marmiton 200 fromage blanc&page=2 → 21
-recherche marmiton 200 filet de poulet&page=2 → 21
-recherche marmiton 200 oeufs&page=4 → 21
-recherche marmiton 200 jambon de dinde&page=3 → 20
-recherche marmiton 200 blanc de poulet&page=4 → 21
+recherche marmiton 200 cabillaud&page=3 → 21
+recherche marmiton 200 skyr&page=2 → 6
+recherche marmiton 200 high protein&page=2 → 6
+recherche marmiton 200 blanc de poulet&page=3 → 21
+recherche marmiton 200 filet mignon de porc&page=3 → 21
+recherche marmiton 404 pancakes protéinés&page=3 → 0
+recherche marmiton 200 quark → 21
+recherche marmiton 404 edamame&page=2 → 0
+recherche marmiton 200 pois chiches → 21
+recherche marmiton 200 protéiné&page=4 → 6
+recherche marmiton 404 barre protéinée&page=3 → 0
+recherche marmiton 200 crevettes&page=4 → 21
+recherche marmiton 200 colin&page=2 → 21
+recherche marmiton 404 muffins protéinés&page=4 → 0
 plan marmiton 200 https://www.marmiton.org/wsitemap_recipes_1.xml → 4868
 plan marmiton 200 https://www.marmiton.org/wsitemap_recipes_2.xml → 4186
 plan marmiton 200 https://www.marmiton.org/wsitemap_recipes_3.xml → 4945
@@ -37,7 +37,7 @@ plan ptitchef 200 https://www.ptitchef.com/upload_data/sitemaps/recipe-fr-2.xml 
 plan fourchette 200 https://www.fourchette-et-bikini.fr/xml/sitemap.xml → 0
 plan fourchette 200 https://www.fourchette-et-bikini.fr/xml/sitemap-fourchette-recette-1.xml → 2253
 plan fourchette 200 https://www.fourchette-et-bikini.fr/xml/sitemap-fourchette-recette-2.xml → 0
-à lire : 900 fiches (4 pistes d'encas)
-gardées : 75 · écartées : {"protéines # g":180,"encas pas assez protéiné":29,"nutrition absente":129,"kcal #":240,"fiche incomplète":30,"lipides # g":48,"catégorie dip, sauce, beurre aux herbes & co., amuse-bouche, apero":1,"plat trop riche (nom)":88,"catégorie cocktail":6,"catégorie boisson":5,"robot de cuisine":18,"catégorie confiserie":1,"sans photo":3,"catégorie dessert":18,"catégorie dessert sans cuisson":3,"catégorie dessert, garniture":1,"catégorie cremes desserts":2,"catégorie patisserie salee et sucree, dessert":3,"catégorie plat principal, dip, sauce, beurre aux herbes & co.":2,"abats":3,"catégorie dip, sauce, beurre aux herbes & co.":2,"catégorie boissons":4,"catégorie dip, sauce, beurre aux herbes & co., plat principal":1,"catégorie dessert, amuse-bouche, patisserie salee et sucree":1,"catégorie dessert, patisserie salee et sucree":3,"encas trop gras":1,"catégorie desserts":1,"catégorie garniture, dip, sauce, beurre aux herbes & co.":1,"http 0":1}
-par source : {"jow":{"lu":158,"plats":4,"encas":0,"why":{"protéines # g":65,"lipides # g":3,"kcal #":18,"catégorie cocktail":6,"plat trop riche (nom)":33,"robot de cuisine":18,"catégorie dessert sans cuisson":3,"encas pas assez protéiné":5,"nutrition absente":2,"abats":1}},"fourchette":{"lu":193,"plats":0,"encas":1,"why":{"encas pas assez protéiné":15,"kcal #":78,"fiche incomplète":30,"nutrition absente":39,"plat trop riche (nom)":15,"protéines # g":8,"catégorie cremes desserts":2,"catégorie boissons":4,"catégorie desserts":1}},"bettybossi":{"lu":233,"plats":33,"encas":2,"why":{"nutrition absente":26,"lipides # g":30,"catégorie dip, sauce, beurre aux herbes & co., amuse-bouche, apero":1,"protéines # g":58,"plat trop riche (nom)":11,"kcal #":48,"encas pas assez protéiné":5,"catégorie boisson":1,"catégorie dessert, garniture":1,"catégorie patisserie salee et sucree, dessert":3,"catégorie plat principal, dip, sauce, beurre aux herbes & co.":2,"catégorie dessert":4,"catégorie dip, sauce, beurre aux herbes & co.":2,"catégorie dip, sauce, beurre aux herbes & co., plat principal":1,"catégorie dessert, amuse-bouche, patisserie salee et sucree":1,"catégorie dessert, patisserie salee et sucree":3,"catégorie garniture, dip, sauce, beurre aux herbes & co.":1}},"marmiton":{"lu":237,"plats":28,"encas":0,"why":{"nutrition absente":26,"kcal #":81,"plat trop riche (nom)":25,"lipides # g":14,"protéines # g":38,"encas pas assez protéiné":4,"catégorie boisson":4,"catégorie confiserie":1,"catégorie dessert":14,"encas trop gras":1,"abats":1}},"ptitchef":{"lu":78,"plats":6,"encas":1,"why":{"nutrition absente":36,"kcal #":15,"sans photo":3,"lipides # g":1,"plat trop riche (nom)":4,"protéines # g":11,"abats":1}}}
-pages créées : 7 · total 197 pages, 1970 recettes · en attente 9
+à lire : 900 fiches (8 pistes d'encas)
+gardées : 69 · écartées : {"lipides # g":29,"encas pas assez protéiné":22,"kcal #":285,"plat trop riche (nom)":143,"catégorie confiserie":1,"catégorie dessert":26,"protéines # g":184,"nutrition absente":73,"abats":8,"catégorie patisserie salee et sucree, dessert":8,"catégorie dessert sans cuisson":3,"catégorie boisson":5,"catégorie dessert, patisserie salee et sucree":10,"robot de cuisine":13,"catégorie cocktail":4,"catégorie garniture, dip, sauce, beurre aux herbes & co.":1,"catégorie plat principal, dip, sauce, beurre aux herbes & co.":3,"catégorie patisserie salee et sucree, amuse-bouche, dessert":1,"catégorie dip, sauce, beurre aux herbes & co.":5,"catégorie dessert, amuse-bouche, patisserie salee et sucree":1,"catégorie boisson chaude":1,"fiche incomplète":2,"catégorie dessert, amuse-bouche":1,"catégorie dessert, plat principal":1,"http 0":1}
+par source : {"marmiton":{"lu":222,"plats":27,"encas":2,"why":{"lipides # g":12,"kcal #":74,"catégorie confiserie":1,"catégorie dessert":11,"encas pas assez protéiné":6,"plat trop riche (nom)":34,"nutrition absente":15,"abats":6,"protéines # g":32,"catégorie boisson":2}},"bettybossi":{"lu":222,"plats":16,"encas":2,"why":{"encas pas assez protéiné":11,"kcal #":42,"plat trop riche (nom)":30,"protéines # g":38,"catégorie patisserie salee et sucree, dessert":8,"nutrition absente":23,"lipides # g":11,"catégorie dessert":15,"catégorie boisson":3,"catégorie dessert, patisserie salee et sucree":10,"catégorie garniture, dip, sauce, beurre aux herbes & co.":1,"catégorie plat principal, dip, sauce, beurre aux herbes & co.":3,"catégorie patisserie salee et sucree, amuse-bouche, dessert":1,"catégorie dip, sauce, beurre aux herbes & co.":5,"catégorie dessert, amuse-bouche, patisserie salee et sucree":1,"catégorie dessert, amuse-bouche":1,"catégorie dessert, plat principal":1}},"jow":{"lu":149,"plats":4,"encas":1,"why":{"plat trop riche (nom)":37,"protéines # g":57,"kcal #":22,"catégorie dessert sans cuisson":3,"robot de cuisine":13,"nutrition absente":1,"catégorie cocktail":4,"encas pas assez protéiné":3,"catégorie boisson chaude":1,"lipides # g":2,"abats":1}},"hellofresh":{"lu":233,"plats":10,"encas":0,"why":{"kcal #":131,"protéines # g":48,"plat trop riche (nom)":37,"lipides # g":2,"nutrition absente":2,"fiche incomplète":2,"abats":1}},"ptitchef":{"lu":73,"plats":7,"encas":0,"why":{"kcal #":16,"nutrition absente":32,"lipides # g":2,"encas pas assez protéiné":2,"protéines # g":9,"plat trop riche (nom)":5}}}
+pages créées : 7 · total 204 pages, 2040 recettes · en attente 8
