@@ -1,5 +1,5 @@
 // Recettes à découvrir pour Sano — tourne trois fois par jour sur GitHub Actions.
-// Lit les plans de site de HelloFresh, Jow, Marmiton, Betty Bossi, Ptitchef et Fourchette & Bikini, plus des recherches Marmiton ciblées
+// Lit les plans de site de HelloFresh, Jow, Marmiton, Betty Bossi et Fourchette & Bikini, plus des recherches Marmiton ciblées
 // (poulet, dinde, poisson, skyr, cottage…), ouvre d'abord les fiches dont l'adresse annonce des protéines,
 // garde les recettes saines et riches en protéines (valeurs nutritionnelles publiées par le site)
 // et les range par pages de 10 (5 plats variés : viandes, poissons, œufs, végé + 5 encas protéinés) dans la branche « data ».
@@ -62,11 +62,12 @@ const SRC = {
   jow: { name: "Jow", maps: ["https://jow.fr/sitemap.xml"], re: /jow\.fr\/recipes\/[a-z0-9-]+$/, w: 2 },
   marmiton: { name: "Marmiton", maps: [1, 2, 3, 4, 5, 6, 7, 8, 9].map((i) => `https://www.marmiton.org/wsitemap_recipes_${i}.xml`), lists: () => mqUrls(14), re: /\/recettes\/recette_[a-z0-9-]+_\d+\.aspx$/, w: 3 },
   bettybossi: { name: "Betty Bossi", maps: ["https://www.bettybossi.ch/sitemap.xml"], sub: /fr/i, re: /bettybossi\.ch\/fr\/recettes\/recette\/[a-z0-9-]+-\d+\/?$/, w: 3 },
-  ptitchef: { name: "Ptitchef", maps: ["https://www.ptitchef.com/upload_data/sitemaps/recipe-fr-1.xml", "https://www.ptitchef.com/upload_data/sitemaps/recipe-fr-2.xml"], re: /ptitchef\.com\/recettes\/(plat|entree|aperitif|brunch|petit-dejeuner|accompagnement|autre)\/[a-z0-9-]+-fid-\d+$/, w: 1 },
   fourchette: { name: "Fourchette & Bikini", maps: ["https://www.fourchette-et-bikini.fr/xml/sitemap.xml"], sub: /recette/i, re: /fourchette-et-bikini\.fr\/recettes\/[a-z0-9-]+-(?:[2-9]\d{4}|\d{6,})\.html$/, w: 3 },
 };
 // seuils protéines (les mêmes dans l'appli) : plat ≥ 28 g par portion et ≥ 24 % des calories ; encas ≥ 10 g et ≥ 25 %
 const PRULE = { plat: { p: 28, r: 0.24 }, encas: { p: 10, r: 0.25 } };
+// sources fiables : cuisines qui testent leurs recettes ; Marmiton seulement si la recette est notée ≥ 4,5 avec au moins 20 avis
+const srcOk = (e) => e.src !== "Ptitchef" && (e.src !== "Marmiton" || (Array.isArray(e.r) && e.r[0] >= 4.5 && e.r[1] >= 20));
 const protOk = (e) => { const R = PRULE[e.k === "encas" ? "encas" : "plat"]; const n = e.n || {}; return n.k > 0 && n.p >= R.p && (n.p * 4) / n.k >= R.r; };
 // fiches visées en priorité : leur adresse annonce un aliment riche en protéines
 const PROT_SLUG = /(proteine|protein|poulet|dinde|volaille|boeuf|steak|bavette|veau|porc|filet-mignon|escalope|agneau|canard|kefta|boulette|saumon|cabillaud|thon|merlu|colin|lieu|truite|sardine|maquereau|dorade|poisson|crevette|gambas|moule|calamar|encornet|saint-jacques|oeuf|omelette|frittata|shakshuka|tofu|tempeh|seitan|lentille|pois-chiche|haricot|edamame|skyr|fromage-blanc|cottage|ricotta|quark|halloumi|jambon|whey)/;
@@ -114,10 +115,9 @@ function toRecipe(key, url, R, hint) {
   if (an && !/^(anonyme|jow|hellofresh|betty bossi|fourchette (et|&) bikini|redaction|rédaction)$/i.test(an)) o.a = an.slice(0, 50); else if (key === "marmiton") o.a = "Membre Marmiton";
   const ar = R.aggregateRating; if (ar && num(ar.ratingValue) && num(ar.ratingCount || ar.reviewCount)) o.r = [Math.round(num(ar.ratingValue) * 10) / 10, Math.round(num(ar.ratingCount || ar.reviewCount))];
   const vid = R.video && (Array.isArray(R.video) ? R.video[0] : R.video); const yv = ytId(vid && (vid.embedUrl || vid.contentUrl)); if (yv) o.v = yv;
+  if (!srcOk(o)) return { why: "note Marmiton insuffisante" };
   if (BAD.test(nrm(t))) return { why: "plat trop riche (nom)" };
   if (/\b(langues?|ris de veau|rognons?|foies?|tripes?|cervelle|boudin|andouillettes?|gesiers?|coeurs? de (boeuf|volaille|poulet))\b/.test(nrm(t))) return { why: "abats" };
-  if (/\/recipe-type\//.test(o.img)) o.img = "";
-  if (key === "ptitchef" && !o.img) return { why: "sans photo" };
   if (/dessert|boisson|cocktail|sauce|confiserie/.test(cat) && !SNACK_T.test(nrm(t))) return { why: "catégorie " + cat };
   // encas sain et protéiné
   const tt = nrm(t);
@@ -196,9 +196,9 @@ for (const f of fs.readdirSync(path.join(DIR, "p"))) { const fp = path.join(DIR,
   for (const e of L) { if (e.k === "encas") continue; const pt = ptOf(e.t, e.ing); if (pt !== e.pt) { e.pt = pt; ch = true; } } if (ch) fs.writeFileSync(fp, JSON.stringify(L)); } catch { /* page illisible */ } }
 for (const e of st.pending) if (e.k !== "encas") e.pt = ptOf(e.t, e.ing);
 let pruned = 0;
-for (const f of fs.readdirSync(path.join(DIR, "p"))) { const fp = path.join(DIR, "p", f); try { const L = JSON.parse(fs.readFileSync(fp, "utf8")); const K = L.filter(protOk); if (K.length !== L.length) { pruned += L.length - K.length; fs.writeFileSync(fp, JSON.stringify(K)); } } catch { /* page illisible */ } }
-{ const n0 = st.pending.length; st.pending = st.pending.filter(protOk); pruned += n0 - st.pending.length; }
-if (pruned) say(`retirées (sous les seuils de protéines) : ${pruned}`);
+for (const f of fs.readdirSync(path.join(DIR, "p"))) { const fp = path.join(DIR, "p", f); try { const L = JSON.parse(fs.readFileSync(fp, "utf8")); const K = L.filter((e) => protOk(e) && srcOk(e)); if (K.length !== L.length) { pruned += L.length - K.length; fs.writeFileSync(fp, JSON.stringify(K)); } } catch { /* page illisible */ } }
+{ const n0 = st.pending.length; st.pending = st.pending.filter((e) => protOk(e) && srcOk(e)); pruned += n0 - st.pending.length; }
+if (pruned) say(`retirées (sous les seuils de protéines ou source non fiable) : ${pruned}`);
 // --- pages de 10 : 5 plats (une catégorie à tour de rôle) et 5 encas, en alternance
 function takePage(force) {
   const P = st.pending; const sn = P.filter((r) => r.k === "encas"), mains = P.filter((r) => r.k !== "encas");

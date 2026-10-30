@@ -1,5 +1,5 @@
 name: Recettes à découvrir
-# Trois fois par jour : nouvelles recettes saines et riches en protéines (HelloFresh, Jow, Marmiton, Betty Bossi, Ptitchef, Fourchette & Bikini)
+# Trois fois par jour : nouvelles recettes saines et riches en protéines (HelloFresh, Jow, Marmiton très bien notées, Betty Bossi, Fourchette & Bikini)
 # rangées par pages de 10 (5 plats + 5 encas)
 # dans la branche « data », lues par l'appli avec le bouton « Actualiser ».
 on:
