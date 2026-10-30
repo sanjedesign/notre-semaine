@@ -2,7 +2,7 @@
 // Page : le réseau d'abord (toujours la dernière version), la copie gardée si le réseau ne répond pas en 4 s.
 // Fichiers du site : la copie gardée tout de suite, mise à jour en arrière-plan. Polices Google : gardées.
 // Les données (synchro, recettes à découvrir, produits) ne passent pas par ici : l'appli gère déjà leur absence.
-const C = "sano-v1";
+const C = "sano-v2";
 self.addEventListener("install", (e) => { self.skipWaiting(); e.waitUntil(caches.open(C).then((c) => c.addAll(["./", "./index.html"])).catch(() => {})); });
 self.addEventListener("activate", (e) => { e.waitUntil((async () => { for (const k of await caches.keys()) if (k !== C) await caches.delete(k); await self.clients.claim(); })()); });
 self.addEventListener("fetch", (e) => {
