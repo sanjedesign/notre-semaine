@@ -1,19 +1,19 @@
 plan hellofresh 200 https://www.hellofresh.fr/sitemap_recipe_pages.xml → 8503
 plan jow 200 https://jow.fr/sitemap.xml → 3729
-recherche marmiton 200 cottage cheese → 15
-recherche marmiton 200 blanc de poulet&page=2 → 21
-recherche marmiton 200 fromage blanc&page=3 → 21
-recherche marmiton 200 houmous&page=3 → 13
-recherche marmiton 200 tofu&page=2 → 21
-recherche marmiton 200 protéiné&page=2 → 6
-recherche marmiton 200 boeuf → 22
+recherche marmiton 200 riche en protéines&page=3 → 6
 recherche marmiton 200 barre protéinée → 7
-recherche marmiton 200 oeufs mimosa&page=3 → 6
-recherche marmiton 200 thon&page=4 → 21
-recherche marmiton 200 energy balls protéinées&page=3 → 6
-recherche marmiton 200 oeufs&page=3 → 21
+recherche marmiton 200 muffins protéinés → 7
+recherche marmiton 200 energy balls protéinées → 20
+recherche marmiton 200 thon&page=3 → 21
+recherche marmiton 404 whey&page=3 → 0
+recherche marmiton 200 escalope de dinde&page=2 → 21
+recherche marmiton 200 saumon&page=4 → 23
+recherche marmiton 200 porridge protéiné&page=3 → 12
+recherche marmiton 200 cabillaud&page=2 → 21
+recherche marmiton 200 rillettes de thon&page=2 → 21
+recherche marmiton 404 edamame&page=4 → 0
+recherche marmiton 200 blanc de poulet&page=4 → 21
 recherche marmiton 200 filet de poulet → 21
-recherche marmiton 200 lentilles&page=4 → 21
 plan marmiton 200 https://www.marmiton.org/wsitemap_recipes_1.xml → 4868
 plan marmiton 200 https://www.marmiton.org/wsitemap_recipes_2.xml → 4186
 plan marmiton 200 https://www.marmiton.org/wsitemap_recipes_3.xml → 4945
@@ -36,6 +36,6 @@ plan fourchette 200 https://www.fourchette-et-bikini.fr/xml/sitemap.xml → 0
 plan fourchette 200 https://www.fourchette-et-bikini.fr/xml/sitemap-fourchette-recette-1.xml → 2267
 plan fourchette 200 https://www.fourchette-et-bikini.fr/xml/sitemap-fourchette-recette-2.xml → 0
 à lire : 900 fiches (0 pistes d'encas)
-gardées : 30 · écartées : {"note Marmiton insuffisante":223,"protéines # g":125,"lipides # g":20,"plat trop riche (nom)":113,"kcal #":216,"catégorie dessert":30,"abats":1,"nutrition absente":66,"catégorie dip, sauce, beurre aux herbes & co.":4,"encas pas assez protéiné":16,"catégorie patisserie salee et sucree, dessert":19,"catégorie plat principal, dip, sauce, beurre aux herbes & co.":2,"catégorie boisson":3,"catégorie dip, sauce, beurre aux herbes & co., garniture":1,"catégorie dessert, patisserie salee et sucree":18,"catégorie amuse-bouche, dip, sauce, beurre aux herbes & co.":1,"fiche incomplète":6,"catégorie pain, plat principal, dessert":1,"catégorie dessert, amuse-bouche, patisserie salee et sucree":1,"catégorie pain, patisserie salee et sucree, dessert":1,"catégorie dessert, boisson":1,"catégorie dip, sauce, beurre aux herbes & co., plat principal":1,"robot de cuisine":1}
-par source : {"marmiton":{"lu":300,"plats":6,"encas":0,"why":{"note Marmiton insuffisante":223,"lipides # g":3,"plat trop riche (nom)":6,"protéines # g":13,"kcal #":15,"nutrition absente":29,"encas pas assez protéiné":1,"fiche incomplète":2,"robot de cuisine":1,"catégorie dessert":1}},"hellofresh":{"lu":300,"plats":12,"encas":0,"why":{"protéines # g":57,"kcal #":152,"plat trop riche (nom)":64,"lipides # g":7,"nutrition absente":4,"fiche incomplète":4}},"bettybossi":{"lu":300,"plats":9,"encas":3,"why":{"protéines # g":55,"plat trop riche (nom)":43,"catégorie dessert":29,"abats":1,"nutrition absente":33,"kcal #":49,"catégorie dip, sauce, beurre aux herbes & co.":4,"encas pas assez protéiné":15,"catégorie patisserie salee et sucree, dessert":19,"lipides # g":10,"catégorie plat principal, dip, sauce, beurre aux herbes & co.":2,"catégorie boisson":3,"catégorie dip, sauce, beurre aux herbes & co., garniture":1,"catégorie dessert, patisserie salee et sucree":18,"catégorie amuse-bouche, dip, sauce, beurre aux herbes & co.":1,"catégorie pain, plat principal, dessert":1,"catégorie dessert, amuse-bouche, patisserie salee et sucree":1,"catégorie pain, patisserie salee et sucree, dessert":1,"catégorie dessert, boisson":1,"catégorie dip, sauce, beurre aux herbes & co., plat principal":1}}}
-pages créées : 3 · total 258 pages, 2580 recettes · en attente 3
+gardées : 19 · écartées : {"note Marmiton insuffisante":242,"plat trop riche (nom)":109,"protéines # g":149,"kcal #":206,"catégorie patisserie salee et sucree, dessert":15,"nutrition absente":68,"catégorie dessert, patisserie salee et sucree":9,"catégorie dip, sauce, beurre aux herbes & co.":9,"encas pas assez protéiné":12,"fiche incomplète":4,"catégorie garniture, dessert, patisserie salee et sucree":1,"catégorie dessert":27,"lipides # g":15,"catégorie dip, sauce, beurre aux herbes & co., plat principal":1,"catégorie boisson":4,"catégorie patisserie salee et sucree, amuse-bouche, dessert":2,"catégorie amuse-bouche, dessert":2,"catégorie dip, sauce, beurre aux herbes & co., apero":2,"catégorie sauce":1,"catégorie dessert, amuse-bouche, patisserie salee et sucree":1,"abats":1,"catégorie apero, boisson":1}
+par source : {"marmiton":{"lu":300,"plats":3,"encas":1,"why":{"note Marmiton insuffisante":242,"nutrition absente":25,"protéines # g":6,"lipides # g":5,"kcal #":8,"encas pas assez protéiné":1,"plat trop riche (nom)":3,"catégorie dessert":4,"catégorie sauce":1,"abats":1}},"bettybossi":{"lu":300,"plats":11,"encas":0,"why":{"plat trop riche (nom)":32,"protéines # g":67,"catégorie patisserie salee et sucree, dessert":15,"nutrition absente":38,"catégorie dessert, patisserie salee et sucree":9,"catégorie dip, sauce, beurre aux herbes & co.":9,"encas pas assez protéiné":11,"kcal #":63,"catégorie garniture, dessert, patisserie salee et sucree":1,"catégorie dessert":23,"lipides # g":8,"catégorie dip, sauce, beurre aux herbes & co., plat principal":1,"catégorie boisson":4,"catégorie patisserie salee et sucree, amuse-bouche, dessert":2,"catégorie amuse-bouche, dessert":2,"catégorie dip, sauce, beurre aux herbes & co., apero":2,"catégorie dessert, amuse-bouche, patisserie salee et sucree":1,"catégorie apero, boisson":1}},"hellofresh":{"lu":300,"plats":4,"encas":0,"why":{"kcal #":135,"plat trop riche (nom)":74,"protéines # g":76,"fiche incomplète":4,"nutrition absente":5,"lipides # g":2}}}
+pages créées : 2 · total 260 pages, 2600 recettes · en attente 2
