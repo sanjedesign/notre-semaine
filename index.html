@@ -2493,6 +2493,59 @@ html,body{min-height:100%;background:var(--bg)}
 @keyframes bootOut{to{opacity:0;visibility:hidden}}
 @media (prefers-reduced-motion:reduce){#boot,.fab{transition:none;animation:none}}
 body.lock .fab,body.panel-open .fab{display:none!important}
+
+/* ================= v50 : boutons flottants ronds, stock simple, budget compact, détail nutrition ================= */
+.fab{width:58px;height:58px;padding:0;gap:0;justify-content:center;border-radius:20px}
+.fab span{display:none}
+.fab svg{width:26px;height:26px}
+.stk-seg{display:none!important}
+#tab-stock:not(.stk-adding) .stock-row .status{display:none}
+#tab-stock .sec-head{align-items:center}
+.stk-addb{flex:none}
+@media (max-width:899.98px){.stk-addb{display:none!important}}
+/* budget */
+.b50{background:var(--surface);border-radius:var(--r-lg,18px);padding:12px 14px;box-shadow:var(--sh-1)}
+.b50-h,.b50-ask{display:flex;align-items:center;gap:12px}
+.b50-ask{background:var(--accent-soft);border-radius:var(--r-lg,18px);padding:12px 14px}
+.b50-t{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;gap:2px}
+.b50-t span{font-size:.84rem;color:var(--muted);font-weight:600;overflow-wrap:anywhere}
+.b50-t b{font-family:var(--f-title);font-size:1.45rem;font-weight:700;letter-spacing:-.02em;color:var(--title,var(--ink))}
+.b50-ask .b50-t b{font-size:1rem;font-family:inherit;letter-spacing:0}
+.b50-ask .b50-t span{font-weight:500;color:var(--ink)}
+.b50 .btn,.b50-ask .btn{flex:none;white-space:nowrap}
+.b50-s{font-size:.86rem;color:var(--muted);margin:8px 0 0}
+.b50-s b{color:var(--ink)}
+.b50-err{color:var(--danger)}
+.b50-n{font-size:.76rem;color:var(--muted);margin:8px 0 0;line-height:1.45}
+.b50-a{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+/* réglages : ville et magasin */
+.pl-form{display:flex;gap:8px;margin:10px 0}
+.pl-form .btn{flex:none}
+.pl-list{display:grid;gap:8px;margin:8px 0 4px}
+.pl-st{display:flex;flex-direction:column;align-items:flex-start;gap:2px;text-align:left;width:100%;min-height:52px;padding:10px 14px;border-radius:14px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);font:inherit;cursor:pointer}
+.pl-st b{font-size:.95rem;font-weight:700}
+.pl-st small{font-size:.8rem;color:var(--muted)}
+.pl-st[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft)}
+.pl-st:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.pl-err{color:var(--danger)}
+.pl-more{margin-top:10px}
+.pl-more summary{cursor:pointer;font-weight:700;font-size:.92rem;padding:8px 0;min-height:40px;display:flex;align-items:center}
+.pl-more .chips{flex-wrap:wrap;overflow:visible;gap:8px}
+/* fiche recette : détail nutrition */
+.nx-det{margin:10px 0 4px;font-size:.88rem}
+.nx-det summary{cursor:pointer;font-weight:700;color:var(--accent);min-height:40px;display:flex;align-items:center}
+.nx-det table{width:100%;border-collapse:collapse;margin-top:4px;font-variant-numeric:tabular-nums}
+.nx-det th{text-align:right;font-size:.76rem;color:var(--muted);font-weight:600;padding:4px 0 6px 8px}
+.nx-det th:first-child,.nx-det td:first-child{text-align:left;padding-left:0}
+.nx-det td{text-align:right;padding:6px 0 6px 8px;border-top:1px solid var(--line);vertical-align:top}
+.nx-det td small{color:var(--muted);white-space:nowrap}
+.nx-det tfoot td{font-weight:700;border-top:2px solid var(--line)}
+.nx-src{font-size:.76rem;color:var(--muted);margin:8px 0 0}
+/* stock : une ligne par article */
+#tab-stock .stock-row{gap:8px;padding:8px}
+#tab-stock .stock-row .ico{flex-basis:30px;width:30px;height:30px}
+#tab-stock .stock-row .item-txt{flex:1 1 80px}
+#tab-stock:not(.stk-adding) .stock-row .sw-lbl{display:none}
 </style>
 </head>
 <body>
@@ -2599,7 +2652,7 @@ body.lock .fab,body.panel-open .fab{display:none!important}
 </div>
 <div id="timers" class="timers" hidden aria-live="polite"></div>
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
-<script>window.NS_CONFIG={"hosted": true, "sbUrl": "https://zjsawjudrdneeptxbskd.supabase.co", "sbKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpqc2F3anVkcmRuZWVwdHhic2tkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1NjUxMjcsImV4cCI6MjEwNzE0MTEyN30.Wn1bUy--5O78gGICTOyEGbnT6B-SdoNCG_XxBBaaUIY", "build": "20261030223250"}</script>
+<script>window.NS_CONFIG={"hosted": true, "sbUrl": "https://zjsawjudrdneeptxbskd.supabase.co", "sbKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpqc2F3anVkcmRuZWVwdHhic2tkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1NjUxMjcsImV4cCI6MjEwNzE0MTEyN30.Wn1bUy--5O78gGICTOyEGbnT6B-SdoNCG_XxBBaaUIY", "build": "20261102084606"}</script>
 <script>
 const AISLES={L:"Fruits & légumes",H:"Herbes fraîches",V:"Viandes & poissons",C:"Crèmerie & œufs",S:"Surgelés",F:"Féculents",B:"Conserves",E:"Épices & condiments"};
 const AISLE_ORDER=["L","H","V","C","S","F","B","E"];
@@ -4210,6 +4263,25 @@ normalize=function(d){const s=normalizeV48.apply(this,arguments);
    if(m.length||Object.keys(sn).length)tp.push({id:t.id,n:String(t.n||"Modèle").replace(/\s+/g," ").trim().slice(0,40)||"Modèle",d:ok8(t.d)?String(t.d):"",m,s:sn})}s.tpl=tp;
   const wa={};if(src.water&&typeof src.water==="object")for(const k in src.water){const v=src.water[k];if(!ok8(k)||k<back(21)||!Array.isArray(v))continue;const a=[0,1].map(i=>Math.max(0,Math.min(30,Math.round(+v[i]||0))));if(a[0]||a[1])wa[k]=a}s.water=wa}
  catch(e){s.cookedAt=s.cookedAt||{};s.frozen=s.frozen||{};s.prepOk=s.prepOk||{};s.tpl=s.tpl||[];s.water=s.water||{}}
+ return s};
+
+
+// ================= v50 (avant l'état) : plus de tickets, ville et magasin pour les prix =================
+// place = { c: ville saisie dans les réglages } · store = enseigne (« lidl »…) ou magasin précis (« L123 », id Open Prices)
+// storeL = { id, n: nom, b: enseigne reconnue, pc: code postal, c: ville } pour un magasin précis
+const STORE_KEYS50=["lidl","aldi","leclerc","intermarche","superu","carrefour","carrefour_prox","auchan","monoprix","casino","franprix","netto","cora","match"];
+const normalizeV50=normalize;
+normalize=function(d){const s=normalizeV50.apply(this,arguments);
+ try{const src=d&&typeof d==="object"?d:{};
+  s.tk={p:{},m:{},t:[]};
+  const pl=src.place&&typeof src.place==="object"?src.place:{};const c=String(pl.c||"").replace(/[<>"]/g,"").replace(/\s+/g," ").trim().slice(0,60);s.place=c?{c}:{};
+  const L=src.storeL&&typeof src.storeL==="object"?src.storeL:null;
+  if(typeof src.store==="string"&&/^L\d{1,9}$/.test(src.store)&&L&&String(L.id)===src.store.slice(1)){
+   const t=v=>String(v==null?"":v).replace(/[<>"]/g,"").replace(/\s+/g," ").trim();
+   s.store=src.store;s.storeL={id:+L.id,n:t(L.n).slice(0,60)||"Magasin",b:STORE_KEYS50.includes(L.b)?L.b:"",pc:t(L.pc).slice(0,10),c:t(L.c).slice(0,60)}}
+  else if(STORE_KEYS50.includes(src.store)){s.store=src.store;s.storeL=null}
+  else s.storeL=null}
+ catch(e){s.tk={p:{},m:{},t:[]};s.place=s.place||{};s.storeL=s.storeL||null}
  return s};
 
 // ---------- état ----------
@@ -7995,382 +8067,6 @@ whyCard=function(d,pi){const P=state.people[pi],t=P.t,today=DAYS[0][0],fut=d>tod
 gaugeRow=function(x,v,t){const pct=t?v/t:0,Z=scZoneOf(x);const flag=!Z?"":(x==="f"||x==="c")&&pct>Z[1]?"↑":pct>=Z[0]?"✓":"";
  return`<div class="mg${flag==="↑"?" mg-over":""}" style="--c:${MC[x][2]}"><span class="mg-l">${mdot(x)}${MC[x][0]}</span><span class="mg-bar" aria-hidden="true"><i style="width:${Math.min(100,pct*100).toFixed(1)}%"></i></span><span class="mg-v">${fmtG(r1(v))}<small>/${t} g</small>${flag?`<em>${flag}</em>`:""}</span></div>`};
 
-// ================= v36 : prix réels avec le ticket de caisse =================
-// ---------- ticket : préparation de l'image (recadrage, redressement, contraste) ----------
-function tkLoadImg(src){return new Promise((ok,ko)=>{const im=new Image();im.onload=()=>ok(im);im.onerror=()=>ko(new Error("image illisible"));im.src=src})}
-async function tkBitmap(file){const url=URL.createObjectURL(file);try{return await tkLoadImg(url)}finally{setTimeout(()=>URL.revokeObjectURL(url),4000)}}
-function tkGray(cv){const c=cv.getContext("2d",{willReadFrequently:true}),d=c.getImageData(0,0,cv.width,cv.height).data,n=cv.width*cv.height,g=new Uint8ClampedArray(n);
- for(let i=0,j=0;i<n;i++,j+=4)g[i]=(d[j]*0.299+d[j+1]*0.587+d[j+2]*0.114)|0;return g}
-function tkOtsu(g){const h=new Float64Array(256);for(let i=0;i<g.length;i++)h[g[i]]++;let sum=0;for(let i=0;i<256;i++)sum+=i*h[i];let sB=0,wB=0,best=0,th=128;
- for(let t=0;t<256;t++){wB+=h[t];if(!wB)continue;const wF=g.length-wB;if(!wF)break;sB+=t*h[t];const mB=sB/wB,mF=(sum-sB)/wF,v=wB*wF*(mB-mF)*(mB-mF);if(v>best){best=v;th=t}}return th}
-function tkCanvas(w,h){const c=document.createElement("canvas");c.width=Math.max(1,Math.round(w));c.height=Math.max(1,Math.round(h));return c}
-// angle d'inclinaison des lignes (projection horizontale la plus « piquée »)
-function tkSkew(g,w,h,box){const pts=[];const th=tkOtsu(g);const st=Math.max(1,Math.round(Math.max(box.w,box.h)/900));
- for(let y=box.y;y<box.y+box.h;y+=st)for(let x=box.x;x<box.x+box.w;x+=st)if(g[y*w+x]<th-12)pts.push(x,y);
- if(pts.length<200)return 0;const score=a=>{const s=Math.sin(a),c=Math.cos(a),bins=new Map();for(let i=0;i<pts.length;i+=2){const k=Math.round((-pts[i]*s+pts[i+1]*c)/2);bins.set(k,(bins.get(k)||0)+1)}let v=0;for(const n of bins.values())v+=n*n;return v};
- let best=0,bv=-1;for(let d=-10;d<=10;d+=0.5){const v=score(d*Math.PI/180);if(v>bv){bv=v;best=d}}
- const b0=best;for(let d=b0-0.5;d<=b0+0.5;d+=0.1){const v=score(d*Math.PI/180);if(v>bv){bv=v;best=d}}return best}
-// zone claire du papier (le ticket est plus clair que la table)
-function tkPaper(g,w,h){const th=tkOtsu(g);const rowF=new Float32Array(h),colF=new Float32Array(w);
- for(let y=0;y<h;y++){let n=0;for(let x=0;x<w;x++)if(g[y*w+x]>th)n++;rowF[y]=n/w}for(let x=0;x<w;x++){let n=0;for(let y=0;y<h;y++)if(g[y*w+x]>th)n++;colF[x]=n/h}
- const span=(f,lim)=>{let a=0,b=f.length-1;while(a<b&&f[a]<lim)a++;while(b>a&&f[b]<lim)b--;return[a,b]};const[y0,y1]=span(rowF,0.25),[x0,x1]=span(colF,0.25);
- const pad=8;const box={x:Math.max(0,x0-pad),y:Math.max(0,y0-pad),w:0,h:0};box.w=Math.min(w,x1+pad)-box.x;box.h=Math.min(h,y1+pad)-box.y;
- if(box.w<w*0.25||box.h<h*0.2)return{x:0,y:0,w,h};return box}
-// fond uniformisé : chaque pixel divisé par la luminosité locale du papier (ombres et dégradés effacés)
-function tkFlatten(cv){const w=cv.width,h=cv.height,g=tkGray(cv),r=Math.max(8,Math.round(Math.min(w,h)/40));
- // maximum local approché (dilatation) puis flou : estimation du papier sans le texte
- const tmp=new Uint8ClampedArray(w*h),bg=new Uint8ClampedArray(w*h);
- for(let y=0;y<h;y++){const o=y*w;for(let x=0;x<w;x++){let m=0;for(let k=-r;k<=r;k+=2){const xx=x+k;if(xx>=0&&xx<w&&g[o+xx]>m)m=g[o+xx]}tmp[o+x]=m}}
- for(let x=0;x<w;x++){for(let y=0;y<h;y++){let m=0;for(let k=-r;k<=r;k+=2){const yy=y+k;if(yy>=0&&yy<h&&tmp[yy*w+x]>m)m=tmp[yy*w+x]}bg[y*w+x]=m}}
- const c=cv.getContext("2d"),id=c.createImageData(w,h),d=id.data;
- for(let i=0,j=0;i<w*h;i++,j+=4){const b=Math.max(40,bg[i]);let v=g[i]/b*255;v=(v-60)*255/(255-60-12);v=v<0?0:v>255?255:v;d[j]=d[j+1]=d[j+2]=v;d[j+3]=255}
- c.putImageData(id,0,0);return cv}
-async function tkPrep(img,opt){opt=opt||{};const W0=img.naturalWidth||img.width,H0=img.naturalHeight||img.height;
- // 1. réduction pour l'analyse
- const s1=Math.min(1,900/Math.max(W0,H0)),a=tkCanvas(W0*s1,H0*s1);a.getContext("2d").drawImage(img,0,0,a.width,a.height);const ga=tkGray(a);
- const box=tkPaper(ga,a.width,a.height);const ang=opt.noSkew?0:tkSkew(ga,a.width,a.height,box);
- // 2. image de travail : papier recadré, redressé, à une taille confortable pour la lecture
- const bx=box.x/s1,by=box.y/s1,bw=box.w/s1,bh=box.h/s1;const target=opt.width||1500;const s2=Math.min(2.2,target/bw);
- const rad=-ang*Math.PI/180,cw=bw*s2,ch=bh*s2,ow=Math.abs(cw*Math.cos(rad))+Math.abs(ch*Math.sin(rad)),oh=Math.abs(cw*Math.sin(rad))+Math.abs(ch*Math.cos(rad));
- const b=tkCanvas(ow,oh),c=b.getContext("2d");c.fillStyle="#fff";c.fillRect(0,0,b.width,b.height);c.translate(b.width/2,b.height/2);c.rotate(rad);c.imageSmoothingQuality="high";
- c.drawImage(img,bx,by,bw,bh,-cw/2,-ch/2,cw,ch);
- if(!opt.noFlat)tkFlatten(b);return{canvas:b,angle:ang,box}}
-
-// ---------- ticket : lecture des lignes (prix, quantités, poids, remises, total) ----------
-const TK_STORE_RX=[["lidl",/\bl\s?[i1l]\s?d\s?l\b/i],["leclerc",/l[e3]\s?c\s?l[e3]rc/i],["carrefour",/carre?f+our|\bcrf\b/i],["auchan",/auchan/i]];
-const TK_STOP_RX=/\b(sous[- ]?total|total|a payer|à payer|net a payer|montant|reste a payer)\b/i;
-const TK_PAY_RX=/(^cb\b|\bcb (emv|sans|contact)|\bcarte ?(bancaire|bleue|cb|b)\b|\b(bancaire|esp[eè]ces?|rendu|monnaie|tva|t\.?v\.?a|ht|ttc|nb\.? ?art|articles?|ticket|merci|caisse|vendeur|h[oô]tesse|cagnotte|points?|fid[eé]lit|solde|paiement|transaction|contact|emv|visa|mastercard|ch[eè]que|resto|avoir|siret|tel|t[eé]l[eé]phone|horaires?|www|http|rcs|n[°o] ?tva|magasin|bienvenue|ouvert)\b)/i;
-const TK_DISC_RX=/remise|r[eé]duc|promo|bon d.?achat|coupon|avantage|lidl ?plus|fid[eé]lit|offre|immediate|imm[eé]diat|-\s?\d+\s?%|carte u|ristourne/i;
-const TK_NONFOOD_RX=/\bsacs?\b|cabas|consigne|carte cadeau|timbres?|\bpiles?\b|essuie|papier toil|lessive|vaisselle|sopalin|mouchoirs?|dentifrice|shamp|gel douche|\bdeo|rasoir|[eé]ponge|poubelle|liti[eè]re|croquettes|bougie|ampoule|journal|magazine/i;
-// nombre lu sur un ticket : « 4,79 » « 4.79 » « 4 ,79 » « O,95 »
-function tkNum(s){if(s==null)return null;s=String(s).replace(/[oO]/g,"0").replace(/\s+/g,"").replace(",",".");const v=parseFloat(s);return isFinite(v)?v:null}
-// variantes possibles d'un prix mal lu (zéro barré lu « 6 » ou « 60 », chiffre en trop…)
-function tkAlts(raw){const s=String(raw).replace(/[oO]/g,"0").replace(/\s+/g,"").replace(".",",");const m=s.match(/^(-?)(\d+),(\d+)$/);if(!m)return[];const[,sg,a,b]=m;const out=new Set();
- const add=(x,y)=>{if(y.length!==2)return;const v=parseFloat((sg?"-":"")+(x||"0")+"."+y);if(isFinite(v))out.add(Math.round(v*100)/100)};
- if(b.length===3){add(a,b.slice(0,2));add(a,b[0]+b[2]);add(a,b.slice(1))}else add(a,b);
- if(/^[689]\d*$/.test(a)){const bs=b.length===3?[b.slice(0,2),b[0]+b[2],b.slice(1)]:[b];for(const y of bs){add(a.slice(1)||"0",y);if(a.length===1)add("0",y)}}
- return[...out]}
-const TK_PRICE=String.raw`(-?\s?\d{1,4}\s?[,.]\s?\d{2,3})`;
-const TK_LINE_RX=new RegExp(String.raw`^(.*?)\s*`+TK_PRICE+String.raw`\s*(?:€|eur|e|c|£)?\s*(?:[a-zà-ÿ0-9*]{1,3})?\s*$`,"i");
-const TK_W_RX=/(\d+\s?[,.]\s?\d{1,3})\s*k\s?g\s*[x×*]\s*(\d+\s?[,.]\s?\d{2})\s*(?:€|eur|e)?\s*\/?\s*k\s?g/i;
-const TK_Q_RX=/(?:^|\s)(\d{1,2})\s*[x×*]\s*(\d{1,3}\s?[,.]\s?\d{2,3})(?!\s*k\s?g)(?:\s*(?:€|eur|e))?/i;
-const TK_DATE_RX=/\b(\d{1,2})[./-](\d{1,2})[./-](\d{2,4})\b/;
-function tkClean(l){return String(l).replace(/[|«»“”]/g," ").replace(/\s+/g," ").trim()}
-function tkLabel(s){return tkClean(String(s).replace(/^[>*#=\-–_.:\s]+/,"").replace(/[>*#=_]+$/,"").replace(/\s*[-–]\s*$/,""))}
-function tkParse(text){
- const lines=String(text||"").split(/\r?\n/).map(tkClean).filter(Boolean);
- const R={store:"",date:"",total:null,items:[],stopAt:-1};
- const all=lines.join("\n");for(const[k,rx]of TK_STORE_RX)if(rx.test(all)){R.store=k;break}
- for(const l of lines){const m=l.match(TK_DATE_RX);if(m){let[,d,mo,y]=m;d=+d;mo=+mo;y=+y;if(y<100)y+=2000;if(d>=1&&d<=31&&mo>=1&&mo<=12&&y>=2020&&y<=2099){R.date=y+"-"+String(mo).padStart(2,"0")+"-"+String(d).padStart(2,"0");break}}}
- let pend=null;const items=R.items;const last=()=>items[items.length-1];
- const mk=(lab,priceRaw,raw)=>{const p=tkNum(priceRaw);const it={raw,lab:tkLabel(lab),price:p,alts:tkAlts(priceRaw),n:1,unit:p,kg:null,ppk:null,promo:0,odd:/[,.]\d{3}$/.test(String(priceRaw).replace(/\s+/g,"")),fix:""};return it};
- for(let i=0;i<lines.length;i++){const l=lines[i];
-  if(TK_STOP_RX.test(l)&&!/^\s*\d/.test(l)){const m=l.match(TK_LINE_RX);const v=m?tkNum(m[2]):null;
-   if(v!=null&&v>0&&(R.total==null||/payer/i.test(l)||v>R.total))R.total=v;
-   // le total est souvent répété (payé en carte) : on lit encore 3 lignes pour trouver « A PAYER »
-   for(let j=i+1;j<Math.min(lines.length,i+4);j++){if(/payer/i.test(lines[j])){const m2=lines[j].match(TK_LINE_RX);const v2=m2?tkNum(m2[2]):null;if(v2>0)R.total=v2}}
-   R.stopAt=i;break}
-  if(/^[>*=#\s]{3,}/.test(l)||/^[-=_*.\s]{8,}$/.test(l)){pend=null;continue} // titre de rayon ou séparateur
-  const w=l.match(TK_W_RX);
-  if(w){const kg=tkNum(w[1]),ppk=tkNum(w[2]);const rest=l.slice(l.indexOf(w[0])+w[0].length);const pm=rest.match(new RegExp(TK_PRICE));const tp=pm?tkNum(pm[1]):null;
-   let it=null;if(pend&&tp!=null){it=mk(pend,pm[1],pend+" / "+l);items.push(it);pend=null}
-   else{const p=last();if(p&&(p.kg==null)&&(p.price==null||Math.abs(p.price-kg*ppk)<0.06||!items.length))it=p;
-    else if(i+1<lines.length){const nx=lines[i+1].match(TK_LINE_RX);if(nx&&Math.abs(tkNum(nx[2])-kg*ppk)<0.06){const it2=mk(nx[1],nx[2],lines[i+1]);items.push(it2);it=it2;i++}}
-    if(!it&&p&&p.kg==null)it=p}
-   if(it){it.kg=kg;it.ppk=ppk;if(it.price==null&&kg&&ppk)it.price=it.unit=Math.round(kg*ppk*100)/100}
-   continue}
-  const q=l.match(TK_Q_RX),m=l.match(TK_LINE_RX);
-  if(q&&(!m||!/[a-zà-ÿ]{3,}/i.test(l.replace(q[0],"")))){const n=+q[1];let u=tkNum(q[2]);const rest=l.slice(l.indexOf(q[0])+q[0].length);const pm=rest.match(new RegExp(TK_PRICE));const tp=pm?tkNum(pm[1]):null;
-   if(pend&&tp!=null){const it=mk(pend,pm[1],pend+" / "+l);it.n=n;it.unit=tp/n;items.push(it);pend=null;continue}
-   const p=last();if(p&&n>=1){p.n=n;p.unit=p.price!=null?Math.round(p.price/n*1000)/1000:u;if(p.price==null&&u)p.price=p.unit=u*n,p.unit=u;if(u&&p.price!=null&&Math.abs(p.price-n*u)>0.06)p.qfix=1}
-   continue}
-  if(m){const lab=m[1];const hasWord=/[a-zà-ÿ]{2,}/i.test(lab);if(!hasWord){if(pend){const it=mk(pend,m[2],pend+" / "+l);items.push(it);pend=null}continue}
-   if(TK_DATE_RX.test(l)&&!/[a-zà-ÿ]{4,}/i.test(lab))continue;
-   if(TK_PAY_RX.test(lab)&&!TK_DISC_RX.test(lab)){pend=null;continue}
-   const it=mk(lab,m[2],l);
-   // qté sur la même ligne : « YAOURT NATURE 2 x 0,99 1,98 »
-   const qi=lab.match(TK_Q_RX);if(qi){it.n=+qi[1];it.lab=tkLabel(lab.replace(qi[0]," "));if(it.price!=null)it.unit=Math.round(it.price/it.n*1000)/1000}
-   if((it.price<0||TK_DISC_RX.test(lab))&&items.length){const p=last();p.promo=Math.round((p.promo+Math.abs(it.price||0))*100)/100;p.promoLab=it.lab;pend=null;continue}
-   if(it.price<0)continue;
-   items.push(it);pend=null;continue}
-  // libellé seul : produit dont le prix est sur la ligne suivante (poids, quantité) ou illisible
-  if(/[a-zà-ÿ]{3,}/i.test(l)&&!TK_PAY_RX.test(l)&&!TK_DATE_RX.test(l))pend=l;else pend=null;
-  if(pend&&items.length&&i+1<lines.length&&!TK_W_RX.test(lines[i+1])&&!TK_Q_RX.test(lines[i+1])){
-   // entre deux articles et sans prix : prix illisible (on le retrouvera avec le total)
-   const nx=lines[i+1];if(TK_LINE_RX.test(nx)&&/[a-zà-ÿ]{3,}/i.test(nx)){const it=mk(pend.replace(/(\s+\S{1,2})+$/,""),"",l);it.price=null;it.unit=null;it.alts=[];it.miss=1;items.push(it);pend=null}}}
- // en-tête : les lignes avant le premier vrai article qui ressemblent à une adresse sont déjà filtrées ; on retire les « articles » sans lettres utiles
- R.items=items.filter(it=>it.lab&&/[a-zà-ÿ]{2,}/i.test(it.lab));
- for(const it of R.items){it.skip=TK_NONFOOD_RX.test(it.lab)?"non alimentaire":"";if(it.price!=null)it.price=Math.round(it.price*100)/100}
- return R}
-// le total du ticket sert à corriger un prix mal lu (une ou deux lignes) ou à retrouver un prix illisible
-function tkSum(items){return Math.round(items.reduce((a,it)=>a+(it.price||0)-(it.promo||0),0)*100)/100}
-function tkReconcile(R){const T=R.total,its=R.items;R.ok=false;if(!(T>0)||!its.length)return;const close=(a,b)=>Math.abs(a-b)<0.015;let S=tkSum(its);
- if(close(S,T)){R.ok=true;return}
- const miss=its.filter(it=>it.price==null);
- if(miss.length===1){const v=Math.round((T-S)*100)/100;if(v>0&&v<200){miss[0].price=v;miss[0].unit=v/(miss[0].n||1);miss[0].fix="retrouvé avec le total";R.ok=true;return}}
- if(miss.length)return;
- const cand=its.map((it,i)=>[i,(it.alts||[]).filter(a=>a>0&&!close(a,it.price))]).filter(x=>x[1].length);
- const apply=(i,a)=>{const it=its[i];it.fix="corrigé : "+tkEur(it.price)+" → "+tkEur(a);it.price=a;it.unit=Math.round(a/(it.n||1)*1000)/1000};
- for(const[i,al]of cand)for(const a of al)if(close(S-its[i].price+a,T)){apply(i,a);R.ok=true;return}
- for(let x=0;x<cand.length;x++)for(let y=x+1;y<cand.length;y++){const[i,A]=cand[x],[j,B]=cand[y];for(const a of A)for(const b of B)if(close(S-its[i].price-its[j].price+a+b,T)){apply(i,a);apply(j,b);R.ok=true;return}}}
-function tkEur(v){return(Math.round(v*100)/100).toFixed(2).replace(".",",")+" €"}
-// format du produit lu dans le libellé : « 400G », « 2X125G », « 1L », « 75CL », « X12 »
-function tkSize(lab){const s=nrm4(lab).replace(/,/g,".");let m=s.match(/(\d{1,2})\s*x\s*(\d+(?:\.\d+)?)\s*(kg|g|gr|l|cl|ml)\b/);
- const toG=(v,u)=>u==="kg"||u==="l"?v*1000:u==="cl"?v*10:v;
- if(m){const n=+m[1],v=toG(parseFloat(m[2]),m[3]);if(n>0&&n<=48&&v>0)return{g:Math.round(n*v),c:n}}
- m=s.match(/(\d+(?:\.\d+)?)\s*(kg|g|gr|l|cl|ml)\b/);if(m){const v=toG(parseFloat(m[1]),m[2]);if(v>=5&&v<=10000)return{g:Math.round(v),c:0}}
- m=s.match(/\bx\s?(\d{1,2})\b|\b(\d{1,2})\s?(?:x|pcs|pieces?|oeufs|tr|tranches)\b/);if(m){const c=+(m[1]||m[2]);if(c>1&&c<=48)return{g:0,c}}
- return{g:0,c:0}}
-
-// ---------- ticket : associer un libellé de caisse à un ingrédient de l'appli ----------
-// expressions et abréviations courantes des tickets français
-const TK_PHRASE=[[/\bp\.? ?d\.? ?t\b|\bpom(?:me)?s? ?(?:de )?t(?:er+e)?\b|\bp\.? ?terre\b/g,"pommes de terre"],[/champ(?:ignon)?s? blancs?/g,"champignons paris"],
- [/\b(?:spaghetti|spaghettis|penne|pennes|fusilli|coquillettes|tagliatelles?|macaronis?|linguine|farfalle|torsades|pates?)\b/g,"pates"],[/\b1\/2 ?ecr\w*|\bdemi[- ]?ecr\w*/g,"demi ecreme"],
- [/\bfr(?:omage)? ?bl(?:anc)?\b/g,"fromage blanc"],[/\bcr(?:eme)? ?fr(?:aiche)?\b/g,"creme fraiche"],[/\bhle\b/g,"huile"],[/\bpt?s? pois\b/g,"petits pois"],[/\bp\.? ?chiches?\b/g,"pois chiches"],
- [/\bhach(?:e|ee|es)?\b/g,"hache"],[/\bs\.? ?soja\b/g,"sauce soja"],[/\bjus citron\b/g,"citron"],[/\bwraps?\b/g,"tortillas"],[/\bsteak hache\b/g,"boeuf hache"],[/\bvol(?:aille)?\b/g,"poulet"]];
-const TK_ABBR={flt:"filet",filt:"filet",fil:"filet",poul:"poulet",plt:"poulet",esc:"escalope",escal:"escalope",escalop:"escalope",dind:"dinde",bf:"boeuf",boeu:"boeuf",saum:"saumon",cab:"cabillaud",cabil:"cabillaud",
- crev:"crevettes",jamb:"jambon",jbn:"jambon",jbon:"jambon",from:"fromage",fro:"fromage",fromag:"fromage",frge:"fromage",yaou:"yaourt",yt:"yaourt",yrt:"yaourt",yog:"yaourt",yoghourt:"yaourt",yogourt:"yaourt",yaourts:"yaourt",
- nat:"nature",crm:"creme",fraich:"fraiche",lt:"lait",ecr:"ecreme",beur:"beurre",oeuf:"oeufs",oef:"oeufs",tom:"tomate",tomat:"tomate",courg:"courgette",crgt:"courgette",champ:"champignons",champi:"champignons",champig:"champignons",chpg:"champignons",
- oign:"oignon",ogn:"oignon",carot:"carotte",carott:"carotte",poiv:"poivron",poivr:"poivron",aub:"aubergine",auberg:"aubergine",broc:"brocoli",brocol:"brocoli",epin:"epinards",har:"haricots",hari:"haricots",haric:"haricots",
- lent:"lentilles",lentil:"lentilles",rz:"riz",far:"farine",farin:"farine",sucr:"sucre",huil:"huile",oliv:"olive",vinaig:"vinaigre",mout:"moutarde",moutard:"moutarde",conc:"concentre",concent:"concentre",bouil:"bouillon",bouill:"bouillon",
- mozza:"mozzarella",mozz:"mozzarella",parm:"parmesan",parmes:"parmesan",emment:"emmental",emmen:"emmental",emm:"emmental",rap:"rape",chev:"chevre",citr:"citron",avoc:"avocat",compl:"complet",cpl:"complet",tort:"tortillas",
- quin:"quinoa",sem:"semoule",semoul:"semoule",boulg:"boulgour",lasag:"lasagne",lasagnes:"lasagne",echal:"echalote",gingem:"gingembre",coriand:"coriandre",pers:"persil",basil:"basilic",poir:"poireau",cajou:"cajou",
- hoummous:"houmous",humus:"houmous",maq:"maquereau",maquer:"maquereau",truit:"truite",fum:"fume",lard:"lardons",pdt:"pommes",dce:"douce",gr:"grec",grecque:"grec"};
-const TK_STOP=new Set("de du des la le les l d en au aux a ou et pour sans avec par sur bio crf carrefour lidl leclerc auchan eco marque repere mr classic classique extra cat x pce piece pieces pcs sachet sac bte boite pot fl bt barq barquette kg g gr l cl ml prix promo lot pack format familial maxi mini tr tranches fines grand grande petit petite frais fraiche fraiches nouveau origine france fr uht env environ".split(" "));
-const TK_ISTOP=new Set("de du des la le les l d en au aux a ou et pour sans avec par sur facultatif dessus mg cuit cuite cuits cuites conserve egoutte egouttes ton choix autre".split(" "));
-function tkKey(lab){return nrm4(lab).replace(/['’.\/]/g," ").replace(/\d+(?:[.,]\d+)?\s*(?:kg|g|gr|l|cl|ml|%|x)?\b/g," ").replace(/\bx\s?\d+\b/g," ").replace(/[^a-z ]/g," ").replace(/\s+/g," ").trim().slice(0,60)}
-function tkToks(lab){let s=nrm4(lab).replace(/['’.\/]/g," ").replace(/[^a-z0-9% ]/g," ").replace(/\s+/g," ").trim();for(const[rx,rep]of TK_PHRASE)s=s.replace(rx,rep);
- const out=[];for(let t of s.split(" ")){if(!t||/\d/.test(t)||t.length<2)continue;t=TK_ABBR[t]||t;for(const x of t.split(" "))if(!TK_STOP.has(x)&&x.length>=2)out.push(x)}return[...new Set(out)]}
-const tkStem=x=>x.length>4?x.replace(/(es|s|x)$/,""):x;
-function tkTokEq(t,w){if(t===w)return true;const a=tkStem(t),b=tkStem(w);if(a===b)return true;if(t.length>=3&&w.startsWith(t))return true;if(w.length>=4&&t.startsWith(w))return true;if(a.length>=4&&b.startsWith(a))return true;return false}
-let TK_IDX=null,TK_IDXN=0;
-function tkIndex(){const n=Object.keys(ING).length;if(TK_IDX&&TK_IDXN===n)return TK_IDX;const byName=new Map();
- for(const id in ING){const nm=ING[id][0];if(!nm||/^eau\b|a preciser/i.test(nrm4(nm)))continue;const k=nrm4(nm);const prev=byName.get(k);
-  const rank=id=>(/^(ww|hf|qt|et|bp|u)_/.test(id)?1:0)+(/^(b|x)_/.test(id)?0.5:0);if(prev&&rank(prev.id)<=rank(id))continue;
-  const base=nrm4(nm.replace(/\([^)]*\)/g," ")).replace(/['’.\/-]/g," ").replace(/[^a-z ]/g," ");
-  const w=[...new Set(base.split(/\s+/).filter(x=>x.length>=2&&!TK_ISTOP.has(x)))];if(!w.length)continue;byName.set(k,{id,nm,w})}
- TK_IDX=[...byName.values()];TK_IDXN=n;return TK_IDX}
-function tkScore(rt,ing){let m=0,first=false;const used=new Set();
- ing.w.forEach((w,i)=>{for(const t of rt)if(tkTokEq(t,w)){m++;if(i===0)first=true;used.add(t);break}});
- if(!m)return 0;tkScore.ci=m/ing.w.length;tkScore.cr=used.size/Math.max(1,rt.length);return 0.55*tkScore.ci+0.35*tkScore.cr+(first?0.15:0)}
-// listIds : ingrédients de la liste de courses (bonus), returns [{id,sc}] triés
-function tkMatch(lab,listIds){const rt=tkToks(lab);if(!rt.length)return[];const L=listIds||new Set();const out=[];
- for(const ing of tkIndex()){let sc=tkScore(rt,ing);if(!sc)continue;const ci=tkScore.ci,cr=tkScore.cr;let id=ing.id;
-  // ingrédient équivalent présent dans la liste : on prend celui de la liste
-  for(const lid of L)if(lid!==id&&ING[lid]&&nrm4(ING[lid][0])===nrm4(ing.nm)){id=lid;break}
-  if(L.has(id))sc+=0.12;out.push({id,sc:Math.round(sc*1000)/1000,ci,cr})}
- out.sort((a,b)=>b.sc-a.sc);const seen=new Set();return out.filter(x=>!seen.has(x.id)&&seen.add(x.id))}
-// recherche manuelle dans le sélecteur
-function tkSearch(q,listIds,lab){const t=nrm4(q).trim();const L=listIds||new Set();if(!t){const base=lab?tkMatch(lab,L).slice(0,6).map(x=>x.id):[];const li=[...L].filter(id=>!base.includes(id));return base.concat(li).slice(0,14)}
- const words=t.split(/\s+/).filter(Boolean);const res=[];for(const ing of tkIndex()){const n=nrm4(ing.nm);if(words.every(w=>n.includes(w)))res.push([ing.id,n.startsWith(words[0])?0:1,ing.nm.length])}
- res.sort((a,b)=>a[1]-b[1]||a[2]-b[2]);return res.slice(0,14).map(x=>x[0])}
-
-// ---------- ticket : chargement du lecteur (sur le téléphone, rien n'est envoyé) ----------
-const TK_BASE="ocr/";let TK_W=null,TK_ONP=null;
-function tkScript(src){return new Promise((ok,ko)=>{const s=document.createElement("script");s.src=src;s.onload=ok;s.onerror=()=>ko(new Error("chargement impossible : "+src));document.head.appendChild(s)})}
-async function tkWorker(){if(!window.Tesseract)await tkScript(TK_BASE+"tesseract.min.js");
- if(!TK_W)TK_W=Tesseract.createWorker("fra",1,{workerPath:TK_BASE+"worker.min.js",corePath:TK_BASE+"core",langPath:TK_BASE+"lang",gzip:false,logger:m=>{try{TK_ONP&&TK_ONP(m)}catch(e){}}})
-  .then(async w=>{await w.setParameters({tessedit_pageseg_mode:"6",preserve_interword_spaces:"1",user_defined_dpi:"300"});return w}).catch(e=>{TK_W=null;throw e});
- return TK_W}
-async function tkOcrCanvas(cv,label){const w=await tkWorker();TK_ONP=m=>{if(m.status==="recognizing text")tkBusy(label||"Lecture du ticket…",m.progress);else if(/load|initializ/.test(m.status||""))tkBusy("Chargement du lecteur (la 1re fois seulement)…",m.progress)};
- const r=await w.recognize(cv);TK_ONP=null;return r.data.text||""}
-async function tkPdfText(file){if(!window.pdfjsLib)await tkScript(TK_BASE+"pdf.min.js");pdfjsLib.GlobalWorkerOptions.workerSrc=TK_BASE+"pdf.worker.min.js";
- const doc=await pdfjsLib.getDocument({data:new Uint8Array(await file.arrayBuffer())}).promise;let out="";
- for(let p=1;p<=Math.min(doc.numPages,6);p++){const page=await doc.getPage(p);const tc=await page.getTextContent();const rows=[];
-  for(const it of tc.items){const s=it.str;if(!s||!s.trim())continue;const x=it.transform[4],y=it.transform[5],h=Math.abs(it.transform[3])||8;let row=rows.find(r=>Math.abs(r.y-y)<h*0.5);if(!row){row={y,h,its:[]};rows.push(row)}row.its.push({x,s,w:it.width||s.length*h*0.5})}
-  rows.sort((a,b)=>b.y-a.y);let txt=rows.map(r=>{r.its.sort((a,b)=>a.x-b.x);let line="",end=null;for(const it of r.its){if(end!=null){const gap=it.x-end;line+=gap>r.h*1.2?"    ":gap>r.h*0.15?" ":""}line+=it.s;end=it.x+it.w}return line}).join("\n");
-  if(txt.replace(/\s/g,"").length<30){const vp=page.getViewport({scale:2.4});const cv=tkCanvas(vp.width,vp.height);await page.render({canvasContext:cv.getContext("2d"),viewport:vp}).promise;txt=await tkOcrCanvas(tkFlatten(cv),"Lecture du PDF…")}
-  out+=(out?"\n":"")+txt}
- return out}
-async function tkImageText(file){tkBusy("Préparation de la photo…",0);const img=await tkBitmap(file);const P=await tkPrep(img);return tkOcrCanvas(P.canvas)}
-
-// ---------- prix enregistrés : lecture et calcul du coût d'un article de la liste ----------
-function tkShopRecs(store){return(state.tk&&state.tk.p&&state.tk.p[store])||null}
-function tkRecFor(store,ids){const S=tkShopRecs(store);if(!S)return null;for(const id of ids)if(S[id])return Object.assign({id},S[id]);
- const names=ids.filter(id=>ING[id]).map(id=>nrm4(ING[id][0]));for(const k in S)if(ING[k]&&names.includes(nrm4(ING[k][0])))return Object.assign({id:k},S[k]);
- for(const k in S){if(!ING[k])continue;for(const id of ids)if(ING[id]&&eqMatch(id,k))return Object.assign({id:k},S[k])}return null}
-const tkPieceW=id=>{const n=nrmA(ING[id][0]);return(NUTDB.find(z=>z[0].test(n))||[])[6]||100};
-function tkNeed(g){let grams=0,units=0,stapleOnly=true,gUnk=false,uUnk=false;
- for(const e of g.items){const id=e.id;if(isStaple(id))continue;stapleOnly=false;const u=ING[id][2],m=Math.max(0,e.q-(e.hq||0));
-  if(u===""||u==="pièce"){units+=m;const gg=approxG(id,m);if(gg)grams+=gg;else gUnk=true}
-  else{const gg=u==="g"||u==="ml"?m:(approxG(id,m)||gramsOf(id,m));if(gg==null){gUnk=true;uUnk=true}else{grams+=gg;units+=gg/tkPieceW(id)}}}
- return{grams,units,stapleOnly,gUnk,uUnk}}
-const tkDd=d=>d?d.slice(8,10)+"/"+d.slice(5,7):"";
-function tkLiquid(id){return!!(id&&ING[id]&&(ING[id][2]==="ml"||/^(huile|lait|vinaigre|sauce soja|vin|jus|boisson|creme liquide)/.test(nrmA(ING[id][0]))))}
-function tkPackTxt(g,id){const ml=tkLiquid(id);if(g>=1000)return String(Math.round(g/100)/10).replace(".",",")+(ml?" L":" kg");return Math.round(g)+(ml?" ml":" g")}
-function tkCost(g,R){const N=tkNeed(g),base={src:"tk",cat:null,kind:R.k,n:0,tk:R},sfx=" · ton ticket du "+tkDd(R.d);
- if(N.stapleOnly)return{...base,eur:R.p||R.v,detail:"1 "+(R.g?tkPackTxt(R.g,R.id):"paquet")+sfx};
- if(R.k==="kg"&&R.g>0){if(N.gUnk||!N.grams)return null;const np=Math.max(1,Math.ceil(N.grams/R.g-0.08));return{...base,eur:np*R.p,detail:np+" × "+tkPackTxt(R.g,R.id)+sfx}}
- if(R.k==="kg"){if(N.gUnk||!N.grams)return null;return{...base,eur:Math.max(0.1,N.grams/1000*R.v),detail:fmtApprox(N.grams).replace("≈ ","")+" au poids"+sfx}}
- if(N.uUnk)return null;const u=Math.max(1,Math.ceil(N.units-0.05)),c=R.c>1?R.c:1,np=Math.ceil(u/c);
- return{...base,eur:np*(R.p||R.v*c),detail:(c>1?np+" × "+c+" pièces":np+" pièce"+(np>1?"s":""))+sfx}}
-const lineCostV36=lineCost;
-lineCost=function(g,store,refOnly){if(refOnly||!store||!state.tk)return lineCostV36.apply(this,arguments);
- const main=g.main||g.items[0];const ids=[main.id].concat(g.items.map(e=>e.id).filter(id=>id!==main.id));const R=tkRecFor(store,ids);
- if(R){try{const c=tkCost(g,R);if(c&&c.eur>0)return c}catch(e){}}return lineCostV36.apply(this,arguments)};
-budgetOf=function(groups,store,refOnly){let tot=0,op=0,ref=0,tk=0,unk=0;const cats=new Set();
- for(const g of groups){const c=lineCost(g,store,refOnly);if(!c){unk++;continue}tot+=c.eur;if(c.src==="op")op++;else if(c.src==="tk")tk++;else ref++;cats.add(c.cat+"|"+c.kind)}
- return{tot,op,ref,tk,unk,cats:[...cats]}};
-
-// ---------- vérification d'un prix lu : comparaison au prix habituel (corrige un zéro lu « 6 », un poids mal lu) ----------
-function tkRefUnit(id,store){const pe=priceEntry(id);if(!pe)return null;const idx=(STORES[store]||STORES.carrefour)[1];
- if(pe[2]==="u")return{k:"u",v:pe[3]*idx};if(pe[2]==="pack")return{k:"kg",v:pe[3]/pe[4]*1000*idx,pack:pe[4]};return{k:"kg",v:pe[3]*idx}}
-function tkImplied(L,price,g,ref){const unit=(price!=null?price:0)/(L.n||1);if(!(unit>0))return null;
- if(ref.k==="kg"){if(L.ppk>0&&price===L.price)return L.ppk;if(L.kg>0)return price/L.kg;if(g>0)return unit/g*1000;if(ref.pack)return unit/ref.pack*1000;const pw=tkPieceW(L.id);return unit/(pw/1000)}
- const c=L.size&&L.size.c>1?L.size.c:1;if(g>0&&!(L.size&&L.size.c>1))return null;return unit/c}
-function tkSizeAlts(lab){const m=nrm4(lab).match(/(\d{3,4})\s*(g|gr|ml)\b/);if(!m)return[];const s=m[1],out=new Set();for(let i=0;i<s.length;i++){const v=+(s.slice(0,i)+s.slice(i+1));if(v>=20)out.add(v)}return[...out]}
-function tkPlaus(L,store){L.warn=false;if(!L.id||!(L.price>0))return;const ref=tkRefUnit(L.id,store);if(!ref)return;const g=L.size?L.size.g:0;
- const r0=tkImplied(L,L.price,g,ref);if(r0==null)return;const lr=x=>Math.abs(Math.log(x/ref.v));const bad=x=>x>ref.v*3.2||x<ref.v*0.28;
- if(!bad(r0))return;let best=null;
- for(const a of L.alts||[]){if(!(a>0)||Math.abs(a-L.price)<0.005)continue;const r=tkImplied(L,a,g,ref);if(r!=null&&!bad(r)&&(!best||lr(r)<best.s))best={s:lr(r),price:a}}
- if(!best&&g>0)for(const a of tkSizeAlts(L.lab)){const r=tkImplied(L,L.price,a,ref);const pen=a%50===0?0:a%10===0?0.2:a%5===0?0.4:0.8;if(r!=null&&!bad(r)&&(!best||lr(r)+pen<best.s))best={s:lr(r)+pen,g:a}}
- if(best&&best.price!=null){L.fix="prix lu "+tkEur(L.price)+", corrigé en "+tkEur(best.price)+" : vérifie";L.price=best.price;L.unit=Math.round(best.price/(L.n||1)*1000)/1000;L.warn=true}
- else if(best&&best.g){L.fix="poids lu "+g+" g, corrigé en "+best.g+" g : vérifie";L.size={...L.size,g:best.g};L.warn=true}
- else{L.warn=true;L.fix="prix inhabituel : vérifie"}}
-
-// ---------- ticket : construction de l'écran de vérification ----------
-function tkListIds(){try{const{out}=shopList();return new Set(out.map(e=>e.id))}catch(e){return new Set()}}
-function tkPrep2(L,listIds){L.key=tkKey(L.lab);L.size=tkSize(L.lab);L.sug=[];L.id=null;L.how="";
- const learned=state.tk&&state.tk.m&&state.tk.m[L.key];
- if(learned==="_"){L.how="ignore";return}if(learned&&ING[learned]){L.id=learned;L.how="appris";
-  for(const lid of listIds)if(lid!==learned&&ING[lid]&&(nrm4(ING[lid][0])===nrm4(ING[learned][0])||eqMatch(lid,learned))){L.id=lid;break}return}
- if(L.skip){L.how="ignore";return}
- const M=tkMatch(L.lab,listIds);if(M[0]&&M[0].sc>=0.62){L.id=M[0].id;L.how="auto";return}
- L.sug=M.filter(x=>x.sc>=0.45&&x.ci>=0.5&&x.cr>=0.5).slice(0,2).map(x=>x.id);L.how=L.sug.length?"ask":"none"}
-function tkBuild(text,more){const listIds=tkListIds();const R=tkParse(text);const prev=more&&ui.tk&&ui.tk.step==="review"?ui.tk:null;
- let lines=R.items;
- if(prev){// suite du ticket : on retire le chevauchement entre les deux photos
-  const sig=L=>L.key+"|"+L.price;lines.forEach(L=>L.key=tkKey(L.lab));const old=prev.lines.map(sig);let cut=0;
-  for(let k=Math.min(old.length,lines.length);k>0;k--){if(lines.slice(0,k).map(sig).join("§")===old.slice(old.length-k).join("§")){cut=k;break}}
-  lines=lines.slice(cut)}
- const store=(prev&&prev.store)||R.store||state.store||"";
- lines.forEach(L=>{tkPrep2(L,listIds);if(store)tkPlaus(L,store)});
- const all=prev?prev.lines.concat(lines):lines;const T=R.total||(prev&&prev.total)||null;const tmp={items:all,total:T};tkReconcile(tmp);
- ui.tk={step:"review",store,date:(prev&&prev.date)||R.date||new Date().toISOString().slice(0,10),total:T,lines:all,ok:tmp.ok,pick:-1,q:"",chk:prev?prev.chk:true,text:(prev?prev.text+"\n":"")+text};
- renderPanel()}
-async function tkFiles(files,more){if(!files||!files.length)return;if(!HOSTED){toast("Le scan photo fonctionne dans l'appli Sano en ligne : ici, colle le texte du ticket");return}
- const keep=more&&ui.tk&&ui.tk.step==="review"?ui.tk:null;let text="";
- try{for(const f of files){tkBusy(f.type==="application/pdf"?"Lecture du PDF…":"Préparation de la photo…",0,keep);
-   text+=(text?"\n":"")+(f.type==="application/pdf"||/\.pdf$/i.test(f.name||"")?await tkPdfText(f):await tkImageText(f))}
-  tkBusy("Analyse des lignes…",1,keep);if(keep)ui.tk=keep;
-  if(!/\d[,.]\d{2}/.test(text)){if(keep)toast("Aucun prix trouvé sur cette photo");ui.tk=keep||{step:"home"};ui.tk.err="Aucun prix trouvé sur cette image. Reprends la photo bien à plat, plus près, avec plus de lumière.";renderPanel();return}
-  tkBuild(text,!!keep)}
- catch(e){ui.tk=keep||{step:"home"};ui.tk.err="Lecture impossible : "+String(e&&e.message||e).slice(0,120)+". Vérifie ta connexion pour le premier chargement du lecteur, puis réessaie.";renderPanel()}}
-function tkBusy(msg,p,keep){if(!ui.tk||ui.tk.step!=="busy")ui.tk={step:"busy",keep:keep||null};ui.tk.msg=msg;ui.tk.p=p;
- const el=document.getElementById("tkBusy");if(el&&ui.panel==="ticket"){el.querySelector(".tk-msg").textContent=msg;const b=el.querySelector(".tk-bar i");if(b)b.style.width=Math.round((p||0)*100)+"%"}else if(ui.panel==="ticket")renderPanel()}
-
-// ---------- prix de la ligne une fois associée (ce qui sera enregistré) ----------
-function tkRecOf(L){const id=L.id;if(!id||!ING[id])return null;const unit=L.price!=null?L.price/(L.n||1):null;if(!(unit>0))return null;
- const pe=priceEntry(id),u=ING[id][2];
- if(L.ppk>0)return{k:"kg",v:L.ppk,p:unit,g:0,c:0};
- const gIn=parseFloat(String(L.szIn||"").replace(",","."));let g=gIn>0?gIn:(L.size&&L.size.g)||0;if(!g&&tkNeedSize(L)&&pe&&pe[2]==="pack"&&pe[4])g=pe[4];
- if(g>0)return{k:"kg",v:Math.round(unit/g*1000*1000)/1000,p:unit,g,c:(L.size&&L.size.c)||0};
- if(L.size&&L.size.c>1)return{k:"u",v:Math.round(unit/L.size.c*1000)/1000,p:unit,g:0,c:L.size.c};
- if(u===""||u==="pièce"||(pe&&pe[2]==="u")||(pe&&pe[2]==="kg"))return{k:"u",v:unit,p:unit,g:0,c:1};
- return null}
-function tkNeedSize(L){if(!L.id||L.ppk>0||(L.size&&(L.size.g||L.size.c>1)))return false;const u=ING[L.id][2],pe=priceEntry(L.id);return!(u===""||u==="pièce"||(pe&&(pe[2]==="u"||pe[2]==="kg")))}
-function tkPerTxt(R,id){if(!R)return"";const ml=tkLiquid(id);return R.k==="kg"?fmtEur(R.v)+(ml?"/L":"/kg"):fmtEur(R.v)+"/pièce"}
-
-// ---------- écran « Scanner un ticket » ----------
-function panelTicket(){const T=ui.tk||(ui.tk={step:"home"});
- if(T.step==="busy")return`<h2 class="pn-title">Scanner un ticket</h2><div class="tk-busy" id="tkBusy" role="status"><p class="tk-msg">${esc(T.msg||"Lecture…")}</p><div class="tk-bar"><i style="width:${Math.round((T.p||0)*100)}%"></i></div><p class="pn-help">La lecture se fait sur ce téléphone, sans rien envoyer.</p></div>`;
- if(T.step==="review")return tkReviewHtml(T);
- if(T.step==="done")return tkDoneHtml(T);
- const pick=`<div class="tk-picks"><label class="btn primary tk-big"><span aria-hidden="true">📷</span> Prendre le ticket en photo<input type="file" accept="image/*" capture="environment" data-tkfile="1" hidden></label>
-  <label class="btn tk-big"><span aria-hidden="true">🗂️</span> Importer une image ou un PDF<input type="file" accept="image/*,application/pdf,.pdf" data-tkfile="1" multiple hidden></label></div>`;
- const recs=[];for(const st of TK_SHOPS){const S=tkShopRecs(st);if(S)for(const id in S)recs.push([st,id,S[id]])}
- recs.sort((a,b)=>b[2].d.localeCompare(a[2].d)||ING[a[1]][0].localeCompare(ING[b[1]][0],"fr"));
- const mon=new Date().toISOString().slice(0,7),tks=(state.tk&&state.tk.t)||[],mT=tks.filter(x=>x.d.startsWith(mon));
- return`<h2 class="pn-title">Scanner un ticket de caisse</h2>
- <p class="pn-help">Les prix de ton ticket remplacent les estimations : le budget de la liste suit les vrais prix de ton magasin.</p>
- ${T.err?`<p class="tk-err" role="alert">${esc(T.err)}</p>`:""}${pick}
- <ul class="tk-tips"><li>Ticket à plat, bien éclairé, entier dans la photo.</li><li>Ticket très long : photographie le haut, puis ajoute la suite.</li><li>Ticket dématérialisé (appli du magasin ou e-mail) : importe le PDF ou une capture d'écran, c'est le plus fiable.</li></ul>
- <details class="tk-paste"><summary>Coller le texte du ticket</summary><textarea id="tkText" class="pn-in" rows="6" placeholder="Colle ici le texte du ticket"></textarea><button type="button" class="btn" data-tk="text">Lire ce texte</button></details>
- <p class="pn-help">🔒 La lecture se fait sur ce téléphone : le ticket n'est envoyé nulle part.</p>
- ${tks.length?`<div class="pn-card tk-spent"><h3>Dépenses relevées</h3><p>Ce mois : <b>${fmtEur(mT.reduce((a,x)=>a+x.tot,0))}</b> · ${mT.length} ticket${mT.length>1?"s":""}</p>
-  <ul class="tk-tlist">${tks.slice(-6).reverse().map(x=>`<li><span>${tkDd(x.d)} · ${esc(x.s?STORES[x.s][0]:"Magasin")}</span><b>${fmtEur(x.tot)}</b></li>`).join("")}</ul></div>`:""}
- ${recs.length?`<details class="pn-card tk-recs"><summary><b>Mes prix relevés (${recs.length})</b></summary><ul>${recs.map(([st,id,R])=>`<li><span class="tk-rn">${esc(ING[id][0])}<small>${esc(STORES[st][0])} · ${tkDd(R.d)}${R.l?" · "+esc(R.l):""}</small></span><b>${tkPerTxt(R,id)}</b><button type="button" class="nt-del" data-tkdel="${st}|${id}" aria-label="Supprimer le prix de ${esc(ING[id][0])}">×</button></li>`).join("")}</ul></details>`:""}`}
-function tkLineHtml(L,i,T,listIds){const off=!L.id;const R=tkRecOf(L);const prev=L.id&&T.store?tkRecFor(T.store,[L.id]):null;
- let chg="";if(R&&prev&&prev.d!==T.date&&prev.k===R.k&&prev.v>0){const pc=Math.round((R.v/prev.v-1)*100);if(Math.abs(pc)>=3)chg=`<span class="tk-chg ${pc>0?"up":"dn"}">${pc>0?"+":"−"}${Math.abs(pc)} % depuis le ${tkDd(prev.d)}</span>`}
- const cls=off?(L.how==="ask"?"ask":"off"):(L.warn||(!R&&!tkNeedSize(L))?"warn":"ok");
- const ingBtn=L.id?`<button type="button" class="tk-ing" data-tkpick="${i}" aria-expanded="${T.pick===i}">${esc(ING[L.id][0])}<span aria-hidden="true">▾</span></button>`:`<button type="button" class="tk-ing none" data-tkpick="${i}" aria-expanded="${T.pick===i}">${L.how==="ask"?"À associer":"Non enregistré"}<span aria-hidden="true">▾</span></button>`;
- const sz=tkNeedSize(L)?(()=>{const pe=priceEntry(L.id);const ph=pe&&pe[2]==="pack"&&pe[4]?pe[4]:"";return`<label class="tk-sz">${L.szIn?"Poids du paquet":"Poids du paquet (estimé)"} <input class="pn-in" inputmode="decimal" data-tksz="${i}" value="${esc(L.szIn||String(ph))}"> ${tkLiquid(L.id)?"ml":"g"}</label>`})():"";
- const notes=[];if(L.n>1)notes.push(`${L.n} × ${fmtEur(L.price/L.n)}`);if(L.kg)notes.push(String(L.kg).replace(".",",")+" kg");if(L.promo)notes.push(`remise ${fmtEur(L.promo)} (prix habituel gardé)`);if(L.fix)notes.push(L.fix);if(L.how==="appris")notes.push("reconnu");
- let pick="";if(T.pick===i){pick=`<div class="tk-picker"><input type="search" class="pn-in" data-tkq="${i}" placeholder="Chercher un ingrédient" value="${esc(T.q||"")}" autocomplete="off" enterkeyhint="search"><div class="tk-opts" id="tkOpts">${tkOptsHtml(i,T.q,L,listIds)}</div></div>`}
- return`<li class="tk-l tk-${cls}"><div class="tk-r1"><span class="tk-lab">${esc(L.lab)}</span><label class="tk-pr"><input class="pn-in" inputmode="decimal" data-tkpr="${i}" value="${L.price!=null?String(L.price.toFixed(2)).replace(".",","):""}" aria-label="Prix payé : ${esc(L.lab)}"><span>€</span></label></div>
-  <div class="tk-r2">${ingBtn}${R?`<span class="tk-per">${tkPerTxt(R,L.id)}${R.g?` · ${tkPackTxt(R.g,L.id)}`:R.c>1?` · par ${R.c}`:""}</span>`:""}${chg}</div>
-  ${!L.id&&L.sug&&L.sug.length&&L.how==="ask"?`<div class="tk-sug"><span>C'est :</span>${L.sug.map(id=>`<button type="button" class="chip" data-tkset="${i}|${id}">${esc(ING[id][0])}</button>`).join("")}</div>`:""}
-  ${sz}${notes.length?`<p class="tk-note">${esc(notes.join(" · "))}</p>`:""}${pick}</li>`}
-function tkOptsHtml(i,q,L,listIds){const ids=tkSearch(q||"",listIds,L.lab);
- return ids.map(id=>`<button type="button" class="tk-opt" data-tkset="${i}|${id}">${esc(ING[id][0])}${listIds.has(id)?`<small>dans ta liste</small>`:""}</button>`).join("")+(ids.length?"":`<p class="pn-help">Aucun ingrédient de l'appli ne correspond.</p>`)+`<button type="button" class="tk-opt off" data-tkset="${i}|_">Ne pas enregistrer cette ligne</button>`}
-function tkReviewHtml(T){const listIds=tkListIds();const L=T.lines;const sum=tkSum(L);const nSave=L.filter(x=>x.id&&tkRecOf(x)).length;
- const nList=L.filter(x=>x.id&&tkListGroups([x.id]).length).length;const close=T.total&&Math.abs(sum-T.total)<0.015;
- const chips=TK_SHOPS.map(k=>`<button type="button" class="chip" data-tkstore="${k}" aria-pressed="${k===T.store}">${esc(STORES[k][0])}</button>`).join("");
- const sumTxt=!L.length?`<p class="tk-sum warn">Aucun article trouvé. Reprends la photo ou colle le texte du ticket.</p>`:T.total?(close?`<p class="tk-sum ok">✓ ${L.length} lignes lues · ${fmtEur(sum)}, comme le total du ticket</p>`:`<p class="tk-sum warn">Lignes lues : ${fmtEur(sum)} · total du ticket : ${fmtEur(T.total)}. ${sum>T.total?"Un prix est sans doute mal lu":"Il manque peut-être une ligne (ajoute la suite du ticket)"} : vérifie les lignes en orange.</p>`):`<p class="tk-sum">${L.length} lignes lues · ${fmtEur(sum)} (total du ticket non trouvé)</p>`;
- return`<h2 class="pn-title">Vérifie ton ticket</h2>
- <div class="tk-meta"><div class="chips" role="group" aria-label="Magasin">${chips}</div><label class="tk-date">Date <input type="date" class="pn-in" data-tkdate value="${esc(T.date||"")}"></label></div>
- ${T.store?"":`<p class="tk-err">Choisis le magasin du ticket.</p>`}${sumTxt}
- <p class="pn-help">Touche le nom d'un ingrédient pour le changer ; corrige un prix en le touchant.</p>
- <ul class="tk-lines">${L.map((x,i)=>tkLineHtml(x,i,T,listIds)).join("")}</ul>
- ${nList?`<label class="tk-chk"><input type="checkbox" data-tkchk ${T.chk!==false?"checked":""}> Cocher ces produits dans la liste de courses (${nList})</label>`:""}
- <div class="tk-acts"><button type="button" class="btn primary" data-tk="save"${nSave&&T.store?"":" disabled"}>Enregistrer ${nSave} prix</button>
-  <label class="btn">+ Suite du ticket<input type="file" accept="image/*,application/pdf,.pdf" data-tkfile="more" hidden></label>
-  <button type="button" class="btn ghost" data-tk="home">Annuler</button></div>`}
-function tkDoneHtml(T){return`<h2 class="pn-title">✓ ${T.n} prix enregistrés</h2>
- <p>${esc(STORES[T.store]?STORES[T.store][0]:"")}, ticket du ${tkDd(T.date)}${T.tot?` · ${fmtEur(T.tot)}`:""}.</p>
- ${T.b0!=null&&T.b1!=null&&Math.abs(T.b0-T.b1)>=0.01?`<p class="tk-sum ok">Budget de ta liste : ${fmtEur(T.b0)} → <b>${fmtEur(T.b1)}</b></p>`:""}
- ${T.up&&T.up.length?`<p class="pn-help">Prix en hausse : ${esc(T.up.join(", "))}.</p>`:""}
- ${state.store&&state.store!==T.store&&STORES[T.store]?`<p class="pn-help">Le budget de ta liste est calculé pour ${esc(STORES[state.store][0])}.</p><div class="tk-acts"><button type="button" class="btn" data-store="${T.store}">Calculer le budget pour ${esc(STORES[T.store][0])}</button></div>`:""}
- ${T.checked?`<p>${T.checked} produit${T.checked>1?"s":""} coché${T.checked>1?"s":""} dans la liste.</p><div class="tk-acts"><button type="button" class="btn primary" data-act="range">Ranger mes courses</button></div>`:""}
- <div class="tk-acts"><button type="button" class="btn" data-tk="home">Scanner un autre ticket</button><button type="button" class="btn ghost" data-act="panel-close">Fermer</button></div>`}
-function tkListGroups(ids){try{const{out}=shopList();const groups=shopGroups(out);return groups.filter(g=>g.ids.some(gid=>ids.some(id=>gid===id||(ING[gid]&&ING[id]&&(nrm4(ING[gid][0])===nrm4(ING[id][0])||eqMatch(gid,id))))))}catch(e){return[]}}
-
-// ---------- enregistrer ----------
-function tkSave(){const T=ui.tk;if(!T||T.step!=="review"||!T.store)return;const st=T.store,d=T.date||new Date().toISOString().slice(0,10);
- const groups0=(()=>{try{return shopGroups(shopList().out)}catch(e){return[]}})();const b0=groups0.length?budgetOf(groups0,st).tot:null;
- state.tk=state.tk||{p:{},m:{},t:[]};const S=state.tk.p[st]||(state.tk.p[st]={});let n=0;const up=[];const saved=[];
- for(const L of T.lines){if(L.key&&L.how==="user")state.tk.m[L.key]=L.id||"_";else if(L.key&&L.id&&L.how==="auto")state.tk.m[L.key]=L.id;
-  const R=tkRecOf(L);if(!R)continue;const old=S[L.id];const h=old&&old.h?old.h.slice():[];
-  if(old&&old.d&&old.d!==d&&old.k===R.k){if(!h.length||h[h.length-1][0]!==old.d)h.push([old.d,old.v]);if(R.v>old.v*1.05)up.push(ING[L.id][0]+" +"+Math.round((R.v/old.v-1)*100)+" %")}
-  if(old&&old.d>d)continue; // un ticket plus ancien ne remplace pas un prix plus récent
-  S[L.id]={k:R.k,v:Math.round(R.v*1000)/1000,p:Math.round(R.p*1000)/1000,g:Math.round(R.g||0),c:R.c||0,d,l:L.lab.slice(0,60),pr:L.promo||0,h:h.slice(-8)};n++;saved.push(L.id)}
- const tot=T.total||tkSum(T.lines);const tid=d+"|"+st+"|"+Math.round(tot*100);state.tk.t=(state.tk.t||[]).filter(x=>x.id!==tid);state.tk.t.push({d,s:st,tot:Math.round(tot*100)/100,n:T.lines.length,id:tid});state.tk.t.sort((a,b)=>a.d.localeCompare(b.d));if(state.tk.t.length>120)state.tk.t=state.tk.t.slice(-120);
- let checked=0;if(T.chk!==false&&saved.length){for(const g of tkListGroups(saved)){if(g.ids.every(id=>state.bought[id]))continue;g.items.forEach(e=>{state.bought[e.id]=isStaple(e.id)?1:(e.buy||e.q||1)});checked++}}
- if(!state.store)state.store=st;try{aiFinish()}catch(e){}
- commit();const groups1=(()=>{try{return shopGroups(shopList().out)}catch(e){return[]}})();const b1=groups1.length?budgetOf(groups1,st).tot:null;
- ui.tk={step:"done",n,store:st,date:d,tot,b0,b1,up,checked};renderAll();renderPanel()}
-
-// ---------- événements ----------
-const renderPanelV36=renderPanel;
-renderPanel=function(){if(ui.panel==="ticket"){const b=document.getElementById("panelBody");if(b)b.innerHTML=panelTicket();return}if(ui.panel==="aisle"){const b=document.getElementById("panelBody");if(b)b.innerHTML=panelAisle();return}return renderPanelV36.apply(this,arguments)};
-function tkOpen(){ui.tk={step:"home"};openPanel("ticket")}
-document.addEventListener("change",e=>{const t=e.target;if(!t||!t.dataset)return;
- if(t.dataset.tkfile!=null&&t.files&&t.files.length){const fs=[...t.files];t.value="";tkFiles(fs,t.dataset.tkfile==="more");return}
- const T=ui.tk;if(!T||T.step!=="review")return;
- if(t.dataset.tkpr!=null){const L=T.lines[+t.dataset.tkpr];if(!L)return;const v=parseFloat(String(t.value).replace(",",".").replace(/[^\d.]/g,""));L.price=v>0?Math.round(v*100)/100:null;L.unit=L.price!=null?L.price/(L.n||1):null;L.fix="";L.warn=false;L.fixUser=true;if(L.ppk&&L.kg&&L.price)L.ppk=Math.round(L.price/L.kg*100)/100;renderPanel();return}
- if(t.dataset.tksz!=null){const L=T.lines[+t.dataset.tksz];if(!L)return;L.szIn=String(t.value).replace(/[^\d.,]/g,"");renderPanel();return}
- if(t.dataset.tkdate!=null){T.date=/^\d{4}-\d{2}-\d{2}$/.test(t.value)?t.value:T.date;return}
- if(t.dataset.tkchk!=null){T.chk=t.checked;return}});
-document.addEventListener("input",e=>{const t=e.target;if(!t||!t.dataset||t.dataset.tkq==null)return;const T=ui.tk;if(!T||T.step!=="review")return;T.q=t.value;const L=T.lines[+t.dataset.tkq];const box=document.getElementById("tkOpts");if(L&&box)box.innerHTML=tkOptsHtml(+t.dataset.tkq,T.q,L,tkListIds())});
-document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("button");if(!b)return;const d=b.dataset;
- if(d.act==="tk-open"){tkOpen();return}
- if(ui.panel!=="ticket")return;const T=ui.tk;
- if(d.act==="range"){setTimeout(()=>{if(ui.panel==="ticket")closePanel()},50);return}
- if(d.store&&T&&T.step==="done"){setTimeout(()=>{renderPanel();toast("Budget calculé pour "+STORES[d.store][0])},30);return}
- if(d.tk==="home"){ui.tk={step:"home"};renderPanel();try{document.getElementById("panel").scrollTo(0,0)}catch(x){}return}
- if(d.tk==="text"){const v=(document.getElementById("tkText")||{}).value||"";if(!/\d[,.]\d{2}/.test(v)){toast("Colle le texte du ticket avec ses prix");return}tkBuild(v,false);return}
- if(d.tk==="save"){tkSave();return}
- if(d.tkdel){const[st,id]=d.tkdel.split("|");const S=tkShopRecs(st);if(S&&S[id]){delete S[id];if(!Object.keys(S).length)delete state.tk.p[st];commit();renderAll();renderPanel();toast("Prix supprimé : "+ING[id][0])}return}
- if(!T||T.step!=="review")return;
- if(d.tkstore){T.store=d.tkstore;T.lines.forEach(L=>{if(L.id&&!L.fixUser)tkPlaus(L,T.store)});renderPanel();return}
- if(d.tkpick!=null){const i=+d.tkpick;T.pick=T.pick===i?-1:i;T.q="";renderPanel();setTimeout(()=>{const q=document.querySelector(`[data-tkq="${i}"]`);if(q)try{q.focus({preventScroll:true})}catch(x){}},30);return}
- if(d.tkset){const[i,id]=d.tkset.split("|");const L=T.lines[+i];if(!L)return;L.id=id==="_"?null:id;L.how="user";L.sug=[];T.pick=-1;T.q="";if(L.id&&T.store)tkPlaus(L,T.store);renderPanel();return}});
-// bouton dans la carte budget des courses
-const renderBudgetV36=renderBudget;
-renderBudget=function(){const r=renderBudgetV36.apply(this,arguments);try{const el=document.getElementById("budget");const card=el&&el.querySelector(".bud-card");if(card&&!card.querySelector(".tk-cta")){
- const mon=new Date().toISOString().slice(0,7),tks=(state.tk&&state.tk.t)||[],mT=tks.filter(x=>x.d.startsWith(mon));
- const anc=card.querySelector(".bud-sub")||card.querySelector(".bud-main");(anc?anc:card).insertAdjacentHTML(anc?"afterend":"beforeend",`<div class="tk-cta"><button type="button" class="btn primary small" data-act="tk-open"><span aria-hidden="true">🧾</span> Scanner un ticket</button><span>${mT.length?`Ce mois : <b>${fmtEur(mT.reduce((a,x)=>a+x.tot,0))}</b> dépensés (${mT.length} ticket${mT.length>1?"s":""})`:"Les prix de tes tickets rendent le budget exact."}</span></div>`)}}catch(e){}return r};
-
 // ================= v36 : la liste de courses dans l'ordre des rayons de ton magasin =================
 // En magasin, chaque article coché est noté dans l'ordre (parcours gardé sur ce téléphone). Au bout de 45 min sans coche,
 // en rangeant les courses ou en scannant le ticket, le parcours est appris : rang moyen de chaque rayon et de chaque article.
@@ -8496,34 +8192,6 @@ document.addEventListener("input",e=>{const t=e.target;if(!t||t.id!=="mealQ"||ui
 
 
 // ================= v38 : supprimer un ticket importé par erreur ; batch cooking : page des quantités avant de cuisiner =================
-// ---------- tickets ----------
-const tkSaveV38=tkSave;
-tkSave=function(){const T=ui.tk;if(!T||T.step!=="review"||!T.store)return tkSaveV38.apply(this,arguments);const st=T.store;
- const before=JSON.parse(JSON.stringify((state.tk&&state.tk.p&&state.tk.p[st])||{}));
- tkSaveV38.apply(this,arguments);
- try{const D=ui.tk;if(!D||D.step!=="done")return;const tid=D.date+"|"+st+"|"+Math.round(D.tot*100);const S=(state.tk.p[st])||{};const u={};
-  for(const id in S){const R=S[id],b=before[id];if(!b||JSON.stringify(b)!==JSON.stringify(R)){R.t=tid;u[id]=b||null}}
-  const tk=state.tk.t.find(x=>x.id===tid);if(tk)tk.u=u;state.tk.t.slice(0,-8).forEach(x=>{delete x.u});D.tid=tid;commit();renderPanel()}catch(e){}};
-function tkDelTicket(tid){const T=(state.tk&&state.tk.t||[]).find(x=>x.id===tid);if(!T)return 0;const S=state.tk.p[T.s]||{};let n=0;
- const back=(id,R)=>{const h=(R.h||[]).slice(),last=h.pop();if(last&&last[0]!==T.d){S[id]={...R,v:last[1],p:R.v>0?Math.round(R.p*last[1]/R.v*1000)/1000:R.p,d:last[0],h,l:"",t:""}}else delete S[id]};
- for(const id of Object.keys(S)){const R=S[id];const from=R.t?R.t===tid:(R.d===T.d);if(!from)continue;n++;
-  const has=T.u&&Object.prototype.hasOwnProperty.call(T.u,id);const prev=has?T.u[id]:undefined;
-  if(prev&&prev.t!==tid)S[id]=prev;else if(has&&prev===null)delete S[id];else back(id,R)}
- // les sauvegardes des autres tickets ne doivent plus pointer vers ce ticket
- for(const x of state.tk.t){if(x===T||!x.u)continue;for(const id in x.u){const v=x.u[id];if(v&&v.t===tid)x.u[id]=T.u&&T.u[id]!==undefined?T.u[id]:null}}
- if(!Object.keys(S).length)delete state.tk.p[T.s];state.tk.t=state.tk.t.filter(x=>x!==T);commit();return n}
-const tkTicketLbl=x=>`${tkDd(x.d)} · ${x.s&&STORES[x.s]?STORES[x.s][0]:"Magasin"} · ${fmtEur(x.tot)}`;
-const panelTicketV38=panelTicket;
-panelTicket=function(){let h=panelTicketV38.apply(this,arguments);const T=ui.tk||{};if(T.step&&T.step!=="home")return h;
- const tks=(state.tk&&state.tk.t)||[];if(!tks.length)return h;
- const list=`<ul class="tk-tlist">${tks.slice(-10).reverse().map(x=>`<li><span>${esc(tkDd(x.d))} · ${esc(x.s&&STORES[x.s]?STORES[x.s][0]:"Magasin")}</span><b>${fmtEur(x.tot)}</b><button type="button" class="nt-del tk-x" data-tkx="${esc(x.id)}" aria-label="Supprimer le ticket du ${esc(tkTicketLbl(x))}">×</button></li>`).join("")}</ul><p class="pn-help tk-xhelp">Ticket importé par erreur ? Touche × : ses prix sont retirés et les prix d'avant reviennent.</p>`;
- return h.replace(/<ul class="tk-tlist">[\s\S]*?<\/ul>/,list)};
-const tkDoneHtmlV38=tkDoneHtml;
-tkDoneHtml=function(T){const h=tkDoneHtmlV38.apply(this,arguments);return T&&T.tid?h+`<button type="button" class="link tk-undo" data-tkx="${esc(T.tid)}">Annuler ce ticket (importé par erreur)</button>`:h};
-document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-tkx]");if(!b)return;e.stopPropagation();const tid=b.dataset.tkx;
- if(b.dataset.armed!=="1"){b.dataset.armed="1";b._txt=b.textContent;b.classList.add("armed");b.textContent=b.classList.contains("tk-x")?"Supprimer ?":"Confirmer : annuler ce ticket";clearTimeout(b._t);b._t=setTimeout(()=>{if(b.isConnected){b.dataset.armed="";b.classList.remove("armed");b.textContent=b._txt}},4000);return}
- const T=(state.tk&&state.tk.t||[]).find(x=>x.id===tid);const lbl=T?tkTicketLbl(T):"";const n=tkDelTicket(tid);ui.tk={step:"home"};renderAll();if(ui.panel==="ticket")renderPanel();toast("Ticket supprimé"+(lbl?" ("+lbl+")":"")+(n?" · "+n+" prix retirés":""))},true);
-
 // ---------- cuisiner : d'abord les quantités pour les portions à cuisiner ----------
 function cookPrepHtml(){const r=RMAP[ui.modal];const sv=curServ(),fct=sv/(r.base||2);const n=r.st.length;const ck=(ui.cookKeys||[]).filter(k=>state.plan[k]===r.id&&!state.done[k]);const C=ui.cpChk||{};
  const ckList=ck.map(k=>`${esc(slotLabel(k))} <b>${servOf(k)} p.</b>`).join(" · ");
@@ -9428,18 +9096,18 @@ function sfRender(){const tab=document.getElementById("tab-courses");if(!tab)ret
   const cls=!op.length?" none":n===op.length?" on":n?" on part":"";
   const dots=ks.map(k=>`<i class="${sfOpen(k)?(sfIn(k)?"in":"out"):state.done[k]?"done":"no"}"></i>`).join("");
   const lab=`${WEEKDAYS[dt.getDay()]} ${dt.getDate()}${!op.length?" : aucun repas à acheter":n===op.length?" : inclus":n?" : en partie":" : pas dans la liste"}`;
-  return`<button type="button" class="sf-d${cls}" data-sf="d|${d}"${op.length?"":" disabled"} aria-pressed="${!!n}" aria-label="${esc(lab)}"><span class="sf-w">${SF_W[dt.getDay()]}</span><b>${dt.getDate()}</b><span class="sf-m" aria-hidden="true">${dots}</span></button>`}).join("");
- const sk=snk?`<button type="button" class="sf-d sf-snk${off.snk?"":" on"}" data-sf="snk" aria-pressed="${!off.snk}" aria-label="Encas de la semaine${off.snk?" : pas dans la liste":" : inclus"}"><span class="sf-w">encas</span><b aria-hidden="true">🍪</b><span class="sf-m" aria-hidden="true"><i class="${off.snk?"out":"in"}"></i></span></button>`:"";
+  return`<button type="button" class="sf-d${cls}" data-shf="d|${d}"${op.length?"":" disabled"} aria-pressed="${!!n}" aria-label="${esc(lab)}"><span class="sf-w">${SF_W[dt.getDay()]}</span><b>${dt.getDate()}</b><span class="sf-m" aria-hidden="true">${dots}</span></button>`}).join("");
+ const sk=snk?`<button type="button" class="sf-d sf-snk${off.snk?"":" on"}" data-shf="snk" aria-pressed="${!off.snk}" aria-label="Encas de la semaine${off.snk?" : pas dans la liste":" : inclus"}"><span class="sf-w">encas</span><b aria-hidden="true">🍪</b><span class="sf-m" aria-hidden="true"><i class="${off.snk?"out":"in"}"></i></span></button>`:"";
  const rows=open.map(k=>{const[d,m]=k.split("-"),dt=dateFromYmd(d),r=RMAP[state.plan[k]];
   return`<li><label class="sf-row"><input type="checkbox" data-sfk="${k}"${sfIn(k)?" checked":""}><span class="sf-rt"><b>${SF_W[dt.getDay()]} ${dt.getDate()} · ${m==="midi"?"midi":"soir"}</b><small>${esc(r?r.n:"")}</small></span></label></li>`}).join("");
  const was=el.querySelector("details");const detOpen=!!(was&&was.open);
- el.innerHTML=`<div class="sf-h"><div class="sf-ht"><h2>Courses pour</h2><span class="sf-n">${partial?`${inc.length} repas sur ${open.length}${snk?off.snk?", sans les encas":" + encas":""}`:`tous les repas${snk?" + encas":""}`}</span></div>${partial?`<button type="button" class="link sf-all" data-sf="all">Tout cocher</button>`:""}</div>
+ el.innerHTML=`<div class="sf-h"><div class="sf-ht"><h2>Courses pour</h2><span class="sf-n">${partial?`${inc.length} repas sur ${open.length}${snk?off.snk?", sans les encas":" + encas":""}`:`tous les repas${snk?" + encas":""}`}</span></div>${partial?`<button type="button" class="link sf-all" data-shf="all">Tout cocher</button>`:""}</div>
  <div class="sf-days" role="group" aria-label="Jours couverts par la liste de courses">${days}${sk}</div>
  <p class="sf-hint">${partial?"Les repas décochés seront dans une prochaine liste.":"Touche un jour pour le garder pour une autre course."}</p>
  ${open.length>1?`<details class="sf-more"${detOpen?" open":""}><summary>Choisir repas par repas</summary><ul>${rows}</ul></details>`:""}`}
 function sfToggleDay(d){const off={...shopOff()},ks=MEALS.map(([m])=>d+"-"+m).filter(sfOpen);if(!ks.length)return;const anyIn=ks.some(k=>!off[k]);
  for(const k of ks){if(anyIn)off[k]=1;else delete off[k]}state.shopOff=off;return anyIn}
-document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-sf]");if(!b||b.disabled)return;const[a,v]=b.dataset.sf.split("|");
+document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-shf]");if(!b||b.disabled)return;const[a,v]=b.dataset.shf.split("|");
  if(a==="d"){const out=sfToggleDay(v);commit();renderShop();try{vcUpdate()}catch(x){}const dt=dateFromYmd(v);toast(out?`${WEEKDAYS[dt.getDay()]} retiré de la liste`:`${WEEKDAYS[dt.getDay()]} ajouté à la liste`);return}
  if(a==="snk"){const off={...shopOff()};if(off.snk)delete off.snk;else off.snk=ymd(new Date());state.shopOff=off;commit();renderShop();toast(off.snk?"Encas retirés de la liste":"Encas ajoutés à la liste");return}
  if(a==="all"){state.shopOff={};commit();renderShop();toast("Tous les repas sont dans la liste");return}});
@@ -9641,6 +9309,190 @@ document.addEventListener("click",()=>requestAnimationFrame(()=>{try{fabRender()
 // --- écran de démarrage : disparaît dès que l'appli est affichée
 function bootOff(){const b=document.getElementById("boot");if(!b)return;b.classList.add("off");setTimeout(()=>b.remove(),450)}
 requestAnimationFrame(()=>requestAnimationFrame(()=>setTimeout(bootOff,180)));
+
+
+// ================= v50 : boutons flottants en icône, stock à la maison, courses exactes, prix près de chez toi, nutrition affinée =================
+
+// ---------- boutons flottants : une icône, l'action principale de l'onglet ----------
+FAB_I.check='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+fabCfg=function(){if(ui.modal||ui.panel||NV.menu)return null;const t=ui.tab;
+ if(t==="semaine")return SLOTS.some(k=>!state.plan[k])?{act:"fill-goal",ic:"spark",l:"Compléter la semaine"}:null;
+ if(t==="recettes")return{act:"rec-add",ic:"plus",l:"Ajouter une recette"};
+ if(t==="stock")return ui.sf==="add"?{act:"stk-done",ic:"check",l:"Terminer l'ajout au stock"}:{act:"stk-add",ic:"plus",l:"Ajouter au stock"};
+ if(t==="courses"){const rb=document.getElementById("rangeBox"),sc=document.getElementById("scanBar");if(rb&&!rb.hidden)return null;return sc&&!sc.hidden?{act:"scan-open-c",ic:"cam",l:"Scanner un produit"}:null}
+ return null};
+fabRender=function(){let f=document.getElementById("fab");const c=fabCfg();
+ if(!c){if(f)f.hidden=true;return}
+ if(!f){f=document.createElement("button");f.type="button";f.id="fab";f.className="fab";document.body.appendChild(f)}
+ if(f.dataset.act!==c.act){f.dataset.act=c.act;f.innerHTML=FAB_I[c.ic];f.setAttribute("aria-label",c.l);f.title=c.l}f.hidden=false};
+
+// ---------- stock : seulement ce qu'il y a à la maison (+ ajout par le bouton flottant) ----------
+(()=>{const h=document.querySelector("#tab-stock .sec-head");if(h&&!h.querySelector(".stk-addb"))h.insertAdjacentHTML("beforeend",`<button type="button" class="btn stk-addb" data-act="stk-add">+ Ajouter</button>`)})();
+const renderStockV50=renderStock;
+renderStock=function(){if(ui.sf!=="add")ui.sf="have";const r=renderStockV50.apply(this,arguments);
+ try{const add=ui.sf==="add",tab=document.getElementById("tab-stock");if(tab)tab.classList.toggle("stk-adding",add);
+  const h=document.querySelector("#tab-stock .sec-head h1");if(h)h.textContent=add?"Ajouter au stock":"Stock";
+  const b=document.querySelector("#tab-stock .stk-addb");if(b){b.dataset.act=add?"stk-done":"stk-add";b.textContent=add?"Terminé":"+ Ajouter"}
+  const sub=document.getElementById("stockSub");if(sub&&!add)sub.textContent="Ce que vous avez à la maison.";
+  const ft=document.querySelector("#tab-stock .plan-foot");if(ft)ft.hidden=add||!Object.keys(state.stock||{}).some(id=>ING[id]&&have(id)>0);
+  const em=document.querySelector("#stockList .stk-empty");if(em&&!add&&!(ui.sq||"").trim())em.textContent="Le stock est vide. Range tes courses depuis l'onglet Courses, ou touche + pour ajouter ce que tu as."}catch(e){}
+ try{fabRender()}catch(e){}return r};
+document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest('[data-act="stk-add"],[data-act="stk-done"]');if(!b)return;
+ ui.sf=b.dataset.act==="stk-add"?"add":"have";ui.sq="";const q=document.getElementById("stockQ");if(q)q.value="";ui.locOpen=null;renderStock();try{window.scrollTo(0,0)}catch(x){}});
+
+// ---------- courses : exactement ce qu'il faut pour les recettes ----------
+// quantités au plus juste (5 g près, ¼ de pièce près) ; les ingrédients facultatifs ne sont pas ajoutés
+buyAmount=function(id,q){const u=ING[id][2];if(!(q>0))return 0;if(u==="g"||u==="ml")return q<1000?Math.ceil(q/5-1e-9)*5:Math.ceil(q/10-1e-9)*10;return Math.max(0.25,Math.ceil(q*4-0.01)/4)};
+const needsForV50=needsFor;
+needsFor=function(plan,done,serv){const m=needsForV50.apply(this,arguments);
+ try{const req=new Set(),opt=new Set();for(const k of SLOTS){if(done&&done[k])continue;const r=RMAP[plan[k]];if(!r)continue;
+   for(const[id,q]of r.i){const o=/facultatif/i.test((ING[id]||[""])[0])||(typeof q==="string"&&/facultatif/i.test(q));(o?opt:req).add(id)}}
+  for(const id of opt)if(!req.has(id))delete m[id]}catch(e){}return m};
+
+// ---------- prix : magasins près de chez toi (Open Prices) ----------
+// Les sites des enseignes bloquent la lecture automatique de leurs catalogues : on utilise les prix relevés
+// en magasin par les clients sur Open Prices (Open Food Facts), d'abord dans ton magasin, puis dans la même enseigne,
+// sinon un prix moyen français ajusté au niveau de prix de l'enseigne.
+Object.assign(STORES,{aldi:["Aldi",0.91],intermarche:["Intermarché",0.97],superu:["Super U",0.97],carrefour_prox:["Carrefour City / Express",1.15],monoprix:["Monoprix",1.2],casino:["Casino",1.12],franprix:["Franprix",1.2],netto:["Netto",0.94],cora:["Cora",0.99],match:["Match",1.03]});
+const OP50="https://prices.openfoodfacts.org/api/v1";
+const BRAND50=[[/\blidl\b/,"lidl"],[/\baldi\b/,"aldi"],[/leclerc/,"leclerc"],[/intermarch|\bnetto\b/,"intermarche"],[/carrefour (city|express|contact|proxi|montagne|bio)/,"carrefour_prox"],[/carrefour/,"carrefour"],[/auchan/,"auchan"],[/\bmonop/,"monoprix"],[/casino|\bspar\b|vival/,"casino"],[/franprix/,"franprix"],[/\bcora\b/,"cora"],[/\bmatch\b/,"match"],[/super u|hyper u|u express|marche u|utile\b/,"superu"]];
+function brandOf(n){const t=nrmA(n||"");const z=BRAND50.find(x=>x[0].test(t));return z?z[1]:""}
+const CHAIN50={lidl:"Lidl",aldi:"Aldi",leclerc:"Leclerc",intermarche:"Intermarch",superu:"Super U",carrefour:"Carrefour",carrefour_prox:"Carrefour",auchan:"Auchan",monoprix:"Monoprix",casino:"Casino",franprix:"Franprix",netto:"Netto",cora:"Cora",match:"Match"};
+const CHAIN_SCALE50={carrefour_prox:1.15};
+function st50Reg(){const L=state.storeL;if(L&&state.store==="L"+L.id)STORES[state.store]=[L.n+(L.pc?` (${L.pc})`:""),(STORES[L.b]||[0,1])[1]]}
+st50Reg();
+const st50Name=()=>state.store&&STORES[state.store]?STORES[state.store][0]:"";
+let PLC=null;
+function plCache(){if(!PLC){try{PLC=JSON.parse(localStorage.getItem(LS+"-oploc")||"{}")||{}}catch(e){PLC={}}}return PLC}
+function plSave(){try{localStorage.setItem(LS+"-oploc",JSON.stringify(PLC))}catch(e){}}
+const plKey=c=>nrmA(c||"").replace(/\s+/g," ").trim();
+function plGet(c){const x=plCache()[plKey(c)];return x&&Date.now()-x.ts<7*864e5?x:null}
+async function plLoad(c,force){const k=plKey(c);if(!k||ui.plBusy===k)return;if(!force&&plGet(c))return;ui.plBusy=k;ui.plErr="";ui.plTried=k;
+ try{const r=await fetch(`${OP50}/locations?osm_address_city__like=${encodeURIComponent(c)}&size=60&order_by=-price_count`,{headers:{Accept:"application/json"}});if(!r.ok)throw new Error("http "+r.status);const j=await r.json();
+  const items=((j&&j.items)||[]).filter(L=>L&&L.id&&L.osm_name&&plKey(L.osm_name)!==k).map(L=>({id:+L.id,n:String(L.osm_name).replace(/[<>"]/g,"").slice(0,60),pc:String(L.osm_address_postcode||"").slice(0,10),c:String(L.osm_address_city||"").slice(0,60),cnt:+L.price_count||0,b:brandOf(L.osm_name)}));
+  const keep=items.filter(L=>L.b||L.cnt>=3).sort((a,b)=>b.cnt-a.cnt).slice(0,12);
+  plCache()[k]={ts:Date.now(),items:keep};plSave()}
+ catch(e){ui.plErr="Impossible de chercher les magasins pour le moment. Vérifie la connexion puis réessaie."}
+ finally{ui.plBusy=null;if(ui.panel==="data")try{renderPanel()}catch(e){}try{renderBudget()}catch(e){}}}
+function plCard(){const c=(state.place&&state.place.c)||"";const P=c?plGet(c):null;const st=state.store;
+ if(c&&!P&&!ui.plBusy&&!ui.plErr&&ui.plTried!==plKey(c))setTimeout(()=>plLoad(c),0);
+ let list="";
+ if(c){if(ui.plBusy||(!P&&!ui.plErr))list=`<p class="pn-help">Recherche des magasins à ${esc(c)}…</p>`;
+  else if(ui.plErr)list=`<p class="pn-help pl-err">${esc(ui.plErr)}</p>`;
+  else if(P.items.length)list=`<div class="pl-list" role="group" aria-label="Magasins à ${esc(c)}">${P.items.map(L=>`<button type="button" class="pl-st" data-pl-pick="L|${L.id}" aria-pressed="${st==="L"+L.id}"><b>${esc(L.n)}</b><small>${esc([L.pc,L.c].filter(Boolean).join(" "))} · ${L.cnt?`${L.cnt} prix relevé${L.cnt>1?"s":""}`:"pas encore de prix relevé"}</small></button>`).join("")}</div>`;
+  else list=`<p class="pn-help">Aucun magasin de ${esc(c)} n'a encore de prix relevés sur Open Prices. Choisis ton enseigne ci-dessous.</p>`}
+ const chains=STORE_KEYS50.map(k=>`<button type="button" class="chip" data-pl-pick="K|${k}" aria-pressed="${st===k}">${esc(STORES[k][0])}</button>`).join("");
+ const openCh=!c||(P&&!P.items.length)||STORE_KEYS50.includes(st);
+ return`<div class="pn-card pl-set" id="plSet"><h3>Magasin et prix</h3><p class="pn-help">Le budget des courses utilise les prix relevés dans ton magasin.</p>
+  <form class="pl-form" data-pl-form><input class="pn-in" name="c" value="${esc(c)}" placeholder="Ta ville, ex. Strasbourg" autocomplete="address-level2" maxlength="60" aria-label="Ta ville"><button type="submit" class="btn">${c?"Changer":"Valider"}</button></form>
+  ${list}<details class="pl-more"${openCh?" open":""}><summary>Choisir une enseigne</summary><div class="chips">${chains}</div></details></div>`}
+const panelDataV50=panelData;
+panelData=function(){const h=panelDataV50.apply(this,arguments).replace('<h2 class="pn-title">Données & synchro</h2>','<h2 class="pn-title">Réglages</h2>');let card="";try{card=plCard()}catch(e){return h}
+ const i=h.indexOf('class="pn-card me-set"');if(i>=0){const j=h.indexOf("</div></div>",i);if(j>0)return h.slice(0,j+12)+card+h.slice(j+12)}
+ return/<h2 class="pn-title">[^<]*<\/h2>/.test(h)?h.replace(/(<h2 class="pn-title">[^<]*<\/h2>)/,"$1"+card):card+h};
+document.addEventListener("submit",e=>{const f=e.target;if(!f||!f.matches||!f.matches("[data-pl-form]"))return;e.preventDefault();
+ const c=String(new FormData(f).get("c")||"").replace(/[<>"]/g,"").replace(/\s+/g," ").trim().slice(0,60);
+ state.place=c?{c}:{};commit();ui.plErr="";if(c)plLoad(c,true);renderPanel();try{renderBudget()}catch(x){}});
+document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-pl-pick]");if(!b)return;const[t,v]=b.dataset.plPick.split("|");
+ if(t==="K"){if(!STORE_KEYS50.includes(v))return;state.store=v;state.storeL=null}
+ else{const P=plGet((state.place&&state.place.c)||"");const L=P&&P.items.find(x=>String(x.id)===v);if(!L)return;state.store="L"+L.id;state.storeL={id:L.id,n:L.n,b:L.b,pc:L.pc,c:L.c}}
+ st50Reg();commit();ui.bud=null;renderPanel();try{renderShop()}catch(x){}toast("Magasin : "+st50Name());
+ if(HOSTED){const C=opCache()[state.store];if(!C||!Object.keys(C).length){ui.budTry=ui.budTry||{};ui.budTry[state.store]=1;opRefresh(state.store)}}});
+document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest('[data-act="pl-open"]');if(!b)return;openPanel("data");
+ setTimeout(()=>{const x=document.getElementById("plSet");if(x)try{x.scrollIntoView({block:"start",behavior:"smooth"})}catch(y){x.scrollIntoView()}},120)});
+// relevés : 1. dans le magasin choisi · 2. dans la même enseigne (12 derniers mois) · sinon prix moyen
+opRefresh=async function(store){if(!store||!STORES[store])return;const B=ui.bud={busy:true,done:0,tot:0,err:""};try{renderBudget()}catch(e){}
+ const{out}=shopList();const groups=shopGroups(out);const need=new Map();
+ for(const g of groups){const main=g.main||g.items[0];const pe=priceEntry(main.id)||g.items.map(e=>priceEntry(e.id)).find(Boolean);if(pe&&pe[1])need.set(pe[1],pe[2])}
+ const C=opCache();C[store]={};let fails=0,calls=0,found=0;B.tot=need.size;
+ const L=/^L\d+$/.test(store)&&state.storeL&&"L"+state.storeL.id===store?state.storeL:null;const brand=L?L.b:store;
+ if(L&&need.size){calls++;try{const items=[];for(let pg=1;pg<=4;pg++){const j=await opFetch(`${OP50}/prices?location_id=${L.id}&size=100&page=${pg}&order_by=-date`);const it=(j&&j.items)||[];items.push(...it);if(it.length<100)break}
+   const since=Date.now()-730*864e5,recent=items.filter(x=>!x.date||Date.parse(x.date)>=since);
+   for(const[cat,kind]of need){const m=recent.filter(x=>x.category_tag===cat||(x.product&&Array.isArray(x.product.categories_tags)&&x.product.categories_tags.includes(cat)));const v=opValue(m,kind);if(v){C[store][cat]={v:v.v,n:v.n,ts:Date.now(),s:"loc"};found++}}}
+  catch(e){fails++}}
+ const todo=[...need].filter(([cat])=>!C[store][cat]);B.done=need.size-todo.length;try{renderBudget()}catch(e){}
+ const q=CHAIN50[brand],sc=CHAIN_SCALE50[brand]||1;
+ if(q&&todo.length){const since=new Date(Date.now()-365*864e5).toISOString().slice(0,10);
+  const worker=async()=>{while(todo.length){const[cat,kind]=todo.shift();calls++;const url=`${OP50}/prices?currency=EUR&size=50&order_by=-date&date__gte=${since}&location__osm_name__contains=${encodeURIComponent(q)}&`+(kind==="pack"?`product__categories_tags__contains=${encodeURIComponent(cat)}`:`category_tag=${encodeURIComponent(cat)}`);
+   try{const j=await opFetch(url);const v=opValue(j&&j.items,kind);C[store][cat]={v:v?v.v*sc:0,n:v?v.n:0,ts:Date.now(),s:"chain"};if(v)found++}catch(e){fails++}
+   B.done++;if(B.done%4===0)try{renderBudget()}catch(e){}}};
+  await Promise.all([worker(),worker(),worker(),worker()])}
+ else for(const[cat]of todo)C[store][cat]={v:0,n:0,ts:Date.now(),s:""};
+ opSave();B.busy=false;B.found=found;if(calls&&fails>=calls)B.err="Impossible de joindre Open Prices pour le moment : estimation avec les prix moyens.";
+ try{renderShop()}catch(e){}};
+function bud50(groups,st){let tot=0,loc=0,ch=0,ref=0,unk=0;for(const g of groups){const c=lineCost(g,st);if(!c){unk++;continue}tot+=c.eur;if(c.src==="op"){const x=opGet(st,c.cat);if(x&&x.s==="loc")loc++;else ch++}else ref++}return{tot,loc,ch,ref,unk}}
+renderBudget=function(){const el=document.getElementById("budget");if(!el)return;
+ try{st50Reg();const st=state.store&&STORES[state.store]?state.store:"";const c=(state.place&&state.place.c)||"";
+  const{out}=shopList();const groups=shopGroups(out);
+  if(!groups.length){el.innerHTML="";el.hidden=true;return}el.hidden=false;
+  if(!st){el.innerHTML=`<div class="b50 b50-ask"><div class="b50-t"><b>Budget de la liste</b><span>${c?`Choisis ton magasin à ${esc(c)} pour estimer le prix.`:"Indique ta ville pour estimer le prix avec les magasins près de chez toi."}</span></div><button type="button" class="btn small" data-act="pl-open">${c?"Choisir":"Ma ville"}</button></div>`;return}
+  const inCart=g=>g.ids.every(id=>state.bought[id]);const toBuy=groups.filter(g=>!inCart(g)),cart=groups.filter(inCart);
+  const A=bud50(groups,st),R=budgetOf(toBuy,st),K=budgetOf(cart,st);const B=ui.bud||{};
+  if(HOSTED&&!B.busy){const C=opCache()[st];const fresh=C&&Object.values(C).some(x=>x&&x.ts&&Date.now()-x.ts<4*864e5);ui.budTry=ui.budTry||{};if(!fresh&&!ui.budTry[st]){ui.budTry[st]=1;setTimeout(()=>opRefresh(st),0)}}
+  const P=c?plGet(c):null;let br=[...new Set(((P&&P.items)||[]).map(x=>x.b).filter(Boolean))];if(br.length<2)br=["lidl","leclerc","carrefour","auchan"];
+  const cmp=br.map(k=>[k,budgetOf(groups,k,true).tot]).sort((a,b)=>a[1]-b[1]).slice(0,5);
+  const L=state.storeL&&st==="L"+state.storeL.id?state.storeL:null;const bn=L&&L.b?STORES[L.b][0]:STORE_KEYS50.includes(st)?STORES[st][0]:"";
+  const src=[A.loc?`<b>${A.loc}</b> relevé${A.loc>1?"s":""} dans ce magasin`:"",A.ch?`<b>${A.ch}</b> relevé${A.ch>1?"s":""} chez ${esc(bn||"l'enseigne")}`:"",A.ref?`<b>${A.ref}</b> prix moyen${A.ref>1?"s":""}`:"",A.unk?`${A.unk} sans prix`:""].filter(Boolean).join(" · ");
+  const open=!!ui.budOpen;
+  el.innerHTML=`<div class="b50${open?" open":""}"><div class="b50-h"><div class="b50-t"><span>Budget estimé · ${esc(st50Name())}</span><b>≈ ${fmtEur(A.tot)}</b></div><button type="button" class="btn small" data-act="bud-more" aria-expanded="${open}">${open?"Moins":"Détails"}</button></div>
+   ${B.busy?`<p class="b50-s">Recherche des prix… ${B.done||0}/${B.tot||"?"}</p>`:""}
+   <div class="b50-more"${open?"":" hidden"}>
+    ${cart.length?`<p class="b50-s">Reste à prendre ≈ ${fmtEur(R.tot)} · déjà dans le panier ≈ ${fmtEur(K.tot)}</p>`:""}
+    <p class="b50-s">Prix utilisés : ${src||"aucun"}.</p>
+    ${B.err?`<p class="b50-s b50-err">${esc(B.err)}</p>`:""}
+    <p class="b50-s">Prix moyens par enseigne${P&&P.items.length?" près de chez toi":""} : ${cmp.map(([k,v])=>`${esc(STORES[k][0])} ${fmtEur(v)}`).join(" · ")}</p>
+    <p class="b50-n">Prix relevés en magasin par les clients sur Open Prices (Open Food Facts). Les enseignes ne laissent pas lire leurs catalogues en ligne ; sans relevé, on prend le prix moyen français ajusté à l'enseigne. Le budget compte des paquets entiers.</p>
+    <div class="b50-a">${HOSTED?`<button type="button" class="btn small" data-act="bud-refresh"${B.busy?" disabled":""}>Actualiser les prix</button>`:""}<button type="button" class="btn small ghost" data-act="pl-open">Changer de magasin</button></div>
+   </div></div>`}
+ catch(e){console.error(e)}};
+
+// ---------- nutrition : correspondances corrigées et poids réels ----------
+// « courgette » n'est plus prise pour de la courge, « steak haché » est reconnu, et les pièces ont un poids réaliste
+NXN.unshift([/courgettes?\b/,"courgette"],[/\bcourges?\b|butternut|potiron|potimarron/,"butternut"],[/steaks? haches?|boeuf hache|hache de boeuf/,"boeuf_hache"]);
+Object.assign(NXP,{boeuf_emince:150,artichauts:100,_veau:150,_canard:350});
+const PW50=[[/gressin/,6],[/biscotte/,9],[/crackers?/,5],[/tortilla|wrap/,40],[/\bpitas?\b/,70],[/bagel/,90],[/muffins? anglais/,60],[/croissant/,60],[/jaunes? d oeufs?/,18],[/blancs? d oeufs?/,32],[/\boeufs?\b/,50],
+ [/artichaut/,100],[/aubergine/,300],[/courgette/,250],[/poivron/,150],[/tomates? cerises?/,15],[/tomate/,120],[/oignon/,100],[/echalote/,30],[/carotte/,100],[/patate douce/,250],[/pommes? de terre/,150],[/navet/,120],[/betterave/,150],[/poireau/,150],[/fenouil/,250],[/concombre/,300],
+ [/avocat/,140],[/banane/,120],[/\bpommes?\b/,150],[/\bpoires?\b/,150],[/orange/,150],[/citron vert/,30],[/citron/,40],[/mangue/,300],[/kiwi/,80],[/champignon/,20],[/brocoli/,350],[/chou[ -]fleur/,600],[/laitue|salade/,250],[/endive/,120],[/gousse|\bail\b/,5],
+ [/escalope/,130],[/blancs? de poulet|filets? de poulet|supremes? de/,140],[/cuisses? de poulet/,200],[/pilons?/,90],[/steak|bavette|onglet|entrecote|faux.filet|rumsteck/,150],[/cotes? de porc|cotelettes?/,150],[/chipolata|saucisse/,60],[/merguez/,55],[/magret/,350],
+ [/paves? de saumon|saumon/,125],[/(filets?|dos) de (cabillaud|colin|lieu|merlu|poisson|dorade|daurade|bar|truite)/,130],[/crevettes?/,12],[/mozzarella|burrata/,125],[/yaourts?|yogourts?/,125],[/skyr/,140],[/jambon/,40]];
+const nxProfileV50=nxProfile;
+nxProfile=function(id){const had=id in NX_CACHE;const P=nxProfileV50.apply(this,arguments);if(had||!P||P.pw)return P;
+ try{const n=nrmS(ING[id][0]);const z=PW50.find(x=>x[0].test(n));if(z)P.pw=z[1];else{const e=NUTDB.find(x=>x[0].test(n));if(e&&e[6])P.pw=e[6]}}catch(e){}return P};
+// « 4 bavettes (100 g par personne) », « 1 filet de dinde de 700 g », « 2 courgettes (500 g) » : le poids écrit l'emporte
+function nx50Line(line,div){try{const x=parseIngLine(line);if(!x||x.unit===null||/^(g|ml|kg|cl|l)$/.test(x.unit||"")||/^(boite|bocal|conserve)/.test(nrmS(x.unit||"")))return line;
+  const t=nrmS(line),num=s=>parseFloat(String(s).replace(",","."));let m,g=null;
+  if((m=t.match(/(\d+(?:[.,]\d+)?)\s*(kg|g)\b[^)]*\bpar (personne|pers|portion)/)))g=num(m[1])*(m[2]==="kg"?1000:1)*Math.max(1,Number(div)||1);
+  else if((m=t.match(/\bde (?:environ |env\.? )?(\d+(?:[.,]\d+)?)\s*(kg|g)\b/)))g=num(m[1])*(m[2]==="kg"?1000:1)*(x.qty||1);
+  else if((m=t.match(/\((?:environ |env\.? |soit |~ ?)?(\d+(?:[.,]\d+)?)\s*(kg|g)\b([^)]*)\)/))){const each=/chacun|piece|l unite/.test(m[3]);g=num(m[1])*(m[2]==="kg"?1000:1)*(each?(x.qty||1):1)}
+  if(!(g>0)||g>5000)return line;
+  const name=String(x.name).replace(/\(.*?\)/g," ").replace(/\bde (environ |env\.? )?\d+(?:[.,]\d+)?\s*(kg|g)\b/gi," ").replace(/\s+/g," ").trim();
+  return name?Math.round(g)+" g de "+name:line}catch(e){return line}}
+const nutEstimateV50=nutEstimate;
+nutEstimate=function(il,div){return nutEstimateV50.call(this,(il||[]).map(l=>nx50Line(l,div)),div)};
+// Quitoque publie ses valeurs sans l'huile ni le beurre « à avoir chez soi » : on les ajoute, puisqu'on les mange
+const PANTRY50=/huile|beurre|margarine/;
+function nxPantry(r){const T={k:0,p:0,f:0,c:0,fi:0};for(const[id,q]of r.i||[]){if(!ING[id]||typeof q!=="string"||!PANTRY50.test(nrmS(ING[id][0])))continue;const L=nxLine(id,q);if(L)for(const x in T)T[x]+=L[x]}
+ const div=r.snack?(r.yieldN||1):(r.base||2);for(const x in T)T[x]/=div;return T}
+const nxRefreshV50=nxRefresh;
+nxRefresh=function(list){nxRefreshV50.apply(this,arguments);
+ for(const r of list||RECIPES){try{if(!/quitoque\.fr/.test(r.u||"")||!r.nut||r.nut.est||r.nut.part||r.nut.pantry||!SRC_NUT[r.id]||r.nut.k!==SRC_NUT[r.id].k)continue;
+  const A=nxPantry(r);if(!(A.k>=5))continue;const n=r.nut;r.nut={k:Math.round(n.k+A.k),p:r1(n.p+A.p),f:r1((n.f||0)+A.f),c:r1((n.c||0)+A.c),fi:r1((n.fi||0)+A.fi),est:false,pantry:Math.round(A.k)};r.k=r.nut.k;r.pr=Math.round(r.nut.p)}catch(e){}}};
+for(const k in NX_CACHE)delete NX_CACHE[k];
+try{nxRefresh()}catch(e){}
+try{for(const e of (typeof DISC!=="undefined"&&Array.isArray(DISC)?DISC:[])){delete e._nx;delete e._est}}catch(e){}
+// fiche recette : détail ingrédient par ingrédient
+const fmtNxG=g=>g>=50?Math.round(g/5)*5+" g":g>=10?Math.round(g)+" g":String(Math.round(g*10)/10).replace(".",",")+" g";
+function nxBreak(r){const div=r.snack?(r.yieldN||1):(r.base||2);const rows=[];
+ for(const[id,q]of r.i||[]){if(!ING[id])continue;let L=null;try{L=nxLine(id,q)}catch(e){}if(!L||!(L.g>0))continue;rows.push({n:ING[id][0],g:L.g/div,k:L.k/div,p:L.p/div})}
+ return rows.sort((a,b)=>b.k-a.k)}
+factsV13=(f=>function(r){const h=f(r);try{const n=r.nut;if(!n||!n.k||!(r.i||[]).length)return h;const rows=nxBreak(r);if(!rows.length)return h;let H=h;
+  if(n.pantry)H=H.replace(/<p class="m-nsrc">[\s\S]*?<\/p>/,`<p class="m-nsrc">Valeurs publiées par Quitoque, plus l'huile et le beurre de la recette que le site ne compte pas (+${n.pantry} kcal par portion).</p>`);
+  const per=r.snack?(r.unitS||"pièce"):"portion";const T=rows.reduce((a,x)=>({k:a.k+x.k,p:a.p+x.p}),{k:0,p:0});
+  const gap=!n.est&&Math.abs(T.k-n.k)/n.k>0.1;
+  return H+`<details class="nx-det"><summary>Détail par ingrédient</summary><table><thead><tr><th scope="col">Pour 1 ${esc(per)}</th><th scope="col">kcal</th><th scope="col">Prot.</th></tr></thead><tbody>${rows.map(x=>`<tr><td>${esc(x.n)} <small>${fmtNxG(x.g)}</small></td><td>${Math.round(x.k)}</td><td>${fmtG(r1(x.p))} g</td></tr>`).join("")}</tbody><tfoot><tr><td>Total calculé</td><td>${Math.round(T.k)}</td><td>${fmtG(r1(T.p))} g</td></tr></tfoot></table><p class="nx-src">Calcul avec la table Ciqual (Anses), aliments crus sauf indication.${gap?` Les valeurs du haut sont celles publiées par la recette.`:""}</p></details>`}catch(e){return h}})(factsV13);
+
+// ---------- rendu ----------
+renderAll=(f=>function(){try{st50Reg()}catch(e){}return f.apply(this,arguments)})(renderAll);
 
 try{setTab(ui.tab);renderAll()}catch(e){try{sbDiag("affichage au démarrage",e)}catch(x){}}try{initDb()}catch(e){}sbStart();
 
