@@ -2652,7 +2652,7 @@ body.lock .fab,body.panel-open .fab{display:none!important}
 </div>
 <div id="timers" class="timers" hidden aria-live="polite"></div>
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
-<script>window.NS_CONFIG={"hosted": true, "sbUrl": "https://zjsawjudrdneeptxbskd.supabase.co", "sbKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpqc2F3anVkcmRuZWVwdHhic2tkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1NjUxMjcsImV4cCI6MjEwNzE0MTEyN30.Wn1bUy--5O78gGICTOyEGbnT6B-SdoNCG_XxBBaaUIY", "build": "20261102084606"}</script>
+<script>window.NS_CONFIG={"hosted": true, "sbUrl": "https://zjsawjudrdneeptxbskd.supabase.co", "sbKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpqc2F3anVkcmRuZWVwdHhic2tkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1NjUxMjcsImV4cCI6MjEwNzE0MTEyN30.Wn1bUy--5O78gGICTOyEGbnT6B-SdoNCG_XxBBaaUIY", "build": "20261102205726"}</script>
 <script>
 const AISLES={L:"Fruits & légumes",H:"Herbes fraîches",V:"Viandes & poissons",C:"Crèmerie & œufs",S:"Surgelés",F:"Féculents",B:"Conserves",E:"Épices & condiments"};
 const AISLE_ORDER=["L","H","V","C","S","F","B","E"];
@@ -9493,6 +9493,90 @@ factsV13=(f=>function(r){const h=f(r);try{const n=r.nut;if(!n||!n.k||!(r.i||[]).
 
 // ---------- rendu ----------
 renderAll=(f=>function(){try{st50Reg()}catch(e){}return f.apply(this,arguments)})(renderAll);
+
+
+// ================= v51 : protéines et lipides plus justes =================
+// 1. bons profils (crème légère, steak haché 15 %, jambon cru, pintade) et féculents « cuits » / légumes secs « secs »
+NXN.unshift([/(steaks? haches?|boeuf hache|viande hachee|hache de boeuf).*\b(15|20) ?%/,"et_boeuf"],
+ [/cremes?\b.*(legere|allegee|light|\b(3|4|5|8|10|12|15) ?%)/,"_creme_legere"],
+ [/jambon (cru|sec|serrano|de parme|de bayonne|iberique)|prosciutto|speck|coppa/,"_jambon_cru"],[/pintades?/,"_pintade"],[/\bpates? (pour |de |a )?(tajine|curry|harissa|piment|miso|tandoori|tikka|korma|massala|masala)/,"_pate_epices"]);
+Object.assign(NUTX,{_jambon_cru:[237,25.6,14.7,0.6,0],_pintade:[134,22.9,4.7,0,0],_pate_epices:[150,3,10,12,4]});
+// un féculent pesé cuit a absorbé son eau : mêmes nutriments, poids multiplié (riz ×2,7, pâtes ×2,3…)
+const CUIT51=[[/riz/,2.7],[/quinoa/,2.7],[/boulgour/,2.6],[/semoule|couscous/,2.3],[/pates|spaghetti|penne|tagliatelle|fusilli|macaroni|nouilles|coquillettes/,2.3],[/lentilles?/,2.6],[/pois chiches?|haricots?|flageolets?|feves?/,2.4]];
+const nxProfileV51=nxProfile;
+nxProfile=function(id){const had=id in NX_CACHE;const P=nxProfileV51.apply(this,arguments);if(had||!P||!ING[id]||!Array.isArray(P.v))return P;
+ try{const n=nrmS(ING[id][0]);const z=CUIT51.find(x=>x[0].test(n));
+  if(z&&/\b(cuit|cuite|cuits|cuites)\b/.test(n)&&P.v[0]>=280)P.v=P.v.map(x=>x/z[1]);
+  else if(z&&/\b(sec|secs|seche|seches)\b/.test(n)&&P.v[0]<220)P.v=P.v.map(x=>x*z[1])}catch(e){}
+ return P};
+// 2. partie comestible : os, carcasse, carapace, arêtes ne se mangent pas
+// [motif, part mangée, poids d'une pièce entière en g]
+const EF51=[[/\b(poulet|poularde|chapon|canard|coquelet) (entier|entiere)|\bpoulet fermier\b/,0.6,1500],[/\bpintades?\b/,0.6,1300],[/\bcoquelets?\b|\bpoussins?\b/,0.6,500],[/\bpoulardes?\b/,0.6,1800],
+ [/\bhauts? de cuisses?\b/,0.75,130],[/\bcuisses? de canard\b/,0.65,300],[/dinde.*cuisses?|cuisses? de dinde/,0.7,900],[/\bcuisses?\b/,0.7,250],[/\bpilons?\b/,0.6,110],[/\bailes? de (poulet|dinde)|\bailerons?\b|\bmanchons?\b/,0.5,90],
+ [/\b(cotes?|cotelettes?) (de |d )?(porc|agneau|veau)|\bcotelettes?\b/,0.75,180],[/\bcote de boeuf\b/,0.8,1000],[/\bsouris d agneau\b/,0.6,350],[/\bjarrets?\b|osso.?buco|travers de porc|\bribs?\b/,0.55,400],
+ [/\bgambas\b/,0.5,35],[/\blangoustines?\b/,0.35,40],[/\becrevisses?\b/,0.2,25],[/\bcrevettes? (roses|grises|entieres?)|crevettes?.*(non decortiq|avec (la )?(tete|carapace))/,0.5,10],[/\bcrevettes?\b/,0.5,20,"count"],[/\bmoules?\b/,0.25,15],[/\bcoques?\b|\bpalourdes?\b|\bbulots?\b/,0.2,8],
+ [/\b(dorades?|daurades?)\b/,0.5,400],[/\b(bars?|loups?)\b/,0.5,500],[/\btruites?\b/,0.55,300],[/\bmaquereaux?\b/,0.6,300],[/\bsardines?\b/,0.6,60],[/\brougets?\b/,0.5,150]];
+const EF51_NO=/filets?\b|desoss|sans os|decortiq|\bchair\b|blancs? de|escalope|supreme|\bdos de|\bpaves?\b|partie comestible|parures|emince|\bhache|surimi|en conserve|en boite|a l huile|au naturel|fumee?s?\b|queues? de|sans tete|sauce|bouillon|fond de|jus de/;
+function ef51(name){const n=nrmS(name||"").replace(/[()\[\],;]/g," ").replace(/\s+/g," ").trim();if(!n||EF51_NO.test(n))return null;return EF51.find(z=>z[0].test(n))||null}
+const nxLineV51=nxLine;
+nxLine=function(id,q){const L=nxLineV51.apply(this,arguments);if(!L||!ING[id]||!(L.g>0))return L;const z=ef51(ING[id][0]);if(!z)return L;
+ const u=ING[id][2];if(z[3]==="count"&&!(typeof q==="number"&&(u===""||u==="pièce"))&&!(L.g>=500))return L;const g=typeof q==="number"&&(u===""||u==="pièce")?q*z[2]:L.g;const f=g*z[1]/L.g;
+ return{...L,g:g*z[1],k:L.k*f,p:L.p*f,f:L.f*f,c:L.c*f,fi:L.fi*f}};
+const PATE51=/\bpates? (pour |de |a )?(tajine|curry|harissa|piment|miso|tandoori|tikka|korma|massala|masala)/;
+function nx51Line(line,div){try{const x=parseIngLine(line);if(!x||x.unit===null)return line;
+  if(/^sachets?$/.test(nrmS(x.unit||""))&&PATE51.test(nrmS(x.name||"")))return Math.round((x.qty||1)*25)+" g de "+x.name;
+  const z=ef51(x.name);if(!z)return line;
+  const u=nrmS(x.unit||"");let g=null;if(u==="g")g=x.qty;else if(u==="kg")g=x.qty*1000;else if(u===""||/^pieces?$/.test(u))g=x.qty*z[2];
+  if(z[3]==="count"&&g!=null&&(u==="g"||u==="kg")&&g/Math.max(1,Number(div)||1)<250)return line;
+  if(!(g>0))return line;return Math.round(g*z[1])+" g de "+String(x.name).replace(/\(.*?\)/g," ").replace(/\s+/g," ").trim()+" (partie comestible)"}catch(e){return line}}
+const nutEstimateV51=nutEstimate;
+nutEstimate=function(il,div){return nutEstimateV51.call(this,(il||[]).map(l=>nx51Line(nx50Line(l,div),div)),div)};
+// 3. valeurs publiées vérifiées : si le site annonce des protéines ou des calories qui ne collent pas aux ingrédients,
+//    on recalcule ; si on ne peut pas vérifier et que c'est invraisemblable, la recette n'est pas proposée
+const NXD51=new Map();
+function nx51Dens(nm){const k=nrmS(nm);if(NXD51.has(k))return NXD51.get(k);let r={k:0,p:0};try{const d=nutEstimateV51.call(this,["100 g de "+nm],1);r={k:d.k,p:d.p}}catch(e){}NXD51.set(k,r);return r}
+// fiable = chaque ingrédient qui compte (≥ 150 kcal ou ≥ 8 g de protéines pour 100 g) a une quantité
+const NEG51=/\b(sel|poivre|epices?|herbes?|persil|coriandre|basilic|menthe|ciboulette|aneth|cerfeuil|estragon|thym|laurier|romarin|origan|sauge|cumin|paprika|curry|curcuma|cannelle|muscade|gingembre|piment|espelette|cayenne|ras el hanout|garam|badiane|girofle|cardamome|safran|vanille|eau|glacons?|vinaigre|citron|citrons? verts?|zestes?|ail|echalote|levure|bicarbonate|bouquet garni|sauce soja|nuoc mam|moutarde|cornichons?|capres?|bouillon|fond|vin|biere|cidre|salade|roquette|pousses|radis|concombre|tomates? cerises?|champignons?|oignons?|poivrons?|courgettes?|brocolis?|epinards?|haricots? verts|celeri|fenouil|carottes?)\b/;
+function nx51Rel(il,div){let sig=0,miss=0;for(const l of il||[]){let x=null;try{x=parseIngLine(l)}catch(e){}if(!x)continue;
+  const nm=String(x.name||"").replace(/\(.*?\)/g," ").replace(/\s+/g," ").trim();if(!nm||/facultatif/i.test(l))continue;
+  let one=null;try{one=nutEstimate([l],div)}catch(e){}const got=!!(one&&one.k>0);
+  const d=nx51Dens(nm);const big=d.k>=150||d.p>=8;if(big)sig++;
+  if(!got&&(big||!(d.k>0)&&!NEG51.test(nrmS(nm))))miss++}
+ return{sig,miss}}
+const nx51Ok=E=>E&&E.k>=150&&E.p<=65&&4*E.p/E.k<=0.75;
+function nx51Susp(n,bone){const k=n.k||0,p=n.p||0,at=4*p+4*(n.c||0)+9*(n.f||0);return{susp:bone||p>50||(k>0&&4*p/k>0.45)||(k>0&&Math.abs(at-k)/k>0.2),bad:p>65||(k>0&&4*p/k>0.8)||(k>0&&Math.abs(at-k)/k>0.25)}}
+const discNutV51=discNut;
+discNut=function(e){if(e._n51!==undefined)return e._n51;const base=discNutV51.apply(this,arguments);let out=base;
+ try{if(base&&!base.est&&e.n&&Array.isArray(e.ing)){const bone=e.ing.some(l=>{try{const x=parseIngLine(l);return!!(x&&x.unit!==null&&ef51(x.name))}catch(z){return false}});
+   const S=nx51Susp(e.n,bone);
+   const mm=e.src==="Marmiton";if(S.bad||bone||mm){const E=nutEstimate(e.ing,e.y||2),R=nx51Rel(e.ing,e.y||2);const rel=R.miss===0&&E.tot>0&&E.known/E.tot>=0.85&&E.k>0;const k=e.n.k||0,p=e.n.p||0;
+    const use=rel&&nx51Ok(E)&&(S.bad||E.k<=1.15*k)&&(S.bad||(bone&&E.p<0.8*p)||(mm&&E.p<p-Math.max(10,0.3*p)));
+    if(use)out={k:E.k,p:E.p,f:E.f,c:E.c,fi:E.fi,est:true,known:E.known,tot:E.tot,recalc:true,pub:{k,p}};
+    else if(S.bad)out={...base,hide:true}}}}catch(x){}
+ e._n51=out;return out};
+const discLeftV51=discLeft;
+discLeft=function(){return discLeftV51.apply(this,arguments).filter(e=>{let n=null;try{n=discNut(e)}catch(x){}return!(n&&n.hide)})};
+const panelDiscOneV51=panelDiscOne;
+panelDiscOne=function(e){const h=panelDiscOneV51.apply(this,arguments);try{const n=discNut(e);if(n&&n.recalc&&n.pub)return h.replace(/<p class="dc-for">Par portion · [^<]*<\/p>/,`<p class="dc-for">Par portion · recalculé avec les quantités de la recette. ${esc(e.src)} annonçait ${fmtInt(n.pub.k)} kcal et ${fmtG(n.pub.p)} g de protéines, ce qui ne correspond pas aux ingrédients.</p>`)}catch(x){}return h};
+// recettes déjà ajoutées depuis un site : même vérification avec leurs ingrédients
+function nx51RecRel(r){let miss=0;for(const[id,q]of r.i||[]){if(!ING[id])continue;if(typeof q==="string"&&/facultatif/i.test(q))continue;const d=nx51Dens(ING[id][0]);if(!(d.k>=150||d.p>=8))continue;let L=null;try{L=nxLine(id,q)}catch(e){}if(!L||!(L.g>0))miss++}return miss===0}
+const nxRefreshV51=nxRefresh;
+nxRefresh=function(list){nxRefreshV51.apply(this,arguments);
+ for(const r of list||RECIPES){try{if(!r.my||!r.u||!r.nut||r.nut.est||r.nut.part||SRC_NUT[r.id])continue;
+  const bone=(r.i||[]).some(([id])=>ING[id]&&ef51(ING[id][0]));const S=nx51Susp(r.nut,bone);if(!S.bad&&!bone)continue;
+  const{T,unk}=recipeNutCalc(r);if(unk||!(T.k>0)||!nx51RecRel(r))continue;const k=r.nut.k||0,p=r.nut.p||0;
+  const E={k:T.k,p:T.p};if(nx51Ok(E)&&(S.bad||(bone&&T.p<0.8*p))){r.nut={k:Math.round(T.k),p:r1(T.p),f:r1(T.f),c:r1(T.c),fi:r1(T.fi),est:true,calc:true,recalc:true,pub:{k,p}};r.k=r.nut.k;r.pr=Math.round(T.p)}}catch(e){}}};
+factsV13=(f=>function(r){const h=f(r);try{const n=r.nut;if(n&&n.recalc&&n.pub)return h.replace(/<p class="m-nsrc">[\s\S]*?<\/p>/,`<p class="m-nsrc">Recalculé ingrédient par ingrédient (table Ciqual) : le site annonçait ${fmtInt(n.pub.k)} kcal et ${fmtG(n.pub.p)} g de protéines par portion, ce qui ne correspond pas aux quantités.</p>`)}catch(e){}return h})(factsV13);
+// tout recalculer avec ces règles
+function nx51Reset(){for(const k in NX_CACHE)delete NX_CACHE[k];NXD51.clear();try{nxRefresh()}catch(e){}
+ try{for(const e of DISC){delete e._nx;delete e._est;delete e._n51;delete e._prOk}}catch(e){}}
+nx51Reset();
+try{cqReady(()=>{nx51Reset();try{if(ui.panel==="decouvrir")renderPanel();else renderAll()}catch(e){}})}catch(e){}
+
+// ---------- prix : ajouter les siens sur Open Prices ----------
+renderBudget=(f=>function(){const r=f.apply(this,arguments);try{const m=document.querySelector("#budget .b50-more .b50-a");
+  if(m&&!m.querySelector(".b50-op"))m.insertAdjacentHTML("beforeend",`<a class="btn small ghost b50-op" href="https://prices.openfoodfacts.org/" target="_blank" rel="noopener noreferrer">Ajouter mes prix</a>`);
+  const nt=document.querySelector("#budget .b50-n");if(nt&&!nt.dataset.op){nt.dataset.op="1";nt.insertAdjacentHTML("afterend",`<p class="b50-n">Pour des prix exacts dans ton magasin : après tes courses, ajoute ton ticket sur Open Prices (site ou appli Open Food Facts). Sano les reprend en premier dès que tu touches « Actualiser les prix ».</p>`)}}catch(e){}return r})(renderBudget);
 
 try{setTab(ui.tab);renderAll()}catch(e){try{sbDiag("affichage au démarrage",e)}catch(x){}}try{initDb()}catch(e){}sbStart();
 
