@@ -1,14 +1,19 @@
+import fs from "fs";
 const out = []; const say = (s) => { out.push(s); console.log(s); };
-async function J(url) { try { const r = await fetch(url, { headers: { Accept: "application/json", "User-Agent": "Sano-meal-planner/1.0 (contact via github sanjedesign)" } }); const t = await r.text(); try { return { s: r.status, j: JSON.parse(t) }; } catch { return { s: r.status, j: null, t: t.slice(0, 200) }; } } catch (e) { return { s: 0, e: String(e) }; } }
 const B = "https://prices.openfoodfacts.org/api/v1";
-for (const q of ["osm_address_postcode__like=670", "osm_address_city__like=Strasbourg", "osm_address_postcode__like=67", "osm_address_city__like=strasbourg&price_count__gte=5"]) {
-  const r = await J(`${B}/locations?${q}&size=100&order_by=-price_count`); const it = (r.j && r.j.items) || [];
-  say(`LOC ${q} ${r.s} total=${r.j && r.j.total} ${r.t || ""}`);
-  for (const L of it.slice(0, 25)) say(`   #${L.id} ${L.osm_name} · ${L.osm_address_postcode} ${L.osm_address_city} · prix=${L.price_count} · produits=${L.product_count || ""} · ${L.osm_lat},${L.osm_lon} · maj ${String(L.updated || "").slice(0, 10)}`);
+async function H(url) { try { const r = await fetch(url, { headers: { Accept: "application/json", Origin: "https://sanjedesign.github.io" } }); const t = await r.text(); let j = null; try { j = JSON.parse(t) } catch {} return { s: r.status, acao: r.headers.get("access-control-allow-origin"), j }; } catch (e) { return { s: 0, e: String(e) }; } }
+let r = await H(`${B}/locations?osm_address_city__like=Strasbourg&size=50&order_by=-price_count`);
+say(`LOC status=${r.s} ACAO=${r.acao} total=${r.j && r.j.total}`);
+r = await H(`${B}/locations?osm_address_city__like=strasb&size=5&order_by=-price_count`);
+say(`LOC partial status=${r.s} total=${r.j && r.j.total}`);
+r = await H(`${B}/locations?osm_address_city__like=%25strasb%25&size=5&order_by=-price_count`);
+say(`LOC wildcard status=${r.s} total=${r.j && r.j.total}`);
+r = await H(`${B}/prices?location_id=286&size=100&order_by=-date`);
+say(`PRICES status=${r.s} ACAO=${r.acao} total=${r.j && r.j.total}`);
+for (const it of ((r.j && r.j.items) || []).slice(0, 60)) {
+  const p = it.product || {};
+  say(` ${it.date} ${it.price} ${it.price_per || ""} type=${it.type} cat=${it.category_tag || ""} | ${p.product_name || ""} q=${p.product_quantity || ""}${p.product_quantity_unit || ""} cats=${(p.categories_tags || []).slice(-3).join(",")} keys=${Object.keys(p).length}`);
 }
-const r = await J(`${B}/locations?osm_address_postcode__like=67&size=100&order_by=-price_count`); const top = ((r.j && r.j.items) || []).slice(0, 6);
-for (const L of top) { const p = await J(`${B}/prices?location_id=${L.id}&size=5&order_by=-date`); const it = (p.j && p.j.items) || [];
-  say(`PRIX @${L.osm_name} ${L.osm_address_city}: total=${p.j && p.j.total} récents=${it.map((x) => x.date).join(",")} ex=${it.map((x) => ((x.product && x.product.product_name) || x.category_tag) + " " + x.price + (x.price_per ? "/" + x.price_per : "")).join(" | ").slice(0, 300)}`); }
-// catégories brutes (fruits, légumes, viandes) en France
-const c = await J(`${B}/prices?category_tag=en:chicken-breasts&size=10&order_by=-date&location__osm_address_country=France`); say(`CAT poulet ${c.s} total=${c.j && c.j.total} ${((c.j && c.j.items) || []).map((x) => x.price + "/" + x.price_per + " @" + ((x.location && x.location.osm_name) || "")).join(" | ")}`);
-import fs from "node:fs"; fs.writeFileSync("report.txt", out.join("\n") + "\n");
+// preflight check
+try { const o = await fetch(`${B}/locations?size=1`, { method: "OPTIONS", headers: { Origin: "https://sanjedesign.github.io", "Access-Control-Request-Method": "GET", "Access-Control-Request-Headers": "accept" } }); say(`OPTIONS ${o.status} ACAO=${o.headers.get("access-control-allow-origin")} ACAM=${o.headers.get("access-control-allow-methods")}`); } catch (e) { say("OPTIONS err " + e) }
+fs.writeFileSync("report.txt", out.join("\n"));
