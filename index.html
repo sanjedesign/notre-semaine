@@ -2546,6 +2546,11 @@ body.lock .fab,body.panel-open .fab{display:none!important}
 #tab-stock .stock-row .ico{flex-basis:30px;width:30px;height:30px}
 #tab-stock .stock-row .item-txt{flex:1 1 80px}
 #tab-stock:not(.stk-adding) .stock-row .sw-lbl{display:none}
+/* ================= v52 : sans code couleur, badge batch ================= */
+.card-meta .good,.card-meta .warn{color:inherit!important;font-weight:inherit!important}
+.m-nut .mdot{display:none!important}
+.sw-batch{display:inline-flex;align-items:center;background:#fff;color:var(--ink,#13201A);border-radius:999px;padding:3px 10px;font-family:var(--f-sub);font-weight:700;font-size:.76rem;text-shadow:none}
+.dc-batch{margin:6px 0 10px;padding:10px 12px;border-radius:12px;background:var(--accent-soft);font-size:.88rem;font-weight:600}
 </style>
 </head>
 <body>
@@ -2652,7 +2657,7 @@ body.lock .fab,body.panel-open .fab{display:none!important}
 </div>
 <div id="timers" class="timers" hidden aria-live="polite"></div>
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
-<script>window.NS_CONFIG={"hosted": true, "sbUrl": "https://zjsawjudrdneeptxbskd.supabase.co", "sbKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpqc2F3anVkcmRuZWVwdHhic2tkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1NjUxMjcsImV4cCI6MjEwNzE0MTEyN30.Wn1bUy--5O78gGICTOyEGbnT6B-SdoNCG_XxBBaaUIY", "build": "20261102205726"}</script>
+<script>window.NS_CONFIG={"hosted": true, "sbUrl": "https://zjsawjudrdneeptxbskd.supabase.co", "sbKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpqc2F3anVkcmRuZWVwdHhic2tkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1NjUxMjcsImV4cCI6MjEwNzE0MTEyN30.Wn1bUy--5O78gGICTOyEGbnT6B-SdoNCG_XxBBaaUIY", "build": "20261103180035"}</script>
 <script>
 const AISLES={L:"Fruits & légumes",H:"Herbes fraîches",V:"Viandes & poissons",C:"Crèmerie & œufs",S:"Surgelés",F:"Féculents",B:"Conserves",E:"Épices & condiments"};
 const AISLE_ORDER=["L","H","V","C","S","F","B","E"];
@@ -9577,6 +9582,59 @@ try{cqReady(()=>{nx51Reset();try{if(ui.panel==="decouvrir")renderPanel();else re
 renderBudget=(f=>function(){const r=f.apply(this,arguments);try{const m=document.querySelector("#budget .b50-more .b50-a");
   if(m&&!m.querySelector(".b50-op"))m.insertAdjacentHTML("beforeend",`<a class="btn small ghost b50-op" href="https://prices.openfoodfacts.org/" target="_blank" rel="noopener noreferrer">Ajouter mes prix</a>`);
   const nt=document.querySelector("#budget .b50-n");if(nt&&!nt.dataset.op){nt.dataset.op="1";nt.insertAdjacentHTML("afterend",`<p class="b50-n">Pour des prix exacts dans ton magasin : après tes courses, ajoute ton ticket sur Open Prices (site ou appli Open Food Facts). Sano les reprend en premier dès que tu touches « Actualiser les prix ».</p>`)}}catch(e){}return r})(renderBudget);
+
+
+// ================= v52 : sans code couleur, sans porc, swipe = plats complets, batch cooking, rayons du pain =================
+// 1. cartes recettes : calories et protéines en texte simple
+recMeta=function(r){let n=null;try{n=rNut(r)}catch(e){}if(!n||!n.k)return"";
+ return`<span class="card-meta">${fmtInt(Math.round(n.k))} kcal · ${Math.round(n.p||0)} g prot.${r.snack?`<small> par ${esc(r.unitS||"pièce")}</small>`:""}</span>`};
+
+// 2. pas de porc : ni dans les propositions, ni dans les suggestions, ni pour compléter la semaine
+const PORK52=/\b(porc|porcelet|cochon|jambonneau|jambons?(?! de (dinde|poulet|volaille|canard))|lardons?(?! de (dinde|poulet|volaille))|lard|bacon(?! de (dinde|poulet|volaille))|pancetta|guanciale|prosciutto|speck|coppa|lonzo|chorizo(?! de (dinde|poulet|volaille|boeuf))|saucissons?|saucisses?(?! de (volaille|poulet|dinde|veau|boeuf|agneau|canard))|chipolatas?(?! de (volaille|poulet|dinde))|knacks?|cervelas|mortadelle|salami|pepperoni|rosette|andouillettes?|andouilles?|boudins?|rillettes?(?! de (thon|saumon|sardines?|maquereaux?|poulet|canard|truite))|chair a saucisse|filets? mignons?(?! de (veau|boeuf|dinde|poulet))|echine|travers|poitrine (fumee|de porc|salee)|cotes? de porc|roti de porc|serrano|bayonne|parme|pata negra|jamon|nduja|morteau|montbeliard|toulouse)\b/;
+// « jambon de dinde », « lardons de volaille », « saucisse de poulet »… ne sont pas du porc
+const PORK_ALT52=/\b(dinde|poulet|volaille|canard|boeuf|veau|vegetale?s?|vegan|veggie|soja|tofu)\b/,PORK_SURE52=/\b(porc|porcelet|cochon|serrano|bayonne|parme|pata negra|jamon|nduja|morteau|montbeliard|toulouse|echine|travers|guanciale|pancetta|prosciutto|speck|coppa|lonzo|mortadelle|boudins?|andouilles?|andouillettes?)\b/;
+const porkTxt=t=>{const n=nrmS(String(t||"")).replace(/['’]/g," ");if(!PORK52.test(n))return false;return PORK_SURE52.test(n)||!PORK_ALT52.test(n)};
+function isPorkR(r){if(!r)return false;if(porkTxt(r.n))return true;for(const[id,q]of r.i||[])if(ING[id]&&porkTxt(ING[id][0]))return true;return false}
+function isPorkE(e){return!!e&&(porkTxt(e.t)||(e.ing||[]).some(porkTxt))}
+// recettes proposées par l'appli avec du porc : retirées de la liste (celles que vous avez ajoutées restent, à vous de les garder ou non)
+function dropPork52(){for(const arr of [VISIBLE,SNACK_RECIPES,BASE_VIS||[],BASE_SNK||[]])for(let k=arr.length-1;k>=0;k--){const r=arr[k];if(r&&!r.my&&isPorkR(r))arr.splice(k,1)}}
+dropPork52();
+applyRemoved=(f=>function(){const r=f.apply(this,arguments);try{dropPork52()}catch(e){}return r})(applyRemoved);
+fillCands=(f=>function(){return f.apply(this,arguments).filter(r=>!isPorkR(r))})(fillCands);
+renderSuggest=(f=>function(){const keep=VISIBLE.slice();try{for(let k=VISIBLE.length-1;k>=0;k--)if(isPorkR(VISIBLE[k]))VISIBLE.splice(k,1);return f.apply(this,arguments)}finally{VISIBLE.length=0;keep.forEach(r=>VISIBLE.push(r))}})(renderSuggest);
+
+// 3. swipe : uniquement des plats complets (protéine + féculent + légumes + matière grasse), sans encas
+const PROT52=/\b(poulet|dinde|volaille|pintade|canard|caille|lapin|boeuf|veau|agneau|steak|bavette|hache|kefta|viande|saumon|cabillaud|colin|merlu|lieu|thon|truite|sardines?|maquereaux?|dorade|daurade|bar|poissons?|haddock|eglefin|merlan|sole|lotte|crevettes?|gambas|moules?|calamars?|encornets?|saint jacques|surimi|crabe|oeufs?|tofu|tempeh|seitan|lentilles?|pois chiches?|haricots? (rouges?|blancs?|noirs?|azuki|coco)|feves|edamame|skyr|fromage blanc|cottage|ricotta|halloumi|feta|paneer|quark)\b/;
+const STARCH52=/\b(riz|pates?|spaghetti|spaghettis|tagliatelles?|linguines?|penne|fusilli|rigatoni|farfalle|macaroni|coquillettes|orzo|langues? d oiseau|nouilles|udon|soba|ramen|vermicelles?|lasagnes?|cannelloni|raviolis?|gnocchis?|semoule|couscous|boulgour|bulgur|quinoa|ble|epeautre|sarrasin|orge|polenta|pommes? de terre|grenailles|patates?( douces?)?|pain|baguette|tortillas?|wraps?|pitas?|naans?|galettes?|bagels?|muffins? anglais|lentilles?|pois chiches?|haricots? (rouges?|blancs?|noirs?|coco)|flageolets?|mais|chataignes?|panais|topinambours?|puree)\b/;
+const VEG52=/\b(courgettes?|poivrons?|brocolis?|broccolini|carottes?|epinards?|tomates?|champignons?|haricots? verts|choux?|kale|salades?|laitue|roquette|mache|mesclun|pousses|poireaux?|aubergines?|petits? pois|pois gourmands|asperges?|fenouils?|courges?|butternut|potimarron|potiron|concombres?|celeris?|betteraves?|avocats?|artichauts?|radis|navets?|endives?|cresson|blettes?|pak choi|bok choy|germes|legumes?|ratatouille|piperade|crudites|cebettes?|oignons? nouveaux|brocoli)\b/;
+const FAT52=/\b(huiles?|beurre|cremes?|fromages?|parmesan|emmental|gruyere|comte|mozzarella|feta|chevre|ricotta|mascarpone|cheddar|avocats?|noix|amandes?|noisettes?|cajou|cacahuetes?|arachides?|pignons?|graines?|sesame|tahini|lait de coco|pesto|mayonnaise|olives?|saumon|maquereaux?|sardines?|oeufs?)\b/;
+function complete52(e){if(!e||e.k==="encas")return false;const t=nrmS((e.t||"")+" | "+(e.ing||[]).join(" | ")).replace(/['’]/g," ");let n={};try{n=discNut(e)||{}}catch(x){}
+ const P=PROT52.test(t),S=STARCH52.test(t)||n.c>=35,V=VEG52.test(t)||n.fi>=6,F=FAT52.test(t)||n.f>=8;
+ return P&&S&&V&&F&&!(n.c<20)&&!(n.f<5)&&!(n.fi!=null&&n.fi<3)}
+discLeft=(f=>function(){return f.apply(this,arguments).filter(e=>{if(e._c52===undefined)e._c52=!isPorkE(e)&&complete52(e);return e._c52})})(discLeft);
+{const i=DTAGS.findIndex(t=>t[0]==="encas");if(i>=0)DTAGS.splice(i,1);const j=DTAGS.findIndex(t=>t[0]==="porc");if(j>=0)DTAGS.splice(j,1)}
+if(ui.dtag==="encas"||ui.dtag==="porc")ui.dtag="all";
+// recettes de chefs sans valeurs publiées : on ne les montre que si le calcul ingrédient par ingrédient est fiable
+discNut=(f=>function(e){if(e._n52!==undefined)return e._n52;let n=f.apply(this,arguments);
+ try{if(n&&n.est&&!e.n&&Array.isArray(e.ing)){const R=nx51Rel(e.ing,e.y||2);if(R.miss>0||!(n.known/Math.max(1,n.tot)>=0.85))n={...n,hide:true}}}catch(x){}
+ e._n52=n;return n})(discNut);
+
+// 4. batch cooking : les plats qui se préparent à l'avance passent devant, avec un badge
+const BATCH52=/(mijot|curry|chili|bolognaise|ragout|tajine|blanquette|daube|bourguignon|goulash|dhal|\bdahl?\b|soupe|veloute|potage|gratin|lasagne|hachis|parmentier|boulettes|keftas?|ratatouille|one pot|cocotte|braise|colombo|massala|masala|tikka|korma|biryani|paella|couscous|farci|enchiladas|moussaka|cannelloni|pot au feu|navarin|osso ?buco|stroganoff|fricassee|marengo|basquaise|cari\b|rougail|mafe|yassa|riz (saute|cantonais)|nouilles sautees|\bwok\b|bowl|salade de (lentilles|quinoa|boulgour|pates|riz|pois chiches|haricots)|taboul|meal prep|batch|chakchouka de legumes)/;
+const NOBATCH52=/(tartare|carpaccio|ceviche|tataki|crudo|sushi|poke|omelette|oeufs? (poches?|mollets?|brouilles|au plat|coque|cocotte)|croustillant|panee?s?\b|tempura|frit|beignet|souffle|burger|sandwich|tartine|croque|pizza|tacos|steak|\bpaves?\b|minute|plancha|grille|shakshuka|chakchouka)/;
+const batch52=e=>{if(!e)return false;if(e._b52!==undefined)return e._b52;const t=nrmS(e.t||"").replace(/['’]/g," ");return e._b52=BATCH52.test(t)&&!NOBATCH52.test(t)};
+discScore=(f=>function(e){const s=f.apply(this,arguments);if(s<0)return s;const t=nrmS(e.t||"");return s+(batch52(e)?0.22:0)+((e.y||0)>=4?0.04:0)-(NOBATCH52.test(t)?0.06:0)})(discScore);
+swCard=(f=>function(e,cls){const h=f.apply(this,arguments);return batch52(e)?h.replace('<span class="sw-src">','<span class="sw-batch">🍱 Se garde 3 jours</span><span class="sw-src">'):h})(swCard);
+panelDiscOne=(f=>function(e){const h=f.apply(this,arguments);return batch52(e)?h.replace('<p class="dc-pills">','<p class="dc-batch">🍱 Idéal en batch cooking : se garde 3 jours au frigo.</p><p class="dc-pills">'):h})(panelDiscOne);
+
+// 5. rayons : muffin anglais, bagel, naan… au pain et féculents, pas aux fruits et légumes
+const BREAD52=/\b(muffins? anglais|english muffins?|bagels?|naans?|ciabattas?|focaccias?|blinis?|crumpets?|petits? pains?|pains? (de mie|complets?|aux cereales|burgers?|hot dog|pita|libanais)|brioches?|toasts?|biscottes?|wasa|crackers?)\b/;
+AISLE_PRE.unshift(["F",BREAD52]);
+for(const id in ING){const I=ING[id];if(!I||I[1]==="F")continue;if(/^(u_|p_|x_|b_)/.test(id)||I[1]==="L"){const n=nrm4(I[0]).replace(/['’]/g," ");if(BREAD52.test(n))I[1]="F"}}
+
+// tout recalculer (et à nouveau quand la table Ciqual est chargée)
+nx51Reset=(f=>function(){try{for(const e of DISC){delete e._c52;delete e._n52;delete e._b52}}catch(x){}return f.apply(this,arguments)})(nx51Reset);
+try{for(const e of DISC){delete e._c52;delete e._n52;delete e._b52;delete e._prOk}}catch(e){}
 
 try{setTab(ui.tab);renderAll()}catch(e){try{sbDiag("affichage au démarrage",e)}catch(x){}}try{initDb()}catch(e){}sbStart();
 
