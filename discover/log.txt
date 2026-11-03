@@ -1,19 +1,19 @@
 plan hellofresh 200 https://www.hellofresh.fr/sitemap_recipe_pages.xml → 8503
 plan jow 200 https://jow.fr/sitemap.xml → 3729
-recherche marmiton 200 crevettes&page=4 → 21
-recherche marmiton 200 skyr → 10
-recherche marmiton 200 oeufs&page=2 → 21
-recherche marmiton 200 protéiné&page=4 → 6
-recherche marmiton 404 cottage cheese&page=3 → 0
-recherche marmiton 200 high protein&page=4 → 6
-recherche marmiton 200 cabillaud&page=4 → 21
-recherche marmiton 200 colin&page=2 → 21
-recherche marmiton 200 escalope de dinde&page=4 → 21
-recherche marmiton 200 pois chiches&page=2 → 21
-recherche marmiton 404 edamame&page=4 → 0
-recherche marmiton 200 rillettes de thon → 21
-recherche marmiton 200 oeufs mimosa → 21
-recherche marmiton 200 dinde → 21
+recherche marmiton 200 colombo de poulet&page=3 → 17
+recherche marmiton 200 blanc de poulet&page=4 → 21
+recherche marmiton 200 saumon → 23
+recherche marmiton 200 colin&page=4 → 21
+recherche marmiton 200 bowl poulet quinoa&page=2 → 21
+recherche marmiton 200 bolognaise&page=4 → 21
+recherche marmiton 200 batch cooking&page=2 → 6
+recherche marmiton 200 riche en protéines&page=3 → 6
+recherche marmiton 200 escalope de dinde&page=2 → 21
+recherche marmiton 200 cabillaud&page=3 → 21
+recherche marmiton 200 hachis parmentier&page=2 → 21
+recherche marmiton 200 boeuf&page=3 → 23
+recherche marmiton 404 lasagnes légères&page=2 → 0
+recherche marmiton 404 meal prep&page=4 → 0
 plan marmiton 200 https://www.marmiton.org/wsitemap_recipes_1.xml → 4865
 plan marmiton 200 https://www.marmiton.org/wsitemap_recipes_2.xml → 4186
 plan marmiton 200 https://www.marmiton.org/wsitemap_recipes_3.xml → 4945
@@ -35,7 +35,10 @@ plan bettybossi 200 https://www.bettybossi.ch/sitemap-pdf-fr.xml → 0
 plan fourchette 200 https://www.fourchette-et-bikini.fr/xml/sitemap.xml → 0
 plan fourchette 200 https://www.fourchette-et-bikini.fr/xml/sitemap-fourchette-recette-1.xml → 2267
 plan fourchette 200 https://www.fourchette-et-bikini.fr/xml/sitemap-fourchette-recette-2.xml → 0
-à lire : 900 fiches (3 pistes d'encas)
-gardées : 20 · écartées : {"note Marmiton insuffisante":697,"nutrition absente":85,"fiche incomplète":1,"lipides # g":15,"protéines # g":16,"kcal #":41,"plat trop riche (nom)":15,"catégorie dessert, patisserie salee et sucree":1,"abats":2,"catégorie sauce":2,"encas pas assez protéiné":1,"catégorie dessert":4}
-par source : {"marmiton":{"lu":899,"plats":20,"encas":0,"why":{"note Marmiton insuffisante":697,"nutrition absente":85,"fiche incomplète":1,"lipides # g":15,"protéines # g":16,"kcal #":41,"plat trop riche (nom)":15,"abats":2,"catégorie sauce":2,"encas pas assez protéiné":1,"catégorie dessert":4}},"bettybossi":{"lu":1,"plats":0,"encas":0,"why":{"catégorie dessert, patisserie salee et sucree":1}}}
-pages créées : 2 · total 274 pages, 2740 recettes · en attente 3
+plan julieandrieu 200 https://www.julieandrieu.com/recipe-sitemap.xml → 1521
+plan hervecuisine 200 https://www.hervecuisine.com/herve_recipe-sitemap.xml → 938
+à lire : 950 fiches (0 pistes d'encas)
+gardées : 104 · écartées : {"dessert":125,"note Marmiton insuffisante":192,"plat incomplet":163,"encas":84,"porc":141,"plat trop riche (nom)":46,"catégorie plat principal,accompagnement et sauce":6,"catégorie dessert":15,"nutrition absente":29,"kcal #":5,"catégorie entree et aperitif ,accompagnement et sauce":8,"catégorie entree et aperitif ,plat principal,accompagnement et sauce":3,"catégorie desserts, patisseries orientales":2,"abats":2,"catégorie desserts, desserts alleges, desserts legers":1,"doublon":2,"fiche incomplète":2,"protéines # g":3,"catégorie accompagnement et sauce":5,"catégorie entree et aperitif ,accompagnement et sauce,snacking":2,"catégorie desserts":1,"catégorie desserts, tartes, tartelettes, flans":1,"catégorie desserts, desserts aux fruits, fetes":1,"catégorie dessert,gouter":2,"catégorie boissons, recettes indiennes":1,"catégorie petit dejeuner et brunch,dessert,snacking":1,"catégorie desserts, gros gateaux, cakes":1,"catégorie desserts americains":1,"catégorie petit dejeuner et brunch,accompagnement et sauce,gouter":1}
+par source : {"marmiton":{"lu":357,"plats":1,"encas":0,"why":{"dessert":36,"note Marmiton insuffisante":192,"porc":61,"nutrition absente":29,"kcal #":5,"catégorie dessert":3,"plat incomplet":23,"protéines # g":3,"plat trop riche (nom)":4}},"julieandrieu":{"lu":357,"plats":57,"encas":0,"why":{"plat incomplet":93,"porc":64,"plat trop riche (nom)":20,"catégorie plat principal,accompagnement et sauce":6,"catégorie dessert":12,"encas":48,"dessert":30,"catégorie entree et aperitif ,accompagnement et sauce":8,"catégorie entree et aperitif ,plat principal,accompagnement et sauce":3,"abats":2,"fiche incomplète":2,"catégorie accompagnement et sauce":5,"catégorie entree et aperitif ,accompagnement et sauce,snacking":2,"catégorie dessert,gouter":2,"catégorie petit dejeuner et brunch,dessert,snacking":1,"catégorie petit dejeuner et brunch,accompagnement et sauce,gouter":1}},"hervecuisine":{"lu":236,"plats":46,"encas":0,"why":{"encas":36,"dessert":59,"plat incomplet":47,"plat trop riche (nom)":22,"porc":16,"catégorie desserts, patisseries orientales":2,"catégorie desserts, desserts alleges, desserts legers":1,"catégorie desserts":1,"catégorie desserts, tartes, tartelettes, flans":1,"catégorie desserts, desserts aux fruits, fetes":1,"catégorie boissons, recettes indiennes":1,"catégorie desserts, gros gateaux, cakes":1,"catégorie desserts americains":1}}}
+retirées (sous les seuils de protéines, source non fiable ou porc) : 257
+pages créées : 10 · total 284 pages, 2840 recettes · en attente 7
