@@ -2551,6 +2551,23 @@ body.lock .fab,body.panel-open .fab{display:none!important}
 .m-nut .mdot{display:none!important}
 .sw-batch{display:inline-flex;align-items:center;background:#fff;color:var(--ink,#13201A);border-radius:999px;padding:3px 10px;font-family:var(--f-sub);font-weight:700;font-size:.76rem;text-shadow:none}
 .dc-batch{margin:6px 0 10px;padding:10px 12px;border-radius:12px;background:var(--accent-soft);font-size:.88rem;font-weight:600}
+/* ================= v53 : idées d'encas ================= */
+.snki{margin-top:22px}
+.snki-h h2{font-family:var(--f-title);font-size:1.25rem;font-weight:700;letter-spacing:-.02em;margin:0 0 4px;color:var(--title,var(--ink))}
+.snki-h p{margin:0 0 10px;font-size:.9rem}
+.snki-f{flex-wrap:wrap;overflow:visible;gap:8px;margin-bottom:10px}
+.snki-list{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+@media (min-width:900px){.snki-list{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.snki-row{display:flex;align-items:center;gap:10px;background:var(--surface);border-radius:16px;padding:8px 10px 8px 8px;box-shadow:var(--sh-1)}
+.snki-open{flex:1 1 auto;min-width:0;display:flex;align-items:center;gap:12px;background:none;border:0;padding:0;text-align:left;font:inherit;color:inherit;cursor:pointer;min-height:56px}
+.snki-open img,.snki-emo{flex:none;width:56px;height:56px;border-radius:12px;object-fit:cover;background:var(--surface-2);display:grid;place-items:center;font-size:1.5rem}
+.snki-t{min-width:0;display:flex;flex-direction:column;gap:2px}
+.snki-t b{font-size:.95rem;font-weight:700;line-height:1.25;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.snki-t small{font-size:.78rem;color:var(--muted)}
+.snki-add{flex:none;white-space:nowrap}
+.snki-more{display:block;margin:12px auto 0}
+.snki-empty{margin:8px 0}
+.snki-open:focus-visible{outline:3px solid var(--accent);outline-offset:3px;border-radius:12px}
 </style>
 </head>
 <body>
@@ -2586,7 +2603,8 @@ body.lock .fab,body.panel-open .fab{display:none!important}
   <p id="emptyR" class="muted" data-v="toutes" hidden>Aucune recette ne correspond à ces filtres. Choisis « Toutes » ou change la recherche.</p>
   <h2 class="block-title vh" id="snkT" data-v="snk">Encas</h2>
   <div class="grid" id="snkGrid" data-v="snk"></div>
-  <p id="snkEmpty" class="muted" data-v="snk" hidden>Aucune recette d'encas pour l'instant : ajoute-en une avec « + Ajouter une recette ».</p>
+  <p id="snkEmpty" class="muted" data-v="snk" hidden>Aucune recette d'encas pour l'instant : ajoute-en une avec « + Ajouter une recette » ou choisis une idée ci-dessous.</p>
+  <div id="snkIdeas" class="snki" data-v="snk"></div>
  </section>
 
  <section id="tab-semaine" class="tab" hidden>
@@ -2657,7 +2675,7 @@ body.lock .fab,body.panel-open .fab{display:none!important}
 </div>
 <div id="timers" class="timers" hidden aria-live="polite"></div>
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
-<script>window.NS_CONFIG={"hosted": true, "sbUrl": "https://zjsawjudrdneeptxbskd.supabase.co", "sbKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpqc2F3anVkcmRuZWVwdHhic2tkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1NjUxMjcsImV4cCI6MjEwNzE0MTEyN30.Wn1bUy--5O78gGICTOyEGbnT6B-SdoNCG_XxBBaaUIY", "build": "20261103180035"}</script>
+<script>window.NS_CONFIG={"hosted": true, "sbUrl": "https://zjsawjudrdneeptxbskd.supabase.co", "sbKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpqc2F3anVkcmRuZWVwdHhic2tkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1NjUxMjcsImV4cCI6MjEwNzE0MTEyN30.Wn1bUy--5O78gGICTOyEGbnT6B-SdoNCG_XxBBaaUIY", "build": "20261103194405"}</script>
 <script>
 const AISLES={L:"Fruits & légumes",H:"Herbes fraîches",V:"Viandes & poissons",C:"Crèmerie & œufs",S:"Surgelés",F:"Féculents",B:"Conserves",E:"Épices & condiments"};
 const AISLE_ORDER=["L","H","V","C","S","F","B","E"];
@@ -9635,6 +9653,47 @@ for(const id in ING){const I=ING[id];if(!I||I[1]==="F")continue;if(/^(u_|p_|x_|b
 // tout recalculer (et à nouveau quand la table Ciqual est chargée)
 nx51Reset=(f=>function(){try{for(const e of DISC){delete e._c52;delete e._n52;delete e._b52}}catch(x){}return f.apply(this,arguments)})(nx51Reset);
 try{for(const e of DISC){delete e._c52;delete e._n52;delete e._b52;delete e._prOk}}catch(e){}
+
+
+// ================= v53 : idées d'encas dans l'onglet Encas (salés comme les cookies au parmesan, ou protéinés) =================
+// liste tenue à jour par la collecte (discover/encas.json), gardée sur le téléphone 6 h
+const SNKI_KEY=LS+"-snkideas";let SNKI=null;
+// validation de base (les règles de protéines des plats ne s'appliquent pas aux encas salés)
+const snkValid=x=>{let o=null;try{o=dqValidV24(x)}catch(e){}if(!o||o.k!=="encas"||!srcOkV47(o)||DQ_ROBOT.test(o.t)||DQ_ROBOT.test(o.u))return null;if(x.sv)o.sv=1;return o};
+function snkiCache(){if(SNKI)return SNKI;try{const o=JSON.parse(localStorage.getItem(SNKI_KEY)||"null");if(o&&Array.isArray(o.items))SNKI={ts:+o.ts||0,items:o.items.map(snkValid).filter(Boolean)}}catch(e){}return SNKI}
+async function snkiFetch(force){const c=snkiCache();if(!force&&c&&Date.now()-c.ts<6*36e5)return c;if(ui.snkBusy)return c;ui.snkBusy=true;ui.snkErr=false;
+ try{const r=await fetch(DREM+"encas.json?t="+Math.floor(Date.now()/3e5),{cache:"no-store"});if(!r.ok)throw new Error("http "+r.status);const j=await r.json();
+  const items=(Array.isArray(j.items)?j.items:[]).map(snkValid).filter(Boolean).slice(0,400);
+  SNKI={ts:Date.now(),items};try{localStorage.setItem(SNKI_KEY,JSON.stringify(SNKI))}catch(e){}}
+ catch(e){ui.snkErr=true}
+ finally{ui.snkBusy=false}
+ try{renderSnackIdeas()}catch(e){}return SNKI}
+const SWEET53=/(chocolat|cacao|sucre|miel|banane|pomme|poire|fruits rouges|myrtille|framboise|fraise|vanille|caramel|confiture|datte|cannelle|brownie|pancake|porridge|overnight|smoothie|granola|cheesecake|mug ?cake|gaufre|crepe|compote|muesli|coco|marron|speculoos|praline|nutella|sirop|erable|fromage blanc|skyr|yaourt)/;
+const snkSweetIng=e=>SWEET53.test(nrmS((e.ing||[]).join(" ")).replace(/fromage blanc|skyr|yaourt/g,""));
+const snkSalty=e=>!!e&&!SWEET53.test(nrmS(e.t||""))&&!snkSweetIng(e);
+function snkiList(){const C=snkiCache();const pool=new Map();for(const e of (C&&C.items)||[])pool.set(e.id,e);for(const e of DISC)if(e.k==="encas"&&!pool.has(e.id))pool.set(e.id,e);
+ const L=[...pool.values()];dqRegister(L);
+ const dz=state.disc||{},mine=new Set((state.myrec||[]).map(x=>x.u).filter(Boolean));
+ return L.filter(e=>{if(dz[e.id]==="no"||dz[e.id]==="ok"||mine.has(e.u)||isPorkE(e))return false;let n=null;try{n=discNut(e)}catch(x){}if(!n||n.hide||!(n.k>0))return false;
+  const r=n.p*4/n.k;return snkSalty(e)?(n.p>=4&&r>=0.14&&n.k<=320):(n.p>=8&&r>=0.22&&n.k<=320)})}
+function renderSnackIdeas(){const box=document.getElementById("snkIdeas");if(!box)return;const f=ui.snkF||"sale";
+ const all=snkiList();const L=all.filter(e=>f==="all"||(f==="sale"?snkSalty(e):!snkSalty(e)));
+ const BAKE53=/(cookie|sable|cracker|biscuit|muffin|cake|gougere|tuile|chips|galette|gressin|grissini|madeleine|financier|scone)/,bk=e=>BAKE53.test(nrmS(e.t||""))?1:0;
+ L.sort((a,b)=>{const na=discNut(a),nb=discNut(b);return(snkSalty(b)-snkSalty(a))||(bk(b)-bk(a))||((nb.p*4/nb.k)-(na.p*4/na.k))||((b.img?1:0)-(a.img?1:0))});
+ const n=Math.min(L.length,ui.snkN||12);const nS=all.filter(snkSalty).length,nU=all.length-nS;
+ const row=e=>{const x=discNut(e);const per=e.uS||"portion";return`<li class="snki-row"><button type="button" class="snki-open" data-snki-see="${e.id}" aria-label="Voir la recette ${esc(e.t)}">${e.img?`<img src="${esc(e.img)}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer">`:`<span class="snki-emo" aria-hidden="true">${e.emo||"🥨"}</span>`}<span class="snki-t"><b>${esc(e.t)}</b><small>${esc(e.a&&e.a!==e.src?e.a:e.src)} · ${x.est?"≈ ":""}${fmtInt(x.k)} kcal · ${fmtG(r1(x.p))} g prot. par ${esc(per)}</small></span></button><button type="button" class="btn small snki-add" data-snki-add="${e.id}"${ui.dbusy===e.id?" disabled":""}>${ui.dbusy===e.id?"…":"+ Ajouter"}</button></li>`};
+ box.innerHTML=`<div class="snki-h"><h2>Idées d'encas</h2><p class="muted">De vraies recettes publiées, avec leur lien. Ajoute celles qui te tentent : elles rejoignent tes encas.</p>
+  <div class="chips snki-f" role="group" aria-label="Type d'encas"><button type="button" class="chip" data-snki-f="sale" aria-pressed="${f==="sale"}">Salés <small>${nS}</small></button><button type="button" class="chip" data-snki-f="sucre" aria-pressed="${f==="sucre"}">Sucrés <small>${nU}</small></button><button type="button" class="chip" data-snki-f="all" aria-pressed="${f==="all"}">Tous</button></div></div>
+  ${L.length?`<ul class="snki-list">${L.slice(0,n).map(row).join("")}</ul>${L.length>n?`<button type="button" class="btn ghost snki-more" data-snki-more="1">Voir plus (${L.length-n})</button>`:""}`
+   :`<p class="muted snki-empty">${ui.snkBusy?"Chargement des idées d'encas…":ui.snkErr?"Impossible de charger les idées pour le moment : vérifie la connexion.":"Pas encore d'idée dans cette catégorie : la collecte en ajoute plusieurs fois par jour."}</p>`}`}
+renderSnacks=(f=>function(){const r=f.apply(this,arguments);try{renderSnackIdeas();const C=snkiCache();if(HOSTED&&!ui.snkTried&&(!C||Date.now()-C.ts>6*36e5)){ui.snkTried=true;snkiFetch(false)}}catch(e){}return r})(renderSnacks);
+document.addEventListener("click",ev=>{const t=ev.target.closest&&ev.target.closest("[data-snki-f],[data-snki-more],[data-snki-see],[data-snki-add]");if(!t)return;
+ if(t.dataset.snkiF){ui.snkF=t.dataset.snkiF;ui.snkN=12;renderSnackIdeas();return}
+ if(t.dataset.snkiMore){ui.snkN=(ui.snkN||12)+12;renderSnackIdeas();return}
+ if(t.dataset.snkiSee){const id=t.dataset.snkiSee;if(!DISC_MAP[id])return;openPanel("decouvrir");ui.dsel=id;ui.dtab="ing";renderPanel();try{window.scrollTo(0,0)}catch(x){}return}
+ if(t.dataset.snkiAdd){const id=t.dataset.snkiAdd;if(!DISC_MAP[id]||ui.dbusy)return;t.disabled=true;t.textContent="…";Promise.resolve(discAdd(id,false)).finally(()=>{try{renderSnackIdeas()}catch(x){}});return}});
+// une recette ajoutée depuis la fiche (Découvrir) disparaît aussi des idées
+renderAll=(f=>function(){const r=f.apply(this,arguments);try{if(ui.tab==="recettes")renderSnackIdeas()}catch(e){}return r})(renderAll);
 
 try{setTab(ui.tab);renderAll()}catch(e){try{sbDiag("affichage au démarrage",e)}catch(x){}}try{initDb()}catch(e){}sbStart();
 
