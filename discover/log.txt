@@ -1,19 +1,19 @@
 plan hellofresh 200 https://www.hellofresh.fr/sitemap_recipe_pages.xml → 8503
 plan jow 200 https://jow.fr/sitemap.xml → 3729
-recherche marmiton 200 filet mignon de porc&page=3 → 21
-recherche marmiton 200 houmous&page=4 → 6
-recherche marmiton 200 filet de poulet&page=2 → 21
-recherche marmiton 200 escalope de dinde&page=4 → 21
-recherche marmiton 200 high protein&page=2 → 6
-recherche marmiton 200 porridge protéiné → 21
-recherche marmiton 200 oeufs&page=4 → 21
-recherche marmiton 200 fromage blanc&page=2 → 21
-recherche marmiton 200 riche en protéines&page=3 → 6
-recherche marmiton 200 boeuf → 23
-recherche marmiton 404 poulet léger&page=3 → 0
-recherche marmiton 200 veau&page=3 → 21
-recherche marmiton 200 energy balls protéinées&page=2 → 9
-recherche marmiton 200 cabillaud → 21
+recherche marmiton 200 rillettes de thon&page=2 → 21
+recherche marmiton 200 lieu noir&page=2 → 19
+recherche marmiton 200 blanc de poulet → 21
+recherche marmiton 404 cottage cheese&page=3 → 0
+recherche marmiton 200 lentilles&page=3 → 21
+recherche marmiton 200 porridge protéiné&page=2 → 18
+recherche marmiton 200 filet mignon de porc → 21
+recherche marmiton 404 barre protéinée&page=3 → 0
+recherche marmiton 200 pancakes protéinés → 7
+recherche marmiton 404 muffins protéinés&page=3 → 0
+recherche marmiton 200 thon&page=2 → 21
+recherche marmiton 200 quark&page=3 → 21
+recherche marmiton 200 dinde → 21
+recherche marmiton 200 filet de poulet&page=3 → 19
 plan marmiton 200 https://www.marmiton.org/wsitemap_recipes_1.xml → 4865
 plan marmiton 200 https://www.marmiton.org/wsitemap_recipes_2.xml → 4186
 plan marmiton 200 https://www.marmiton.org/wsitemap_recipes_3.xml → 4945
@@ -36,6 +36,6 @@ plan fourchette 200 https://www.fourchette-et-bikini.fr/xml/sitemap.xml → 0
 plan fourchette 200 https://www.fourchette-et-bikini.fr/xml/sitemap-fourchette-recette-1.xml → 2267
 plan fourchette 200 https://www.fourchette-et-bikini.fr/xml/sitemap-fourchette-recette-2.xml → 0
 à lire : 900 fiches (0 pistes d'encas)
-gardées : 11 · écartées : {"note Marmiton insuffisante":732,"kcal #":36,"lipides # g":9,"nutrition absente":68,"protéines # g":18,"plat trop riche (nom)":14,"encas pas assez protéiné":1,"catégorie dessert":8,"catégorie sauce":1,"robot de cuisine":1,"catégorie confiserie":1}
-par source : {"marmiton":{"lu":900,"plats":11,"encas":0,"why":{"note Marmiton insuffisante":732,"kcal #":36,"lipides # g":9,"nutrition absente":68,"protéines # g":18,"plat trop riche (nom)":14,"encas pas assez protéiné":1,"catégorie dessert":8,"catégorie sauce":1,"robot de cuisine":1,"catégorie confiserie":1}}}
-pages créées : 1 · total 271 pages, 2710 recettes · en attente 1
+gardées : 12 · écartées : {"abats":2,"note Marmiton insuffisante":684,"protéines # g":22,"nutrition absente":91,"robot de cuisine":1,"kcal #":43,"lipides # g":12,"catégorie confiserie":1,"plat trop riche (nom)":20,"catégorie dessert":9,"encas pas assez protéiné":2,"catégorie sauce":1}
+par source : {"marmiton":{"lu":900,"plats":12,"encas":0,"why":{"abats":2,"note Marmiton insuffisante":684,"protéines # g":22,"nutrition absente":91,"robot de cuisine":1,"kcal #":43,"lipides # g":12,"catégorie confiserie":1,"plat trop riche (nom)":20,"catégorie dessert":9,"encas pas assez protéiné":2,"catégorie sauce":1}}}
+pages créées : 1 · total 272 pages, 2720 recettes · en attente 3
