@@ -2568,6 +2568,62 @@ body.lock .fab,body.panel-open .fab{display:none!important}
 .snki-more{display:block;margin:12px auto 0}
 .snki-empty{margin:8px 0}
 .snki-open:focus-visible{outline:3px solid var(--accent);outline-offset:3px;border-radius:12px}
+/* ================= v54 : carte Découvrir, idées d'encas, Suivi centré sur le poids ================= */
+.disc-card{display:flex;align-items:center;gap:12px;width:100%;text-align:left;font:inherit;color:inherit;cursor:pointer;margin:0 0 18px;padding:14px 16px;border:0;border-radius:var(--r-lg,18px);background:var(--accent-soft);min-height:64px}
+.disc-card .dcc-ic{flex:none;width:44px;height:44px;border-radius:14px;background:var(--surface);display:grid;place-items:center;font-size:1.35rem}
+.disc-card .dcc-t{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;gap:2px}
+.disc-card .dcc-t b{font-size:1rem;font-weight:700;color:var(--title,var(--ink))}
+.disc-card .dcc-t small{font-size:.82rem;color:var(--muted);line-height:1.35}
+.disc-card .vc{position:static;margin:0}
+.disc-card .dcc-go{flex:none;font-size:1.6rem;line-height:1;color:var(--accent);font-weight:700}
+.disc-card:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+.snki-no{flex:none;width:36px;height:36px;border-radius:50%;border:1px solid var(--line);background:var(--surface);color:var(--muted);font-size:1.15rem;line-height:1;display:grid;place-items:center;padding:0;cursor:pointer}
+.snki-no:hover{color:var(--danger,#B3261E);border-color:currentColor}
+.snki-row{gap:8px}
+/* poids & objectif */
+.w54 .sv-h{align-items:center}
+.w54-goal{font-size:.78rem;font-weight:700;color:var(--accent);background:var(--accent-soft);border-radius:999px;padding:3px 10px}
+.w54-hero{display:flex;align-items:flex-end;gap:16px;flex-wrap:wrap;margin:4px 0 12px}
+.w54-now{display:flex;flex-direction:column}
+.w54-now b{font-family:var(--f-title);font-size:2.6rem;font-weight:700;letter-spacing:-.03em;line-height:1;color:var(--title,var(--ink))}
+.w54-now span{font-size:.82rem;color:var(--muted);margin-top:4px}
+.w54-kpis{display:flex;gap:16px;flex-wrap:wrap;flex:1 1 auto;justify-content:flex-end}
+.w54-kpis div{display:flex;flex-direction:column;min-width:0}
+.w54-kpis b{font-size:1.15rem;font-weight:700}
+.w54-kpis b.good{color:var(--ok,var(--accent))}
+.w54-kpis b.bad{color:var(--high,#C2410C)}
+.w54-kpis span{font-size:.76rem;color:var(--muted)}
+.w54-bar{height:10px;border-radius:99px;background:var(--surface-2);overflow:hidden}
+.w54-bar i{display:block;height:100%;border-radius:99px;background:var(--accent)}
+.w54-sub{font-size:.8rem;color:var(--muted);margin:6px 0 10px}
+.w54-chart{margin-top:6px}
+.chart .w54-avg{fill:none;stroke:var(--ink);stroke-width:2;stroke-linejoin:round;opacity:.35}
+.chart .w54-plan{stroke:var(--accent);stroke-width:1.6;stroke-dasharray:3 5;opacity:.75}
+.w54-leg{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:.74rem;color:var(--muted);margin:2px 0 10px}
+.w54-leg span::before{content:"";display:inline-block;width:14px;height:0;border-top:2.5px solid var(--accent);vertical-align:middle;margin-right:6px}
+.w54-leg .lg-a::before{border-top-color:var(--ink);opacity:.35}
+.w54-leg .lg-p::before{border-top-style:dashed;border-top-width:2px}
+.w54-pace{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.w54-pace div{background:var(--surface-2);border-radius:12px;padding:10px 12px;display:flex;flex-direction:column;min-width:0}
+.w54-pace span{font-size:.74rem;color:var(--muted);font-weight:700}
+.w54-pace b{font-size:1.05rem}
+.w54-pace small{font-size:.74rem;color:var(--muted)}
+.w54-st{font-size:.84rem;font-weight:700;margin:8px 0 0;color:var(--high,#C2410C)}
+.w54-st.ok{color:var(--ok,var(--accent))}
+.w54-eta{font-size:.88rem;margin:10px 0 0}
+.w54-eta.ok{color:var(--ok,var(--accent));font-weight:700}
+.w54-eta.warn{color:var(--high,#C2410C)}
+.w54-form{margin-top:12px}
+.w54-list{list-style:none;margin:0;padding:0;display:grid;gap:12px}
+.w54-list li{display:flex;gap:12px;align-items:flex-start}
+.w54-ic{flex:none;width:34px;height:34px;border-radius:50%;background:var(--surface-2);display:grid;place-items:center;font-size:1rem}
+.w54-list li div{display:flex;flex-direction:column;gap:2px;min-width:0}
+.w54-list b{font-size:.92rem}
+.w54-list small{font-size:.8rem;color:var(--muted);line-height:1.4}
+.w54-list small b{font-size:inherit;color:var(--ink)}
+.w54-note{font-size:.74rem;color:var(--muted);margin:12px 0 0}
+.w54-chart .tgt{stroke:var(--accent);stroke-width:1.4;stroke-dasharray:5 4;opacity:.85}
+.w54-chart .tgl{fill:var(--accent);font-weight:700;font-size:10.5px;opacity:1}
 </style>
 </head>
 <body>
@@ -2675,7 +2731,7 @@ body.lock .fab,body.panel-open .fab{display:none!important}
 </div>
 <div id="timers" class="timers" hidden aria-live="polite"></div>
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
-<script>window.NS_CONFIG={"hosted": true, "sbUrl": "https://zjsawjudrdneeptxbskd.supabase.co", "sbKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpqc2F3anVkcmRuZWVwdHhic2tkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1NjUxMjcsImV4cCI6MjEwNzE0MTEyN30.Wn1bUy--5O78gGICTOyEGbnT6B-SdoNCG_XxBBaaUIY", "build": "20261103194405"}</script>
+<script>window.NS_CONFIG={"hosted": true, "sbUrl": "https://zjsawjudrdneeptxbskd.supabase.co", "sbKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpqc2F3anVkcmRuZWVwdHhic2tkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1NjUxMjcsImV4cCI6MjEwNzE0MTEyN30.Wn1bUy--5O78gGICTOyEGbnT6B-SdoNCG_XxBBaaUIY", "build": "20261104131131"}</script>
 <script>
 const AISLES={L:"Fruits & légumes",H:"Herbes fraîches",V:"Viandes & poissons",C:"Crèmerie & œufs",S:"Surgelés",F:"Féculents",B:"Conserves",E:"Épices & condiments"};
 const AISLE_ORDER=["L","H","V","C","S","F","B","E"];
@@ -5357,7 +5413,7 @@ document.addEventListener("click",e=>{const t=e.target.closest("button");if(!t)r
  else if(a==="cant-save-both")cantSave(true);
  else if(a==="cant-man"&&C){const v=id=>{const x=Number(String((document.getElementById(id)||{}).value||"").replace(",","."));return isFinite(x)&&x>=0?x:0};const n=String((document.getElementById("ctN")||{}).value||"").trim();const k=v("ctK");if(!n||!k){toast("Indique au moins le nom et les kcal");return}C.items.push({n:n.slice(0,40),k:Math.round(k),p:r1(v("ctP")),f:r1(v("ctF")),c:r1(v("ctC")),fi:r1(v("ctFi")),mul:1,por:"saisie libre"});renderPanel()}
  else if(a==="rec-hide"){if(t.dataset.armed!=="1"){t.dataset.armed="1";t.textContent="Confirmer la suppression";clearTimeout(t._t);t._t=setTimeout(()=>{t.dataset.armed="0";t.textContent="Supprimer"},4000);return}
-  const id=ui.modal;if(!id)return;if(!state.removed)state.removed={};state.removed[id]=true;for(const s of SLOTS)if(state.plan[s]===id&&!state.done[s]){delete state.plan[s];delete state.servings[s]}delete state.snacks[id];delete state.favs[id];delete state.likes[id];applyRemoved(state.removed);commit();closeModal();renderAll();toast("Recette supprimée : tu peux la restaurer en bas de l'onglet Recettes")}});
+  const id=ui.modal;if(!id)return;if(!state.removed)state.removed={};state.removed[id]=true;for(const s of SLOTS)if(state.plan[s]===id&&!state.done[s]){delete state.plan[s];delete state.servings[s]}delete state.snacks[id];delete state.favs[id];delete state.likes[id];applyRemoved(state.removed);commit();closeModal();renderAll();toast("Recette supprimée")}});
 document.addEventListener("change",e=>{const t=e.target;if(t&&t.id==="cantPhoto"){cantPhoto(t.files&&t.files[0]);t.value=""}});
 
 // ================= v7 : liste de courses regroupée (même ingrédient = une ligne, quantité totale) =================
@@ -9694,6 +9750,122 @@ document.addEventListener("click",ev=>{const t=ev.target.closest&&ev.target.clos
  if(t.dataset.snkiAdd){const id=t.dataset.snkiAdd;if(!DISC_MAP[id]||ui.dbusy)return;t.disabled=true;t.textContent="…";Promise.resolve(discAdd(id,false)).finally(()=>{try{renderSnackIdeas()}catch(x){}});return}});
 // une recette ajoutée depuis la fiche (Découvrir) disparaît aussi des idées
 renderAll=(f=>function(){const r=f.apply(this,arguments);try{if(ui.tab==="recettes")renderSnackIdeas()}catch(e){}return r})(renderAll);
+
+
+// ================= v54 : encas à part du swipe, Découvrir en carte, Suivi centré sur le poids et l'objectif =================
+
+// ---------- 1. Découvrir : plus de catégorie « encas » ni « porc » ; « Tout » = tous les plats ----------
+for(const k of ["encas","porc","plats"]){const i=DF_OPTS.findIndex(o=>o[0]===k);if(i>=0)DF_OPTS.splice(i,1)}
+{const a=DF_OPTS.find(o=>o[0]==="all");if(a){a[1]="Tous les plats";a[2]="🍽️"}}
+if(["encas","porc","plats"].includes(ui.dtag))ui.dtag="all";
+
+// ---------- 2. Recettes : Découvrir n'est plus un onglet, c'est une carte en haut de la liste ----------
+(()=>{const old=document.querySelector('#tab-recettes .subtabs .vgo');const vc=old&&old.querySelector("#vcDisc");
+ const sg=document.getElementById("suggest");if(!sg||document.getElementById("discCard"))return;
+ sg.insertAdjacentHTML("beforebegin",`<button type="button" id="discCard" class="disc-card" data-dsc="open" data-v="toutes"><span class="dcc-ic" aria-hidden="true">🍽️</span><span class="dcc-t"><b>Découvrir de nouveaux plats</b><small>Swipe parmi de vraies recettes de plats complets : à droite pour ajouter, à gauche pour écarter.</small></span><span class="dcc-go" aria-hidden="true">›</span></button>`);
+ if(vc){const c=document.getElementById("discCard");c.insertBefore(vc,c.querySelector(".dcc-go"))}
+ if(old)old.remove()})();
+
+// ---------- 3. Encas : plus de plats parmi les idées ----------
+const MEAL54=/(bourguignon|parmentier|curry|saute|poelee|ragout|tajine|blanquette|chili|lasagne|gratin|risotto|burger|sandwich|\bwrap|tacos|quiche|pizza|salade (composee|de pates|de riz|de quinoa|de lentilles|cesar)|\bbowl|\bpates|spaghetti|\briz\b|nouilles|couscous|soupe|veloute|potage|steak|filets? de|paves? de|escalope|poulet (roti|grille)|hachis|mijote|cocotte|puree|galettes? de (sarrasin|ble noir)|crepes? (salees|completes)|plat |omelette|frittata|shakshuka|chakchouka|brochettes de (poulet|boeuf|dinde)|boulettes)/;
+const snkMeal=e=>MEAL54.test(nrmS(e.t||"").replace(/['’]/g," "))||(()=>{try{const n=discNut(e);return n&&n.p>28}catch(x){return false}})();
+snkiList=(f=>function(){return f.apply(this,arguments).filter(e=>!snkMeal(e))})(snkiList);
+
+// ---------- 4. Encas : écarter une idée, fiche à part (le retour ramène aux encas, pas au swipe) ----------
+renderSnackIdeas=(f=>function(){const r=f.apply(this,arguments);try{document.querySelectorAll("#snkIdeas .snki-row").forEach(li=>{if(li.querySelector(".snki-no"))return;const b=li.querySelector("[data-snki-add]");if(!b)return;const id=b.dataset.snkiAdd;const t=(DISC_MAP[id]||{}).t||"";
+  b.insertAdjacentHTML("afterend",`<button type="button" class="snki-no" data-snki-no="${esc(id)}" aria-label="Écarter ${esc(t)} : ne plus la proposer" title="Ne plus proposer">×</button>`)})}catch(e){}return r})(renderSnackIdeas);
+function panelSnkOne(){const e=DISC_MAP[ui.snkSel];if(!e)return`<p class="pn-help">Cette idée n'est plus disponible.</p>`;let h="";try{h=panelDiscOne(e)}catch(x){return""}
+ return h.replace(/<button type="button" class="dc-back" data-dsc="back">([\s\S]*?)<\/button>/,(m,inner)=>`<button type="button" class="dc-back" data-snki-close="1">${inner.replace(/Toutes les propositions/,"Retour aux encas")}</button>`)
+  .replace(/data-dsc="add\|([^"]+)"/g,'data-snki-add="$1"').replace(/data-dsc="no\|([^"]+)"/g,'data-snki-no="$1"')}
+renderPanel=(f=>function(){const b=document.getElementById("panelBody");if(b&&ui.panel==="snki"){b.innerHTML=panelSnkOne();return}return f.apply(this,arguments)})(renderPanel);
+// les clics des idées d'encas passent avant ceux de Découvrir
+document.addEventListener("click",ev=>{const t=ev.target.closest&&ev.target.closest("[data-snki-see],[data-snki-add],[data-snki-no],[data-snki-close]");if(!t)return;ev.stopImmediatePropagation();ev.preventDefault();
+ if(t.dataset.snkiClose){closePanel();return}
+ if(t.dataset.snkiSee){const id=t.dataset.snkiSee;if(!DISC_MAP[id])return;ui.snkSel=id;ui.dtab="ing";openPanel("snki");return}
+ if(t.dataset.snkiNo){const id=t.dataset.snkiNo;state.disc={...(state.disc||{}),[id]:"no"};commit();if(ui.panel==="snki")closePanel();try{renderSnackIdeas()}catch(x){}toast("Idée écartée : elle ne sera plus proposée");return}
+ if(t.dataset.snkiAdd){const id=t.dataset.snkiAdd;if(!DISC_MAP[id]||ui.dbusy)return;t.disabled=true;t.textContent="…";
+  Promise.resolve(discAdd(id,false)).finally(()=>{if(ui.panel==="snki")closePanel();try{renderSnackIdeas()}catch(x){}});return}},true);
+
+// ---------- 5. Supprimer une recette proposée (encas ou plat) depuis sa fiche ----------
+renderModal=(f=>function(){const r=f.apply(this,arguments);try{const R=RMAP[ui.modal];const a=document.querySelector("#mContent .m-actions");
+  if(R&&!R.my&&a&&!a.querySelector('[data-act="rec-hide"]'))a.insertAdjacentHTML("beforeend",`<button type="button" class="btn ghost" data-act="rec-hide">Supprimer</button>`)}catch(e){}return r})(renderModal);
+
+// ---------- 6. Suivi : plus de gamification ----------
+gwTick=function(){};npCelebrate=function(){};xpFloat=function(){};levelUp=function(){};badgePop=function(){};celebrateQuest=function(){};
+gqChip=function(){document.querySelectorAll(".gq-chip").forEach(b=>b.remove())};try{gqChip()}catch(e){}
+
+// ---------- 7. Suivi › Progrès : le poids et ce qui le fait bouger, en premier ----------
+const GOAL54={perte:"Perte de poids",seche:"Sèche",maintien:"Maintien du poids",masse:"Prise de masse"};
+const fd54=t=>new Date(t).toLocaleDateString("fr-FR",{day:"numeric",month:"short"}).replace(".","");
+const kg54=v=>fmtG(r1(v)).replace(/,0$/,"");
+const sg54=v=>(v>0?"+":v<0?"−":"")+kg54(Math.abs(v));
+function chartW54(w,goalKg,startT,startKg,planRate,projT){const W=320,H=190,L=36,R=12,T=14,B=26;
+ const pts=w.map(([d,kg])=>({t:dateFromYmd(d).getTime(),kg}));let t0=Math.min(pts[0].t,startT||pts[0].t),t1=Math.max(pts[pts.length-1].t,Date.now());if(projT)t1=Math.max(t1,Math.min(projT,t0+400*864e5));if(t1-t0<14*864e5)t1=t0+14*864e5;
+ // trajectoire prévue : du départ vers l'objectif au rythme visé
+ let plan=null;if(startT&&startKg&&goalKg&&planRate&&Math.sign(goalKg-startKg)===Math.sign(planRate)){const tg=startT+(goalKg-startKg)/planRate*864e5;const te=Math.min(tg,t1);plan=[[startT,startKg],[te,startKg+planRate*(te-startT)/864e5]]}
+ const ks=pts.map(p=>p.kg).concat(goalKg?[goalKg]:[]).concat(startKg?[startKg]:[]);let lo=Math.min(...ks),hi=Math.max(...ks);const pad=Math.max(0.6,(hi-lo)*0.12);lo=Math.floor(lo-pad);hi=Math.ceil(hi+pad);
+ const X=t=>L+(W-L-R)*(t-t0)/(t1-t0),Y=k=>T+(H-T-B)*(hi-k)/((hi-lo)||1);let g="";
+ [lo,(lo+hi)/2,hi].forEach(k=>{g+=`<line class="grid" x1="${L}" x2="${W-R}" y1="${Y(k)}" y2="${Y(k)}"/><text class="yl" x="${L-6}" y="${Y(k)+4}" text-anchor="end">${fmtG(Math.round(k*2)/2)}</text>`});
+ if(goalKg)g+=`<line class="tgt" x1="${L}" x2="${W-R}" y1="${Y(goalKg)}" y2="${Y(goalKg)}"/><text class="tgl" x="${W-R-2}" y="${Y(goalKg)-5}" text-anchor="end">objectif ${kg54(goalKg)} kg</text>`;
+ if(plan)g+=`<line class="w54-plan" x1="${X(plan[0][0])}" y1="${Y(plan[0][1])}" x2="${X(plan[1][0])}" y2="${Y(plan[1][1])}"/>`;
+ // moyenne sur 7 jours : lisse les variations d'eau d'un jour à l'autre
+ if(pts.length>=3){const avg7=pts.map(p=>{const s=pts.filter(q=>q.t<=p.t&&q.t>p.t-7*864e5);return{t:p.t,kg:s.reduce((a,q)=>a+q.kg,0)/s.length}});g+=`<path class="w54-avg" d="${avg7.map((p,i)=>(i?"L":"M")+X(p.t).toFixed(1)+" "+Y(p.kg).toFixed(1)).join(" ")}"/>`}
+ if(pts.length>1)g+=`<path class="wline" d="${pts.map((p,i)=>(i?"L":"M")+X(p.t).toFixed(1)+" "+Y(p.kg).toFixed(1)).join(" ")}"/>`;
+ pts.forEach((p,i)=>{g+=`<circle class="wdot${i===pts.length-1?" last":""}" cx="${X(p.t)}" cy="${Y(p.kg)}" r="${i===pts.length-1?4.5:3}"/>`});
+ const last=pts[pts.length-1];g+=`<text class="yl" x="${X(last.t)}" y="${Y(last.kg)-9}" text-anchor="${X(last.t)>W-50?"end":"middle"}" font-weight="700">${kg54(last.kg)}</text>`;
+ g+=`<text class="xs" x="${L}" y="${H-6}">${fd54(t0)}</text><text class="xs" x="${W-R}" y="${H-6}" text-anchor="end">${fd54(t1)}</text>`;
+ return`<svg viewBox="0 0 ${W} ${H}" class="chart w54-chart" role="img" aria-label="Courbe de poids : ${pts.length} pesées, dernière ${kg54(last.kg)} kg${goalKg?", objectif "+kg54(goalKg)+" kg":""}">${g}</svg>
+  <p class="w54-leg"><span class="lg-w">pesées</span>${pts.length>=3?`<span class="lg-a">moyenne 7 jours</span>`:""}${plan?`<span class="lg-p">rythme prévu</span>`:""}</p>`}
+function w54Cards(pi){const P=state.people[pi]||{},pr=P.prof,w=(P.w||[]).slice().sort((a,b)=>a[0]<b[0]?-1:1);if(!pr)return null;
+ const goal=pr.goal||"perte",goalKg=pr.goalKg||null,curKg=w.length?w[w.length-1][1]:pr.kg,startKg=pr.startKg||(w[0]&&w[0][1])||pr.kg;
+ const startT=pr.since&&/^\d{8}$/.test(pr.since)?dateFromYmd(pr.since).getTime():(w[0]?dateFromYmd(w[0][0]).getTime():null);
+ let calc=null;try{calc=calcTargets({...pr,kg:curKg})}catch(e){}
+ const tk=(P.t&&P.t.k)||(calc&&calc.t.k)||0;const planRate=calc&&tk&&Math.abs(tk-calc.tdee)>=20?(tk-calc.tdee)/7700:null;// kg par jour, avec l'objectif calorique en cours
+ const tr=wTrend(w);// kg par jour, sur 5 semaines
+ const ch=curKg-startKg,left=goalKg?goalKg-curKg:null;
+ const dirOk=v=>goal==="masse"?v>0:goal==="maintien"?Math.abs(v)<0.6:v<0;
+ const prog=goalKg&&Math.abs(goalKg-startKg)>=0.3&&goal!=="maintien"?Math.max(0,Math.min(1,(curKg-startKg)/(goalKg-startKg))):null;
+ const rate=tr!=null?tr:planRate;let eta="";
+ if(goalKg&&Math.abs(left)<0.3)eta=`<p class="w54-eta ok">🎉 Poids visé atteint. Passe en « Maintien » dans le profil pour garder ce poids.</p>`;
+ else if(goalKg&&rate&&Math.sign(left)===Math.sign(rate)){const days=left/rate;if(days>0&&days<1100)eta=`<p class="w54-eta">${tr!=null?"Au rythme mesuré":"Au rythme prévu"}, objectif atteint vers le <b>${new Date(Date.now()+days*864e5).toLocaleDateString("fr-FR",{day:"numeric",month:"long",year:"numeric"})}</b>.</p>`}
+ else if(goalKg&&tr!=null&&Math.sign(left)!==Math.sign(tr)&&Math.abs(tr*7)>=0.1)eta=`<p class="w54-eta warn">Ces dernières semaines, le poids va dans le mauvais sens (${sg54(tr*7)} kg/sem.). Regarde les calories ci-dessous.</p>`;
+ let pace="";if(tr!=null||planRate){const st=tr!=null&&planRate?(Math.abs(tr)<Math.abs(planRate)*0.6?"Plus lent que prévu":Math.abs(tr)>Math.abs(planRate)*1.5?"Plus rapide que prévu":"Dans le rythme"):"";
+  pace=`<div class="w54-pace"><div><span>Rythme mesuré</span><b>${tr!=null?sg54(tr*7)+" kg/sem.":"–"}</b><small>${tr!=null?"5 dernières semaines":"au moins 3 pesées sur 1 semaine"}</small></div><div><span>Rythme prévu</span><b>${planRate?sg54(planRate*7)+" kg/sem.":"–"}</b><small>${tk?"avec "+fmtInt(tk)+" kcal par jour":""}</small></div></div>${st?`<p class="w54-st ${st==="Dans le rythme"?"ok":""}">${st}</p>`:""}`}
+ const lastD=w.length?w[w.length-1][0]:null,ago=lastD?Math.round((Date.now()-dateFromYmd(lastD).getTime())/864e5):null;
+ const hero=`<div class="sv-card w54" data-v="progres" id="w54Card"><div class="sv-h"><h3>Poids & objectif</h3><span class="w54-goal">${esc(GOAL54[goal]||"")}</span></div>
+  <div class="w54-hero"><div class="w54-now"><b>${kg54(curKg)}</b><span>kg ${ago===0?"aujourd'hui":ago!=null?`il y a ${ago} j`:"(profil)"}</span></div>
+   <div class="w54-kpis"><div><b class="${ch&&dirOk(ch)?"good":ch?"bad":""}">${ch?sg54(ch)+" kg":"0 kg"}</b><span>depuis le ${startT?fd54(startT):"départ"}</span></div>
+    ${goalKg&&goal!=="maintien"?`<div><b>${Math.abs(left)<0.3?"0 kg":kg54(Math.abs(left))+" kg"}</b><span>${Math.abs(left)<0.3?"objectif atteint":`à ${left<0?"perdre":"prendre"} pour ${kg54(goalKg)} kg`}</span></div>`:""}</div></div>
+  ${prog!=null?`<div class="w54-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${Math.round(prog*100)}" aria-label="Chemin parcouru vers l'objectif"><i style="width:${(prog*100).toFixed(1)}%"></i></div><p class="w54-sub">${Math.round(prog*100)} % du chemin · départ ${kg54(startKg)} kg → objectif ${kg54(goalKg)} kg</p>`:""}
+  ${w.length>=2?chartW54(w.slice(-90),goalKg,startT,startKg,planRate,null):`<p class="pn-help">Note au moins deux pesées pour voir ta courbe.</p>`}
+  ${pace}${eta}<div class="w54-form"></div></div>`;
+ // ce qui fait bouger le poids : moyennes des derniers jours
+ let S=[];try{S=seriesFor(pi).filter(it=>it.i<0&&it.v&&it.v.k>0)}catch(e){}
+ const n=S.length,aK=n?S.reduce((a,it)=>a+(+it.v.k||0),0)/n:0,aP=n?S.reduce((a,it)=>a+(+it.v.p||0),0)/n:0,t=P.t||{};
+ const exp=calc&&n?(aK-calc.tdee)*7/7700:null;
+ const items=[];
+ items.push(n>=3?`<li><span class="w54-ic" aria-hidden="true">🔥</span><div><b>Calories : ${fmtInt(aK)} kcal par jour en moyenne</b><small>Objectif ${fmtInt(t.k||0)} kcal${calc?` · dépense estimée ${fmtInt(calc.tdee)} kcal`:""}${exp!=null?` → environ <b>${sg54(exp)} kg par semaine</b> attendus`:""}</small></div></li>`
+  :`<li><span class="w54-ic" aria-hidden="true">🔥</span><div><b>Calories : pas encore assez de jours suivis</b><small>Planifie et coche tes repas : la moyenne des ${n?"derniers ":""}jours apparaîtra ici avec le rythme attendu.</small></div></li>`);
+ if(n>=3&&t.p)items.push(`<li><span class="w54-ic" aria-hidden="true">🥩</span><div><b>Protéines : ${fmtInt(aP)} g par jour en moyenne</b><small>Objectif ${fmtInt(t.p)} g${goal==="perte"||goal==="seche"?" : assez de protéines aide à perdre du gras sans perdre de muscle":goal==="masse"?" : indispensables pour construire du muscle":""}${aP<t.p*0.95?` · il manque environ ${fmtInt(t.p-aP)} g par jour`:" · objectif tenu"}</small></div></li>`);
+ if(exp!=null&&tr!=null&&Math.abs(exp-tr*7)>=0.4)items.push(`<li><span class="w54-ic" aria-hidden="true">💡</span><div><b>Écart entre calories et balance</b><small>Les calories notées annoncent ${sg54(exp)} kg/sem., la balance montre ${sg54(tr*7)} kg/sem. Oublis (huile, sauces, grignotages) ou variations d'eau : compare sur 2 à 3 semaines.</small></div></li>`);
+ items.push(`<li><span class="w54-ic" aria-hidden="true">⚖️</span><div><b>${ago==null?"Aucune pesée notée":ago===0?"Pesée faite aujourd'hui":`Dernière pesée il y a ${ago} jour${ago>1?"s":""}`}</b><small>Pèse-toi 1 à 2 fois par semaine, le matin à jeun : la moyenne sur 7 jours compte plus que le chiffre du jour.</small></div></li>`);
+ const why=`<div class="sv-card w54-why" data-v="progres"><div class="sv-h"><h3>Ce qui fait bouger ton poids</h3></div><ul class="w54-list">${items.join("")}</ul><p class="w54-note">Moyennes des ${n||7} derniers jours, d'après le suivi et le planning. Repère : 7 700 kcal ≈ 1 kg.</p></div>`;
+ return{hero,why}}
+renderSuivi=(f=>function(){const r=f.apply(this,arguments);
+ try{const root=document.getElementById("suivi");if(!root)return r;const pi=ui.ntP||0;
+  root.querySelectorAll(".gq-card,.sv-card.game").forEach(c=>c.remove());
+  root.querySelectorAll(".sv-chip").forEach(c=>{if(/🔥/.test(c.textContent))c.remove()});
+  const C=w54Cards(pi);
+  const wc=[...root.children].find(c=>c.querySelector&&c.querySelector("#wForm"));
+  if(C){const first=root.querySelector('[data-v~="progres"]');
+   if(first)first.insertAdjacentHTML("beforebegin",C.hero+C.why);else root.insertAdjacentHTML("beforeend",C.hero+C.why);
+   const slot=root.querySelector("#w54Card .w54-form");if(wc&&slot){const fm=wc.querySelector("#wForm"),ls=wc.querySelector(".sv-wlist");if(fm)slot.appendChild(fm);if(ls)slot.appendChild(ls);wc.remove()}
+   // ensuite : repères poids (IMC), tendance des apports, puis le reste
+   const why=root.querySelector(".w54-why");const bmi=root.querySelector(".bmi-card");if(bmi&&why)why.after(bmi);
+   const trend=[...root.children].find(c=>/^tendance/.test(nrmS((c.querySelector("h3")||{}).textContent||"").trim()));if(trend&&(bmi||why))(bmi||why).after(trend);
+   const pn=root.querySelector(".pn-card"),co2=root.querySelector("#co2Card");if(pn)root.appendChild(pn);if(co2)root.appendChild(co2)}
+  applyView("suivi")}catch(e){try{console.warn(e)}catch(x){}}
+ return r})(renderSuivi);
 
 try{setTab(ui.tab);renderAll()}catch(e){try{sbDiag("affichage au démarrage",e)}catch(x){}}try{initDb()}catch(e){}sbStart();
 
