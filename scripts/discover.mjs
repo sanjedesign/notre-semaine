@@ -4,6 +4,7 @@
 // annonce des protéines ou un plat qui se garde, ne garde que des plats complets (protéine, féculent, légumes, matière grasse),
 // sans porc, et les range par pages de 10 plats variés dans la branche « data ».
 // Les encas (salés comme les cookies au parmesan, ou protéinés) vont dans discover/encas.json, montrés dans l'onglet Encas.
+// Les plats avec une vidéo (YouTube d'Hervé Cuisine, vidéos de Jow sur leur site) vont aussi dans discover/videos.json, montrés en priorité dans le swipe.
 // Les chefs ne publient pas de valeurs nutritionnelles : l'appli les calcule ingrédient par ingrédient (table Ciqual).
 // DRY_RUN=1 : lit quelques fiches et affiche le résultat sans rien écrire (SOURCES=bettybossi,fourchette pour en choisir).
 // L'appli lit ces pages une par une avec le bouton « Actualiser ».
@@ -48,7 +49,19 @@ function ld(html) {
 const num = (v) => { const m = String(v ?? "").replace(",", ".").match(/\d+(?:\.\d+)?/); return m ? parseFloat(m[0]) : null; };
 const iso = (d) => { const m = String(d ?? "").match(/P(?:(\d+)D)?T?(?:(\d+)H)?(?:(\d+)M)?/i); return m ? (+(m[1] || 0)) * 1440 + (+(m[2] || 0)) * 60 + (+(m[3] || 0)) : 0; };
 const imgOf = (i) => !i ? "" : typeof i === "string" ? i : Array.isArray(i) ? imgOf(i.find((x) => /1024x768/.test(String(x?.url || x))) || i[0]) : typeof i.url === "string" ? i.url : "";
-const ytId = (u) => { const m = String(u || "").match(/(?:youtube\.com\/(?:embed\/|watch\?v=|shorts\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/); return m ? m[1] : ""; };
+const ytId = (u) => { const m = String(u || "").match(/(?:youtube(?:-nocookie)?\.com\/(?:embed\/|watch\?v=|shorts\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/); return m ? m[1] : ""; };
+// vidéo de la recette : identifiant YouTube (lue dans l'appli), ou « page » quand la vidéo se regarde sur le site d'origine (Jow)
+// (pas de lien direct vers les fichiers vidéo des sites : on renvoie vers leur page)
+function videoOf(R, html, key) {
+  const vo = R && R.video && (Array.isArray(R.video) ? R.video[0] : R.video);
+  const vu = vo && (vo.embedUrl || vo.contentUrl || vo.url); const y = ytId(vu); if (y) return y;
+  if (vu && /^https?:\/\//.test(String(vu))) return "page";
+  const h = String(html || "");
+  const m = h.match(/youtube(?:-nocookie)?\.com\/embed\/([A-Za-z0-9_-]{11})/) || (key === "hervecuisine" && (h.match(/youtu\.be\/([A-Za-z0-9_-]{11})/) || h.match(/youtube\.com\/watch\?v=([A-Za-z0-9_-]{11})/)));
+  if (m) return m[1];
+  if (key === "jow" && /static\.jow\.fr\/recipes\/[^"'\s]+\.mp4/.test(h)) return "page";
+  return "";
+}
 
 // --- recherches Marmiton ciblées sur les protéines (pages de résultats au hasard à chaque passage)
 const MQ = ["batch cooking", "meal prep", "plat à préparer à l'avance", "plat complet", "mijoté de poulet", "curry de poulet", "chili con carne", "bolognaise",
@@ -65,13 +78,13 @@ const mqUrls = (n) => shuffle([...MQ]).slice(0, n).map((q) => { const pg = 1 + M
 // w : part des fiches lues ; sub : sous-plans à suivre dans un plan d'index
 const SRC = {
   hellofresh: { name: "HelloFresh", maps: ["https://www.hellofresh.fr/sitemap_recipe_pages.xml"], re: /\/recipes\/[a-z0-9-]+-[0-9a-f]{24}$/, w: 3 },
-  jow: { name: "Jow", maps: ["https://jow.fr/sitemap.xml"], re: /jow\.fr\/recipes\/[a-z0-9-]+$/, w: 2 },
+  jow: { name: "Jow", maps: ["https://jow.fr/sitemap.xml"], re: /jow\.fr\/recipes\/[a-z0-9-]+$/, w: 4 },
   marmiton: { name: "Marmiton", maps: [1, 2, 3, 4, 5, 6, 7, 8, 9].map((i) => `https://www.marmiton.org/wsitemap_recipes_${i}.xml`), lists: () => [...mqUrls(10), ...mqsUrls(8)], re: /\/recettes\/recette_[a-z0-9-]+_\d+\.aspx$/, w: 3 },
   bettybossi: { name: "Betty Bossi", maps: ["https://www.bettybossi.ch/sitemap.xml"], sub: /fr/i, re: /bettybossi\.ch\/fr\/recettes\/recette\/[a-z0-9-]+-\d+\/?$/, w: 3 },
   fourchette: { name: "Fourchette & Bikini", maps: ["https://www.fourchette-et-bikini.fr/xml/sitemap.xml"], sub: /recette/i, re: /fourchette-et-bikini\.fr\/recettes\/[a-z0-9-]+-(?:[2-9]\d{4}|\d{6,})\.html$/, w: 3 },
   // chefs : pas de valeurs nutritionnelles publiées (chef: true)
   julieandrieu: { name: "Julie Andrieu", maps: ["https://www.julieandrieu.com/recipe-sitemap.xml"], re: /julieandrieu\.com\/recettes\/[a-z0-9-]+\/?$/, w: 3, chef: true },
-  hervecuisine: { name: "Hervé Cuisine", maps: ["https://www.hervecuisine.com/herve_recipe-sitemap.xml"], re: /hervecuisine\.com\/recette\/[a-z0-9-]+\/?$/, w: 2, chef: true },
+  hervecuisine: { name: "Hervé Cuisine", maps: ["https://www.hervecuisine.com/herve_recipe-sitemap.xml"], re: /hervecuisine\.com\/recette\/[a-z0-9-]+\/?$/, w: 4, chef: true },
 };
 // seuils protéines (les mêmes dans l'appli) : plat ≥ 28 g par portion et ≥ 24 % des calories ; encas ≥ 10 g et ≥ 25 %
 const PRULE = { plat: { p: 28, r: 0.24 }, encas: { p: 10, r: 0.25 } };
@@ -123,7 +136,7 @@ function normIng(src, s) {
 const SNACK_UNIT = [[/muffin/, "muffins", "muffin"], [/pancake/, "pancakes", "pancake"], [/bouch[ée]e|ball|boule/, "bouchées", "bouchée"], [/barre/, "barres", "barre"], [/cookie|biscuit/, "cookies", "cookie"], [/verrine/, "verrines", "verrine"], [/(oeuf|œuf)s? (mimosa|farci)/, "demi-œufs", "demi-œuf"]];
 const SNACK_EMO = [[/chocolat|cacao|brownie/, "🍫"], [/myrtille|fruits rouges|fraise|framboise/, "🍓"], [/banane/, "🍌"], [/pomme/, "🍎"], [/oeuf|œuf|omelette/, "🥚"], [/muffin|cake|pancake/, "🧁"], [/fromage|skyr|yaourt|cottage/, "🧀"], [/cacahu|amande|noisette|noix/, "🥜"], [/houmous|pois chiche|edamame/, "🥕"]];
 
-function toRecipe(key, url, R, hint) {
+function toRecipe(key, url, R, hint, html) {
   const n = R.nutrition || {};
   let k = num(n.calories); if (k != null && /kj/i.test(String(n.calories)) && !/kcal|calor/i.test(String(n.calories))) k = Math.round(k / 4.184);
   const p = num(n.proteinContent), f = num(n.fatContent), c = num(n.carbohydrateContent), fi = num(n.fiberContent), sug = num(n.sugarContent);
@@ -146,7 +159,7 @@ function toRecipe(key, url, R, hint) {
   if (porkOf(o)) return { why: "porc" };
   if (DESSERT.test(nrm(t)) && !/(poulet|dinde|boeuf|saumon|thon|crevette|lentille|pois chiche|parmesan|fromage|comte|emmental|gruyere|chevre|feta|olive|tomate|herbes|pesto|graines|\bsale|\bsalee|apero|protein|skyr)/.test(nrm(t))) return { why: "dessert" };
   const ar = R.aggregateRating; if (ar && num(ar.ratingValue) && num(ar.ratingCount || ar.reviewCount)) o.r = [Math.round(num(ar.ratingValue) * 10) / 10, Math.round(num(ar.ratingCount || ar.reviewCount))];
-  const vid = R.video && (Array.isArray(R.video) ? R.video[0] : R.video); const yv = ytId(vid && (vid.embedUrl || vid.contentUrl)); if (yv) o.v = yv;
+  const vv = videoOf(R, html, key); if (vv) o.v = vv;
   if (!srcOk(o)) return { why: "note Marmiton insuffisante" };
   if (BAD.test(nrm(t)) && !/chips de (parmesan|pois chiches?|kale|chou|legumes?)/.test(nrm(t))) return { why: "plat trop riche (nom)" };
   if (/\b(langues?|ris de veau|rognons?|foies?|tripes?|cervelle|boudin|andouillettes?|gesiers?|coeurs? de (boeuf|volaille|poulet))\b/.test(nrm(t))) return { why: "abats" };
@@ -222,7 +235,7 @@ for (const [key, url] of queue) {
   const r = await get(url); st.seen[idOf(url)] = 1;
   if (r.status !== 200) { why["http " + r.status] = (why["http " + r.status] || 0) + 1; await sleep(500); continue; }
   const R = ld(r.text); if (!R) { why["pas de fiche"] = (why["pas de fiche"] || 0) + 1; await sleep(300); continue; }
-  const x = toRecipe(key, url, R, SNACK_SLUG.test(nrm(url)));
+  const x = toRecipe(key, url, R, SNACK_SLUG.test(nrm(url)), r.text);
   const B = bySrc[key] || (bySrc[key] = { lu: 0, plats: 0, encas: 0, why: {} }); B.lu++;
   if (x.r) { const tk = nrm(x.r.t).replace(/[^a-z0-9]+/g, " ").trim(); if (st.titles[tk]) { why["doublon"] = (why["doublon"] || 0) + 1; } else { st.titles[tk] = 1; st.pending.push(x.r); ok++; B[x.r.k === "encas" ? "encas" : "plats"]++; if (DRY) say("OK " + JSON.stringify(x.r).slice(0, 600)); } }
   else { const w = x.why.replace(/\d+(\.\d+)?/g, "#"); why[w] = (why[w] || 0) + 1; B.why[w] = (B.why[w] || 0) + 1; }
@@ -240,6 +253,17 @@ let pruned = 0;
 for (const f of fs.readdirSync(path.join(DIR, "p"))) { const fp = path.join(DIR, "p", f); try { const L = JSON.parse(fs.readFileSync(fp, "utf8")); const K = L.filter((e) => protOk(e) && srcOk(e) && !porkOf(e)); if (K.length !== L.length) { pruned += L.length - K.length; fs.writeFileSync(fp, JSON.stringify(K)); } } catch { /* page illisible */ } }
 { const n0 = st.pending.length; st.pending = st.pending.filter((e) => protOk(e) && srcOk(e) && !porkOf(e)); pruned += n0 - st.pending.length; }
 if (pruned) say(`retirées (sous les seuils de protéines, source non fiable ou porc) : ${pruned}`);
+// --- vidéos : les fiches déjà publiées sont relues une seule fois pour repérer leur vidéo (Jow et Hervé Cuisine d'abord)
+st.vchk = st.vchk || {};
+{ const VSRC = { "Jow": "jow", "Hervé Cuisine": "hervecuisine", "Marmiton": "marmiton", "Betty Bossi": "bettybossi", "Julie Andrieu": "julieandrieu" }; const PRIO = ["Jow", "Hervé Cuisine"];
+  const VMAX = +(process.env.VIDEO_CHECK || 450); const files = {}, todo = [];
+  for (const f of fs.readdirSync(path.join(DIR, "p"))) { try { const L = JSON.parse(fs.readFileSync(path.join(DIR, "p", f), "utf8")); files[f] = L; for (const e of L) if (!e.v && VSRC[e.src] && !st.vchk[e.id]) todo.push([f, e]); } catch { /* page illisible */ } }
+  todo.sort((x, y) => (PRIO.includes(y[1].src) ? 1 : 0) - (PRIO.includes(x[1].src) ? 1 : 0));
+  const ch = new Set(); let n = 0, found = 0;
+  for (const [f, e] of todo.slice(0, VMAX)) { n++; const r = await get(e.u); if (r.status === 200 || r.status === 404 || r.status === 410) st.vchk[e.id] = 1;
+    if (r.status === 200) { const v = videoOf(ld(r.text), r.text, VSRC[e.src]); if (v) { e.v = v; ch.add(f); found++; } } await sleep(350); }
+  for (const f of ch) fs.writeFileSync(path.join(DIR, "p", f), JSON.stringify(files[f]));
+  if (n) say(`vidéos : ${n} fiches publiées relues, ${found} avec vidéo (reste ${Math.max(0, todo.length - n)})`); }
 const SNACK_W = /\b(cookies?|sables?|biscuits?|crackers?|tuiles?|gougeres?|muffins?|cakes? sales?|chips|gressins?|grissini|pancakes?|energy|bouchees?|barres?|mug ?cake|cheesecake|porridge|overnight|mimosa|roules?|verrines?|mousses?|bowl ?cake|tartines?|houmous|hummus|tzatziki|trempette|dip|smoothie|yaourts?|skyr|fromage blanc|cottage|oeufs? (durs?|cocotte|mimosa|farcis?)|collation|encas|snack|gaufres?|madeleines?|edamame|pois chiches? (grilles|rotis|croustillants)|rillettes?|amuse|aperitif|apero|toasts?|galettes? de (pois chiches|flocons)|falafels?|mini|brochettes? apero)\b/;
 const SNACK_MAIN = /\b(cabillaud|lotte|brochet|colin|merlu|lieu|dorade|daurade|truite|sole|bar|poulet|dinde|boeuf|veau|agneau|canard|lapin|steak|escalope|filets?|paves?|saint jacques|riz|pates|quinoa|semoule|boulgour|pommes? de terre)\b/;
 const snackOk = (e) => { const t = nrm(e.t).replace(/['’]/g, " "); return SNACK_W.test(t) || (!!e.n && e.n.k <= 320 && e.n.p <= 28 && !SNACK_MAIN.test(t)); };
@@ -263,8 +287,17 @@ function takePage(force) {
 }
 let made = 0, pg;
 while ((pg = takePage(false))) { st.pages++; st.total += pg.length; fs.writeFileSync(path.join(DIR, "p", `${st.pages}.json`), JSON.stringify(pg)); made++; }
+// --- plats avec vidéo : liste à part (discover/videos.json) que l'appli montre en priorité dans le swipe
+// une même vidéo YouTube sur 3 fiches ou plus est une vidéo de la chaîne, pas celle de la recette : retirée
+let nVid = 0;
+{ const files = fs.readdirSync(path.join(DIR, "p")).filter((f) => /^\d+\.json$/.test(f)).sort((a, b) => parseInt(b) - parseInt(a)); const pages = files.map((f) => { try { return [f, JSON.parse(fs.readFileSync(path.join(DIR, "p", f), "utf8"))]; } catch { return [f, []]; } });
+  const cnt = {}; for (const [, L] of pages) for (const e of L) if (e.v && e.v !== "page") cnt[e.v] = (cnt[e.v] || 0) + 1;
+  const V = [];
+  for (const [f, L] of pages) { let ch = false; for (const e of L) { if (e.v && e.v !== "page" && cnt[e.v] >= 3) { delete e.v; ch = true; } if (e.v && e.k !== "encas") V.push(e); } if (ch) fs.writeFileSync(path.join(DIR, "p", f), JSON.stringify(L)); }
+  nVid = V.length; fs.writeFileSync(path.join(DIR, "videos.json"), JSON.stringify({ updated: new Date().toISOString(), items: V.slice(0, 600) }));
+  say(`plats avec vidéo : ${V.length} (YouTube ${V.filter((e) => e.v !== "page").length}, sur le site ${V.filter((e) => e.v === "page").length})`); }
 st.runs++;
 fs.writeFileSync(SP, JSON.stringify(st));
-fs.writeFileSync(IX, JSON.stringify({ v: 1, gen: RULES, updated: new Date().toISOString(), pages: st.pages, total: st.total, snacks: st.snacks.length, sources: Object.values(SRC).map((s) => s.name) }));
+fs.writeFileSync(IX, JSON.stringify({ v: 1, gen: RULES, updated: new Date().toISOString(), pages: st.pages, total: st.total, snacks: st.snacks.length, videos: nVid, sources: Object.values(SRC).map((s) => s.name) }));
 say(`pages créées : ${made} · total ${st.pages} pages, ${st.total} recettes · en attente ${st.pending.length}`);
 fs.writeFileSync(path.join(DIR, "log.txt"), log.join("\n") + "\n");

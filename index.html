@@ -2731,7 +2731,7 @@ body.lock .fab,body.panel-open .fab{display:none!important}
 </div>
 <div id="timers" class="timers" hidden aria-live="polite"></div>
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
-<script>window.NS_CONFIG={"hosted": true, "sbUrl": "https://zjsawjudrdneeptxbskd.supabase.co", "sbKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpqc2F3anVkcmRuZWVwdHhic2tkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1NjUxMjcsImV4cCI6MjEwNzE0MTEyN30.Wn1bUy--5O78gGICTOyEGbnT6B-SdoNCG_XxBBaaUIY", "build": "20261104184626"}</script>
+<script>window.NS_CONFIG={"hosted": true, "sbUrl": "https://zjsawjudrdneeptxbskd.supabase.co", "sbKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpqc2F3anVkcmRuZWVwdHhic2tkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1NjUxMjcsImV4cCI6MjEwNzE0MTEyN30.Wn1bUy--5O78gGICTOyEGbnT6B-SdoNCG_XxBBaaUIY", "build": "20261104192212"}</script>
 <script>
 const AISLES={L:"Fruits & légumes",H:"Herbes fraîches",V:"Viandes & poissons",C:"Crèmerie & œufs",S:"Surgelés",F:"Féculents",B:"Conserves",E:"Épices & condiments"};
 const AISLE_ORDER=["L","H","V","C","S","F","B","E"];
@@ -9888,6 +9888,74 @@ const SNACK55=/\b(cookies?|sables?|biscuits?|crackers?|tuiles?|gougeres?|muffins
 const MAIN55=/\b(cabillaud|lotte|brochet|colin|merlu|lieu|dorade|daurade|truite|sole|bar|poulet|dinde|boeuf|veau|agneau|canard|lapin|steak|escalope|filets?|paves?|saint jacques|riz|pates|quinoa|semoule|boulgour|pommes? de terre)\b/;
 snkiList=(f=>function(){return f.apply(this,arguments).filter(e=>{const t=nrmS(e.t||"").replace(/['’]/g," ");if(SNACK55.test(t))return true;let n=null;try{n=discNut(e)}catch(x){}return!!(e.n&&n&&n.k<=320&&n.p<=28&&!MAIN55.test(t))})})(snkiList);
 try{if(typeof nx51Reset==="function")nx51Reset()}catch(e){}
+
+
+// ================= v56 : plus de recettes avec vidéo dans le swipe =================
+// La collecte publie discover/videos.json : les plats complets avec une vidéo YouTube (Hervé Cuisine, lue dans l'appli)
+// ou une vidéo à regarder sur le site d'origine (Jow). Ils passent en priorité dans le swipe (2 cartes sur 3 quand il y en a)
+// et le choix « Avec vidéo » de « Je veux découvrir » ne montre qu'eux.
+const isYT56=e=>!!e&&/^[A-Za-z0-9_-]{11}$/.test(e.v||"");
+// 1. la vidéo « sur le site » (Jow) est gardée (lien vers la fiche, pas de lecture directe du fichier)
+dqValid=(f=>function(e){const o=f.apply(this,arguments);if(o&&!o.v&&e&&e.v==="page")o.v="page";return o})(dqValid);
+// 2. liste des plats avec vidéo, gardée sur le téléphone 6 h
+const VID_KEY=LS+"-vids";let VIDS=null;
+function vidAttach(items){const dz=state.disc||{},mine=new Set((state.myrec||[]).map(x=>x.u).filter(Boolean)),add=[];
+ for(const e of items){const cur=DISC_MAP[e.id];if(cur){if(!cur.v&&e.v)cur.v=e.v;continue}if(dz[e.id]||mine.has(e.u))continue;add.push(e)}
+ if(add.length)dqRegister(add)}
+function vidCache(){if(VIDS)return VIDS;try{const o=JSON.parse(localStorage.getItem(VID_KEY)||"null");if(o&&Array.isArray(o.items)){VIDS={ts:+o.ts||0,items:o.items.map(dqValid).filter(Boolean)};vidAttach(VIDS.items)}}catch(e){}return VIDS}
+async function vidFetch(force){const c=vidCache();if(!force&&c&&Date.now()-c.ts<6*36e5)return c;if(ui.vidBusy||!HOSTED)return c;ui.vidBusy=true;
+ try{const r=await fetch(DREM+"videos.json?t="+Math.floor(Date.now()/3e5),{cache:"no-store"});if(!r.ok)throw new Error("http "+r.status);const j=await r.json();
+  const items=(Array.isArray(j.items)?j.items:[]).map(dqValid).filter(Boolean).slice(0,600);
+  VIDS={ts:Date.now(),items};vidAttach(items);
+  try{localStorage.setItem(VID_KEY,JSON.stringify({ts:VIDS.ts,items:items.slice(0,300)},(k,v)=>k&&k[0]==="_"?undefined:v))}catch(e){}}
+ catch(e){}
+ finally{ui.vidBusy=false}
+ return VIDS}
+try{vidCache()}catch(e){}
+// 3. classement : une vidéo compte un peu plus, une vidéo lisible dans l'appli encore un peu plus
+discScore=(f=>function(e){const s=f.apply(this,arguments);if(s<0)return s;return s+(isYT56(e)?0.08:e.v?0.05:0)})(discScore);
+const vRank56=e=>{let s=0;try{s=discScore(e)}catch(x){}return s+(isYT56(e)?0.12:0)+Math.random()*0.3};
+const vSort56=L=>{const k=new Map(L.map(e=>[e,vRank56(e)]));return L.sort((a,b)=>k.get(b)-k.get(a))};
+// 4. choix « Avec vidéo »
+if(!DF_OPTS.some(o=>o[0]==="video"))DF_OPTS.splice(1,0,["video","Avec vidéo","🎬"]);
+try{if(localStorage.getItem(DF_K)==="video")ui.dtag="video"}catch(e){}
+discPool=(f=>function(tag){if(tag!=="video")return f.apply(this,arguments);return vSort56(discLeft().filter(e=>e.v&&!(ui.dpend&&ui.dpend.has(e.id))))})(discPool);
+dqPick=(f=>function(arr,n,tag){return f.call(this,arr,n,tag==="video"?"all":tag)})(dqPick);
+dqFetch=(f=>async function(need,tag){if(tag!=="video")return f.apply(this,arguments);await vidFetch(true);return{got:discPool("video").length,left:0}})(dqFetch);
+// 5. chaque série : 2 cartes sur 3 avec une vidéo quand il y en a (la carte affichée ne bouge pas)
+function vidMix(tag,keep){const B=ui.dbatch||[];const deck=discDeck();const done=B.length-deck.length;
+ const head=deck.slice(0,keep||0),rest=deck.slice(keep||0).map(id=>DISC_MAP[id]).filter(Boolean);
+ const slots=Math.max(rest.length,D_N-done-head.length);if(slots<=0)return false;
+ let V=rest.filter(e=>e.v),N=rest.filter(e=>!e.v);const want=tag==="video"?slots:Math.ceil(slots*2/3);
+ if(V.length<want){const have=new Set([...B,...head]);const X=vSort56(discPool(tag).filter(e=>e.v&&!have.has(e.id)));if(X.length)V=V.concat(dqPick(X,want-V.length,tag))}
+ const out=[];let i=0;while(V.length||N.length){if(V.length&&(i%3!==2||!N.length))out.push(V.shift());else out.push(N.shift());i++}
+ const decided=B.filter(id=>!deck.includes(id));ui.dbatch=[...decided,...head,...out.slice(0,slots).map(e=>e.id)];return true}
+discMakeBatch=(f=>function(tag){const r=f.apply(this,arguments);try{vidMix(tag||"all",0)}catch(e){}return r})(discMakeBatch);
+// 6. à l'ouverture de Découvrir : la liste des vidéos est mise à jour en arrière-plan, puis la pile est complétée
+async function vidKick(){const c=vidCache();const stale=!c||Date.now()-c.ts>6*36e5;if(stale)await vidFetch(false);
+ if(ui.panel!=="decouvrir"||ui.dsel||ui.dload)return;const deck=discDeck();if(!deck.length)return;
+ const nv=deck.filter(id=>DISC_MAP[id]&&DISC_MAP[id].v).length;if(nv>=Math.ceil(deck.length*0.6))return;
+ const tag=ui.dtag||"all";if(vidMix(tag,1))try{renderPanel()}catch(e){}}
+panelDisc=(f=>function(){const h=f.apply(this,arguments);if(!ui.vidTried&&!ui.dsel){ui.vidTried=true;setTimeout(()=>{vidKick().catch(()=>{})},0)}return h})(panelDisc);
+// 7. badge : on sait tout de suite si la vidéo se regarde ici ou sur le site
+swCard=(f=>function(e,cls){const h=f.apply(this,arguments);return e&&e.v==="page"?h.replace(/(<span class="sw-vid">[\s\S]*?)Vidéo<\/span>/,`$1Vidéo sur ${esc(e.src)}</span>`):h})(swCard);
+// 8. recettes de chefs (Hervé Cuisine, Julie Andrieu) : leurs fiches écrivent « 2 cuil. à soupe », « Sauce soja 3 cuil. à soupe »
+// ou « Sel, poivre » sans quantité ; le calcul les comprend désormais, ce qui rend fiables (donc visibles) plus de recettes avec vidéo.
+// Les lignes affichées ne changent pas : seule la copie servant au calcul est réécrite.
+const CHEF56=new Set(["Hervé Cuisine","Julie Andrieu"]);
+const SPICE56=/^(sel|fleur de sel|gros sel|poivre|piment|paprika|cumin|curry|curcuma|garam|massala|masala|epices?|quatre epices|herbes?|thym|origan|romarin|laurier|persil|coriandre|basilic|ciboulette|ciboule|menthe|aneth|estragon|sauge|marjolaine|muscade|cannelle|gingembre en poudre|ail en poudre|feuilles? de (kaffir|laurier|citronnier)|kaffir|citronnelle|zestes?|jus de citron|jus citron|citron vert|vinaigre|sauce soja|sauce sriracha|sriracha|sauce piment|tabasco|nuoc mam|sauce poisson|graines de sesame|sesame|eau)\b/;
+function nrmLine56(l){let s=String(l||"").replace(/\s+/g," ").trim();if(!s)return null;
+ s=s.replace(/\bcuil(?:l(?:ere|ère)?s?)?\.?\s*(?:à|a)\s*soupe\b/gi,"cs").replace(/\bcuil(?:l(?:ere|ère)?s?)?\.?\s*(?:à|a)\s*caf[ée]\b/gi,"cc").replace(/\bc\.\s*(?:à|a)\s*soupe\b/gi,"cs").replace(/\bc\.\s*(?:à|a)\s*caf[ée]\b/gi,"cc");
+ let m=s.match(/^([^\d].*?)[,]?\s+(\d+(?:[.,]\d+)?(?:\/\d+)?)\s*(cs|cc|g|kg|ml|cl|l|gousses?|tranches?|pincées?)\.?$/i);if(m)s=`${m[2]} ${m[3]} ${m[1].replace(/[,:]\s*$/,"")}`;
+ if(/^\d|^½|^¼|^un |^une /i.test(s))return /kaffir|citronnelle|feuilles? de laurier/i.test(s)?null:s;
+ const n=nrmS(s).replace(/['’]/g," ");
+ if(/\bhuiles?\b/.test(n))return"1 cs "+s.replace(/^.*?(huiles?\b)/i,"$1");
+ if(SPICE56.test(n))return null;
+ return s}
+discNut=(f=>function(e){if(!e||e.n||!Array.isArray(e.ing)||!CHEF56.has(e.src))return f.apply(this,arguments);if(e._n56!==undefined)return e._n56;
+ const x={};for(const k in e)if(k[0]!=="_")x[k]=e[k];x.ing=e.ing.map(nrmLine56).filter(Boolean);let n=null;try{n=f.call(this,x)}catch(z){}return e._n56=n})(discNut);
+nx51Reset=(f=>function(){try{for(const e of DISC){delete e._n56;delete e._c52}}catch(x){}return f.apply(this,arguments)})(nx51Reset);
+try{for(const e of DISC){delete e._n56;delete e._c52}}catch(e){}
 
 try{setTab(ui.tab);renderAll()}catch(e){try{sbDiag("affichage au démarrage",e)}catch(x){}}try{initDb()}catch(e){}sbStart();
 
