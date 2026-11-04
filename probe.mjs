@@ -1,5 +1,8 @@
 import fs from "fs";
 const out = []; const say = (s) => { out.push(s); console.log(s); };
+process.on("uncaughtException", (e) => { fs.writeFileSync("report.txt", out.join("\n") + "\nERREUR " + (e && e.stack || e)); process.exit(0); });
+process.on("unhandledRejection", (e) => { fs.writeFileSync("report.txt", out.join("\n") + "\nERREUR " + (e && e.stack || e)); process.exit(0); });
+fs.writeFileSync("report.txt", "début");
 const UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36";
 async function get(u) { try { const r = await fetch(u, { headers: { "User-Agent": UA, "Accept-Language": "fr-FR" } }); return { s: r.status, t: r.ok ? await r.text() : "" }; } catch (e) { return { s: 0, t: "" }; } }
 function findRecipe(n) { if (!n || typeof n !== "object") return null; if (Array.isArray(n)) { for (const x of n) { const r = findRecipe(x); if (r) return r; } return null; } const t = n["@type"]; if (t === "Recipe" || (Array.isArray(t) && t.includes("Recipe"))) return n; return findRecipe(n["@graph"]) || findRecipe(n.mainEntity) || null; }
