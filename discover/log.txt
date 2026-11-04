@@ -1,23 +1,23 @@
 plan hellofresh 200 https://www.hellofresh.fr/sitemap_recipe_pages.xml → 8503
 plan jow 200 https://jow.fr/sitemap.xml → 3729
-recherche marmiton 404 plat à préparer à l'avance&page=2 → 0
-recherche marmiton 200 dahl de lentilles → 19
-recherche marmiton 200 curry de poulet&page=2 → 21
-recherche marmiton 200 gratin de pâtes au poulet → 17
-recherche marmiton 200 plat complet&page=4 → 20
-recherche marmiton 200 colin&page=2 → 21
-recherche marmiton 200 hachis parmentier&page=4 → 21
-recherche marmiton 200 blanc de poulet&page=4 → 21
-recherche marmiton 200 cabillaud&page=3 → 21
+recherche marmiton 200 bowl poulet quinoa → 21
+recherche marmiton 200 cabillaud&page=2 → 21
+recherche marmiton 200 blanc de poulet → 21
+recherche marmiton 200 boulettes de boeuf&page=4 → 20
+recherche marmiton 404 plat à préparer à l'avance&page=3 → 0
+recherche marmiton 200 chili con carne&page=2 → 17
+recherche marmiton 200 couscous poulet&page=4 → 16
+recherche marmiton 200 veau&page=2 → 20
 recherche marmiton 404 poêlée de dinde&page=2 → 0
-recherche marmiton 200 rillettes de thon → 21
-recherche marmiton 200 houmous → 20
-recherche marmiton 200 chips de parmesan → 13
-recherche marmiton 200 galettes salées flocons d'avoine → 21
-recherche marmiton 200 verrines au thon → 21
-recherche marmiton 200 mug cake protéiné → 21
+recherche marmiton 200 batch cooking&page=2 → 6
+recherche marmiton 200 bouchées au thon → 20
+recherche marmiton 200 biscuits apéritifs au fromage → 11
+recherche marmiton 200 sablés au parmesan → 21
 recherche marmiton 200 gougères → 19
-recherche marmiton 200 cookies au parmesan → 11
+recherche marmiton 200 crackers au parmesan → 8
+recherche marmiton 200 muffins salés → 21
+recherche marmiton 200 galettes salées flocons d'avoine → 21
+recherche marmiton 200 rillettes de thon → 21
 plan marmiton 200 https://www.marmiton.org/wsitemap_recipes_1.xml → 4865
 plan marmiton 200 https://www.marmiton.org/wsitemap_recipes_2.xml → 4186
 plan marmiton 200 https://www.marmiton.org/wsitemap_recipes_3.xml → 4945
@@ -41,8 +41,8 @@ plan fourchette 200 https://www.fourchette-et-bikini.fr/xml/sitemap-fourchette-r
 plan fourchette 200 https://www.fourchette-et-bikini.fr/xml/sitemap-fourchette-recette-2.xml → 0
 plan julieandrieu 200 https://www.julieandrieu.com/recipe-sitemap.xml → 1521
 plan hervecuisine 200 https://www.hervecuisine.com/herve_recipe-sitemap.xml → 938
-à lire : 950 fiches (285 pistes d'encas)
-gardées : 65 · écartées : {"dessert":323,"plat incomplet":95,"porc":107,"catégorie entree et aperitif ,accompagnement et sauce":4,"abats":4,"note Marmiton insuffisante":173,"nutrition absente":42,"encas sucré sans valeurs":43,"plat trop riche (nom)":33,"catégorie dessert":16,"fiche incomplète":4,"encas":5,"catégorie boissons, detox, diet, vegan":1,"encas trop gras":1,"catégorie plat principal,accompagnement et sauce":5,"catégorie desserts aux fruits":1,"protéines # g":3,"catégorie chocolat, crepes, pancakes, gaufres, desserts, rapide":1,"catégorie desserts":2,"kcal #":3,"catégorie accompagnement et sauce":3,"catégorie desserts, desserts aux fruits, desserts legers":2,"catégorie plat principal,accompagnement et sauce,snacking":1,"catégorie petit dejeuner et brunch,dessert":2,"catégorie desserts, desserts classiques":1,"catégorie beignets, desserts, fetes":1,"catégorie petit dejeuner et brunch,dessert,gouter":1,"encas pas assez protéiné":1,"catégorie desserts, desserts aux fruits":2,"catégorie desserts, fetes":1,"catégorie chocolat, desserts, desserts classiques, desserts de noel, fetes, gros gateaux, cakes, noel":1,"catégorie chocolat, desserts, recettes healthy":1,"catégorie desserts, desserts aux fruits, desserts classiques, gros gateaux, cakes":1,"catégorie automne, desserts, desserts aux fruits, desserts classiques, fraises, gros gateaux, cakes":1}
-par source : {"julieandrieu":{"lu":320,"plats":29,"encas":20,"why":{"dessert":72,"plat incomplet":66,"catégorie entree et aperitif ,accompagnement et sauce":4,"porc":48,"abats":4,"encas sucré sans valeurs":31,"plat trop riche (nom)":13,"catégorie dessert":16,"encas trop gras":1,"catégorie plat principal,accompagnement et sauce":5,"catégorie accompagnement et sauce":3,"fiche incomplète":3,"encas":1,"catégorie plat principal,accompagnement et sauce,snacking":1,"catégorie petit dejeuner et brunch,dessert":2,"catégorie petit dejeuner et brunch,dessert,gouter":1}},"hervecuisine":{"lu":251,"plats":5,"encas":10,"why":{"dessert":163,"porc":12,"encas sucré sans valeurs":12,"encas":4,"catégorie boissons, detox, diet, vegan":1,"plat trop riche (nom)":15,"catégorie desserts aux fruits":1,"catégorie chocolat, crepes, pancakes, gaufres, desserts, rapide":1,"catégorie desserts":2,"plat incomplet":14,"catégorie desserts, desserts aux fruits, desserts legers":2,"catégorie desserts, desserts classiques":1,"catégorie beignets, desserts, fetes":1,"catégorie desserts, desserts aux fruits":2,"catégorie desserts, fetes":1,"catégorie chocolat, desserts, desserts classiques, desserts de noel, fetes, gros gateaux, cakes, noel":1,"catégorie chocolat, desserts, recettes healthy":1,"catégorie desserts, desserts aux fruits, desserts classiques, gros gateaux, cakes":1,"catégorie automne, desserts, desserts aux fruits, desserts classiques, fraises, gros gateaux, cakes":1}},"marmiton":{"lu":379,"plats":1,"encas":0,"why":{"dessert":88,"note Marmiton insuffisante":173,"nutrition absente":42,"porc":47,"plat trop riche (nom)":5,"fiche incomplète":1,"plat incomplet":15,"protéines # g":3,"kcal #":3,"encas pas assez protéiné":1}}}
-encas : 92 (dont salés 30)
-pages créées : 4 · total 288 pages, 2880 recettes · en attente 2
+à lire : 900 fiches (270 pistes d'encas)
+gardées : 45 · écartées : {"porc":98,"dessert":364,"note Marmiton insuffisante":161,"catégorie dessert":22,"plat incomplet":70,"nutrition absente":39,"catégorie desserts":2,"catégorie entree et aperitif ,plat principal,accompagnement et sauce":1,"fiche incomplète":7,"encas sucré sans valeurs":25,"plat trop riche (nom)":25,"catégorie desserts, desserts classiques":1,"catégorie desserts, desserts classiques, gros gateaux, cakes":1,"catégorie petit dejeuner et brunch,accompagnement et sauce":1,"catégorie accompagnement et sauce":3,"catégorie entree et aperitif ,accompagnement et sauce":2,"kcal #":6,"catégorie plat principal,accompagnement et sauce":2,"catégorie beignets, desserts":1,"catégorie brioches, machine a pain, desserts, fetes, la cuisine francaise":1,"catégorie desserts aux fruits, recette anti gaspi":1,"protéines # g":2,"abats":9,"catégorie plat principal,accompagnement et sauce,snacking":1,"catégorie desserts, patisseries orientales":1,"catégorie desserts, desserts alleges":1,"catégorie desserts, recettes indiennes":1,"catégorie dessert,gouter":2,"encas pas assez protéiné":1,"catégorie desserts classiques":1,"catégorie petit dejeuner et brunch,dessert,gouter":1,"catégorie dessert,snacking,gouter":1,"catégorie boissons":1}
+par source : {"julieandrieu":{"lu":237,"plats":19,"encas":13,"why":{"porc":37,"dessert":53,"catégorie dessert":22,"plat incomplet":39,"catégorie entree et aperitif ,plat principal,accompagnement et sauce":1,"fiche incomplète":5,"encas sucré sans valeurs":17,"plat trop riche (nom)":10,"catégorie petit dejeuner et brunch,accompagnement et sauce":1,"catégorie accompagnement et sauce":3,"catégorie entree et aperitif ,accompagnement et sauce":2,"catégorie plat principal,accompagnement et sauce":2,"abats":8,"catégorie plat principal,accompagnement et sauce,snacking":1,"catégorie dessert,gouter":2,"catégorie petit dejeuner et brunch,dessert,gouter":1,"catégorie dessert,snacking,gouter":1}},"marmiton":{"lu":455,"plats":0,"encas":2,"why":{"dessert":176,"note Marmiton insuffisante":161,"porc":49,"plat incomplet":16,"nutrition absente":39,"kcal #":6,"fiche incomplète":1,"plat trop riche (nom)":2,"protéines # g":2,"encas pas assez protéiné":1}},"hervecuisine":{"lu":208,"plats":9,"encas":2,"why":{"dessert":135,"catégorie desserts":2,"plat trop riche (nom)":13,"catégorie desserts, desserts classiques":1,"plat incomplet":15,"catégorie desserts, desserts classiques, gros gateaux, cakes":1,"porc":12,"catégorie beignets, desserts":1,"encas sucré sans valeurs":8,"catégorie brioches, machine a pain, desserts, fetes, la cuisine francaise":1,"catégorie desserts aux fruits, recette anti gaspi":1,"abats":1,"catégorie desserts, patisseries orientales":1,"catégorie desserts, desserts alleges":1,"catégorie desserts, recettes indiennes":1,"catégorie desserts classiques":1,"fiche incomplète":1,"catégorie boissons":1}}}
+encas : 109 (dont salés 47)
+pages créées : 3 · total 291 pages, 2910 recettes · en attente 0
