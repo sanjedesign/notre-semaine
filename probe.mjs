@@ -21,5 +21,5 @@ for (const u of U) { const r = await get(u); const R = ld(r.t); const v = R && R
   const vids = [...new Set([...r.t.matchAll(/(https?:[^"'\s<>]+\.(?:mp4|m3u8)[^"'\s<>]*)/g)].map((m) => m[1]))].slice(0, 3);
   const yt = [...new Set([...r.t.matchAll(/(?:youtube\.com\/(?:embed\/|watch\?v=)|youtu\.be\/)([A-Za-z0-9_-]{11})/g)].map((m) => m[1]))].slice(0, 3);
   const dm = [...new Set([...r.t.matchAll(/dailymotion\.com\/(?:embed\/)?video\/([a-z0-9]+)/gi)].map((m) => m[1]))].slice(0, 3);
-  say(`\n${r.s} ${u}\n  ld.video=${JSON.stringify(v).slice(0, 500)}\n  mp4/m3u8 dans la page=${vids.join(" | ")}\n  youtube=${yt.join(",")} dailymotion=${dm.join(",")}`); }
+  say(`\n${r.s} ${u}\n  ld.video=${String(JSON.stringify(v)).slice(0, 200)} | contentUrl=${(Array.isArray(v)?v:[v]).filter(Boolean).map((x)=>x.contentUrl||"").join(" ; ")} | embedUrl=${(Array.isArray(v)?v:[v]).filter(Boolean).map((x)=>x.embedUrl||"").join(" ; ")} | duration=${(Array.isArray(v)?v:[v]).filter(Boolean).map((x)=>x.duration||"").join(" ; ")} | n=${Array.isArray(v)?v.length:v?1:0}\n  mp4/m3u8 dans la page=${vids.join(" | ")}\n  youtube=${yt.join(",")} dailymotion=${dm.join(",")}`); }
 fs.writeFileSync("report.txt", out.join("\n"));
