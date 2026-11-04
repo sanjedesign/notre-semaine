@@ -2624,7 +2624,7 @@ body.lock .fab,body.panel-open .fab{display:none!important}
 .w54-note{font-size:.74rem;color:var(--muted);margin:12px 0 0}
 .w54-chart .tgt{stroke:var(--accent);stroke-width:1.4;stroke-dasharray:5 4;opacity:.85}
 .w54-chart .tgl{fill:var(--accent);font-weight:700;font-size:10.5px;opacity:1}
-</style>
+/* v55 */</style>
 </head>
 <body>
 <div id="boot" aria-hidden="true"><span class="boot-logo"><svg viewBox="8.5 8 17 18"><path d="M16 24.8v-6.6" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/><path d="M16 17c0-4.6 3-7.6 8-8-.3 5-3.4 8-8 8z" fill="#fff"/><path d="M16 19.5c-.1-3.6-2.5-6-6.5-6.3.2 3.9 2.6 6.2 6.5 6.3z" fill="#CDEFD9"/></svg></span><b>Sano</b></div>
@@ -2731,7 +2731,7 @@ body.lock .fab,body.panel-open .fab{display:none!important}
 </div>
 <div id="timers" class="timers" hidden aria-live="polite"></div>
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
-<script>window.NS_CONFIG={"hosted": true, "sbUrl": "https://zjsawjudrdneeptxbskd.supabase.co", "sbKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpqc2F3anVkcmRuZWVwdHhic2tkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1NjUxMjcsImV4cCI6MjEwNzE0MTEyN30.Wn1bUy--5O78gGICTOyEGbnT6B-SdoNCG_XxBBaaUIY", "build": "20261104131131"}</script>
+<script>window.NS_CONFIG={"hosted": true, "sbUrl": "https://zjsawjudrdneeptxbskd.supabase.co", "sbKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpqc2F3anVkcmRuZWVwdHhic2tkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1NjUxMjcsImV4cCI6MjEwNzE0MTEyN30.Wn1bUy--5O78gGICTOyEGbnT6B-SdoNCG_XxBBaaUIY", "build": "20261104184626"}</script>
 <script>
 const AISLES={L:"Fruits & légumes",H:"Herbes fraîches",V:"Viandes & poissons",C:"Crèmerie & œufs",S:"Surgelés",F:"Féculents",B:"Conserves",E:"Épices & condiments"};
 const AISLE_ORDER=["L","H","V","C","S","F","B","E"];
@@ -9866,6 +9866,28 @@ renderSuivi=(f=>function(){const r=f.apply(this,arguments);
    const pn=root.querySelector(".pn-card"),co2=root.querySelector("#co2Card");if(pn)root.appendChild(pn);if(co2)root.appendChild(co2)}
   applyView("suivi")}catch(e){try{console.warn(e)}catch(x){}}
  return r})(renderSuivi);
+
+
+// ================= v55 : quantités sans unité (Fourchette & Bikini), encas mieux reconnus =================
+// Fourchette & Bikini publie parfois « 200 Yaourt nature » pour « 200 g » : sans unité, l'appli comptait 200 pots (25 kg).
+// Une quantité ≥ 5 suivie d'un aliment qui ne se compte pas à la pièce est lue en grammes.
+const CNT55=/^(oeufs?|œufs?|blancs?|jaunes?|echalotes?|échalotes?|echalottes?|oignons?|gousses?|tetes?|têtes?|citrons?|bananes?|pommes?|poires?|tranches?|feuilles?|branches?|brins?|pincees?|pincées?|filets?|escalopes?|paves?|pavés?|steaks?|tortillas?|wraps?|galettes?|avocats?|tomates?|carottes?|courgettes?|poivrons?|pains?|muffins?|cookies?|biscuits?|speculoos|spéculoos|dattes?|sachets?|boites?|boîtes?|pots?|cubes?|petits?|gros|grosses?|belles?|kiwis?|oranges?|mangues?|figues?|abricots?|peches?|pêches?|clementines?|clémentines?|concombres?|aubergines?|navets?|radis|endives?|crevettes?|gambas|noix|amandes?|noisettes?|olives?|cornichons?|champignons?|saint|fraises?|framboises?|myrtilles?|cerises?|tomates|feuille|cuill\w*|c\.|cs|cc|bou\.?|botte|bottes)$/i;
+function fixUnitless(line){const m=String(line||"").match(/^\s*(\d+(?:[.,]\d+)?)\s+([A-ZÀ-ÝŒ][^\s]*)(.*)$/);if(!m)return line;const q=parseFloat(m[1].replace(",","."));if(!(q>=5))return line;
+ const w=m[2].replace(/[’']/g," ").split(" ")[0];if(CNT55.test(w))return line;return`${m[1]} g ${m[2]}${m[3]}`}
+const isFB55=u=>/fourchette-et-bikini\.fr/.test(String(u||""));
+buildRecipe=(f=>function(d){if(d&&isFB55(d.u)&&Array.isArray(d.il))return f.call(this,{...d,il:d.il.map(fixUnitless)});return f.apply(this,arguments)})(buildRecipe);
+const fixE55=e=>{if(e&&!e._fx55&&(e.src==="Fourchette & Bikini"||isFB55(e.u))&&Array.isArray(e.ing)){e.ing=e.ing.map(fixUnitless);e._fx55=1;delete e._nx;delete e._est;delete e._n51;delete e._n52;delete e._c52}return e};
+dqRegister=(f=>function(list){(list||[]).forEach(fixE55);return f.apply(this,arguments)})(dqRegister);
+try{DISC.forEach(fixE55)}catch(e){}
+try{const C=snkiCache();if(C)C.items.forEach(fixE55)}catch(e){}
+// recettes déjà ajoutées : reconstruites avec les bonnes quantités
+try{regMyRecipes(state.myrec||[])}catch(e){}
+
+// encas : un vrai encas (nom d'encas), sinon un petit plat léger sans viande ni poisson principal
+const SNACK55=/\b(cookies?|sables?|biscuits?|crackers?|tuiles?|gougeres?|muffins?|cakes? sales?|chips|gressins?|grissini|pancakes?|energy|bouchees?|barres?|mug ?cake|cheesecake|porridge|overnight|mimosa|roules?|verrines?|mousses?|bowl ?cake|tartines?|houmous|hummus|tzatziki|trempette|dip|smoothie|yaourts?|skyr|fromage blanc|cottage|oeufs? (durs?|cocotte|mimosa|farcis?)|collation|encas|snack|gaufres?|madeleines?|edamame|pois chiches? (grilles|rotis|croustillants)|rillettes?|amuse|aperitif|apero|toasts?|galettes? de (pois chiches|flocons)|falafels?|mini|bouchee|brochettes? apero)\b/;
+const MAIN55=/\b(cabillaud|lotte|brochet|colin|merlu|lieu|dorade|daurade|truite|sole|bar|poulet|dinde|boeuf|veau|agneau|canard|lapin|steak|escalope|filets?|paves?|saint jacques|riz|pates|quinoa|semoule|boulgour|pommes? de terre)\b/;
+snkiList=(f=>function(){return f.apply(this,arguments).filter(e=>{const t=nrmS(e.t||"").replace(/['’]/g," ");if(SNACK55.test(t))return true;let n=null;try{n=discNut(e)}catch(x){}return!!(e.n&&n&&n.k<=320&&n.p<=28&&!MAIN55.test(t))})})(snkiList);
+try{if(typeof nx51Reset==="function")nx51Reset()}catch(e){}
 
 try{setTab(ui.tab);renderAll()}catch(e){try{sbDiag("affichage au démarrage",e)}catch(x){}}try{initDb()}catch(e){}sbStart();
 

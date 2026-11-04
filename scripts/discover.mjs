@@ -100,7 +100,7 @@ const PROT_SLUG = /(proteine|protein|poulet|dinde|volaille|boeuf|steak|bavette|v
 const ROBOT = /thermomix|cookeo|monsieur[- ]cuisine|companion|i-cook|magimix|cook-?expert|multicuiseur/i;
 const SNACK_SLUG = /(cookie|sable|biscuit|tuile|gougere|cake-sale|chips|grissini|gressin|crackers?-|galette-de-flocons|proteine|skyr|fromage-blanc|cottage|energy-?ball|bouchee|muffin|pancake|barre|houmous|hummus|tzatziki|tatziki|edamame|pois-chiches?-(grilles|rotis|croustillants)|oeufs?-(mimosa|durs?|cocotte|farcis)|roules?-de-(jambon|saumon|dinde)|collation|encas|snack|mug-?cake|cheesecake|porridge|overnight|yaourt|trempette|tartinade|verrine|smoothie|gaufre|crackers?|bol-|bowl-cake|oeufs?-brouilles|omelette-roulee|mini-|brochettes?-apero|tartare-de-saumon|rillettes-de-(thon|saumon|sardine|maquereau))/;
 const BAD = /(frite|friture|beignet|burger|pizza|tartiflette|raclette|fondue|croque|nugget|cordon bleu|\bpanee?s?\b|chips|gratin dauphinois|aligot|confit|lardon|camembert|\bbrie\b|mont d.or|reblochon|tarte|quiche|feuillete|feuilletee|pate brisee|terrine|navets? sales|choucroute|cassoulet|carbonara|kebab|tacos? (frite|frites)|hot ?dog|grilled cheese|pepperoni|gateau|anniversaire)/;
-const SNACK_T = /(sable|biscuit|tuile|gougere|cake sale|chips|grissini|gressin|muffin|pancake|energy|bouchee|barre|cookie|mug ?cake|cheesecake|porridge|overnight|mimosa|roule|verrine|mousse|bowl ?cake|tartine|houmous|hummus|tzatziki|trempette|\bdip\b|crackers?|smoothie|yaourt|skyr|fromage blanc|cottage|oeufs? (durs?|a la coque|coque|cocotte|mimosa|farcis?)|oeuf (dur|a la coque|cocotte|mimosa|farci)|collation|encas|snack|gaufre|madeleine|edamame|pois chiches? (grilles|rotis|croustillants))/;
+const SNACK_T = /(sable|biscuit|tuile|gougere|cake sale|chips|grissini|gressin|muffin|pancake|energy|bouchee|barre|cookie|mug ?cake|cheesecake|porridge|overnight|mimosa|roule|verrine|\bmousses?\b|bowl ?cake|tartine|houmous|hummus|tzatziki|trempette|\bdip\b|crackers?|smoothie|yaourt|skyr|fromage blanc|cottage|oeufs? (durs?|a la coque|coque|cocotte|mimosa|farcis?)|oeuf (dur|a la coque|cocotte|mimosa|farci)|collation|encas|snack|gaufre|madeleine|edamame|pois chiches? (grilles|rotis|croustillants))/;
 const MEAL_T = /(puree|\briz\b|pates|spaghetti|semoule|quinoa|boulgour|nouilles|gratin|curry|mijote|roti|poelee|risotto|wok|bowl(?! ?cake)|tajine|blanquette|pot-au-feu|bourguignon|parmentier|saute|ragout|chili|lasagne|burger|sandwich|\bwrap|tacos|quiche|pizza|hachis|cocotte|steak|escalope|filets? de|paves? de|soupe|veloute|potage|couscous|omelette|frittata|shakshuka|chakchouka|galettes? de (sarrasin|ble noir)|plat |salade (composee|de pates|de riz|de quinoa|de lentilles|cesar)|brochettes de (poulet|boeuf|dinde))/;
 // catégorie de protéine (pour varier chaque page)
 const PT = [["crevettes", /crevette|gambas|fruits? de mer|\bmoules?\b|calamar|encornet|saint-jacques|noix de st|surimi|crabe/], ["poisson", /saumon|cabillaud|thon|merlu|\blieu\b|colin|truite|sardine|maquereau|dorade|\bbar\b|poisson|haddock|eglefin|merlan|sole|lotte/],
@@ -111,8 +111,12 @@ const VEG = /\bv[eé]g[eé]|vegetari|vegan|tofu|tempeh|seitan|falafel|halloumi|p
 const ptOf = (title, ing) => { const t = nrm(title); if (VEG.test(t)) return "vege"; for (const [p, re] of PT) if (re.test(t)) return p;
   const i = nrm(ing.slice(0, 6).join(" | ")); for (const [p, re] of PT) if (re.test(i)) return p; return "vege"; };
 
+const CNT = /^(oeufs?|œufs?|blancs?|jaunes?|echalotes?|échalotes?|echalottes?|oignons?|gousses?|tetes?|têtes?|citrons?|bananes?|pommes?|poires?|tranches?|feuilles?|branches?|brins?|pincees?|pincées?|filets?|escalopes?|paves?|pavés?|steaks?|tortillas?|wraps?|galettes?|avocats?|tomates?|carottes?|courgettes?|poivrons?|pains?|muffins?|cookies?|biscuits?|speculoos|spéculoos|dattes?|sachets?|boites?|boîtes?|pots?|cubes?|petits?|gros|grosses?|belles?|kiwis?|oranges?|mangues?|figues?|abricots?|peches?|pêches?|clementines?|clémentines?|concombres?|aubergines?|navets?|radis|endives?|crevettes?|gambas|noix|amandes?|noisettes?|olives?|cornichons?|champignons?|saint|fraises?|framboises?|myrtilles?|cerises?|cuill\w*|c\.|cs|cc|bou\.?|botte|bottes)$/i;
+const fixUnitless = (line) => { const m = String(line || "").match(/^\s*(\d+(?:[.,]\d+)?)\s+([A-ZÀ-ÝŒ][^\s]*)(.*)$/); if (!m) return line; const q = parseFloat(m[1].replace(",", ".")); if (!(q >= 5)) return line;
+  const w = m[2].replace(/[’']/g, " ").split(" ")[0]; return CNT.test(w) ? line : `${m[1]} g ${m[2]}${m[3]}`; };
 function normIng(src, s) {
   let x = clean(s).replace(/\((?:s|x|es)\)/g, "").replace(/\s{2,}/g, " ").trim();
+  if (src === "fourchette") x = fixUnitless(x);
   if (src === "jow") x = x.replace(/\btran\.?(?=\s)/i, "tranche").replace(/\bc[àa]s\b/gi, "cs").replace(/\bc[àa]c\b/gi, "cc").replace(/\bgr\b/gi, "g");
   return x.slice(0, 140);
 }
@@ -140,7 +144,7 @@ function toRecipe(key, url, R, hint) {
   const a = R.author && (Array.isArray(R.author) ? R.author[0] : R.author); const an = clean(a && (a.name || a));
   if (an && !/^(anonyme|jow|hellofresh|betty bossi|fourchette (et|&) bikini|redaction|rédaction)$/i.test(an)) o.a = an.slice(0, 50); else if (key === "marmiton") o.a = "Membre Marmiton";
   if (porkOf(o)) return { why: "porc" };
-  if (DESSERT.test(nrm(t)) && !/(poulet|dinde|boeuf|saumon|thon|crevette|lentille|pois chiche|parmesan|fromage|comte|emmental|gruyere|chevre|feta|olive|tomate|herbes|pesto|graines|\bsale|\bsalee|apero)/.test(nrm(t))) return { why: "dessert" };
+  if (DESSERT.test(nrm(t)) && !/(poulet|dinde|boeuf|saumon|thon|crevette|lentille|pois chiche|parmesan|fromage|comte|emmental|gruyere|chevre|feta|olive|tomate|herbes|pesto|graines|\bsale|\bsalee|apero|protein|skyr)/.test(nrm(t))) return { why: "dessert" };
   const ar = R.aggregateRating; if (ar && num(ar.ratingValue) && num(ar.ratingCount || ar.reviewCount)) o.r = [Math.round(num(ar.ratingValue) * 10) / 10, Math.round(num(ar.ratingCount || ar.reviewCount))];
   const vid = R.video && (Array.isArray(R.video) ? R.video[0] : R.video); const yv = ytId(vid && (vid.embedUrl || vid.contentUrl)); if (yv) o.v = yv;
   if (!srcOk(o)) return { why: "note Marmiton insuffisante" };
@@ -236,11 +240,15 @@ let pruned = 0;
 for (const f of fs.readdirSync(path.join(DIR, "p"))) { const fp = path.join(DIR, "p", f); try { const L = JSON.parse(fs.readFileSync(fp, "utf8")); const K = L.filter((e) => protOk(e) && srcOk(e) && !porkOf(e)); if (K.length !== L.length) { pruned += L.length - K.length; fs.writeFileSync(fp, JSON.stringify(K)); } } catch { /* page illisible */ } }
 { const n0 = st.pending.length; st.pending = st.pending.filter((e) => protOk(e) && srcOk(e) && !porkOf(e)); pruned += n0 - st.pending.length; }
 if (pruned) say(`retirées (sous les seuils de protéines, source non fiable ou porc) : ${pruned}`);
+const SNACK_W = /\b(cookies?|sables?|biscuits?|crackers?|tuiles?|gougeres?|muffins?|cakes? sales?|chips|gressins?|grissini|pancakes?|energy|bouchees?|barres?|mug ?cake|cheesecake|porridge|overnight|mimosa|roules?|verrines?|mousses?|bowl ?cake|tartines?|houmous|hummus|tzatziki|trempette|dip|smoothie|yaourts?|skyr|fromage blanc|cottage|oeufs? (durs?|cocotte|mimosa|farcis?)|collation|encas|snack|gaufres?|madeleines?|edamame|pois chiches? (grilles|rotis|croustillants)|rillettes?|amuse|aperitif|apero|toasts?|galettes? de (pois chiches|flocons)|falafels?|mini|brochettes? apero)\b/;
+const SNACK_MAIN = /\b(cabillaud|lotte|brochet|colin|merlu|lieu|dorade|daurade|truite|sole|bar|poulet|dinde|boeuf|veau|agneau|canard|lapin|steak|escalope|filets?|paves?|saint jacques|riz|pates|quinoa|semoule|boulgour|pommes? de terre)\b/;
+const snackOk = (e) => { const t = nrm(e.t).replace(/['’]/g, " "); return SNACK_W.test(t) || (!!e.n && e.n.k <= 320 && e.n.p <= 28 && !SNACK_MAIN.test(t)); };
 // --- encas : liste à part (discover/encas.json), les 400 plus récents ; au premier passage, on reprend ceux des pages déjà publiées
 st.snacks = st.snacks || [];
 if (!st.snkSeeded) { for (const f of fs.readdirSync(path.join(DIR, "p"))) { try { for (const e of JSON.parse(fs.readFileSync(path.join(DIR, "p", f), "utf8"))) if (e.k === "encas") st.snacks.push(e); } catch { /* page illisible */ } } st.snkSeeded = 1; }
 st.snacks.push(...st.pending.filter((e) => e.k === "encas")); st.pending = st.pending.filter((e) => e.k !== "encas");
-{ const seen = new Set(); st.snacks = st.snacks.reverse().filter((e) => { if (seen.has(e.id)) return false; seen.add(e.id); return protOk(e) && srcOk(e) && !porkOf(e) && !MEAL_T.test(nrm(e.t)) && !(e.n && e.n.p > 28); }).slice(0, 400).reverse(); }
+{ const seen = new Set(); st.snacks = st.snacks.reverse().filter((e) => { if (seen.has(e.id)) return false; seen.add(e.id); return protOk(e) && srcOk(e) && !porkOf(e) && !MEAL_T.test(nrm(e.t)) && !(e.n && e.n.p > 28) && snackOk(e); }).slice(0, 400).reverse(); }
+for (const e of st.snacks) if (e.src === "Fourchette & Bikini") e.ing = e.ing.map(fixUnitless);
 fs.writeFileSync(path.join(DIR, "encas.json"), JSON.stringify({ updated: new Date().toISOString(), items: st.snacks.slice().reverse() }));
 say(`encas : ${st.snacks.length} (dont salés ${st.snacks.filter((e) => e.sv).length})`);
 // --- pages de 10 plats (une catégorie à tour de rôle)
