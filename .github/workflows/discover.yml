@@ -1,6 +1,6 @@
 name: Recettes à découvrir
-# Trois fois par jour : nouveaux plats complets, sans porc, riches en protéines (HelloFresh, Jow, Marmiton très bien notées, Betty Bossi, Fourchette & Bikini, Julie Andrieu, Hervé Cuisine)
-# rangés par pages de 10 plats (ceux qui se gardent pour le batch cooking en priorité) ; les encas (salés ou protéinés) dans discover/encas.json
+# Trois fois par jour : nouveaux plats complets, sans porc, riches en protéines (HelloFresh, Jow, Marmiton très bien notées, Betty Bossi, Fourchette & Bikini, Journal des Femmes, Julie Andrieu, Hervé Cuisine)
+# rangés par pages de 10 plats (ceux qui se gardent pour le batch cooking en priorité) ; les encas (salés ou protéinés, dont CuisineAZ) dans discover/encas.json, 12 nouveaux par jour
 # dans la branche « data », lues par l'appli avec le bouton « Actualiser ».
 on:
   workflow_dispatch:

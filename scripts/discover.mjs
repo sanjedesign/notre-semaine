@@ -1,9 +1,11 @@
 // Recettes à découvrir pour Sano — tourne trois fois par jour sur GitHub Actions.
-// Lit les plans de site de HelloFresh, Jow, Marmiton, Betty Bossi, Fourchette & Bikini et de deux chefs (Julie Andrieu, Hervé Cuisine),
+// Lit les plans de site de HelloFresh, Jow, Marmiton, Betty Bossi, Fourchette & Bikini, du Journal des Femmes (recettes en vidéo),
+// de CuisineAZ (encas seulement) et de deux chefs (Julie Andrieu, Hervé Cuisine),
 // plus des recherches Marmiton ciblées (plats à préparer à l'avance, poulet, poisson…), ouvre d'abord les fiches dont l'adresse
 // annonce des protéines ou un plat qui se garde, ne garde que des plats complets (protéine, féculent, légumes, matière grasse),
 // sans porc, et les range par pages de 10 plats variés dans la branche « data ».
-// Les encas (salés comme les cookies au parmesan, ou protéinés) vont dans discover/encas.json, montrés dans l'onglet Encas.
+// Les encas (salés comme les cookies au parmesan, ou protéinés) vont dans discover/encas.json, montrés dans l'onglet Encas :
+// mis en réserve puis publiés au fil des jours (12 par jour), pour qu'il y ait de nouvelles idées chaque jour.
 // Les plats avec une vidéo (YouTube d'Hervé Cuisine, vidéos de Jow sur leur site) vont aussi dans discover/videos.json, montrés en priorité dans le swipe.
 // Les chefs ne publient pas de valeurs nutritionnelles : l'appli les calcule ingrédient par ingrédient (table Ciqual).
 // DRY_RUN=1 : lit quelques fiches et affiche le résultat sans rien écrire (SOURCES=bettybossi,fourchette pour en choisir).
@@ -85,11 +87,18 @@ const SRC = {
   // chefs : pas de valeurs nutritionnelles publiées (chef: true)
   julieandrieu: { name: "Julie Andrieu", maps: ["https://www.julieandrieu.com/recipe-sitemap.xml"], re: /julieandrieu\.com\/recettes\/[a-z0-9-]+\/?$/, w: 3, chef: true },
   hervecuisine: { name: "Hervé Cuisine", maps: ["https://www.hervecuisine.com/herve_recipe-sitemap.xml"], re: /hervecuisine\.com\/recette\/[a-z0-9-]+\/?$/, w: 4, chef: true },
+  // encas uniquement, recettes bien notées ; pas de valeurs publiées : l'appli les calcule ingrédient par ingrédient (calc: true)
+  // (robots.txt de CuisineAZ : pas d'adresses avec « -- », « ' » ou commençant par « recette-chiffre »)
+  cuisineaz: { name: "CuisineAZ", maps: ["https://www.cuisineaz.com/xml/sitemap.xml"], sub: /recette/i, re: /cuisineaz\.com\/recettes\/(?!recette-\d)[a-z0-9]+(?:-[a-z0-9]+)*-\d+\.aspx$/, w: 3, calc: true, snackOnly: true, minR: [4.5, 5] },
+  // recettes en vidéo du Journal des Femmes (calories seules publiées : le reste est calculé par l'appli)
+  jdf: { name: "Journal des Femmes", maps: ["https://cuisine.journaldesfemmes.fr/sitemap/video-recipe/"], re: /cuisine\.journaldesfemmes\.fr\/recette\/\d+-[a-z0-9-]+$/, w: 2, calc: true, minR: [4.4, 10] },
 };
 // seuils protéines (les mêmes dans l'appli) : plat ≥ 28 g par portion et ≥ 24 % des calories ; encas ≥ 10 g et ≥ 25 %
 const PRULE = { plat: { p: 28, r: 0.24 }, encas: { p: 10, r: 0.25 } };
 // sources fiables : cuisines qui testent leurs recettes ; Marmiton seulement si la recette est notée ≥ 4,5 avec au moins 20 avis
-const srcOk = (e) => e.src !== "Ptitchef" && (e.src !== "Marmiton" || (Array.isArray(e.r) && e.r[0] >= 4.5 && e.r[1] >= 20));
+// sources sans valeurs publiées (CuisineAZ, Journal des Femmes) : seulement des recettes bien notées
+const MIN_R = { "Marmiton": [4.5, 20], "CuisineAZ": [4.5, 5], "Journal des Femmes": [4.4, 10] };
+const srcOk = (e) => e.src !== "Ptitchef" && (!MIN_R[e.src] || (Array.isArray(e.r) && e.r[0] >= MIN_R[e.src][0] && e.r[1] >= MIN_R[e.src][1]));
 const protOk = (e) => { if (!e.n) return true; const R = e.k === "encas" && e.sv ? { p: 4, r: 0.14 } : PRULE[e.k === "encas" ? "encas" : "plat"]; const n = e.n; return n.k > 0 && n.p >= R.p && (n.p * 4) / n.k >= R.r; };
 // pas de porc (« jambon de dinde », « lardons de volaille »… restent permis)
 const PORK = /\b(porc|porcelet|cochon|jambonneau|jambons?|lardons?|lard|bacon|pancetta|guanciale|prosciutto|speck|coppa|lonzo|chorizo|saucissons?|saucisses?|chipolatas?|knacks?|cervelas|mortadelle|salami|pepperoni|rosette|andouillettes?|andouilles?|boudins?|rillettes?|chair a saucisse|filets? mignons?|echine|travers|poitrine (fumee|de porc|salee)|serrano|bayonne|parme|pata negra|jamon|nduja|morteau|montbeliard|toulouse)\b/;
@@ -109,6 +118,8 @@ const DESSERT = /(gateau|cake|tarte|flan|creme (brulee|anglaise|dessert|caramel)
 const BATCH_SLUG = /(mijot|curry|chili|bolognaise|ragout|tajine|blanquette|daube|bourguignon|goulash|dhal|dahl|gratin|lasagne|hachis|parmentier|boulette|kefta|one-pot|cocotte|colombo|massala|masala|tikka|korma|biryani|paella|couscous|farci|enchilada|moussaka|cannelloni|navarin|stroganoff|fricassee|basquaise|rougail|mafe|riz-saute|bowl|salade-de-(lentilles|quinoa|boulgour|pates|riz|pois-chiches)|taboule|meal-prep|batch)/;
 // fiches visées en priorité : leur adresse annonce un aliment riche en protéines
 const PROT_SLUG = /(proteine|protein|poulet|dinde|volaille|boeuf|steak|bavette|veau|escalope|agneau|canard|kefta|boulette|saumon|cabillaud|thon|merlu|colin|lieu|truite|sardine|maquereau|dorade|poisson|crevette|gambas|moule|calamar|encornet|saint-jacques|oeuf|omelette|frittata|tofu|tempeh|seitan|lentille|pois-chiche|haricot|edamame|skyr|fromage-blanc|cottage|ricotta|quark|halloumi)/;
+// ingrédients riches en protéines (encas sans valeurs publiées)
+const PROT_ING = /\b(parmesan|parmigiano|grana|comte|emmental|gruyere|feta|chevre|mozzarella|ricotta|cottage|fromage blanc|faisselle|skyr|yaourt grec|yaourt a la grecque|quark|oeufs?|thon|saumon|sardines?|maquereaux?|crevettes?|surimi|jambon de (dinde|poulet|volaille)|blancs? de (poulet|dinde)|poulet|dinde|pois chiches?|lentilles?|edamame|tofu|haricots? (rouges?|blancs?)|whey|proteines?|houmous|hummus)\b/;
 // recettes écrites pour un robot de cuisine : étapes inutilisables sans l'appareil
 const ROBOT = /thermomix|cookeo|monsieur[- ]cuisine|companion|i-cook|magimix|cook-?expert|multicuiseur/i;
 const SNACK_SLUG = /(cookie|sable|biscuit|tuile|gougere|cake-sale|chips|grissini|gressin|crackers?-|galette-de-flocons|proteine|skyr|fromage-blanc|cottage|energy-?ball|bouchee|muffin|pancake|barre|houmous|hummus|tzatziki|tatziki|edamame|pois-chiches?-(grilles|rotis|croustillants)|oeufs?-(mimosa|durs?|cocotte|farcis)|roules?-de-(jambon|saumon|dinde)|collation|encas|snack|mug-?cake|cheesecake|porridge|overnight|yaourt|trempette|tartinade|verrine|smoothie|gaufre|crackers?|bol-|bowl-cake|oeufs?-brouilles|omelette-roulee|mini-|brochettes?-apero|tartare-de-saumon|rillettes-de-(thon|saumon|sardine|maquereau))/;
@@ -130,6 +141,8 @@ const fixUnitless = (line) => { const m = String(line || "").match(/^\s*(\d+(?:[
 function normIng(src, s) {
   let x = clean(s).replace(/\((?:s|x|es)\)/g, "").replace(/\s{2,}/g, " ").trim();
   if (src === "fourchette") x = fixUnitless(x);
+  if (src === "cuisineaz") x = x.replace(/^(\d+(?:[.,]\d+)?)\s+grammes?\b/i, "$1 g").replace(/^(\d+(?:[.,]\d+)?)\s+(?:verres?)\s+/i, "$1 verre ");
+  if (src === "jdf") x = x.replace(/\bc\.?\s?(?:à|a)\s?s\.?(?=\s)/gi, "cs").replace(/\bc\.?\s?(?:à|a)\s?c\.?(?=\s)/gi, "cc").replace(/^(\d+(?:[.,]\d+)?)\s+unit[ée]s?\s+/i, "$1 ");
   if (src === "jow") x = x.replace(/\btran\.?(?=\s)/i, "tranche").replace(/\bc[àa]s\b/gi, "cs").replace(/\bc[àa]c\b/gi, "cc").replace(/\bgr\b/gi, "g");
   return x.slice(0, 140);
 }
@@ -140,7 +153,7 @@ function toRecipe(key, url, R, hint, html) {
   const n = R.nutrition || {};
   let k = num(n.calories); if (k != null && /kj/i.test(String(n.calories)) && !/kcal|calor/i.test(String(n.calories))) k = Math.round(k / 4.184);
   const p = num(n.proteinContent), f = num(n.fatContent), c = num(n.carbohydrateContent), fi = num(n.fiberContent), sug = num(n.sugarContent);
-  const chef = !!SRC[key].chef, hasN = !!(k && p != null && f != null && c != null);
+  const chef = !!(SRC[key].chef || SRC[key].calc), hasN = !!(k && p != null && f != null && c != null);
   if (!hasN && !chef) return { why: "nutrition absente" };
   const t = clean(R.name).replace(/\s*:\s*la meilleure recette\s*$/i, "").replace(/\s*-\s*que du bon\b.*$/i, "").replace(/\s*\(\d+\)\s*$/, "")
     .replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}\u{FE0F}]/gu, "").replace(/^(la |ma |notre )?recettes? (facile |rapide )?(du |de la |des |de l['’]|d['’]|de )?/i, "").replace(/\s*:\s*recette (et )?vid[ée]o\s*$/i, "").replace(/\s{2,}/g, " ").trim().replace(/^./, (c) => c.toUpperCase()).slice(0, 110);
@@ -155,12 +168,12 @@ function toRecipe(key, url, R, hint, html) {
   const o = { id: idOf(url), t, src: SRC[key].name, u: url, img: imgOf(R.image), min: iso(R.totalTime) || iso(R.prepTime) + iso(R.cookTime) || 0, y, ing };
   if (hasN) { o.n = { k: Math.round(k), p: +p.toFixed(1), f: +f.toFixed(1), c: +c.toFixed(1) }; if (fi != null) o.n.fi = +fi.toFixed(1); }
   const a = R.author && (Array.isArray(R.author) ? R.author[0] : R.author); const an = clean(a && (a.name || a));
-  if (an && !/^(anonyme|jow|hellofresh|betty bossi|fourchette (et|&) bikini|redaction|rédaction)$/i.test(an)) o.a = an.slice(0, 50); else if (key === "marmiton") o.a = "Membre Marmiton";
+  if (an && !/^(anonyme|jow|hellofresh|betty bossi|fourchette (et|&) bikini|redaction|rédaction|cuisineaz|cuisine az|journal des femmes|la redaction.*|journal des femmes cuisine)$/i.test(an)) o.a = an.slice(0, 50); else if (key === "marmiton") o.a = "Membre Marmiton";
   if (porkOf(o)) return { why: "porc" };
   if (DESSERT.test(nrm(t)) && !/(poulet|dinde|boeuf|saumon|thon|crevette|lentille|pois chiche|parmesan|fromage|comte|emmental|gruyere|chevre|feta|olive|tomate|herbes|pesto|graines|\bsale|\bsalee|apero|protein|skyr)/.test(nrm(t))) return { why: "dessert" };
   const ar = R.aggregateRating; if (ar && num(ar.ratingValue) && num(ar.ratingCount || ar.reviewCount)) o.r = [Math.round(num(ar.ratingValue) * 10) / 10, Math.round(num(ar.ratingCount || ar.reviewCount))];
   const vv = videoOf(R, html, key); if (vv) o.v = vv;
-  if (!srcOk(o)) return { why: "note Marmiton insuffisante" };
+  if (!srcOk(o)) return { why: "note insuffisante" };
   if (BAD.test(nrm(t)) && !/chips de (parmesan|pois chiches?|kale|chou|legumes?)/.test(nrm(t))) return { why: "plat trop riche (nom)" };
   if (/\b(langues?|ris de veau|rognons?|foies?|tripes?|cervelle|boudin|andouillettes?|gesiers?|coeurs? de (boeuf|volaille|poulet))\b/.test(nrm(t))) return { why: "abats" };
   if (/dessert|boisson|cocktail|sauce|confiserie/.test(cat) && !SNACK_T.test(nrm(t))) return { why: "catégorie " + cat };
@@ -173,13 +186,16 @@ function toRecipe(key, url, R, hint, html) {
   const sweetBake = !savory && /(cake|brownie|cookie|crepe|gaufre|madeleine|sable|biscuit)/.test(tt) && !/prot[eé]in/.test(tt);
   if (snackLike && !sweetBake && (!hasN || k <= 320)) {
     if (hasN && (savory ? (k < 30 || p < 4 || pr < 0.14 || f > 16) : (k < 50 || p < PRULE.encas.p || pr < PRULE.encas.r || f > 16 || (sug != null && sug > 18)))) return { why: "encas pas assez protéiné" };
-    if (!hasN && !savory) return { why: "encas sucré sans valeurs" };
+    if (!hasN && !savory && !/prot[eé]in|skyr|fromage blanc|cottage|whey/.test(tt)) return { why: "encas sucré sans valeurs" };
+    // sans valeurs publiées : il faut au moins un ingrédient riche en protéines (l'appli vérifie ensuite par le calcul)
+    if (!hasN && !PROT_ING.test(nrm(ing.join(" | ")).replace(/['’]/g, " "))) return { why: "encas sans ingrédient protéiné" };
     if (savory) o.sv = 1;
     if (/(bacon|chorizo|saucisson|rillette|lardon|salami)/.test(tt)) return { why: "encas trop gras" };
     o.k = "encas"; const su = SNACK_UNIT.find(([re]) => re.test(nrm(t))); o.yU = su ? su[1] : y > 1 ? "portions" : "portion"; o.uS = su ? su[2] : "portion";
     o.emo = (SNACK_EMO.find(([re]) => re.test(nrm(t))) || [0, "🥚"])[1]; o.pt = "encas"; return { r: o };
   }
   if (snackLike && !hasN) return { why: "encas" };
+  if (SRC[key].snackOnly) return { why: "plat (source d'encas)" };
   // plat complet, léger et riche en protéines (les valeurs des chefs sont vérifiées par l'appli)
   if (!completeOf(o)) return { why: "plat incomplet" };
   if (hasN) {
@@ -221,13 +237,15 @@ for (const key of Object.keys(SRC).filter((k) => !ONLY.length || ONLY.includes(k
   const U = await urlsOf(key); const P = new Set(shuffle(U.pri.filter((u) => !st.seen[idOf(u)])));
   const L = [...P, ...shuffle(U.all.filter((u) => !st.seen[idOf(u)] && !P.has(u)))];
   const aim = (A) => { const pri = A.filter((u) => P.has(u)), B = A.filter((u) => !P.has(u)); const good = (u) => BATCH_SLUG.test(nrm(u)) || PROT_SLUG.test(nrm(u)); const hit = B.filter(good), rest = B.filter((u) => !good(u)); const out = [...pri]; while (hit.length || rest.length) { for (let i = 0; i < 3 && hit.length; i++) out.push(hit.shift()); if (rest.length) out.push(rest.shift()); } return out; };
-  per[key] = { snack: aim(L.filter((u) => SNACK_SLUG.test(nrm(u)))), main: aim(L.filter((u) => !SNACK_SLUG.test(nrm(u)))) };
+  per[key] = { snack: aim(L.filter((u) => SNACK_SLUG.test(nrm(u)))), main: SRC[key].snackOnly ? [] : aim(L.filter((u) => !SNACK_SLUG.test(nrm(u)))) };
 }
 // tirage pondéré entre les sources ; la moitié des fiches sont des pistes d'encas, et si une source ou un type manque, les autres complètent
 function take(kind, n) { const out = []; let more = true;
   while (out.length < n && more) { more = false; for (const k of Object.keys(per)) for (let i = 0; i < SRC[k].w && out.length < n; i++) { const u = per[k][kind].shift(); if (u) { out.push([k, u]); more = true; } } }
   return out; }
-const snacks = take("snack", process.env.SNACK_ONLY === "1" ? MAX : Math.round(MAX * 0.3));
+// encas : tant que la réserve est petite, 30 % des fiches lues sont des pistes d'encas ; ensuite 40 par passage (les sites ne sont pas surchargés)
+const RES_N = (st.snkRes || []).length;
+const snacks = take("snack", process.env.SNACK_ONLY === "1" ? MAX : RES_N > 150 ? 40 : Math.round(MAX * 0.3));
 const queue = shuffle([...snacks, ...(process.env.SNACK_ONLY === "1" ? [] : take("main", MAX - snacks.length))]);
 say(`à lire : ${queue.length} fiches (${snacks.length} pistes d'encas)`);
 const why = {}; let ok = 0; const bySrc = {};
@@ -270,8 +288,20 @@ const snackOk = (e) => { const t = nrm(e.t).replace(/['’]/g, " "); return SNAC
 // --- encas : liste à part (discover/encas.json), les 400 plus récents ; au premier passage, on reprend ceux des pages déjà publiées
 st.snacks = st.snacks || [];
 if (!st.snkSeeded) { for (const f of fs.readdirSync(path.join(DIR, "p"))) { try { for (const e of JSON.parse(fs.readFileSync(path.join(DIR, "p", f), "utf8"))) if (e.k === "encas") st.snacks.push(e); } catch { /* page illisible */ } } st.snkSeeded = 1; }
-st.snacks.push(...st.pending.filter((e) => e.k === "encas")); st.pending = st.pending.filter((e) => e.k !== "encas");
-{ const seen = new Set(); st.snacks = st.snacks.reverse().filter((e) => { if (seen.has(e.id)) return false; seen.add(e.id); return protOk(e) && srcOk(e) && !porkOf(e) && !MEAL_T.test(nrm(e.t)) && !(e.n && e.n.p > 28) && snackOk(e); }).slice(0, 400).reverse(); }
+// nouveaux encas : mis en réserve, puis publiés au fil des jours (SNK_DAY par jour, avec leur date d'ajout « ad ») pour avoir des idées neuves chaque jour
+const snkGood = (e) => protOk(e) && srcOk(e) && !porkOf(e) && !MEAL_T.test(nrm(e.t)) && !(e.n && e.n.p > 28) && snackOk(e);
+st.snkRes = st.snkRes || [];
+{ const have = new Set([...st.snacks, ...st.snkRes].map((e) => e.id)); for (const e of st.pending.filter((e) => e.k === "encas")) if (!have.has(e.id) && snkGood(e)) { st.snkRes.push(e); have.add(e.id); } }
+st.pending = st.pending.filter((e) => e.k !== "encas");
+{ const SNK_DAY = +(process.env.SNACK_PER_DAY || 12); const today = new Date().toLocaleDateString("sv-SE", { timeZone: "Europe/Paris" }).replace(/-/g, "");
+  if (!st.snkDay || st.snkDay.d !== today) st.snkDay = { d: today, n: 0 };
+  // un salé, un sucré, à tour de rôle
+  const sv = st.snkRes.filter((e) => e.sv), su = st.snkRes.filter((e) => !e.sv); const out = [];
+  while (st.snkDay.n + out.length < SNK_DAY && (sv.length || su.length)) { const e = (out.length % 2 === 0 ? sv.shift() || su.shift() : su.shift() || sv.shift()); out.push(e); }
+  const ids = new Set(out.map((e) => e.id)); st.snkRes = st.snkRes.filter((e) => !ids.has(e.id));
+  for (const e of out) { e.ad = today; st.snacks.push(e); } st.snkDay.n += out.length;
+  say(`encas publiés aujourd'hui : ${st.snkDay.n} (dont ${out.length} à ce passage) · en réserve : ${st.snkRes.length}`); }
+{ const seen = new Set(); st.snacks = st.snacks.reverse().filter((e) => { if (seen.has(e.id)) return false; seen.add(e.id); return snkGood(e); }).slice(0, 600).reverse(); }
 for (const e of st.snacks) if (e.src === "Fourchette & Bikini") e.ing = e.ing.map(fixUnitless);
 fs.writeFileSync(path.join(DIR, "encas.json"), JSON.stringify({ updated: new Date().toISOString(), items: st.snacks.slice().reverse() }));
 say(`encas : ${st.snacks.length} (dont salés ${st.snacks.filter((e) => e.sv).length})`);

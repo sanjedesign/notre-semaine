@@ -2624,7 +2624,11 @@ body.lock .fab,body.panel-open .fab{display:none!important}
 .w54-note{font-size:.74rem;color:var(--muted);margin:12px 0 0}
 .w54-chart .tgt{stroke:var(--accent);stroke-width:1.4;stroke-dasharray:5 4;opacity:.85}
 .w54-chart .tgl{fill:var(--accent);font-weight:700;font-size:10.5px;opacity:1}
-/* v55 */</style>
+/* v55 */
+/* v57 : badge des nouvelles idées d'encas */
+.snki-new{display:inline-block;margin-right:6px;padding:1px 7px;border-radius:999px;background:var(--cta);color:#fff;font-family:var(--f-sub);font-weight:600;font-size:.68rem;vertical-align:2px}
+.sp-kpis>.sp-kpi:last-child:nth-child(odd){grid-column:1/-1}
+</style>
 </head>
 <body>
 <div id="boot" aria-hidden="true"><span class="boot-logo"><svg viewBox="8.5 8 17 18"><path d="M16 24.8v-6.6" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/><path d="M16 17c0-4.6 3-7.6 8-8-.3 5-3.4 8-8 8z" fill="#fff"/><path d="M16 19.5c-.1-3.6-2.5-6-6.5-6.3.2 3.9 2.6 6.2 6.5 6.3z" fill="#CDEFD9"/></svg></span><b>Sano</b></div>
@@ -2731,7 +2735,7 @@ body.lock .fab,body.panel-open .fab{display:none!important}
 </div>
 <div id="timers" class="timers" hidden aria-live="polite"></div>
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
-<script>window.NS_CONFIG={"hosted": true, "sbUrl": "https://zjsawjudrdneeptxbskd.supabase.co", "sbKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpqc2F3anVkcmRuZWVwdHhic2tkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1NjUxMjcsImV4cCI6MjEwNzE0MTEyN30.Wn1bUy--5O78gGICTOyEGbnT6B-SdoNCG_XxBBaaUIY", "build": "20261104192212"}</script>
+<script>window.NS_CONFIG={"hosted": true, "sbUrl": "https://zjsawjudrdneeptxbskd.supabase.co", "sbKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpqc2F3anVkcmRuZWVwdHhic2tkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1NjUxMjcsImV4cCI6MjEwNzE0MTEyN30.Wn1bUy--5O78gGICTOyEGbnT6B-SdoNCG_XxBBaaUIY", "build": "20261105205700"}</script>
 <script>
 const AISLES={L:"Fruits & légumes",H:"Herbes fraîches",V:"Viandes & poissons",C:"Crèmerie & œufs",S:"Surgelés",F:"Féculents",B:"Conserves",E:"Épices & condiments"};
 const AISLE_ORDER=["L","H","V","C","S","F","B","E"];
@@ -9956,6 +9960,65 @@ discNut=(f=>function(e){if(!e||e.n||!Array.isArray(e.ing)||!CHEF56.has(e.src))re
  const x={};for(const k in e)if(k[0]!=="_")x[k]=e[k];x.ing=e.ing.map(nrmLine56).filter(Boolean);let n=null;try{n=f.call(this,x)}catch(z){}return e._n56=n})(discNut);
 nx51Reset=(f=>function(){try{for(const e of DISC){delete e._n56;delete e._c52}}catch(x){}return f.apply(this,arguments)})(nx51Reset);
 try{for(const e of DISC){delete e._n56;delete e._c52}}catch(e){}
+
+
+// ================= v57 : sans pas ni eau, nouvelles idées d'encas chaque jour =================
+// 1. eau : la carte disparaît du Suivi (les données déjà notées restent dans la sauvegarde)
+waterCard=()=>"";
+try{document.querySelectorAll(".wt-card").forEach(x=>x.remove())}catch(e){}
+// 2. pas : plus de carte « Pas », plus de mesure « Pas/jour », plus de lecture automatique depuis l'iPhone
+spStepsHtml=()=>"";
+spInboxPull=async function(){};
+spWkStat=function(p,days){const sp=SPD(),H=sp.hist.filter(h=>h.p===p&&days.includes(h.d));return{n:H.length,min:H.reduce((a,h)=>a+h.min,0),kc:H.reduce((a,h)=>a+h.kcal,0),avg:null,H}};
+spStripHtml=function(p,d){const sp=SPD(),H=sp.hist.filter(h=>h.p===p&&h.d===d),min=H.reduce((a,h)=>a+h.min,0),kc=H.reduce((a,h)=>a+h.kcal,0);
+ return`<button type="button" class="sp-strip" data-spgo="1"><span>${SPI.db}<b>${min}</b> min de sport</span><span>${SPI.flame}≈ <b>${fmtInt(Math.round(kc/5)*5)}</b> kcal</span><span class="sp-go">Sport ›</span></button>`};
+if(ui.spMet==="pas")ui.spMet="min";
+spChart=(f=>function(p,W,met){if(met==="pas"){met="min";ui.spMet="min"}return f.call(this,p,W,met).replace(/<button type="button" data-spmet="pas"[^>]*>[^<]*<\/button>/,"")})(spChart);
+spProgress=(f=>function(){return f.apply(this,arguments).filter(x=>x&&x[0]!=="Pas").map(x=>x[0]==="Depuis le début"?[x[0],String(x[1]).replace(/ · <b>[^<]*km<\/b> à pied/,"")]:x)})(spProgress);
+spStatsHtml=(f=>function(){return f.apply(this,arguments).replace(/, foulée et poids pour les pas/g,"").replace(/<div class="sp-kpi"><span class="sp-kl">Pas par jour<\/span>[\s\S]*?<\/div>/,"")})(spStatsHtml);
+// la vue « Activité » ne garde que le bilan des séances
+try{const b=document.querySelector('#tab-sport [data-view="activite"]');if(b)b.textContent="Bilan"}catch(e){}
+
+// 3. idées d'encas : la collecte en ajoute chaque jour ; les nouvelles (moins de 2 jours) passent en tête avec un badge
+const snkValid57=x=>{const o=snkValid(x);if(o&&x&&/^\d{8}$/.test(String(x.ad||"")))o.ad=String(x.ad);return o};
+const SNK_NEW_D=2;
+const snkIsNew=e=>{if(!e||!e.ad)return false;const d=dateFromYmd(e.ad);return(Date.now()-d.getTime())<SNK_NEW_D*864e5};
+snkiCache=function(){if(SNKI)return SNKI;try{const o=JSON.parse(localStorage.getItem(SNKI_KEY)||"null");if(o&&Array.isArray(o.items))SNKI={ts:+o.ts||0,items:o.items.map(snkValid57).filter(Boolean)}}catch(e){}return SNKI};
+snkiFetch=async function(force){const c=snkiCache();if(!force&&c&&Date.now()-c.ts<3*36e5)return c;if(ui.snkBusy)return c;ui.snkBusy=true;ui.snkErr=false;
+ try{const r=await fetch(DREM+"encas.json?t="+Math.floor(Date.now()/3e5),{cache:"no-store"});if(!r.ok)throw new Error("http "+r.status);const j=await r.json();
+  const items=(Array.isArray(j.items)?j.items:[]).map(snkValid57).filter(Boolean).slice(0,600);
+  for(const e of items){const cur=DISC_MAP[e.id];if(cur&&e.ad&&!cur.ad)cur.ad=e.ad}
+  SNKI={ts:Date.now(),items};try{localStorage.setItem(SNKI_KEY,JSON.stringify(SNKI,(k,v)=>k&&k[0]==="_"?undefined:v))}catch(e){}}
+ catch(e){ui.snkErr=true}
+ finally{ui.snkBusy=false}
+ try{renderSnackIdeas()}catch(e){}return SNKI};
+// la liste gardée sur le téléphone est relue avec la date d'ajout (si elle est déjà là)
+try{SNKI=null;snkiCache()}catch(e){}
+renderSnackIdeas=function(){const box=document.getElementById("snkIdeas");if(!box)return;const f=ui.snkF||"sale";
+ const all=snkiList();const L=all.filter(e=>f==="all"||(f==="sale"?snkSalty(e):!snkSalty(e)));
+ const BAKE=/(cookie|sable|cracker|biscuit|muffin|cake|gougere|tuile|chips|galette|gressin|grissini|madeleine|financier|scone)/,bk=e=>BAKE.test(nrmS(e.t||""))?1:0,nw=e=>snkIsNew(e)?1:0;
+ L.sort((a,b)=>{const na=discNut(a),nb=discNut(b);return(nw(b)-nw(a))||(snkSalty(b)-snkSalty(a))||(bk(b)-bk(a))||((nb.p*4/nb.k)-(na.p*4/na.k))||((b.img?1:0)-(a.img?1:0))});
+ const n=Math.min(L.length,ui.snkN||12),nS=all.filter(snkSalty).length,nU=all.length-nS,nNew=all.filter(snkIsNew).length;
+ const row=e=>{const x=discNut(e);const per=e.uS||"portion";return`<li class="snki-row"><button type="button" class="snki-open" data-snki-see="${e.id}" aria-label="Voir la recette ${esc(e.t)}">${e.img?`<img src="${esc(e.img)}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer">`:`<span class="snki-emo" aria-hidden="true">${e.emo||"🥨"}</span>`}<span class="snki-t"><b>${snkIsNew(e)?`<span class="snki-new">Nouveau</span>`:""}${esc(e.t)}</b><small>${esc(e.a&&e.a!==e.src?e.a:e.src)} · ${x.est?"≈ ":""}${fmtInt(x.k)} kcal · ${fmtG(r1(x.p))} g prot. par ${esc(per)}</small></span></button><button type="button" class="btn small snki-add" data-snki-add="${e.id}"${ui.dbusy===e.id?" disabled":""}>${ui.dbusy===e.id?"…":"+ Ajouter"}</button><button type="button" class="snki-no" data-snki-no="${esc(e.id)}" aria-label="Écarter ${esc(e.t)} : ne plus la proposer" title="Ne plus proposer">×</button></li>`};
+ box.innerHTML=`<div class="snki-h"><h2>Idées d'encas</h2><p class="muted">De vraies recettes publiées, avec leur lien. De nouvelles idées arrivent chaque jour${nNew?` : <b>${nNew} nouvelle${nNew>1?"s":""}</b> depuis hier`:""}.</p>
+  <div class="chips snki-f" role="group" aria-label="Type d'encas"><button type="button" class="chip" data-snki-f="sale" aria-pressed="${f==="sale"}">Salés <small>${nS}</small></button><button type="button" class="chip" data-snki-f="sucre" aria-pressed="${f==="sucre"}">Sucrés <small>${nU}</small></button><button type="button" class="chip" data-snki-f="all" aria-pressed="${f==="all"}">Tous</button></div></div>
+  ${L.length?`<ul class="snki-list">${L.slice(0,n).map(row).join("")}</ul>${L.length>n?`<button type="button" class="btn ghost snki-more" data-snki-more="1">Voir plus (${L.length-n})</button>`:""}`
+   :`<p class="muted snki-empty">${ui.snkBusy?"Chargement des idées d'encas…":ui.snkErr?"Impossible de charger les idées pour le moment : vérifie la connexion.":"Pas encore d'idée dans cette catégorie : de nouvelles arrivent chaque jour."}</p>`}`};
+// à chaque ouverture de l'onglet Encas : la liste est relue si elle a plus de 3 heures
+renderSnacks=(f=>function(){const r=f.apply(this,arguments);try{const C=snkiCache();if(HOSTED&&!ui.snkBusy&&(!C||Date.now()-C.ts>3*36e5)&&(!ui.snkAt||Date.now()-ui.snkAt>6e4)){ui.snkAt=Date.now();snkiFetch(false)}}catch(e){}return r})(renderSnacks);
+
+// 5. lecture des lignes pour le calcul : épices et condiments en petite quantité ignorés (pincée de curry, 1 cc de moutarde…),
+// « 200 Carotte » (unité oubliée par le site) lu en grammes
+const SPICE57=/^(sel|fleur de sel|poivre|piment|paprika|cumin|curry|curcuma|garam|massala|masala|epices?|herbes?|thym|origan|romarin|laurier|persil|coriandre|basilic|ciboulette|ciboule|menthe|aneth|estragon|sauge|marjolaine|muscade|cannelle|gingembre|ail en poudre|kaffir|citronnelle|zestes?|jus de citron|vinaigre|sauce soja|sriracha|tabasco|nuoc mam|moutarde|levure|bicarbonate|cafe soluble|extrait de vanille|vanille|set et poivre)\b/;
+const UNIT57=/^(g|kg|mg|ml|cl|dl|l|cs|cc|c|pincees?|gousses?|tranches?|boites?|sachets?|pots?|verres?|tasses?|bottes?|brins?|feuilles?|grammes?|bouquets?|cuill\w*|cubes?)$/;
+nrmLine56=(f=>function(l){const s=f.apply(this,arguments);if(!s)return s;const n=nrmS(s).replace(/['’]/g," ");
+ let nm=n.replace(/^[\d.,\/½¼¾\s-]+/,"");for(let i=0;i<4;i++)nm=nm.replace(/^(quelques|gouttes?|pincees?|feuilles?|brins?|branches?|bouquets?|cs|cc|l|cl|ml|g|c\. a (soupe|cafe)|de|d|du|des)\s+/,"");
+ const g=n.match(/^(\d+(?:[.,]\d+)?)\s*(g|ml|cl)\b/);if(SPICE57.test(nm)&&!(g&&parseFloat(g[1].replace(",","."))*(g[2]==="cl"?10:1)>=30))return null;
+ const m=s.match(/^(\d+(?:[.,]\d+)?)\s+(\S+)(.*)$/);if(m&&parseFloat(m[1].replace(",","."))>=50&&!UNIT57.test(nrmS(m[2]).replace(/\.$/,"")))return`${m[1]} g ${m[2]}${m[3]}`;
+ return s})(nrmLine56);
+try{for(const e of DISC){delete e._n56;delete e._c52;delete e._n52}}catch(e){}
+// 4. nouvelles sources sans valeurs publiées (CuisineAZ pour les encas, Journal des Femmes en vidéo) : même lecture des lignes que pour les chefs
+try{CHEF56.add("CuisineAZ");CHEF56.add("Journal des Femmes")}catch(e){}
 
 try{setTab(ui.tab);renderAll()}catch(e){try{sbDiag("affichage au démarrage",e)}catch(x){}}try{initDb()}catch(e){}sbStart();
 
