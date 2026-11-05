@@ -2625,6 +2625,41 @@ body.lock .fab,body.panel-open .fab{display:none!important}
 .w54-chart .tgt{stroke:var(--accent);stroke-width:1.4;stroke-dasharray:5 4;opacity:.85}
 .w54-chart .tgl{fill:var(--accent);font-weight:700;font-size:10.5px;opacity:1}
 /* v55 */
+/* v58 : boîtes pour chacun, interrupteur, tour de taille */
+.box58{margin:12px 0 4px;padding:12px 14px;border-radius:14px;background:var(--accent-soft);color:var(--ink)}
+.box58-t{margin:0 0 6px;font-family:var(--f-sub);font-weight:700}
+.box58-l{list-style:none;margin:0 0 8px;padding:0;display:grid;gap:6px}
+.box58-l li{display:flex;justify-content:space-between;gap:10px;align-items:baseline;flex-wrap:wrap}
+.box58-l li>span:first-child{font-weight:700}
+.box58-l small{color:var(--muted)}
+.box58-w{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:.85rem;flex-wrap:wrap}
+.box58-w span{display:inline-flex;align-items:center;gap:6px}
+.box58-w input{width:96px;padding:8px 10px;border-radius:10px;border:1px solid var(--line);background:var(--surface,#fff);font:inherit;color:inherit}
+.box58-n{margin:6px 0 0;font-size:.78rem;color:var(--muted)}
+.cook-mode .box58{text-align:left}
+.split58{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:12px;padding-top:12px;border-top:1px solid var(--line)}
+.split58 div{display:flex;flex-direction:column;gap:2px;min-width:0}
+.split58 small{font-size:.8rem;color:var(--muted)}
+.sw58{flex:0 0 auto;width:48px;height:28px;border-radius:999px;border:0;padding:3px;background:var(--surface-2,#ddd);cursor:pointer;display:flex;align-items:center;transition:background .15s}
+.sw58 i{display:block;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25);transition:transform .15s}
+.sw58.on{background:var(--accent)}
+.sw58.on i{transform:translateX(20px)}
+.sw58:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wa-due{font-size:.78rem;font-weight:700;color:var(--accent);background:var(--accent-soft);border-radius:999px;padding:3px 10px}
+.wa-spark{width:100%;height:auto;margin:2px 0 8px;display:block}
+.wa-spark polyline{fill:none;stroke:var(--accent);stroke-width:2.2;stroke-linejoin:round;stroke-linecap:round}
+.wa-spark circle{fill:var(--accent)}
+.wa-spark text{font-size:10px;fill:var(--muted)}
+.wa-form{margin-top:8px}
+.wa-form label{display:block;font-size:.85rem;font-weight:700;margin:0 0 6px}
+.wa-row{display:flex;gap:8px;align-items:stretch}
+.wa-row .pn-in{flex:1 1 auto;min-width:0;margin:0}
+.wa-row .btn{flex:0 0 auto}
+.wa-hist{list-style:none;margin:10px 0 4px;padding:0;display:grid;gap:2px}
+.wa-hist li{display:flex;align-items:center;gap:10px;font-size:.85rem;padding:4px 0;border-bottom:1px solid var(--line)}
+.wa-hist li span{flex:1;color:var(--muted)}
+.wa-hist button{border:0;background:none;color:var(--muted);font-size:1.1rem;width:32px;height:32px;border-radius:50%;cursor:pointer}
+@media (prefers-reduced-motion:reduce){.sw58,.sw58 i{transition:none}}
 /* v57 : badge des nouvelles idées d'encas */
 .snki-new{display:inline-block;margin-right:6px;padding:1px 7px;border-radius:999px;background:var(--cta);color:#fff;font-family:var(--f-sub);font-weight:600;font-size:.68rem;vertical-align:2px}
 .sp-kpis>.sp-kpi:last-child:nth-child(odd){grid-column:1/-1}
@@ -2735,7 +2770,7 @@ body.lock .fab,body.panel-open .fab{display:none!important}
 </div>
 <div id="timers" class="timers" hidden aria-live="polite"></div>
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
-<script>window.NS_CONFIG={"hosted": true, "sbUrl": "https://zjsawjudrdneeptxbskd.supabase.co", "sbKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpqc2F3anVkcmRuZWVwdHhic2tkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1NjUxMjcsImV4cCI6MjEwNzE0MTEyN30.Wn1bUy--5O78gGICTOyEGbnT6B-SdoNCG_XxBBaaUIY", "build": "20261105210525"}</script>
+<script>window.NS_CONFIG={"hosted": true, "sbUrl": "https://zjsawjudrdneeptxbskd.supabase.co", "sbKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpqc2F3anVkcmRuZWVwdHhic2tkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1NjUxMjcsImV4cCI6MjEwNzE0MTEyN30.Wn1bUy--5O78gGICTOyEGbnT6B-SdoNCG_XxBBaaUIY", "build": "20261105212656"}</script>
 <script>
 const AISLES={L:"Fruits & légumes",H:"Herbes fraîches",V:"Viandes & poissons",C:"Crèmerie & œufs",S:"Surgelés",F:"Féculents",B:"Conserves",E:"Épices & condiments"};
 const AISLE_ORDER=["L","H","V","C","S","F","B","E"];
@@ -4403,6 +4438,17 @@ function normalize(d){const s={v:3,weekStart:"2026-10-05",plan:{},done:{},stock:
  if(d.bought&&typeof d.bought==="object")for(const k in d.bought){const v=Number(d.bought[k]);if(ING[k]&&v>0)s.bought[k]=v}
  if(d.loc&&typeof d.loc==="object")for(const k in d.loc)if(ING[k]&&["frigo","legumes","congel","placard","epices"].includes(d.loc[k]))s.loc[k]=d.loc[k];
  return s}
+// ================= v58 (avant l'état) : portions selon l'objectif de chacun, tour de taille =================
+// split = false : même portion pour les deux (par défaut : portions selon les calories de chacun)
+// people[i].wa = [[jour, tour de taille en cm], …]
+const normalizeV58=normalize;
+normalize=function(d){const s=normalizeV58.apply(this,arguments);
+ try{const src=d&&typeof d==="object"?d:{};s.split=src.split!==false;const sp=Array.isArray(src.people)?src.people:[];
+  (s.people||[]).forEach((p,i)=>{const w=sp[i]&&sp[i].wa,m=new Map();if(!p||!Array.isArray(w))return;
+   for(const x of w)if(Array.isArray(x)&&/^\d{8}$/.test(String(x[0]))&&+x[1]>=40&&+x[1]<=200)m.set(String(x[0]),Math.round(+x[1]*10)/10);
+   const a=[...m].sort((x,y)=>x[0]<y[0]?-1:1).slice(-150);if(a.length)p.wa=a})}
+ catch(e){}return s};
+
 let state=(()=>{try{const raw=localStorage.getItem(LS);if(raw)return normalize(JSON.parse(raw))}catch(e){}const s=normalize({plan:DEFAULT_PLAN});s.stock={...DEFAULT_STOCK};return s})();
 function saveLocal(){try{localStorage.setItem(LS,JSON.stringify(state))}catch(e){}}
 let ref=null,readOnly=false,saving=false,again=false,timer=null;
@@ -10022,6 +10068,91 @@ try{CHEF56.add("CuisineAZ");CHEF56.add("Journal des Femmes")}catch(e){}
 // 6. Suivi : plus de bandeau « min de sport · kcal · Sport › » (le sport a son propre onglet)
 spStripHtml=()=>"";
 try{document.querySelectorAll("#suivi .sp-strip").forEach(x=>x.remove())}catch(e){}
+
+
+// ================= v58 : portions selon l'objectif de chacun, tour de taille =================
+// ---------- 1. portions : un même plat, une part plus ou moins grande selon les calories de chacun ----------
+// Exemple : 2 200 kcal et 1 700 kcal par jour → 1,13 et 0,87 portion. Les courses ne changent pas (même quantité cuisinée).
+const tgtK58=pi=>{const P=(state.people||[])[pi]||{};return +(P.t&&P.t.k)||0};
+function shareOf(pi){if(state.split===false)return 1;const a=tgtK58(0),b=tgtK58(1);if(!(a>0&&b>0))return 1;
+ const s=2*(pi===0?a:b)/(a+b);return Math.max(0.6,Math.min(1.4,Math.round(s*100)/100))}
+const splitOn=()=>state.split!==false&&Math.abs(shareOf(0)-1)>=0.03;
+const mealShare=(k,pi)=>{try{return splitOn()&&eats(k,0)&&eats(k,1)?shareOf(pi):1}catch(e){return 1}};
+// ce que chacun mange (suivi du jour, planning de la semaine) tient compte de sa part
+dayData=(f=>function(day,pi){const D=f.apply(this,arguments);try{if(!splitOn())return D;
+ for(const row of D.rows){if(row.type!=="meal"||!row.n||row.none||!row.k)continue;const s=mealShare(row.k,pi);if(Math.abs(s-1)<0.01)continue;
+  const n={...row.n},cnt=row.on!==false;for(const x of ["k","p","f","c","fi"]){if(n[x]==null)continue;const v=n[x]*s;if(cnt)D.tot[x]+=v-n[x];n[x]=v}row.n=n;row.share=s}}catch(e){}return D})(dayData);
+mealsTotP=function(plan,d,pi){const T={k:0,p:0,f:0,c:0,fi:0};MEALS.forEach(([m])=>{const k=d+"-"+m,r=RMAP[plan[k]];if(!r||!eats(k,pi))return;const n=nutOr(rNut(r)),s=mealShare(k,pi);
+ T.k+=n.k*s;T.p+=n.p*s;T.f+=n.f*s;T.c+=n.c*s;T.fi+=n.fi*s});return T};
+// poids des ingrédients (crus) pour sv portions : estimation, à remplacer par le poids du plat cuit
+function rawG58(r,sv){const fct=sv/(r.base||2);let g=0,known=0,tot=0;
+ for(const [id,q] of r.i||[]){if(!ING[id]||isStaple(id))continue;tot++;let x=null;try{x=ingGrams(id,typeof q==="number"?q*fct:q)}catch(e){}if(x>0){g+=x;known++}}
+ return tot&&known/tot>=0.7&&g>0?Math.round(g):null}
+const g5=v=>Math.max(5,Math.round(v/5)*5);
+// boîtes : pour chaque personne, combien de boîtes et de quel poids
+function boxPlan58(r,keys,sv){const cw=ui.cookG&&ui.cookG[r.id];const tot=cw>0?cw:rawG58(r,sv);const gp=tot?tot/sv:null;const kc=(rNut(r)||{}).k||0;
+ const P=[0,1].map(pi=>{const m=new Map();for(const k of keys){if(!eats(k,pi))continue;const s=mealShare(k,pi);m.set(s,(m.get(s)||0)+1)}return{pi,g:[...m].map(([s,n])=>({s,n,g:gp?g5(s*gp):null,k:kc?Math.round(s*kc/5)*5:null}))}});
+ return{P,exact:cw>0,tot}}
+function boxCard58(r,keys,sv,title){if(!splitOn()||!keys.length)return"";const B=boxPlan58(r,keys,sv);if(!B.P.some(p=>p.g.length))return"";
+ const line=p=>p.g.map(x=>`${x.n>1||keys.length>1?`${x.n} boîte${x.n>1?"s":""} de `:""}<b>${x.g?(B.exact?"":"≈ ")+fmtInt(x.g)+" g":fmtS58(x.s)+" portion"}</b>${x.k?` <small>(${fmtInt(x.k)} kcal)</small>`:""}`).join(" + ");
+ return`<div class="box58" data-box58="${esc(r.id)}"><p class="box58-t">${title}</p><ul class="box58-l">${B.P.filter(p=>p.g.length).map(p=>`<li><span>${esc(pName(p.pi))}</span><span>${line(p)}</span></li>`).join("")}</ul>
+  <label class="box58-w">Poids du plat cuit (sans la casserole) <span><input type="number" inputmode="numeric" min="50" max="20000" step="10" data-cookg="${esc(r.id)}" value="${ui.cookG&&ui.cookG[r.id]||""}" placeholder="${B.tot&&!B.exact?fmtInt(B.tot):"en g"}" aria-label="Poids du plat cuit en grammes"> g</span></label>
+  <p class="box58-n">${B.exact?"Poids exacts d'après ta pesée.":"Estimation d'après les ingrédients crus : pèse le plat cuit pour avoir le poids exact de chaque boîte."} Parts selon les calories de chacun.</p></div>`}
+renderModal=(f=>function(){const out=f.apply(this,arguments);try{box58Inject()}catch(e){}return out})(renderModal);
+function box58Inject(){const r=RMAP[ui.modal];if(!r||r.snack||!splitOn())return;const c=document.getElementById("mContent");if(!c||c.querySelector(".box58"))return;
+ if(ui.cook!=null&&!ui.cookPrep){const cm=c.querySelector(".cook-mode");const ct=(c.querySelector(".cm-count")||{}).textContent||"";const m=ct.match(/(\d+)\s*\/\s*(\d+)/);if(!cm||!m||m[1]!==m[2])return;
+  const ck=(ui.cookKeys||[]).filter(k=>state.plan[k]===r.id&&!state.done[k]);const keys=ck.length?ck:(ui.modalSlot&&state.plan[ui.modalSlot]===r.id?[ui.modalSlot]:[]);if(!keys.length)return;
+  const h=boxCard58(r,keys,curServ(),keys.length>1?`Répartis en boîtes`:`Les assiettes`);if(!h)return;
+  const old=[...cm.querySelectorAll(".cm-batch")].find(p=>/Répartis/.test(p.textContent));const st=cm.querySelector(".cm-step");if(old)old.outerHTML=h;else if(st)st.insertAdjacentHTML("afterend",h);return}
+ if(ui.cook==null){const bc=c.querySelector(".batch-card");if(bc){const B=batchOf(r.id);if(B.ks.length>1){const h=boxCard58(r,B.ks,B.n,"Boîtes pour chacun");if(h)bc.insertAdjacentHTML("beforeend",h)}return}
+  const k=ui.modalSlot;if(k&&state.plan[k]===r.id&&eats(k,0)&&eats(k,1)){const h=boxCard58(r,[k],servOf(k),"Les assiettes");const sl=c.querySelector(".m-slot");if(h){if(sl)sl.insertAdjacentHTML("afterend",h);else{const a=c.querySelector(".m-actions");if(a)a.insertAdjacentHTML("beforebegin",h)}}}}}
+// pesée du plat cuit : le poids de chaque boîte se met à jour sans fermer le clavier
+document.addEventListener("input",e=>{const t=e.target;if(!t||!t.matches||!t.matches("[data-cookg]"))return;const id=t.dataset.cookg,r=RMAP[id];if(!r)return;
+ const v=Math.round(+String(t.value).replace(",","."));ui.cookG=ui.cookG||{};if(v>=50&&v<=20000)ui.cookG[id]=v;else delete ui.cookG[id];
+ const card=t.closest(".box58");if(!card)return;const keep=t.value;const tmp=document.createElement("div");
+ const B=card.querySelector(".box58-t");const title=B?B.textContent:"";let keys=[],sv=2;
+ if(ui.cook!=null){const ck=(ui.cookKeys||[]).filter(k=>state.plan[k]===r.id&&!state.done[k]);keys=ck.length?ck:[ui.modalSlot].filter(Boolean);sv=curServ()}
+ else{const Bt=batchOf(r.id);if(card.closest(".batch-card")){keys=Bt.ks;sv=Bt.n}else{keys=[ui.modalSlot].filter(Boolean);sv=servOf(ui.modalSlot)}}
+ tmp.innerHTML=boxCard58(r,keys,sv,title);const nw=tmp.firstElementChild;if(!nw)return;card.querySelector(".box58-l").replaceWith(nw.querySelector(".box58-l"));card.querySelector(".box58-n").replaceWith(nw.querySelector(".box58-n"))});
+// Profil : la répartition, avec un interrupteur
+const fmtS58=v=>String(v).replace(".",",");
+function split58Html(){const a=tgtK58(0),b=tgtK58(1);if(!(a>0&&b>0)||Math.abs(a-b)/Math.max(a,b)<0.03)return"";const on=state.split!==false;
+ return`<div class="split58"><div><b>Portions selon l'objectif de chacun</b><small>${on?`Dans un plat partagé : ${esc(pName(0))} ${fmtS58(shareOf(0))} portion, ${esc(pName(1))} ${fmtS58(shareOf(1))} portion (d'après ${fmtInt(a)} et ${fmtInt(b)} kcal par jour). Les boîtes du batch ont chacune leur poids.`:"Même portion pour les deux."}</small></div>
+  <button type="button" class="sw58${on?" on":""}" data-split58="1" role="switch" aria-checked="${on}" aria-label="Portions selon l'objectif de chacun"><i></i></button></div>`}
+document.addEventListener("click",e=>{const t=e.target.closest&&e.target.closest("[data-split58]");if(!t)return;state.split=state.split===false;commit();renderAll();toast(state.split?"Portions selon l'objectif de chacun":"Même portion pour les deux")});
+
+// ---------- 2. tour de taille : une mesure par semaine, à côté du poids ----------
+const cm58=v=>String(Math.round(v*10)/10).replace(".",",");
+const sg58=v=>(v>0?"+":v<0?"−":"")+cm58(Math.abs(v));
+function waSpark58(w){if(w.length<2)return"";const W=320,H=70,L=4,R=4,T=8,B=16;const xs=w.map(x=>dateFromYmd(x[0]).getTime()),ys=w.map(x=>x[1]);
+ const x0=Math.min(...xs),x1=Math.max(...xs),y0=Math.min(...ys)-0.5,y1=Math.max(...ys)+0.5;const X=t=>L+(x1>x0?(t-x0)/(x1-x0):0.5)*(W-L-R),Y=v=>T+(1-(v-y0)/(y1-y0))*(H-T-B);
+ const pts=w.map((x,i)=>`${X(xs[i]).toFixed(1)},${Y(ys[i]).toFixed(1)}`).join(" ");
+ return`<svg class="wa-spark" viewBox="0 0 ${W} ${H}" role="img" aria-label="Évolution du tour de taille : de ${cm58(ys[0])} à ${cm58(ys[ys.length-1])} cm"><polyline points="${pts}"/>${w.map((x,i)=>`<circle cx="${X(xs[i]).toFixed(1)}" cy="${Y(ys[i]).toFixed(1)}" r="3"/>`).join("")}
+  <text x="${L}" y="${H-3}">${fd54(xs[0])}</text><text x="${W-R}" y="${H-3}" text-anchor="end">${fd54(xs[xs.length-1])}</text></svg>`}
+function waCard58(pi){const P=state.people[pi]||{},w=(P.wa||[]).slice(-26),last=w[w.length-1],first=w[0];
+ const ago=last?Math.round((Date.now()-dateFromYmd(last[0]).getTime())/864e5):null,due=ago==null||ago>=7;const ch=w.length>=2?last[1]-first[1]:null;
+ const goal=(P.prof&&P.prof.goal)||"perte";let tip="";
+ if(ch!=null){const kg=(P.w||[]).filter(x=>x[0]>=first[0]).sort((a,b)=>a[0]<b[0]?-1:1);const dk=kg.length>=2?kg[kg.length-1][1]-kg[0][1]:null;
+  if(ch<=-1&&dk!=null&&Math.abs(dk)<0.5)tip=`<p class="w54-eta ok">La balance bouge peu, mais ton tour de taille a baissé de ${cm58(-ch)} cm : tu perds du gras et tu gardes (ou prends) du muscle. Continue.</p>`;
+  else if(ch<=-1)tip=`<p class="w54-eta ok">${cm58(-ch)} cm de moins depuis le ${fd54(dateFromYmd(first[0]).getTime())}.</p>`;
+  else if(ch>=1&&goal!=="masse")tip=`<p class="w54-eta warn">Tour de taille en hausse de ${cm58(ch)} cm : regarde les calories et les protéines ci-dessous.</p>`}
+ const hist=w.slice(-4).reverse();
+ return`<div class="sv-card wa58" data-v="progres" id="waCard"><div class="sv-h"><h3>Tour de taille</h3>${due?`<span class="wa-due">${last?"À mesurer cette semaine":"Première mesure"}</span>`:""}</div>
+  <div class="w54-hero"><div class="w54-now"><b>${last?cm58(last[1]):"–"}</b><span>cm${last?` · ${ago===0?"aujourd'hui":`il y a ${ago} j`}`:""}</span></div>
+   ${ch!=null?`<div class="w54-kpis"><div><b class="${(goal==="masse"?ch>0:ch<0)?"good":ch?"bad":""}">${sg58(ch)} cm</b><span>depuis le ${fd54(dateFromYmd(first[0]).getTime())}</span></div></div>`:""}</div>
+  ${waSpark58(w)}${tip}
+  <form class="wa-form" id="waForm" autocomplete="off"><label for="waIn">Mesure du jour</label><div class="wa-row"><input class="pn-in" id="waIn" name="cm" inputmode="decimal" placeholder="ex. 86,5 cm" aria-label="Tour de taille en centimètres"><button type="submit" class="btn primary">Noter</button></div></form>
+  ${hist.length?`<ul class="wa-hist">${hist.map(x=>`<li><span>${fd54(dateFromYmd(x[0]).getTime())}</span><b>${cm58(x[1])} cm</b><button type="button" data-wadel="${x[0]}" aria-label="Effacer la mesure du ${fd54(dateFromYmd(x[0]).getTime())}">×</button></li>`).join("")}</ul>`:""}
+  <p class="pn-help">Une fois par semaine, le matin, mètre ruban au niveau du nombril, sans serrer. Quand la balance stagne mais que le tour de taille baisse, c'est du gras en moins.</p></div>`}
+renderSuivi=(f=>function(){const r=f.apply(this,arguments);try{const root=document.getElementById("suivi");if(!root)return r;const pi=ui.ntP||0;
+  const old=root.querySelector("#waCard");if(old)old.remove();const h=waCard58(pi);const w=root.querySelector("#w54Card");if(w)w.insertAdjacentHTML("afterend",h);else{const first=root.querySelector('[data-v~="progres"]');if(first)first.insertAdjacentHTML("beforebegin",h);else root.insertAdjacentHTML("beforeend",h)}
+  const bes=[...root.querySelectorAll(".sv-card")].find(c=>/^besoins/.test(nrmS((c.querySelector("h3")||{}).textContent||"").trim()));if(bes){const o=bes.querySelector(".split58");if(o)o.remove();const hs=split58Html();if(hs)bes.insertAdjacentHTML("beforeend",hs)}
+  applyView("suivi")}catch(e){}return r})(renderSuivi);
+document.addEventListener("submit",e=>{const f=e.target;if(!f||f.id!=="waForm")return;e.preventDefault();const pi=ui.ntP||0,P=state.people[pi];if(!P)return;
+ const v=parseFloat(String(new FormData(f).get("cm")||"").replace(",","."));if(!(v>=40&&v<=200)){toast("Indique ton tour de taille en centimètres (par exemple 86,5)");return}
+ const d=ymd(new Date()),w=(P.wa||[]).filter(x=>x[0]!==d);w.push([d,Math.round(v*10)/10]);w.sort((a,b)=>a[0]<b[0]?-1:1);P.wa=w.slice(-150);commit();renderSuivi();toast(`Tour de taille noté : ${cm58(v)} cm`)});
+document.addEventListener("click",e=>{const t=e.target.closest&&e.target.closest("[data-wadel]");if(!t)return;const pi=ui.ntP||0,P=state.people[pi];if(!P)return;
+ P.wa=(P.wa||[]).filter(x=>x[0]!==t.dataset.wadel);if(!P.wa.length)delete P.wa;commit();renderSuivi();toast("Mesure effacée")});
 
 try{setTab(ui.tab);renderAll()}catch(e){try{sbDiag("affichage au démarrage",e)}catch(x){}}try{initDb()}catch(e){}sbStart();
 
