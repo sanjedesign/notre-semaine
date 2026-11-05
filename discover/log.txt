@@ -1,23 +1,23 @@
-plan hellofresh 200 https://www.hellofresh.fr/sitemap_recipe_pages.xml → 8503
-plan jow 200 https://jow.fr/sitemap.xml → 3736
-recherche marmiton 200 lentilles → 21
-recherche marmiton 200 batch cooking&page=2 → 6
-recherche marmiton 200 cabillaud → 21
-recherche marmiton 200 couscous poulet → 16
-recherche marmiton 200 pois chiches&page=2 → 21
-recherche marmiton 200 colombo de poulet&page=2 → 18
+plan hellofresh 200 https://www.hellofresh.fr/sitemap_recipe_pages.xml → 8613
+plan jow 200 https://jow.fr/sitemap.xml → 3729
+recherche marmiton 200 hachis parmentier&page=3 → 21
+recherche marmiton 200 cabillaud&page=4 → 21
+recherche marmiton 200 blanc de poulet&page=2 → 21
+recherche marmiton 200 bowl poulet quinoa → 21
+recherche marmiton 200 veau&page=4 → 21
+recherche marmiton 200 chili con carne&page=2 → 17
+recherche marmiton 200 curry de poulet&page=4 → 21
 recherche marmiton 404 lasagnes légères&page=3 → 0
-recherche marmiton 200 boulettes de boeuf&page=3 → 21
-recherche marmiton 200 tofu&page=3 → 21
-recherche marmiton 200 poulet riz légumes → 21
-recherche marmiton 200 roulés de jambon de dinde → 15
-recherche marmiton 200 biscuits apéritifs au fromage → 11
+recherche marmiton 200 couscous poulet&page=2 → 21
+recherche marmiton 200 saumon&page=2 → 23
+recherche marmiton 200 crackers au parmesan → 8
 recherche marmiton 200 edamame → 7
-recherche marmiton 200 energy balls protéinées → 20
-recherche marmiton 200 gougères → 19
-recherche marmiton 200 chips de parmesan → 13
-recherche marmiton 200 houmous → 20
-recherche marmiton 200 muffins salés → 21
+recherche marmiton 200 pancakes protéinés → 7
+recherche marmiton 200 galettes salées flocons d'avoine → 21
+recherche marmiton 200 muffins protéinés → 7
+recherche marmiton 200 cookies au parmesan → 11
+recherche marmiton 200 bouchées au thon → 20
+recherche marmiton 200 cake salé léger → 7
 plan marmiton 200 https://www.marmiton.org/wsitemap_recipes_1.xml → 4865
 plan marmiton 200 https://www.marmiton.org/wsitemap_recipes_2.xml → 4186
 plan marmiton 200 https://www.marmiton.org/wsitemap_recipes_3.xml → 4945
@@ -41,10 +41,10 @@ plan fourchette 200 https://www.fourchette-et-bikini.fr/xml/sitemap-fourchette-r
 plan fourchette 200 https://www.fourchette-et-bikini.fr/xml/sitemap-fourchette-recette-2.xml → 0
 plan julieandrieu 200 https://www.julieandrieu.com/recipe-sitemap.xml → 1521
 plan hervecuisine 200 https://www.hervecuisine.com/herve_recipe-sitemap.xml → 938
-à lire : 900 fiches (0 pistes d'encas)
-gardées : 1 · écartées : {"note Marmiton insuffisante":515,"dessert":90,"nutrition absente":73,"plat incomplet":43,"porc":154,"protéines # g":6,"plat trop riche (nom)":7,"kcal #":7,"robot de cuisine":1,"catégorie dessert":2,"encas pas assez protéiné":1}
-par source : {"marmiton":{"lu":900,"plats":0,"encas":1,"why":{"note Marmiton insuffisante":515,"dessert":90,"nutrition absente":73,"plat incomplet":43,"porc":154,"protéines # g":6,"plat trop riche (nom)":7,"kcal #":7,"robot de cuisine":1,"catégorie dessert":2,"encas pas assez protéiné":1}}}
-vidéos : 450 fiches publiées relues, 0 avec vidéo (reste 186)
+à lire : 900 fiches (4 pistes d'encas)
+gardées : 6 · écartées : {"note Marmiton insuffisante":437,"porc":150,"nutrition absente":76,"kcal #":41,"http 404":28,"protéines # g":9,"dessert":79,"plat trop riche (nom)":13,"plat incomplet":55,"catégorie boisson":1,"lipides # g":2,"abats":1,"catégorie sauce":2}
+par source : {"marmiton":{"lu":790,"plats":1,"encas":0,"why":{"note Marmiton insuffisante":437,"porc":131,"nutrition absente":76,"protéines # g":7,"dessert":74,"plat incomplet":46,"plat trop riche (nom)":5,"kcal #":9,"catégorie boisson":1,"abats":1,"catégorie sauce":2}},"hellofresh":{"lu":82,"plats":5,"encas":0,"why":{"kcal #":32,"porc":19,"dessert":5,"plat trop riche (nom)":8,"plat incomplet":9,"lipides # g":2,"protéines # g":2}}}
+vidéos : 186 fiches publiées relues, 0 avec vidéo (reste 0)
 encas : 54 (dont salés 13)
 plats avec vidéo : 410 (YouTube 42, sur le site 368)
-pages créées : 0 · total 295 pages, 2950 recettes · en attente 8
+pages créées : 1 · total 296 pages, 2960 recettes · en attente 4
