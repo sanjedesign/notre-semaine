@@ -247,7 +247,8 @@ for (const key of Object.keys(SRC).filter((k) => !ONLY.length || ONLY.includes(k
   const U = await urlsOf(key); const P = new Set(shuffle(U.pri.filter((u) => !st.seen[idOf(u)])));
   const L = [...P, ...shuffle(U.all.filter((u) => !st.seen[idOf(u)] && !P.has(u)))];
   const aim = (A) => { const pri = A.filter((u) => P.has(u)), B = A.filter((u) => !P.has(u)); const good = (u) => BATCH_SLUG.test(nrm(u)) || PROT_SLUG.test(nrm(u)); const hit = B.filter(good), rest = B.filter((u) => !good(u)); const out = [...pri]; while (hit.length || rest.length) { for (let i = 0; i < 3 && hit.length; i++) out.push(hit.shift()); if (rest.length) out.push(rest.shift()); } return out; };
-  per[key] = { snack: aim(L.filter((u) => SNACK_SLUG.test(nrm(u)))), main: SRC[key].snackOnly ? [] : aim(L.filter((u) => !SNACK_SLUG.test(nrm(u)))) };
+  // recettes anglaises : des plats seulement (les mots-clés d'encas sont en français), lus au hasard
+  per[key] = SRC[key].lang === "en" ? { snack: [], main: shuffle(L.slice()) } : { snack: aim(L.filter((u) => SNACK_SLUG.test(nrm(u)))), main: SRC[key].snackOnly ? [] : aim(L.filter((u) => !SNACK_SLUG.test(nrm(u)))) };
 }
 // tirage pondéré entre les sources ; la moitié des fiches sont des pistes d'encas, et si une source ou un type manque, les autres complètent
 // recettes anglaises : EN_MAX fiches par passage au plus (la traduction prend du temps)
