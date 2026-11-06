@@ -1,23 +1,23 @@
 plan hellofresh 200 https://www.hellofresh.fr/sitemap_recipe_pages.xml → 8613
 plan jow 200 https://jow.fr/sitemap.xml → 3736
-recherche marmiton 200 chili con carne&page=2 → 17
-recherche marmiton 200 tofu&page=3 → 21
-recherche marmiton 200 poêlée de dinde → 13
-recherche marmiton 200 saumon&page=2 → 23
-recherche marmiton 200 blanc de poulet → 21
-recherche marmiton 200 colin&page=2 → 21
-recherche marmiton 404 meal prep&page=2 → 0
-recherche marmiton 200 batch cooking&page=2 → 6
+recherche marmiton 200 veau&page=4 → 21
 recherche marmiton 200 riche en protéines → 6
-recherche marmiton 200 boulettes de boeuf → 21
-recherche marmiton 200 muffins salés → 21
-recherche marmiton 200 cake salé léger → 7
-recherche marmiton 200 galettes salées flocons d'avoine → 21
-recherche marmiton 200 sablés au parmesan → 21
-recherche marmiton 200 crackers au parmesan → 8
-recherche marmiton 200 pois chiches grillés → 10
+recherche marmiton 200 chili con carne&page=2 → 17
+recherche marmiton 200 bolognaise → 21
+recherche marmiton 200 escalope de dinde&page=3 → 21
+recherche marmiton 404 lasagnes légères&page=4 → 0
+recherche marmiton 200 couscous poulet&page=2 → 21
+recherche marmiton 200 pois chiches&page=4 → 21
+recherche marmiton 200 tajine de poulet&page=2 → 21
+recherche marmiton 200 steak haché&page=3 → 12
+recherche marmiton 200 biscuits apéritifs au fromage → 11
 recherche marmiton 200 cookies au parmesan → 11
-recherche marmiton 200 mug cake protéiné → 21
+recherche marmiton 200 crackers au parmesan → 8
+recherche marmiton 200 pancakes protéinés → 7
+recherche marmiton 200 galettes salées flocons d'avoine → 21
+recherche marmiton 200 tuiles de parmesan → 14
+recherche marmiton 200 rillettes de thon → 21
+recherche marmiton 200 cookies salés → 21
 plan marmiton 200 https://www.marmiton.org/wsitemap_recipes_1.xml → 4865
 plan marmiton 200 https://www.marmiton.org/wsitemap_recipes_2.xml → 4186
 plan marmiton 200 https://www.marmiton.org/wsitemap_recipes_3.xml → 4945
@@ -100,10 +100,7 @@ plan pinchofnom 200 https://pinchofnom.com/post_tag-sitemap2.xml → 0
 plan pinchofnom 200 https://pinchofnom.com/post_tag-sitemap3.xml → 0
 plan pinchofnom 200 https://pinchofnom.com/author-sitemap.xml → 0
 plan jamieoliver 200 https://www.jamieoliver.com/sitemap.xml → 4552
-plan skinnytaste 200 https://www.skinnytaste.com/sitemap_index.xml → 0
-plan skinnytaste 200 https://www.skinnytaste.com/post-sitemap.xml → 666
-plan skinnytaste 200 https://www.skinnytaste.com/post-sitemap2.xml → 865
-plan skinnytaste 200 https://www.skinnytaste.com/post-sitemap3.xml → 853
+plan skinnytaste 520 https://www.skinnytaste.com/sitemap_index.xml → 0
 plan recipetineats 200 https://www.recipetineats.com/sitemap_index.xml → 0
 plan recipetineats 200 https://www.recipetineats.com/post-sitemap.xml → 493
 plan recipetineats 200 https://www.recipetineats.com/post-sitemap2.xml → 499
@@ -141,11 +138,12 @@ plan olive 200 https://www.olivemagazine.com/sitemaps/2020-Q1-recipe.xml → 131
 plan olive 200 https://www.olivemagazine.com/sitemaps/2019-Q4-recipe.xml → 117
 plan jdf 200 https://cuisine.journaldesfemmes.fr/sitemap/video-recipe/ → 2047
 à lire : 950 fiches (40 pistes d'encas)
-file d'attente anglaise : 17 traduites, 9 gardées {"plat incomplet":5,"plat trop riche (nom)":3}
-gardées : 16 · écartées : {"note insuffisante":330,"dessert":271,"plat incomplet":26,"nutrition absente":80,"doublon":1,"porc":132,"kcal #":34,"catégorie dessert":6,"protéines # g":25,"catégorie boisson":1,"abats":1,"encas trop gras":3,"fiche incomplète":3,"plat (source d'encas)":5,"lipides # g":5,"plat trop riche (nom)":7,"catégorie sauce":2,"encas sucré sans valeurs":1,"encas":1}
-traductions : {"gemini":19}, échecs 1
-par source : {"marmiton":{"lu":830,"plats":0,"encas":0,"why":{"note insuffisante":325,"dessert":261,"plat incomplet":24,"porc":120,"nutrition absente":72,"catégorie dessert":6,"catégorie boisson":1,"abats":1,"fiche incomplète":3,"kcal #":3,"protéines # g":5,"plat trop riche (nom)":7,"catégorie sauce":2}},"cuisineaz":{"lu":40,"plats":0,"encas":15,"why":{"dessert":10,"encas trop gras":3,"plat (source d'encas)":5,"note insuffisante":2,"encas sucré sans valeurs":1,"encas":1,"porc":2}},"jamieoliver":{"lu":15,"plats":1,"encas":0,"why":{"nutrition absente":1,"protéines # g":5,"kcal #":5,"lipides # g":2,"porc":1}},"bbc":{"lu":20,"plats":0,"encas":0,"why":{"kcal #":10,"porc":1,"protéines # g":9}},"recipetineats":{"lu":8,"plats":0,"encas":0,"why":{"kcal #":4,"lipides # g":2,"porc":2}},"skinnytaste":{"lu":9,"plats":0,"encas":0,"why":{"plat incomplet":1,"kcal #":6,"protéines # g":2}},"pinchofnom":{"lu":20,"plats":0,"encas":0,"why":{"note insuffisante":3,"nutrition absente":7,"porc":5,"kcal #":4,"plat incomplet":1}},"olive":{"lu":8,"plats":0,"encas":0,"why":{"protéines # g":4,"kcal #":2,"porc":1,"lipides # g":1}}}
-encas publiés aujourd'hui : 12 (dont 0 à ce passage) · en réserve : 240
+file d'attente anglaise : 1 traduites, 1 gardées {}
+gardées : 12 · écartées : {"nutrition absente":83,"porc":120,"dessert":269,"note insuffisante":351,"plat incomplet":25,"kcal #":30,"protéines # g":22,"plat trop riche (nom)":12,"encas sucré sans valeurs":3,"catégorie confiserie":1,"plat (source d'encas)":3,"catégorie dessert":7,"encas":2,"lipides # g":2,"http 404":1,"abats":1,"catégorie sauce":1,"encas sans ingrédient protéiné":1,"pas de fiche":3,"robot de cuisine":1}
+traductions : {"gemini":3}
+par source : {"marmiton":{"lu":830,"plats":1,"encas":0,"why":{"nutrition absente":72,"porc":102,"dessert":260,"note insuffisante":342,"plat incomplet":24,"plat trop riche (nom)":8,"catégorie confiserie":1,"kcal #":5,"protéines # g":5,"catégorie dessert":7,"abats":1,"catégorie sauce":1,"robot de cuisine":1}},"recipetineats":{"lu":9,"plats":0,"encas":0,"why":{"porc":4,"kcal #":3,"nutrition absente":1,"protéines # g":1}},"cuisineaz":{"lu":40,"plats":0,"encas":9,"why":{"porc":4,"plat trop riche (nom)":4,"encas sucré sans valeurs":3,"note insuffisante":5,"plat (source d'encas)":3,"dessert":9,"encas":2,"encas sans ingrédient protéiné":1}},"bbc":{"lu":24,"plats":0,"encas":0,"why":{"kcal #":11,"protéines # g":8,"porc":4,"lipides # g":1}},"olive":{"lu":9,"plats":0,"encas":0,"why":{"plat incomplet":1,"kcal #":3,"protéines # g":3,"nutrition absente":2}},"jamieoliver":{"lu":13,"plats":2,"encas":0,"why":{"lipides # g":1,"kcal #":4,"porc":3,"protéines # g":3}},"pinchofnom":{"lu":21,"plats":0,"encas":0,"why":{"protéines # g":2,"porc":3,"note insuffisante":4,"nutrition absente":8,"kcal #":4}}}
+vidéos : 1 fiches publiées relues, 0 avec vidéo (reste 0)
+encas publiés aujourd'hui : 12 (dont 0 à ce passage) · en réserve : 249
 encas : 78 (dont salés 25)
-plats avec vidéo : 479 (YouTube 44, sur le site 435)
-pages créées : 1 · total 304 pages, 3040 recettes · en attente 7
+plats avec vidéo : 482 (YouTube 47, sur le site 435)
+pages créées : 1 · total 305 pages, 3050 recettes · en attente 1
