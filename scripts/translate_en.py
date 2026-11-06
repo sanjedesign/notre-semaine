@@ -639,7 +639,8 @@ def gemini(rec):
                     pass
                 low = msg.lower()
                 print(f"Gemini {mo} : HTTP {e.code} " + re.sub(r"\s+", " ", msg)[:260], file=sys.stderr)
-                if e.code == 400 and "thinking" in low and mo not in GEM_STATE["nothink"]:
+                if e.code == 400 and "api key" not in low and "api_key" not in low and mo not in GEM_STATE["nothink"]:
+                    # réglage « sans réflexion » refusé par ce modèle : on réessaie sans
                     GEM_STATE["nothink"].add(mo)
                     continue
                 if e.code in (401, 403) or (e.code == 400 and ("api key" in low or "api_key" in low)):
