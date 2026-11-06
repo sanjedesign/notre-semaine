@@ -17,6 +17,9 @@ import { spawn } from "node:child_process";
 import { fileURLToPath } from "node:url";
 
 const DIR = process.env.DATA_DIR || "data/discover";
+// budget de temps : la lecture s'arrête avant la limite de l'action (55 min) pour toujours publier ce qui a été trouvé
+const T0 = Date.now(), LEFT = () => (+(process.env.TIME_BUDGET_MIN || 40)) * 60e3 - (Date.now() - T0);
+let TR_UNTIL = 0; // fin du budget de traduction de ce passage
 const MAX = +(process.env.MAX_FETCH || 160);
 const DRY = process.env.DRY_RUN === "1";
 const ONLY = (process.env.SOURCES || "").split(",").map((x) => x.trim()).filter(Boolean);
@@ -275,9 +278,9 @@ function trStart() {
     TRP = p; } catch { TRP = false; }
   return TRP;
 }
-function translate(rec) { const p = trStart(); if (!p) return Promise.resolve(null); const id = "t" + (++trN);
+function translate(rec) { if (TR_UNTIL && Date.now() > TR_UNTIL) return Promise.resolve(null); const p = trStart(); if (!p) return Promise.resolve(null); const id = "t" + (++trN);
   return new Promise((res) => { trWait.set(id, res); try { p.stdin.write(JSON.stringify({ id, ...rec }) + "\n"); } catch { trWait.delete(id); res(null); }
-    setTimeout(() => { if (trWait.has(id)) { trWait.delete(id); res(null); } }, 240000); }); }
+    setTimeout(() => { if (trWait.has(id)) { trWait.delete(id); res(null); } }, 150000); }); }
 const stepsOf = (R) => { const o = []; const walk = (x) => { if (!x) return; if (typeof x === "string") { o.push(...x.split(/\n+/)); return; } if (Array.isArray(x)) { x.forEach(walk); return; } if (x.itemListElement) walk(x.itemListElement); else if (x.text) o.push(x.text); else if (x.name) o.push(x.name); }; walk(R.recipeInstructions); return o.map((s) => clean(String(s).replace(/<[^>]+>/g, " "))).filter((s) => s.length > 3).slice(0, 25); };
 // avant de traduire : pas de porc, pas de dessert peu protéiné, assez de protéines quand les valeurs sont publiées
 const PORK_EN = /\b(pork|bacon|ham|hams|gammon|prosciutto|pancetta|chorizo|salami|pepperoni|lardons?|nduja|'nduja|guanciale|serrano|parma ham|black pudding|pigs? in blankets|spare ?ribs|pulled pork|hot ?dogs?|frankfurters?|sausages?|sausagemeat|sausage meat|bratwurst|kielbasa|mortadella|speck|coppa|lard)\b/i;
@@ -321,13 +324,16 @@ const keepEn = (x, where) => { if (x.r) { const tk = nrm(x.r.t).replace(/[^a-z0-
       n++; done.add(q.id); kept += keepEn(finishEn(q, { title: String(t.title), ing: t.ing.map(String), steps: Array.isArray(t.steps) ? t.steps.map(String) : [], cat: String(t.cat || ""), engine: "claude" }), W); }
     st.enq = st.enq.filter((x) => !done.has(x.id)); try { fs.unlinkSync(FP); } catch { /* déjà retiré */ }
     say(`traductions déposées : ${n} lues, ${kept} gardées ${JSON.stringify(W)}`); } }
+// traduction : 15 minutes au plus par passage (file d'attente et nouvelles fiches)
+TR_UNTIL = Date.now() + (+(process.env.TR_BUDGET_MIN || 15)) * 60e3;
 if (TR_ON && st.enq.length) { const W = {}; let n = 0, kept = 0; const done = new Set();
-  for (const q of st.enq.slice(0, +(process.env.EN_TR_MAX || 40))) { const tr = await translate({ title: q.R.name, ing: q.R.recipeIngredient, steps: q.R.steps, cat: q.R.recipeCategory });
+  for (const q of st.enq.slice(0, +(process.env.EN_TR_MAX || 40))) { if (Date.now() > TR_UNTIL) break; const tr = await translate({ title: q.R.name, ing: q.R.recipeIngredient, steps: q.R.steps, cat: q.R.recipeCategory });
     if (!tr || !tr.title || !Array.isArray(tr.ing) || tr.ing.length < 3) { trFail++; continue; } trEng[tr.engine] = (trEng[tr.engine] || 0) + 1; n++; done.add(q.id); kept += keepEn(finishEn(q, tr), W); }
   st.enq = st.enq.filter((x) => !done.has(x.id)); if (n) say(`file d'attente anglaise : ${n} traduites, ${kept} gardées ${JSON.stringify(W)}`); }
 st.enq = st.enq.slice(-ENQ_MAX);
 const why = {}; let ok = 0; const bySrc = {};
 for (const [key, url] of queue) {
+  if (LEFT() < 0) { say("temps limite atteint : la lecture s'arrête ici, la suite au prochain passage"); break; }
   const r = await get(url); st.seen[idOf(url)] = 1;
   if (r.status !== 200) { why["http " + r.status] = (why["http " + r.status] || 0) + 1; await sleep(500); continue; }
   const R = ld(r.text); if (!R) { why["pas de fiche"] = (why["pas de fiche"] || 0) + 1; await sleep(300); continue; }
