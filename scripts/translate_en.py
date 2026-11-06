@@ -585,12 +585,15 @@ def gem_models():
         return (0 if "lite" in n else 1, float(v.group(1)) if v else 0.0, 1 if "latest" in n else 0)
 
     found = sorted([n for n in names if score(n)], key=score, reverse=True)
+    # chaque modèle a son propre quota gratuit : les « flash » récents d'abord, puis les « flash-lite »
+    flash = [n for n in found if "lite" not in n][:4]
+    lite = [n for n in found if "lite" in n][:3]
     pref = [m for m in [os.environ.get("GEMINI_MODEL", "")] if m]
     out = []
-    for m in pref + found + ["gemini-flash-latest", "gemini-flash-lite-latest"]:
+    for m in pref + flash + lite + ["gemini-flash-latest", "gemini-flash-lite-latest"]:
         if m not in out:
             out.append(m)
-    GEM_STATE["models"] = out[:5]
+    GEM_STATE["models"] = out[:9]
     print("Gemini : modèles essayés " + ", ".join(GEM_STATE["models"]), file=sys.stderr)
     return GEM_STATE["models"]
 

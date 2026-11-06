@@ -286,6 +286,8 @@ const stepsOf = (R) => { const o = []; const walk = (x) => { if (!x) return; if 
 const PORK_EN = /\b(pork|bacon|ham|hams|gammon|prosciutto|pancetta|chorizo|salami|pepperoni|lardons?|nduja|'nduja|guanciale|serrano|parma ham|black pudding|pigs? in blankets|spare ?ribs|pulled pork|hot ?dogs?|frankfurters?|sausages?|sausagemeat|sausage meat|bratwurst|kielbasa|mortadella|speck|coppa|lard)\b/i;
 const PORK_EN_OK = /\b(chicken|turkey|veggie|vegetarian|vegan|plant[- ]based|quorn|beef|lamb|meat-free|meatless|halal) (sausages?|bacon|ham|hot ?dogs?|frankfurters?)\b|\bturkey (rashers|bacon)\b/gi;
 const DESSERT_EN = /\b(cakes?|cookies?|brownies?|blondies?|cupcakes?|muffins?|cheesecakes?|puddings?|crumbles?|tarts?|tartlets?|pies?|ice ?cream|fudge|truffles?|biscuits?|scones?|doughnuts?|donuts?|pancakes?|waffles?|smoothies?|cocktails?|mocktails?|gin|vodka|rum|punch|sangria|lemonade|jam|marmalade|chutney|dressing|gravy|stuffing|frosting|icing|meringues?|pavlova|trifle|mousse|sorbet|granola|flapjacks?|bars?|bread|buns?|loaf|cordial|syrup|custard|caramel|toffee|chocolate)\b/i;
+// féculent ou légumineuse : un plat complet en a forcément un
+const EN_STARCH = /\b(rice|pasta|spaghetti|penne|rigatoni|linguine|fusilli|tagliatelle|macaroni|orzo|risoni|noodles|udon|couscous|bulgur|bulgar|quinoa|freekeh|farro|barley|potato(?:es)?|chips|fries|mash|gnocchi|wraps?|tortillas?|bread|naan|pitta|pita|flatbreads?|buns?|bagels?|toast|lasagne|lasagna|lentils|beans|chickpeas|grains?|polenta|oats|crackers)\b/i;
 const EN_SAVOURY = /\b(chicken|turkey|beef|lamb|salmon|cod|tuna|prawns?|fish|egg|feta|halloumi|cheese|savou?ry|pot pie|cottage pie|shepherd|fish pie|chicken pie|steak pie)\b/i;
 // Les recettes retenues attendent leur traduction dans st.enq (file d'attente). Elles sont traduites
 //  - pendant le passage par Gemini (secret GEMINI_API_KEY du dépôt), 40 au plus ;
@@ -306,7 +308,14 @@ async function readEn(key, url, R, html) {
   if (PORK_EN.test(txt.replace(PORK_EN_OK, ""))) return { why: "porc" };
   const pr = k && p != null ? (p * 4) / k : null;
   if (!(k && p != null)) return { why: "nutrition absente" };
-  if (pr < 0.16) return { why: "pas assez protéiné" };
+  // mêmes seuils que les plats français, vérifiés avant de traduire (le quota de traduction est limité)
+  const f = num(N.fatContent);
+  if (k < 280 || k > 680) return { why: `kcal ${Math.round(k)}` };
+  if (p < PRULE.plat.p || pr < PRULE.plat.r) return { why: `protéines ${p} g` };
+  if (f != null && (f > 30 || (f * 9) / k > 0.45)) return { why: `lipides ${f} g` };
+  const ar = R.aggregateRating; const rr = ar && num(ar.ratingValue) && num(ar.ratingCount || ar.reviewCount) ? [num(ar.ratingValue), num(ar.ratingCount || ar.reviewCount)] : null;
+  if (!srcOk({ src: SRC[key].name, r: rr })) return { why: "note insuffisante" };
+  if (!EN_STARCH.test(txt)) return { why: "plat incomplet" };
   if (DESSERT_EN.test(name) && !EN_SAVOURY.test(name) && !(pr >= 0.25)) return { why: "dessert" };
   if (ingEn.length < 3) return { why: "fiche incomplète" };
   const q = enLite(key, url, R, html);
@@ -327,6 +336,10 @@ const keepEn = (x, where) => { if (x.r) { const tk = nrm(x.r.t).replace(/[^a-z0-
 // traduction : 15 minutes au plus par passage (file d'attente et nouvelles fiches)
 TR_UNTIL = Date.now() + (+(process.env.TR_BUDGET_MIN || 15)) * 60e3;
 if (TR_ON && st.enq.length) { const W = {}; let n = 0, kept = 0; const done = new Set();
+  // file : on retire d'abord ce qui ne passerait pas les seuils (anciennes fiches mises en attente)
+  st.enq = st.enq.filter((q) => { const N = (q.R && q.R.nutrition) || {}; const k = num(N.calories), p = num(N.proteinContent), f = num(N.fatContent); const txt = q.R.name + " | " + q.R.recipeIngredient.join(" | ");
+    const ar = q.R.aggregateRating; const rr = ar && num(ar.ratingValue) && num(ar.ratingCount || ar.reviewCount) ? [num(ar.ratingValue), num(ar.ratingCount || ar.reviewCount)] : null;
+    return k >= 280 && k <= 680 && p >= PRULE.plat.p && (p * 4) / k >= PRULE.plat.r && !(f != null && (f > 30 || (f * 9) / k > 0.45)) && srcOk({ src: SRC[q.key] ? SRC[q.key].name : "", r: rr }) && EN_STARCH.test(txt); });
   for (const q of st.enq.slice(0, +(process.env.EN_TR_MAX || 40))) { if (Date.now() > TR_UNTIL) break; const tr = await translate({ title: q.R.name, ing: q.R.recipeIngredient, steps: q.R.steps, cat: q.R.recipeCategory });
     if (!tr || !tr.title || !Array.isArray(tr.ing) || tr.ing.length < 3) { trFail++; continue; } trEng[tr.engine] = (trEng[tr.engine] || 0) + 1; n++; done.add(q.id); kept += keepEn(finishEn(q, tr), W); }
   st.enq = st.enq.filter((x) => !done.has(x.id)); if (n) say(`file d'attente anglaise : ${n} traduites, ${kept} gardées ${JSON.stringify(W)}`); }
