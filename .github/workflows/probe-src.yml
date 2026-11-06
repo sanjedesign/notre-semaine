@@ -16,7 +16,7 @@ jobs:
       - uses: actions/setup-python@v5
         with: { python-version: "3.11" }
       - name: Sonde
-        run: node probe.mjs > log.txt 2>&1 || true; cp log.txt report_full.txt
+        run: python3 ghm.py > log.txt 2>&1 || true; cp log.txt report_full.txt
         env:
           GITHUB_TOKEN: ${{ github.token }}
       - name: Publier le rapport
