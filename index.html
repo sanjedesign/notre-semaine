@@ -2625,6 +2625,12 @@ body.lock .fab,body.panel-open .fab{display:none!important}
 .w54-chart .tgt{stroke:var(--accent);stroke-width:1.4;stroke-dasharray:5 4;opacity:.85}
 .w54-chart .tgl{fill:var(--accent);font-weight:700;font-size:10.5px;opacity:1}
 /* v55 */
+/* v59 : recettes traduites */
+.dc-tr{margin:-4px 0 10px;font-size:.8rem;color:var(--muted);text-align:center}
+.dc-steps{margin:0;padding:0 0 0 22px;display:grid;gap:12px;line-height:1.5}
+.dc-steps li{padding-left:4px}
+.dc-steps li::marker{font-weight:700;color:var(--accent)}
+.dc-tabs{flex-wrap:wrap}
 /* v58 : boîtes pour chacun, interrupteur, tour de taille */
 .box58{margin:12px 0 4px;padding:12px 14px;border-radius:14px;background:var(--accent-soft);color:var(--ink)}
 .box58-t{margin:0 0 6px;font-family:var(--f-sub);font-weight:700}
@@ -2770,7 +2776,7 @@ body.lock .fab,body.panel-open .fab{display:none!important}
 </div>
 <div id="timers" class="timers" hidden aria-live="polite"></div>
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
-<script>window.NS_CONFIG={"hosted": true, "sbUrl": "https://zjsawjudrdneeptxbskd.supabase.co", "sbKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpqc2F3anVkcmRuZWVwdHhic2tkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1NjUxMjcsImV4cCI6MjEwNzE0MTEyN30.Wn1bUy--5O78gGICTOyEGbnT6B-SdoNCG_XxBBaaUIY", "build": "20261105212656"}</script>
+<script>window.NS_CONFIG={"hosted": true, "sbUrl": "https://zjsawjudrdneeptxbskd.supabase.co", "sbKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpqc2F3anVkcmRuZWVwdHhic2tkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1NjUxMjcsImV4cCI6MjEwNzE0MTEyN30.Wn1bUy--5O78gGICTOyEGbnT6B-SdoNCG_XxBBaaUIY", "build": "20261106192540"}</script>
 <script>
 const AISLES={L:"Fruits & légumes",H:"Herbes fraîches",V:"Viandes & poissons",C:"Crèmerie & œufs",S:"Surgelés",F:"Féculents",B:"Conserves",E:"Épices & condiments"};
 const AISLE_ORDER=["L","H","V","C","S","F","B","E"];
@@ -10153,6 +10159,29 @@ document.addEventListener("submit",e=>{const f=e.target;if(!f||f.id!=="waForm")r
  const d=ymd(new Date()),w=(P.wa||[]).filter(x=>x[0]!==d);w.push([d,Math.round(v*10)/10]);w.sort((a,b)=>a[0]<b[0]?-1:1);P.wa=w.slice(-150);commit();renderSuivi();toast(`Tour de taille noté : ${cm58(v)} cm`)});
 document.addEventListener("click",e=>{const t=e.target.closest&&e.target.closest("[data-wadel]");if(!t)return;const pi=ui.ntP||0,P=state.people[pi];if(!P)return;
  P.wa=(P.wa||[]).filter(x=>x[0]!==t.dataset.wadel);if(!P.wa.length)delete P.wa;commit();renderSuivi();toast("Mesure effacée")});
+
+
+// ================= v59 : recettes publiées en anglais, traduites en français =================
+// La collecte lit aussi BBC Good Food, Pinch of Nom, Jamie Oliver, Skinnytaste, RecipeTin Eats et Olive,
+// et traduit titre, ingrédients (en unités métriques) et étapes. Mêmes règles que les autres : sans porc, plats complets, riches en protéines.
+const isEN59=e=>!!e&&e.lg==="en";
+dqValid=(f=>function(e){const o=f.apply(this,arguments);try{if(o&&e&&e.lg==="en"){o.lg="en";if(typeof e.to==="string")o.to=e.to.slice(0,120);o.tr=e.tr===2?2:1;
+ if(Array.isArray(e.st))o.st=e.st.filter(x=>typeof x==="string"&&x.trim()).slice(0,25).map(x=>x.slice(0,700))}}catch(x){}return o})(dqValid);
+// ajout d'une recette : les étapes traduites servent directement (pas de relecture du site en anglais)
+discDraft=(f=>function(e,j){const d=f.apply(this,arguments);try{if(isEN59(e)){if(Array.isArray(e.st)&&e.st.length)d.st=mergeSteps(e.st.slice()).slice(0,25);
+ d.tip=`Recette ${e.a?"de "+e.a+", ":""}publiée en anglais sur ${siteName(e.u)}${e.to?` (« ${e.to} »)`:""}, traduite en français.`}}catch(x){}return d})(discDraft);
+fnCall=(f=>async function(body){try{if(body&&body.action==="import"&&DISC.some(e=>e.u===body.url&&isEN59(e)&&Array.isArray(e.st)&&e.st.length))return null}catch(x){}return f.apply(this,arguments)})(fnCall);
+// fiche : mention de la traduction, titre d'origine, onglet « Étapes »
+panelDiscOne=(f=>function(e){if(!isEN59(e))return f.apply(this,arguments);const st=Array.isArray(e.st)&&e.st.length>0,want=ui.dtab||"ing";let h;
+ if(want==="st"&&st){ui.dtab="ing";try{h=f.apply(this,arguments)}finally{ui.dtab="st"}
+  h=h.replace(/<p class="dc-for">[\s\S]*?<\/ul>/,`<p class="dc-for">Traduit de l'anglais</p><ol class="dc-steps">${e.st.map(s=>`<li>${esc(s)}</li>`).join("")}</ol>`).replace('aria-selected="true" data-dsc="tab|ing"','aria-selected="false" data-dsc="tab|ing"')}
+ else h=f.apply(this,arguments);
+ if(st)h=h.replace(/(data-dsc="tab\|nut">Nutrition<\/button>)/,`$1<button type="button" role="tab" aria-selected="${want==="st"}" data-dsc="tab|st">Étapes</button>`);
+ h=h.replace(/(<h2 class="pn-title dc-title">[\s\S]*?<\/h2>)/,`$1<p class="dc-tr">Traduit de l'anglais${e.to?` · titre d'origine : « ${esc(e.to)} »`:""}</p>`);
+ return h})(panelDiscOne);
+document.addEventListener("click",ev=>{const t=ev.target.closest&&ev.target.closest('[data-dsc="tab|st"]');if(!t)return;ev.stopPropagation();ev.preventDefault();ui.dtab="st";renderPanel()},true);
+// carte du swipe : la source indique la traduction
+swCard=(f=>function(e,cls){const h=f.apply(this,arguments);return isEN59(e)?h.replace(/(<span class="sw-src">)([^<]*)(<\/span>)/,`$1$2 · traduit de l'anglais$3`):h})(swCard);
 
 try{setTab(ui.tab);renderAll()}catch(e){try{sbDiag("affichage au démarrage",e)}catch(x){}}try{initDb()}catch(e){}sbStart();
 
