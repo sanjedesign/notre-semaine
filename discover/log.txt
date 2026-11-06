@@ -1,22 +1,22 @@
 plan hellofresh 200 https://www.hellofresh.fr/sitemap_recipe_pages.xml → 8613
 plan jow 200 https://jow.fr/sitemap.xml → 3736
+recherche marmiton 200 thon&page=2 → 21
+recherche marmiton 200 bolognaise&page=4 → 21
+recherche marmiton 200 saumon&page=3 → 23
+recherche marmiton 200 tajine de poulet&page=2 → 21
+recherche marmiton 404 meal prep&page=4 → 0
+recherche marmiton 200 boulettes de boeuf&page=3 → 21
 recherche marmiton 404 poulet riz légumes&page=4 → 0
-recherche marmiton 404 plat à préparer à l'avance&page=4 → 0
-recherche marmiton 404 batch cooking&page=4 → 0
-recherche marmiton 200 bowl poulet quinoa&page=4 → 21
-recherche marmiton 200 cabillaud&page=2 → 21
-recherche marmiton 404 dahl de lentilles&page=3 → 0
-recherche marmiton 200 thon&page=4 → 21
-recherche marmiton 200 salade de lentilles&page=2 → 21
-recherche marmiton 200 plat complet&page=2 → 21
-recherche marmiton 200 tofu&page=3 → 21
-recherche marmiton 200 crackers au parmesan → 8
-recherche marmiton 200 rillettes de thon → 21
-recherche marmiton 200 pois chiches grillés → 10
-recherche marmiton 200 gougères → 19
+recherche marmiton 200 blanc de poulet&page=2 → 21
+recherche marmiton 200 boeuf&page=2 → 23
+recherche marmiton 200 couscous poulet&page=2 → 21
 recherche marmiton 200 muffins salés → 21
+recherche marmiton 200 roulés de jambon de dinde → 15
+recherche marmiton 200 edamame → 7
 recherche marmiton 200 cake salé léger → 7
-recherche marmiton 200 chips de parmesan → 13
+recherche marmiton 200 galettes salées flocons d'avoine → 21
+recherche marmiton 200 energy balls protéinées → 20
+recherche marmiton 200 gougères → 19
 recherche marmiton 200 pancakes protéinés → 7
 plan marmiton 200 https://www.marmiton.org/wsitemap_recipes_1.xml → 4865
 plan marmiton 200 https://www.marmiton.org/wsitemap_recipes_2.xml → 4186
@@ -44,19 +44,106 @@ plan hervecuisine 200 https://www.hervecuisine.com/herve_recipe-sitemap.xml → 
 plan cuisineaz 200 https://www.cuisineaz.com/xml/sitemap.xml → 0
 plan cuisineaz 200 https://www.cuisineaz.com/xml/sitemap-cuisineaz-recette-1.xml → 9233
 plan cuisineaz 200 https://www.cuisineaz.com/xml/sitemap-cuisineaz-recette-2.xml → 9421
-plan cuisineaz 200 https://www.cuisineaz.com/xml/sitemap-cuisineaz-recette-3.xml → 9375
-plan cuisineaz 200 https://www.cuisineaz.com/xml/sitemap-cuisineaz-recette-4.xml → 8981
+plan cuisineaz 200 https://www.cuisineaz.com/xml/sitemap-cuisineaz-recette-3.xml → 9377
+plan cuisineaz 200 https://www.cuisineaz.com/xml/sitemap-cuisineaz-recette-4.xml → 8979
 plan cuisineaz 200 https://www.cuisineaz.com/xml/sitemap-cuisineaz-recette-5.xml → 9347
 plan cuisineaz 200 https://www.cuisineaz.com/xml/sitemap-cuisineaz-recette-6.xml → 9984
 plan cuisineaz 200 https://www.cuisineaz.com/xml/sitemap-cuisineaz-recette-7.xml → 9999
 plan cuisineaz 200 https://www.cuisineaz.com/xml/sitemap-cuisineaz-recette-8.xml → 10000
 plan cuisineaz 200 https://www.cuisineaz.com/xml/sitemap-cuisineaz-recette-9.xml → 10000
-plan cuisineaz 200 https://www.cuisineaz.com/xml/sitemap-cuisineaz-recette-10.xml → 4569
+plan cuisineaz 200 https://www.cuisineaz.com/xml/sitemap-cuisineaz-recette-10.xml → 4571
+plan bbc 200 https://www.bbcgoodfood.com/sitemap.xml → 0
+plan bbc 200 https://www.bbcgoodfood.com/sitemaps/2026-Q4-recipe.xml → 80
+plan bbc 200 https://www.bbcgoodfood.com/sitemaps/2026-Q3-recipe.xml → 64
+plan bbc 200 https://www.bbcgoodfood.com/sitemaps/2026-Q2-recipe.xml → 50
+plan bbc 200 https://www.bbcgoodfood.com/sitemaps/2026-Q1-recipe.xml → 36
+plan bbc 200 https://www.bbcgoodfood.com/sitemaps/2025-Q4-recipe.xml → 37
+plan bbc 200 https://www.bbcgoodfood.com/sitemaps/2025-Q3-recipe.xml → 70
+plan bbc 200 https://www.bbcgoodfood.com/sitemaps/2025-Q2-recipe.xml → 106
+plan bbc 200 https://www.bbcgoodfood.com/sitemaps/2025-Q1-recipe.xml → 166
+plan bbc 200 https://www.bbcgoodfood.com/sitemaps/2024-Q4-recipe.xml → 238
+plan bbc 200 https://www.bbcgoodfood.com/sitemaps/2024-Q3-recipe.xml → 142
+plan bbc 200 https://www.bbcgoodfood.com/sitemaps/2024-Q2-recipe.xml → 129
+plan bbc 200 https://www.bbcgoodfood.com/sitemaps/2024-Q1-recipe.xml → 194
+plan bbc 200 https://www.bbcgoodfood.com/sitemaps/2023-Q4-recipe.xml → 250
+plan bbc 200 https://www.bbcgoodfood.com/sitemaps/2023-Q3-recipe.xml → 214
+plan bbc 200 https://www.bbcgoodfood.com/sitemaps/2023-Q2-recipe.xml → 114
+plan bbc 200 https://www.bbcgoodfood.com/sitemaps/2023-Q1-recipe.xml → 177
+plan bbc 200 https://www.bbcgoodfood.com/sitemaps/2022-Q4-recipe.xml → 272
+plan bbc 200 https://www.bbcgoodfood.com/sitemaps/2022-Q3-recipe.xml → 203
+plan bbc 200 https://www.bbcgoodfood.com/sitemaps/2022-Q2-recipe.xml → 217
+plan bbc 200 https://www.bbcgoodfood.com/sitemaps/2022-Q1-recipe.xml → 156
+plan bbc 200 https://www.bbcgoodfood.com/sitemaps/2021-Q4-recipe.xml → 245
+plan bbc 200 https://www.bbcgoodfood.com/sitemaps/2021-Q3-recipe.xml → 205
+plan bbc 200 https://www.bbcgoodfood.com/sitemaps/2021-Q2-recipe.xml → 154
+plan bbc 200 https://www.bbcgoodfood.com/sitemaps/2021-Q1-recipe.xml → 191
+plan bbc 200 https://www.bbcgoodfood.com/sitemaps/2020-Q4-recipe.xml → 276
+plan bbc 200 https://www.bbcgoodfood.com/sitemaps/2020-Q3-recipe.xml → 128
+plan bbc 200 https://www.bbcgoodfood.com/sitemaps/2020-Q2-recipe.xml → 207
+plan bbc 200 https://www.bbcgoodfood.com/sitemaps/2020-Q1-recipe.xml → 194
+plan bbc 200 https://www.bbcgoodfood.com/sitemaps/2019-Q4-recipe.xml → 196
+plan pinchofnom 200 https://pinchofnom.com/sitemap.xml → 0
+plan pinchofnom 200 https://pinchofnom.com/sitemap_index.xml → 0
+plan pinchofnom 200 https://pinchofnom.com/post-sitemap.xml → 0
+plan pinchofnom 200 https://pinchofnom.com/page-sitemap.xml → 0
+plan pinchofnom 200 https://pinchofnom.com/recipes-sitemap.xml → 1000
+plan pinchofnom 200 https://pinchofnom.com/recipes-sitemap2.xml → 999
+plan pinchofnom 200 https://pinchofnom.com/recipes-sitemap3.xml → 402
+plan pinchofnom 200 https://pinchofnom.com/videos-sitemap.xml → 0
+plan pinchofnom 200 https://pinchofnom.com/how_tos-sitemap.xml → 0
+plan pinchofnom 200 https://pinchofnom.com/books-sitemap.xml → 0
+plan pinchofnom 200 https://pinchofnom.com/products-sitemap.xml → 0
+plan pinchofnom 200 https://pinchofnom.com/podcasts-sitemap.xml → 0
+plan pinchofnom 200 https://pinchofnom.com/category-sitemap.xml → 0
+plan pinchofnom 200 https://pinchofnom.com/post_tag-sitemap.xml → 0
+plan pinchofnom 200 https://pinchofnom.com/post_tag-sitemap2.xml → 0
+plan pinchofnom 200 https://pinchofnom.com/post_tag-sitemap3.xml → 0
+plan pinchofnom 200 https://pinchofnom.com/author-sitemap.xml → 0
+plan jamieoliver 200 https://www.jamieoliver.com/sitemap.xml → 4552
+plan skinnytaste 200 https://www.skinnytaste.com/sitemap_index.xml → 0
+plan skinnytaste 200 https://www.skinnytaste.com/post-sitemap.xml → 666
+plan skinnytaste 200 https://www.skinnytaste.com/post-sitemap2.xml → 865
+plan skinnytaste 200 https://www.skinnytaste.com/post-sitemap3.xml → 853
+plan recipetineats 200 https://www.recipetineats.com/sitemap_index.xml → 0
+plan recipetineats 200 https://www.recipetineats.com/post-sitemap.xml → 493
+plan recipetineats 200 https://www.recipetineats.com/post-sitemap2.xml → 499
+plan recipetineats 200 https://www.recipetineats.com/post-sitemap3.xml → 497
+plan recipetineats 200 https://www.recipetineats.com/post-sitemap4.xml → 253
+plan olive 200 https://www.olivemagazine.com/sitemap.xml → 0
+plan olive 200 https://www.olivemagazine.com/sitemaps/2026-Q4-recipe.xml → 32
+plan olive 200 https://www.olivemagazine.com/sitemaps/2026-Q3-recipe.xml → 59
+plan olive 200 https://www.olivemagazine.com/sitemaps/2026-Q2-recipe.xml → 64
+plan olive 200 https://www.olivemagazine.com/sitemaps/2026-Q1-recipe.xml → 57
+plan olive 200 https://www.olivemagazine.com/sitemaps/2025-Q4-recipe.xml → 63
+plan olive 200 https://www.olivemagazine.com/sitemaps/2025-Q3-recipe.xml → 80
+plan olive 200 https://www.olivemagazine.com/sitemaps/2025-Q2-recipe.xml → 71
+plan olive 200 https://www.olivemagazine.com/sitemaps/2025-Q1-recipe.xml → 108
+plan olive 200 https://www.olivemagazine.com/sitemaps/2024-Q4-recipe.xml → 79
+plan olive 200 https://www.olivemagazine.com/sitemaps/2024-Q3-recipe.xml → 73
+plan olive 200 https://www.olivemagazine.com/sitemaps/2024-Q2-recipe.xml → 66
+plan olive 200 https://www.olivemagazine.com/sitemaps/2024-Q1-recipe.xml → 82
+plan olive 200 https://www.olivemagazine.com/sitemaps/2023-Q4-recipe.xml → 114
+plan olive 200 https://www.olivemagazine.com/sitemaps/2023-Q3-recipe.xml → 90
+plan olive 200 https://www.olivemagazine.com/sitemaps/2023-Q2-recipe.xml → 109
+plan olive 200 https://www.olivemagazine.com/sitemaps/2023-Q1-recipe.xml → 107
+plan olive 200 https://www.olivemagazine.com/sitemaps/2022-Q4-recipe.xml → 166
+plan olive 200 https://www.olivemagazine.com/sitemaps/2022-Q3-recipe.xml → 135
+plan olive 200 https://www.olivemagazine.com/sitemaps/2022-Q2-recipe.xml → 207
+plan olive 200 https://www.olivemagazine.com/sitemaps/2022-Q1-recipe.xml → 181
+plan olive 200 https://www.olivemagazine.com/sitemaps/2021-Q4-recipe.xml → 224
+plan olive 200 https://www.olivemagazine.com/sitemaps/2021-Q3-recipe.xml → 145
+plan olive 200 https://www.olivemagazine.com/sitemaps/2021-Q2-recipe.xml → 147
+plan olive 200 https://www.olivemagazine.com/sitemaps/2021-Q1-recipe.xml → 167
+plan olive 200 https://www.olivemagazine.com/sitemaps/2020-Q4-recipe.xml → 122
+plan olive 200 https://www.olivemagazine.com/sitemaps/2020-Q3-recipe.xml → 86
+plan olive 200 https://www.olivemagazine.com/sitemaps/2020-Q2-recipe.xml → 113
+plan olive 200 https://www.olivemagazine.com/sitemaps/2020-Q1-recipe.xml → 131
+plan olive 200 https://www.olivemagazine.com/sitemaps/2019-Q4-recipe.xml → 117
 plan jdf 200 https://cuisine.journaldesfemmes.fr/sitemap/video-recipe/ → 2047
-à lire : 900 fiches (270 pistes d'encas)
-gardées : 4 · écartées : {"http 403":256,"note insuffisante":209,"dessert":209,"plat incomplet":53,"porc":91,"nutrition absente":52,"catégorie autre sauce d'accompagnement":1,"kcal #":4,"plat trop riche (nom)":7,"protéines # g":2,"encas sucré sans valeurs":1,"catégorie sauce":2,"catégorie dessert":3,"robot de cuisine":1,"catégorie chou dessert":1,"catégorie verrine dessert aux fruits":1,"catégorie creme dessert":1,"fiche incomplète":1,"catégorie cocktail liqueur":1}
-par source : {"marmiton":{"lu":392,"plats":0,"encas":0,"why":{"note insuffisante":148,"dessert":111,"porc":56,"nutrition absente":52,"kcal #":4,"plat incomplet":11,"protéines # g":2,"catégorie sauce":2,"catégorie dessert":3,"robot de cuisine":1,"fiche incomplète":1,"plat trop riche (nom)":1}},"jdf":{"lu":252,"plats":4,"encas":0,"why":{"note insuffisante":61,"dessert":98,"plat incomplet":42,"porc":35,"catégorie autre sauce d'accompagnement":1,"plat trop riche (nom)":6,"encas sucré sans valeurs":1,"catégorie chou dessert":1,"catégorie verrine dessert aux fruits":1,"catégorie creme dessert":1,"catégorie cocktail liqueur":1}}}
-encas publiés aujourd'hui : 12 (dont 0 à ce passage) · en réserve : 147
+à lire : 950 fiches (285 pistes d'encas)
+gardées : 57 · écartées : {"dessert":326,"note insuffisante":218,"nutrition absente":47,"plat trop riche (nom)":30,"plat (source d'encas)":41,"porc":82,"en attente de traduction":36,"plat incomplet":53,"pas assez protéiné":26,"abats":3,"catégorie dessert":6,"robot de cuisine":1,"encas sucré sans valeurs":10,"encas":3,"doublon":3,"encas pas assez protéiné":1,"catégorie creme dessert originale":1,"catégorie confiserie":1,"protéines # g":1,"encas sans ingrédient protéiné":2,"http 0":1,"encas trop gras":1}
+par source : {"jdf":{"lu":265,"plats":1,"encas":1,"why":{"dessert":119,"note insuffisante":61,"plat trop riche (nom)":6,"porc":30,"plat incomplet":42,"encas sucré sans valeurs":3,"abats":1,"catégorie creme dessert originale":1}},"marmiton":{"lu":399,"plats":0,"encas":1,"why":{"note insuffisante":150,"nutrition absente":36,"dessert":147,"porc":39,"plat trop riche (nom)":6,"plat incomplet":11,"catégorie dessert":6,"robot de cuisine":1,"catégorie confiserie":1,"protéines # g":1}},"cuisineaz":{"lu":205,"plats":0,"encas":54,"why":{"plat trop riche (nom)":18,"plat (source d'encas)":41,"dessert":54,"note insuffisante":7,"abats":2,"encas":3,"porc":12,"encas sucré sans valeurs":7,"encas pas assez protéiné":1,"encas sans ingrédient protéiné":2,"encas trop gras":1}},"bbc":{"lu":20,"plats":0,"encas":0,"why":{"en attente de traduction":8,"pas assez protéiné":11,"dessert":1}},"skinnytaste":{"lu":9,"plats":0,"encas":0,"why":{"en attente de traduction":7,"pas assez protéiné":1,"dessert":1}},"jamieoliver":{"lu":15,"plats":0,"encas":0,"why":{"nutrition absente":1,"en attente de traduction":8,"pas assez protéiné":4,"dessert":2}},"recipetineats":{"lu":8,"plats":0,"encas":0,"why":{"en attente de traduction":2,"nutrition absente":3,"pas assez protéiné":2,"dessert":1}},"pinchofnom":{"lu":20,"plats":0,"encas":0,"why":{"en attente de traduction":8,"nutrition absente":7,"pas assez protéiné":4,"porc":1}},"olive":{"lu":8,"plats":0,"encas":0,"why":{"en attente de traduction":3,"pas assez protéiné":4,"dessert":1}}}
+encas publiés aujourd'hui : 12 (dont 0 à ce passage) · en réserve : 202
 encas : 78 (dont salés 25)
 plats avec vidéo : 455 (YouTube 42, sur le site 413)
-pages créées : 0 · total 301 pages, 3010 recettes · en attente 6
+pages créées : 0 · total 301 pages, 3010 recettes · en attente 7
