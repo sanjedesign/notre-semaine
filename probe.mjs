@@ -23,7 +23,7 @@ const D = [
  ["gordonramsay", "https://www.gordonramsay.com", /\/gr\/recipes\/[a-z0-9-]+\/?$/],
 ];
 const samples = [];
-for (const [k, base, re] of D) {
+for (const [k, base, re] of D) { try {
   const rb = await get(base + "/robots.txt"); const lines = rb.t.split("\n").map((l) => l.trim());
   const sms = lines.filter((l) => /^sitemap/i.test(l)).map((l) => l.split(/:\s*/).slice(1).join(":").trim());
   const ua = rb.t.match(/User-agent:\s*\*[\s\S]*?(?=User-agent:|$)/i); const dis = ua ? ua[0].split("\n").filter((l) => /^disallow/i.test(l.trim())).slice(0, 8).map((l) => l.trim().replace(/^disallow:\s*/i, "")).join(" ") : "";
@@ -38,11 +38,11 @@ for (const [k, base, re] of D) {
   say(`  urls ${urls.length} recettes ${cand.length}`);
   let n = 0, nut = 0, prot = 0;
   for (const u of cand.sort(() => Math.random() - 0.5).slice(0, 6)) { const r = await get(u); const R = ld(r.t);
-    if (R) { n++; const N = R.nutrition || {}; if (N.calories) nut++; if (N.proteinContent) prot++; const ar = R.aggregateRating || {}; const ing = R.recipeIngredient || []; const st = steps(R);
+    if (R) { n++; const N = R.nutrition || {}; if (N.calories) nut++; if (N.proteinContent) prot++; const ar = R.aggregateRating || {}; const ing = [].concat(R.recipeIngredient || []).map(String); const st = steps(R);
       say(`  ${r.s} ${u.slice(0, 80)} | ${String(R.name).slice(0, 34)} | y ${String(R.recipeYield).slice(0, 12)} | ing ${ing.length} st ${st.length} | ${N.calories || "-"}/${N.proteinContent || "-"} | note ${ar.ratingValue || "-"}/${ar.ratingCount || ar.reviewCount || "-"} | ${ing.slice(0, 3).join(" ; ").slice(0, 110)}`);
       if (samples.filter((s) => s.src === k).length < 2 && ing.length && st.length) samples.push({ src: k, t: R.name, ing: ing.slice(0, 14), st: st.slice(0, 8) }); }
     else say(`  -- ${r.s} ${u.slice(0, 90)} sans Recipe`); }
-  say(`  => ${n} fiches, ${nut} kcal, ${prot} protéines`);
-}
+  say(`  => ${n} fiches, ${nut} kcal, ${prot} protéines`); fs.writeFileSync("samples.json", JSON.stringify(samples));
+} catch (e) { say("  ERREUR " + e.message); } }
 fs.writeFileSync("samples.json", JSON.stringify(samples));
 say("FIN SOURCES");
