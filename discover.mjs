@@ -177,7 +177,7 @@ function toRecipe(key, url, R, hint, html) {
   const pr = hasN ? (p * 4) / k : 0;
   const o = { id: idOf(url), t, src: SRC[key].name, u: url, img: imgOf(R.image), min: iso(R.totalTime) || iso(R.prepTime) + iso(R.cookTime) || 0, y, ing };
   if (hasN) { o.n = { k: Math.round(k), p: +p.toFixed(1), f: +f.toFixed(1), c: +c.toFixed(1) }; if (fi != null) o.n.fi = +fi.toFixed(1); }
-  const a = R.author && (Array.isArray(R.author) ? R.author[0] : R.author); const an = clean(a && (a.name || a));
+  const a = R.author && (Array.isArray(R.author) ? R.author[0] : R.author); const an = clean(typeof a === "string" ? a : a && typeof a.name === "string" ? a.name : "");
   if (an && !/^(anonyme|jow|hellofresh|betty bossi|fourchette (et|&) bikini|redaction|rédaction|cuisineaz|cuisine az|journal des femmes|la redaction.*|journal des femmes cuisine|pinch of nom|bbc good food|good food team|olive magazine|olive|recipetin eats|skinnytaste)$/i.test(an)) o.a = an.slice(0, 50); else if (key === "marmiton") o.a = "Membre Marmiton";
   if (porkOf(o)) return { why: "porc" };
   if (DESSERT.test(nrm(t)) && !/(poulet|dinde|boeuf|saumon|thon|crevette|lentille|pois chiche|parmesan|fromage|comte|emmental|gruyere|chevre|feta|olive|tomate|herbes|pesto|graines|\bsale|\bsalee|apero|protein|skyr)/.test(nrm(t))) return { why: "dessert" };
@@ -251,7 +251,7 @@ for (const key of Object.keys(SRC).filter((k) => !ONLY.length || ONLY.includes(k
 }
 // tirage pondéré entre les sources ; la moitié des fiches sont des pistes d'encas, et si une source ou un type manque, les autres complètent
 // recettes anglaises : EN_MAX fiches par passage au plus (la traduction prend du temps)
-const EN_MAX = +(process.env.EN_MAX || 120); let enN = 0;
+const EN_MAX = +(process.env.EN_MAX || 80); let enN = 0;
 function take(kind, n) { const out = []; let more = true;
   while (out.length < n && more) { more = false; for (const k of Object.keys(per)) for (let i = 0; i < SRC[k].w && out.length < n; i++) { if (SRC[k].lang === "en" && enN >= EN_MAX) break; const u = per[k][kind].shift(); if (u) { out.push([k, u]); more = true; if (SRC[k].lang === "en") enN++; } } }
   return out; }
@@ -291,10 +291,10 @@ async function readEn(key, url, R, html) {
   if (ingEn.length < 3) return { why: "fiche incomplète" };
   const cat = [].concat(R.recipeCategory || []).join(", ");
   const tr = await translate({ title: name, ing: ingEn, steps: stepsOf(R), cat });
-  if (!tr || !tr.title || !Array.isArray(tr.ing) || tr.ing.length < 3) { trFail++; return { why: "traduction impossible" }; }
+  if (!tr || !tr.title || !Array.isArray(tr.ing) || tr.ing.length < 3) { trFail++; return { why: "traduction impossible (relue plus tard)", retry: true }; }
   trEng[tr.engine] = (trEng[tr.engine] || 0) + 1;
   const x = toRecipe(key, url, { ...R, name: tr.title, recipeIngredient: tr.ing, recipeCategory: tr.cat || "", keywords: "" }, false, html);
-  if (x.r) { if (x.r.k === "encas") return { why: "encas (recette anglaise)" }; x.r.lg = "en"; x.r.to = name.slice(0, 120); x.r.tr = tr.engine === "gemini" ? 2 : 1; if (Array.isArray(tr.steps) && tr.steps.length) x.r.st = tr.steps.slice(0, 20).map((s) => String(s).slice(0, 700)); }
+  if (x.r) { if (x.r.k === "encas") return { why: "encas (recette anglaise)" }; x.r.lg = "en"; x.r.to = name.slice(0, 120); x.r.tr = tr.engine === "argos" ? 1 : 2; if (Array.isArray(tr.steps) && tr.steps.length) x.r.st = tr.steps.slice(0, 20).map((s) => String(s).slice(0, 700)); }
   return x;
 }
 const why = {}; let ok = 0; const bySrc = {};
@@ -303,6 +303,7 @@ for (const [key, url] of queue) {
   if (r.status !== 200) { why["http " + r.status] = (why["http " + r.status] || 0) + 1; await sleep(500); continue; }
   const R = ld(r.text); if (!R) { why["pas de fiche"] = (why["pas de fiche"] || 0) + 1; await sleep(300); continue; }
   const x = SRC[key].lang === "en" ? await readEn(key, url, R, r.text) : toRecipe(key, url, R, SNACK_SLUG.test(nrm(url)), r.text);
+  if (x.retry) delete st.seen[idOf(url)];
   const B = bySrc[key] || (bySrc[key] = { lu: 0, plats: 0, encas: 0, why: {} }); B.lu++;
   if (x.r) { const tk = nrm(x.r.t).replace(/[^a-z0-9]+/g, " ").trim(); if (st.titles[tk]) { why["doublon"] = (why["doublon"] || 0) + 1; } else { st.titles[tk] = 1; st.pending.push(x.r); ok++; B[x.r.k === "encas" ? "encas" : "plats"]++; if (DRY) say("OK " + JSON.stringify(x.r).slice(0, 600)); } }
   else { const w = x.why.replace(/\d+(\.\d+)?/g, "#"); why[w] = (why[w] || 0) + 1; B.why[w] = (B.why[w] || 0) + 1; }
@@ -369,15 +370,15 @@ function takePage(force) {
 }
 let made = 0, pg;
 while ((pg = takePage(false))) { st.pages++; st.total += pg.length; fs.writeFileSync(path.join(DIR, "p", `${st.pages}.json`), JSON.stringify(pg)); made++; }
-// --- recettes anglaises traduites hors ligne (Argos) : refaites avec Gemini quand la clé GEMINI_API_KEY est fournie
-if (process.env.GEMINI_API_KEY) { const RMAX = +(process.env.RETRANSLATE || 40); let n = 0, done = 0;
+// --- recettes anglaises traduites hors ligne (Argos) : refaites avec un modèle de langage quand il est disponible
+if (process.env.GEMINI_API_KEY || process.env.GITHUB_TOKEN) { const RMAX = +(process.env.RETRANSLATE || 40); let n = 0, done = 0;
   for (const f of fs.readdirSync(path.join(DIR, "p"))) { if (n >= RMAX) break; const fp = path.join(DIR, "p", f); let L; try { L = JSON.parse(fs.readFileSync(fp, "utf8")); } catch { continue; } let ch = false;
     for (const e of L) { if (n >= RMAX) break; if (e.lg !== "en" || e.tr !== 1) continue; n++; const key = Object.keys(SRC).find((k) => SRC[k].name === e.src); const r = await get(e.u);
-      const R = r.status === 200 ? ld(r.text) : null; if (key && R) { const tr = await translate({ title: clean(R.name), ing: [].concat(R.recipeIngredient || []).map(String), steps: stepsOf(R), cat: [].concat(R.recipeCategory || []).join(", "), engine: "gemini" });
-        if (tr && tr.engine === "gemini" && Array.isArray(tr.ing) && tr.ing.length >= 3) { e.t = String(tr.title).replace(/^./, (c) => c.toUpperCase()).slice(0, 110); e.ing = tr.ing.map((x) => normIng(key, x)).filter(Boolean).slice(0, 30); if (Array.isArray(tr.steps) && tr.steps.length) e.st = tr.steps.slice(0, 20).map((x) => String(x).slice(0, 700)); e.tr = 2; ch = true; done++; } }
+      const R = r.status === 200 ? ld(r.text) : null; if (key && R) { const tr = await translate({ title: clean(R.name), ing: [].concat(R.recipeIngredient || []).map(String), steps: stepsOf(R), cat: [].concat(R.recipeCategory || []).join(", "), engine: "llm" });
+        if (tr && tr.engine !== "argos" && Array.isArray(tr.ing) && tr.ing.length >= 3) { e.t = String(tr.title).replace(/^./, (c) => c.toUpperCase()).slice(0, 110); e.ing = tr.ing.map((x) => normIng(key, x)).filter(Boolean).slice(0, 30); if (Array.isArray(tr.steps) && tr.steps.length) e.st = tr.steps.slice(0, 20).map((x) => String(x).slice(0, 700)); e.tr = 2; ch = true; done++; } }
       await sleep(350); }
     if (ch) fs.writeFileSync(fp, JSON.stringify(L)); }
-  if (n) say(`traductions refaites avec Gemini : ${done} sur ${n}`); }
+  if (n) say(`traductions refaites : ${done} sur ${n}`); }
 trStop();
 // --- plats avec vidéo : liste à part (discover/videos.json) que l'appli montre en priorité dans le swipe
 // une même vidéo YouTube sur 3 fiches ou plus est une vidéo de la chaîne, pas celle de la recette : retirée

@@ -6,10 +6,11 @@ une réponse JSON par ligne sur la sortie standard.
   entrée : {"id": "...", "title": "...", "ing": ["..."], "steps": ["..."], "cat": "..."}
   sortie : {"id": "...", "title": "...", "ing": [...], "steps": [...], "cat": "...", "engine": "gemini" | "argos"}
 
-Moteurs :
-  - Gemini (si le secret GEMINI_API_KEY est défini) : traduction naturelle, unités converties ;
-  - sinon Argos Translate (hors ligne, gratuit) avec un dictionnaire des ingrédients
-    et une liste de corrections du vocabulaire de cuisine.
+Moteurs, dans l'ordre :
+  - Gemini, si le secret GEMINI_API_KEY est défini ;
+  - GitHub Models (modèle de langage gratuit fourni par GitHub, avec le jeton GITHUB_TOKEN de l'action) ;
+  - Argos Translate (hors ligne) seulement si TRANSLATE_FALLBACK=argos : sa traduction est moins naturelle,
+    elle n'est donc pas utilisée par défaut (la recette est relue au passage suivant).
 Les quantités américaines et anglaises (cups, oz, lb, °F) sont converties en unités métriques.
 """
 import json
@@ -21,6 +22,9 @@ import urllib.request
 
 GEMINI_KEY = os.environ.get("GEMINI_API_KEY", "").strip()
 GEMINI_MODELS = [m for m in [os.environ.get("GEMINI_MODEL", ""), "gemini-flash-latest", "gemini-2.5-flash"] if m]
+GH_TOKEN = os.environ.get("GITHUB_TOKEN", "").strip() if os.environ.get("GH_MODELS", "1") != "0" else ""
+GH_MODELS = [m for m in [os.environ.get("GH_MODEL", ""), "openai/gpt-4.1-mini", "openai/gpt-4o-mini"] if m]
+GH_STATE = {"off": False, "last": 0.0}
 
 # ---------------------------------------------------------------- Argos (chargé à la demande)
 _ARGOS = None
@@ -542,9 +546,13 @@ def cat_fr(c):
 # ---------------------------------------------------------------- Gemini
 PROMPT = """Tu traduis une recette anglaise en français de France, pour une appli de repas.
 Règles :
-- Titre : naturel et appétissant en français (pas de traduction mot à mot), sans mention « slimming » ni « Weight Watchers ».
-- Ingrédients : une ligne par ingrédient, même ordre, même nombre de lignes. Format « quantité unité Ingrédient, préparation » (ex. « 400 g Tomates concassées », « 2 cs Huile d'olive », « 1 Oignon rouge, finement haché »).
-  Convertis en métrique : cups, oz, lb, fl oz, pints → g ou ml (arrondis à 5 g) ; tbsp → cs ; tsp → cc. « 400g can » → « 400 g ». Noms d'aliments courants en France (passata → coulis de tomate, tomato purée → concentré de tomate, double cream → crème entière, caster sugar → sucre en poudre, self-raising flour → farine avec levure incorporée, spring onions → oignons nouveaux, courgette → courgette, mince → haché).
+- Titre : court (60 caractères au plus), naturel, comme un titre de recette française (« Curry de poulet au riz en une seule casserole », pas « Un pot de poulet et de riz curry »). Sans mention « slimming », « Weight Watchers », « easy » ni nom de marque.
+- Ingrédients : une ligne par ingrédient, même ordre, même nombre de lignes, sans les notes ni les renvois (« see tip », « Note 1 »). Format « quantité unité Ingrédient, préparation » :
+  « 400 g Tomates concassées », « 2 cs Huile d'olive », « 1 Oignon rouge, finement haché », « 2 gousses d'ail, écrasées ». Unités : g, kg, ml, l, cs, cc, pincée.
+  Convertis en métrique : cups, oz, lb, fl oz, pints → g ou ml (arrondis à 5) ; tbsp → cs ; tsp → cc ; « 400g can » → « 400 g ». Ne change aucune quantité, n'invente rien.
+  Noms courants en France : passata → coulis de tomate, tomato purée → concentré de tomate, double cream → crème entière, single cream → crème liquide, caster sugar → sucre en poudre,
+  self-raising flour → farine avec levure incorporée, cornflour → fécule de maïs, spring onions → oignons nouveaux, coriander → coriandre, pepper (légume) → poivron, chilli → piment, mince → haché,
+  stock → bouillon, rapeseed oil → huile de colza, kosher salt → sel, low calorie cooking spray → huile en spray.
 - Étapes : même nombre d'étapes, impératif à la 2e personne du pluriel (« Faites chauffer… »), températures en °C (chaleur tournante entre parenthèses si donnée), durées en minutes. Pas de commentaire.
 - Catégorie : traduis en quelques mots.
 Réponds uniquement en JSON : {"title": "...", "ing": ["..."], "steps": ["..."], "cat": "..."}
@@ -566,11 +574,9 @@ def gemini(rec):
                 with urllib.request.urlopen(req, timeout=60) as r:
                     j = json.loads(r.read().decode())
                 txt = j["candidates"][0]["content"]["parts"][0]["text"]
-                o = json.loads(txt)
-                ing = [str(x).strip() for x in o.get("ing", []) if str(x).strip()]
-                st = [str(x).strip() for x in o.get("steps", []) if str(x).strip()]
-                if o.get("title") and len(ing) >= max(2, len(body["ing"]) - 2) and (st or not body["steps"]):
-                    return {"title": cap(str(o["title"]).strip()), "ing": ing, "steps": st, "cat": str(o.get("cat", "")), "engine": "gemini"}
+                out = check(json.loads(txt), body, "gemini")
+                if out:
+                    return out
                 break
             except urllib.error.HTTPError as e:
                 if e.code in (429, 500, 503):
@@ -578,6 +584,61 @@ def gemini(rec):
                 break
             except Exception:
                 time.sleep(2)
+                continue
+    return None
+
+
+def check(o, body, engine):
+    ing = [str(x).strip() for x in o.get("ing", []) if str(x).strip()]
+    st = [str(x).strip() for x in o.get("steps", []) if str(x).strip()]
+    if o.get("title") and len(ing) >= max(2, len(body["ing"]) - 2) and (st or not body["steps"]):
+        return {"title": cap(str(o["title"]).strip()), "ing": ing, "steps": st, "cat": str(o.get("cat", "")), "engine": engine}
+    return None
+
+
+def github(rec):
+    """GitHub Models : 15 requêtes par minute et environ 150 par jour avec le jeton de l'action."""
+    if not GH_TOKEN or GH_STATE["off"]:
+        return None
+    body = {"title": rec.get("title", ""), "ing": rec.get("ing", [])[:40], "steps": rec.get("steps", [])[:25], "cat": rec.get("cat", "")}
+    wait = 4.5 - (time.time() - GH_STATE["last"])
+    if wait > 0:
+        time.sleep(wait)
+    for mo in GH_MODELS:
+        payload = json.dumps({"model": mo, "temperature": 0.2, "response_format": {"type": "json_object"},
+                              "messages": [{"role": "system", "content": PROMPT.split("Recette :")[0].strip()},
+                                           {"role": "user", "content": "Recette :\n" + json.dumps(body, ensure_ascii=False)}]}).encode()
+        for attempt in range(2):
+            GH_STATE["last"] = time.time()
+            try:
+                req = urllib.request.Request("https://models.github.ai/inference/chat/completions", data=payload,
+                                             headers={"Content-Type": "application/json", "Authorization": "Bearer " + GH_TOKEN, "Accept": "application/json"})
+                with urllib.request.urlopen(req, timeout=90) as r:
+                    j = json.loads(r.read().decode())
+                o = json.loads(j["choices"][0]["message"]["content"])
+                out = check(o, body, "github")
+                if out:
+                    return out
+                break
+            except urllib.error.HTTPError as e:
+                msg = ""
+                try:
+                    msg = e.read().decode()[:300]
+                except Exception:
+                    pass
+                print(f"GitHub Models {mo} : {e.code} {msg}", file=sys.stderr)
+                if e.code == 429:
+                    if "day" in msg.lower() or "daily" in msg.lower() or attempt:
+                        GH_STATE["off"] = True  # quota du jour atteint : on reprendra au prochain passage
+                        return None
+                    time.sleep(30); continue
+                if e.code in (401, 403):
+                    GH_STATE["off"] = True
+                    return None
+                break  # modèle indisponible : on essaie le suivant
+            except Exception as e:
+                print(f"GitHub Models {mo} : {e!r}", file=sys.stderr)
+                time.sleep(3)
                 continue
     return None
 
@@ -600,11 +661,13 @@ def main():
         out = None
         want = rec.get("engine") or os.environ.get("TRANSLATE_ENGINE", "")
         try:
-            if want != "argos":
+            if want in ("", "gemini", "llm"):
                 out = gemini(rec)
-                if out:
-                    out["cat"] = cat_fr(rec.get("cat", "")) or out.get("cat", "")
-            if out is None and want != "gemini":
+            if out is None and want in ("", "github", "llm"):
+                out = github(rec)
+            if out:
+                out["cat"] = cat_fr(rec.get("cat", "")) or out.get("cat", "")
+            if out is None and (want == "argos" or (not want and os.environ.get("TRANSLATE_FALLBACK") == "argos")):
                 out = argos_rec(rec)
         except Exception as e:
             print("traduction impossible : " + repr(e), file=sys.stderr)

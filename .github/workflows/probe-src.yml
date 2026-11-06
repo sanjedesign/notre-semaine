@@ -4,6 +4,7 @@ on:
     branches: [probe-src]
 permissions:
   contents: write
+  models: read
 jobs:
   probe:
     runs-on: ubuntu-latest
@@ -14,12 +15,10 @@ jobs:
         with: { node-version: 20 }
       - uses: actions/setup-python@v5
         with: { python-version: "3.11" }
-      - name: Installer la traduction
-        run: |
-          pip install -q torch --index-url https://download.pytorch.org/whl/cpu || true
-          pip install -q argostranslate || true
       - name: Sonde
         run: node probe.mjs > log.txt 2>&1 || true; cp log.txt report_full.txt
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
       - name: Publier le rapport
         run: |
           git config user.name "github-actions[bot]"

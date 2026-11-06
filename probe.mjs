@@ -1,6 +1,6 @@
 import fs from "fs"; import { spawnSync } from "child_process";
 let out = "";
-const runs = [["bbc,pinchofnom", { MAX_FETCH: "36" }], ["jamieoliver,skinnytaste,recipetineats,olive", { MAX_FETCH: "36" }]];
+const runs = [["bbc,pinchofnom,skinnytaste", { MAX_FETCH: "40" }], ["jamieoliver,recipetineats,olive", { MAX_FETCH: "30" }]];
 for (const [src, env] of runs) {
   const t0 = Date.now();
   const r = spawnSync("node", ["discover.mjs"], { env: { ...process.env, DRY_RUN: "1", SOURCES: src, SNACK_ONLY: "0", ...env }, encoding: "utf8", timeout: 1500000, maxBuffer: 50e6 });
