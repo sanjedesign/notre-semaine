@@ -7,22 +7,19 @@ permissions:
 jobs:
   probe:
     runs-on: ubuntu-latest
-    timeout-minutes: 40
+    timeout-minutes: 55
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with: { node-version: 20 }
       - uses: actions/setup-python@v5
         with: { python-version: "3.11" }
+      - name: Installer la traduction
+        run: |
+          pip install -q torch --index-url https://download.pytorch.org/whl/cpu || true
+          pip install -q argostranslate || true
       - name: Sonde
         run: node probe.mjs > log.txt 2>&1 || true; cp log.txt report_full.txt
-      - name: Traduction (essai)
-        run: |
-          pip install -q torch --index-url https://download.pytorch.org/whl/cpu > pip.txt 2>&1 || true
-          pip install -q argostranslate >> pip.txt 2>&1 || true
-          python tr_test.py > trlog.txt 2>&1 || true
-          tail -5 pip.txt >> report_tr.txt; tail -20 trlog.txt >> report_tr.txt
-          cat report_tr.txt >> report.txt
       - name: Publier le rapport
         run: |
           git config user.name "github-actions[bot]"
