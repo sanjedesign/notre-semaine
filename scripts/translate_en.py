@@ -21,7 +21,6 @@ import time
 import urllib.request
 
 GEMINI_KEY = os.environ.get("GEMINI_API_KEY", "").strip()
-GEMINI_MODELS = [m for m in [os.environ.get("GEMINI_MODEL", ""), "gemini-2.5-flash", "gemini-2.5-flash-lite", "gemini-flash-latest"] if m]
 GH_TOKEN = os.environ.get("GITHUB_TOKEN", "").strip() if os.environ.get("GH_MODELS", "0") == "1" else ""
 GH_MODELS = [m for m in [os.environ.get("GH_MODEL", ""), "openai/gpt-4.1-mini", "openai/gpt-4o-mini"] if m]
 GH_STATE = {"off": False, "last": 0.0}
@@ -560,31 +559,69 @@ Recette :
 """
 
 
-GEM_STATE = {"off": False, "n": 0, "last": 0.0, "dead": set()}
+GEM_STATE = {"off": False, "n": 0, "last": 0.0, "dead": set(), "models": None, "nothink": set()}
+GEM_URL = "https://generativelanguage.googleapis.com/v1beta/models"
+
+
+def gem_models():
+    """Modèles Gemini disponibles pour cette clé : les « flash » les plus récents d'abord, puis les « flash-lite »."""
+    if GEM_STATE["models"] is not None:
+        return GEM_STATE["models"]
+    names = []
+    try:
+        req = urllib.request.Request(GEM_URL + "?pageSize=1000", headers={"x-goog-api-key": GEMINI_KEY})
+        with urllib.request.urlopen(req, timeout=30) as r:
+            j = json.loads(r.read().decode())
+        for m in j.get("models", []):
+            if "generateContent" in m.get("supportedGenerationMethods", []):
+                names.append(m["name"].split("/")[-1])
+    except Exception as e:
+        print(f"Gemini : liste des modèles indisponible ({e!r})", file=sys.stderr)
+
+    def score(n):
+        if "flash" not in n or re.search(r"image|tts|audio|live|embed|vision|exp|preview|robotics|computer|thinking|8b", n):
+            return None
+        v = re.search(r"gemini-(\d+(?:\.\d+)?)", n)
+        return (0 if "lite" in n else 1, float(v.group(1)) if v else 0.0, 1 if "latest" in n else 0)
+
+    found = sorted([n for n in names if score(n)], key=score, reverse=True)
+    pref = [m for m in [os.environ.get("GEMINI_MODEL", "")] if m]
+    out = []
+    for m in pref + found + ["gemini-flash-latest", "gemini-flash-lite-latest"]:
+        if m not in out:
+            out.append(m)
+    GEM_STATE["models"] = out[:5]
+    print("Gemini : modèles essayés " + ", ".join(GEM_STATE["models"]), file=sys.stderr)
+    return GEM_STATE["models"]
 
 
 def gemini(rec):
-    """Gemini (offre gratuite) : on espace les appels ; quota épuisé ou clé refusée → plus d'appel pendant ce passage."""
+    """Gemini (offre gratuite) : appels espacés ; un modèle retiré ou sans quota est écarté, clé refusée → plus d'appel."""
     if not GEMINI_KEY or GEM_STATE["off"]:
         return None
     body = {"title": rec.get("title", ""), "ing": rec.get("ing", [])[:40], "steps": rec.get("steps", [])[:25], "cat": rec.get("cat", "")}
-    payload = json.dumps({"contents": [{"parts": [{"text": PROMPT + json.dumps(body, ensure_ascii=False)}]}],
-                          "generationConfig": {"temperature": 0.2, "responseMimeType": "application/json",
-                                                               "thinkingConfig": {"thinkingBudget": 0}}}).encode()  # sans « réflexion » : réponse en quelques secondes
-    for mo in GEMINI_MODELS:
-        if mo in GEM_STATE["dead"]:
-            continue
-        for attempt in range(2):
-            wait = 4.0 - (time.time() - GEM_STATE["last"])
+    models = [m for m in gem_models() if m not in GEM_STATE["dead"]]
+    if not models:
+        GEM_STATE["off"] = True
+        return None
+    for mo in models:
+        for attempt in range(3):
+            gc = {"temperature": 0.2, "responseMimeType": "application/json"}
+            if mo not in GEM_STATE["nothink"]:
+                gc["thinkingConfig"] = {"thinkingBudget": 0}  # réponse en quelques secondes
+            payload = json.dumps({"contents": [{"parts": [{"text": PROMPT + json.dumps(body, ensure_ascii=False)}]}], "generationConfig": gc}).encode()
+            wait = 4.5 - (time.time() - GEM_STATE["last"])
             if wait > 0:
                 time.sleep(wait)
             GEM_STATE["last"] = time.time()
             try:
-                req = urllib.request.Request(f"https://generativelanguage.googleapis.com/v1beta/models/{mo}:generateContent",
-                                             data=payload, headers={"Content-Type": "application/json", "x-goog-api-key": GEMINI_KEY})
-                with urllib.request.urlopen(req, timeout=45) as r:
+                req = urllib.request.Request(f"{GEM_URL}/{mo}:generateContent", data=payload,
+                                             headers={"Content-Type": "application/json", "x-goog-api-key": GEMINI_KEY})
+                with urllib.request.urlopen(req, timeout=60) as r:
                     j = json.loads(r.read().decode())
-                txt = j["candidates"][0]["content"]["parts"][0]["text"]
+                parts = j["candidates"][0]["content"]["parts"]
+                txt = "".join(p.get("text", "") for p in parts if not p.get("thought"))
+                txt = re.sub(r"^```(?:json)?\s*|\s*```$", "", txt.strip())
                 out = check(json.loads(txt), body, "gemini")
                 if out:
                     GEM_STATE["n"] += 1
@@ -594,20 +631,30 @@ def gemini(rec):
             except urllib.error.HTTPError as e:
                 msg = ""
                 try:
-                    msg = e.read().decode()[:300]
+                    msg = e.read().decode()
                 except Exception:
                     pass
-                print(f"Gemini {mo} : HTTP {e.code} {msg}", file=sys.stderr)
-                if e.code in (400, 401, 403):
+                low = msg.lower()
+                print(f"Gemini {mo} : HTTP {e.code} " + re.sub(r"\s+", " ", msg)[:260], file=sys.stderr)
+                if e.code == 400 and "thinking" in low and mo not in GEM_STATE["nothink"]:
+                    GEM_STATE["nothink"].add(mo)
+                    continue
+                if e.code in (401, 403) or (e.code == 400 and ("api key" in low or "api_key" in low)):
                     GEM_STATE["off"] = True  # clé refusée
                     return None
+                if e.code == 404:
+                    GEM_STATE["dead"].add(mo)
+                    m = re.search(r"use models/([a-z0-9.\-]+)", msg)
+                    if m and m.group(1) not in GEM_STATE["models"]:
+                        GEM_STATE["models"].insert(GEM_STATE["models"].index(mo) + 1, m.group(1))
+                        models.insert(models.index(mo) + 1, m.group(1))
+                    break
                 if e.code == 429:
-                    if "per day" in msg.lower() or "perday" in msg.lower() or attempt:
-                        GEM_STATE["dead"].add(mo)  # quota de ce modèle épuisé : modèle suivant
-                        if len(GEM_STATE["dead"]) >= len(GEMINI_MODELS):
-                            GEM_STATE["off"] = True
+                    d = re.search(r'"retryDelay":\s*"(\d+)', msg)
+                    if "limit: 0" in low or "perday" in low or "per day" in low or attempt >= 1 or not d:
+                        GEM_STATE["dead"].add(mo)  # pas de quota (ou quota du jour épuisé) pour ce modèle
                         break
-                    time.sleep(20)
+                    time.sleep(min(60, int(d.group(1)) + 1))
                     continue
                 if e.code in (500, 503):
                     time.sleep(5)
@@ -616,6 +663,8 @@ def gemini(rec):
             except Exception as e:
                 print(f"Gemini {mo} : {e!r}", file=sys.stderr)
                 break
+    if all(m in GEM_STATE["dead"] for m in GEM_STATE["models"]):
+        GEM_STATE["off"] = True
     return None
 
 
