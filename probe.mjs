@@ -1,10 +1,11 @@
-import fs from "fs"; import { spawnSync } from "child_process";
+import fs from "fs";
+const UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36";
+const u = "https://www.hellofresh.fr/recipes/shawarma-au-poulet-pour-missions-epiques-644baa82d33c4d3a387cf45c";
 let out = "";
-const runs = [["bbc,pinchofnom,skinnytaste", { MAX_FETCH: "40" }], ["jamieoliver,recipetineats,olive", { MAX_FETCH: "30" }]];
-for (const [src, env] of runs) {
-  const t0 = Date.now();
-  const r = spawnSync("node", ["discover.mjs"], { env: { ...process.env, DRY_RUN: "1", SOURCES: src, SNACK_ONLY: "0", ...env }, encoding: "utf8", timeout: 1500000, maxBuffer: 50e6 });
-  out += `\n######## ${src} (${Math.round((Date.now() - t0) / 1000)} s)\n` + (r.stdout || "").split("\n").filter((l) => !/^plan |^recherche /.test(l)).join("\n") + (r.stderr ? "\nERR " + r.stderr.slice(-3000) : "");
-  fs.writeFileSync("report.txt", out);
-}
-fs.writeFileSync("report.txt", out + "\nFIN");
+const r = await fetch(u, { headers: { "User-Agent": UA, "Accept-Language": "fr-FR" }, redirect: "manual" });
+out += `statut ${r.status} location ${r.headers.get("location")}\n`;
+const t = await r.text(); out += `taille ${t.length}\n`;
+const m = t.match(/<script[^>]*application\/ld\+json[^>]*>([\s\S]*?)<\/script>/i); out += m ? "ld " + m[1].slice(0, 1500) : "pas de ld\n" + t.slice(0, 800);
+const s = await fetch("https://www.hellofresh.fr/recipes/search?q=shawarma", { headers: { "User-Agent": UA } }); const st = await s.text();
+out += "\n\nrecherche " + s.status + " " + [...new Set([...st.matchAll(/\/recipes\/([a-z0-9-]*shawarma[a-z0-9-]*)/g)].map((x) => x[1]))].slice(0, 15).join("\n");
+fs.writeFileSync("report.txt", out);
