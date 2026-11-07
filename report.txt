@@ -1,0 +1,5 @@
+statut 200 location null
+taille 1686939
+ld {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":"https://www.hellofresh.fr/","name":"Home"},{"@type":"ListItem","position":2,"item":"https://www.hellofresh.fr/recipes","name":"Recettes"},{"@type":"ListItem","position":3,"name":"Shawarma au poulet pour missions épiques"}]}
+
+recherche 200 
