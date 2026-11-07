@@ -2625,6 +2625,9 @@ body.lock .fab,body.panel-open .fab{display:none!important}
 .w54-chart .tgt{stroke:var(--accent);stroke-width:1.4;stroke-dasharray:5 4;opacity:.85}
 .w54-chart .tgl{fill:var(--accent);font-weight:700;font-size:10.5px;opacity:1}
 /* v55 */
+/* v60 : fiche de secours */
+.broken60{padding:8px 4px 24px}.broken60 h3{margin:16px 0 6px;font-size:1rem}.broken60 ul,.broken60 ol{margin:0;padding-left:20px;display:grid;gap:4px}
+.broken60-a{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}.broken60-e{font-size:.75rem;margin-top:14px}
 /* v59 : recettes traduites */
 .dc-tr{margin:-4px 0 10px;font-size:.8rem;color:var(--muted);text-align:center}
 .dc-steps{margin:0;padding:0 0 0 22px;display:grid;gap:12px;line-height:1.5}
@@ -2776,7 +2779,7 @@ body.lock .fab,body.panel-open .fab{display:none!important}
 </div>
 <div id="timers" class="timers" hidden aria-live="polite"></div>
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
-<script>window.NS_CONFIG={"hosted": true, "sbUrl": "https://zjsawjudrdneeptxbskd.supabase.co", "sbKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpqc2F3anVkcmRuZWVwdHhic2tkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1NjUxMjcsImV4cCI6MjEwNzE0MTEyN30.Wn1bUy--5O78gGICTOyEGbnT6B-SdoNCG_XxBBaaUIY", "build": "20261106192540"}</script>
+<script>window.NS_CONFIG={"hosted": true, "sbUrl": "https://zjsawjudrdneeptxbskd.supabase.co", "sbKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpqc2F3anVkcmRuZWVwdHhic2tkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1NjUxMjcsImV4cCI6MjEwNzE0MTEyN30.Wn1bUy--5O78gGICTOyEGbnT6B-SdoNCG_XxBBaaUIY", "build": "20261107100143"}</script>
 <script>
 const AISLES={L:"Fruits & légumes",H:"Herbes fraîches",V:"Viandes & poissons",C:"Crèmerie & œufs",S:"Surgelés",F:"Féculents",B:"Conserves",E:"Épices & condiments"};
 const AISLE_ORDER=["L","H","V","C","S","F","B","E"];
@@ -10182,6 +10185,36 @@ panelDiscOne=(f=>function(e){if(!isEN59(e))return f.apply(this,arguments);const 
 document.addEventListener("click",ev=>{const t=ev.target.closest&&ev.target.closest('[data-dsc="tab|st"]');if(!t)return;ev.stopPropagation();ev.preventDefault();ui.dtab="st";renderPanel()},true);
 // carte du swipe : la source indique la traduction
 swCard=(f=>function(e,cls){const h=f.apply(this,arguments);return isEN59(e)?h.replace(/(<span class="sw-src">)([^<]*)(<\/span>)/,`$1$2 · traduit de l'anglais$3`):h})(swCard);
+
+
+// ================= v60 : une recette qui ne s'ouvre plus ne donne plus une page blanche =================
+// Cas vus : recette du planning qui n'existe plus dans la liste (supprimée, ou ses données sont abîmées), ou erreur d'affichage.
+// À la place : la recette est reconstruite si possible, sinon une fiche simple propose de la retirer du planning ou de la retrouver.
+function brokenName58(id){const m=(state.myrec||[]).find(x=>x.id===id);if(m)return m;return null}
+function showBroken60(id,err){const box=document.getElementById("modal"),c=document.getElementById("mContent");if(!box||!c)return;box.hidden=false;document.body.classList.add("lock");
+ const m=brokenName58(id),name=m&&m.n||(RMAP[id]&&RMAP[id].n)||"Cette recette",inPlan=Object.keys(state.plan||{}).filter(k=>state.plan[k]===id).length;
+ const nn=m?nrmS(m.n):"",alt=nn?DISC.find(e=>nrmS(e.t)===nn||(m.u&&e.u===m.u)):null;
+ c.innerHTML=`<div class="broken60"><h2 class="pn-title">${esc(name)}</h2>
+  <p>Cette recette ne s'affiche plus correctement${m||RMAP[id]?"":" : elle n'existe plus dans tes recettes"}.</p>
+  ${m&&m.il&&m.il.length?`<h3>Ingrédients</h3><ul>${m.il.map(l=>`<li>${esc(l)}</li>`).join("")}</ul>`:""}
+  ${m&&m.st&&m.st.length?`<h3>Étapes</h3><ol>${m.st.map(l=>`<li>${esc(l)}</li>`).join("")}</ol>`:""}
+  ${m&&m.u?`<p><a href="${esc(m.u)}" target="_blank" rel="noopener">Voir la recette d'origine</a></p>`:""}
+  <div class="broken60-a">${alt?`<button type="button" class="btn primary" data-b60="readd" data-id="${esc(id)}" data-d="${esc(alt.id)}">Réparer la recette</button>`:""}
+   ${inPlan?`<button type="button" class="btn" data-b60="unplan" data-id="${esc(id)}">Retirer du planning (${inPlan} repas)</button>`:""}
+   ${m?`<button type="button" class="btn ghost" data-b60="del" data-id="${esc(id)}">Supprimer la recette</button>`:""}
+   <button type="button" class="btn ghost" data-b60="close">Fermer</button></div>
+  ${err?`<p class="muted broken60-e">Détail : ${esc(String(err&&err.message||err).slice(0,160))}</p>`:""}</div>`}
+renderModal=(f=>function(){if(ui.modal&&!RMAP[ui.modal]){try{regMyRecipes(state.myrec||[])}catch(e){}}
+ if(ui.modal&&!RMAP[ui.modal]){showBroken60(ui.modal,null);return}
+ try{return f.apply(this,arguments)}catch(e){try{console.error("recette",ui.modal,e)}catch(x){}if(ui.cook!=null){ui.cook=null;try{return f.apply(this,arguments)}catch(e2){}}showBroken60(ui.modal,e)}})(renderModal);
+document.addEventListener("click",async ev=>{const t=ev.target.closest&&ev.target.closest("[data-b60]");if(!t)return;ev.preventDefault();const a=t.dataset.b60,id=t.dataset.id;
+ if(a==="close"){closeModal();return}
+ if(a==="unplan"){for(const k of Object.keys(state.plan||{}))if(state.plan[k]===id)delete state.plan[k];commit();closeModal();renderAll();toast("Retirée du planning");return}
+ if(a==="del"){state.myrec=(state.myrec||[]).filter(x=>x.id!==id);for(const k of Object.keys(state.plan||{}))if(state.plan[k]===id)delete state.plan[k];commit();closeModal();renderAll();toast("Recette supprimée");return}
+ if(a==="readd"){const d=t.dataset.d,ks=Object.keys(state.plan||{}).filter(k=>state.plan[k]===id);t.disabled=true;t.textContent="…";
+  state.myrec=(state.myrec||[]).filter(x=>x.id!==id);try{await discAdd(d,false)}catch(e){}
+  const e=DISC_MAP[d],nr=(state.myrec||[]).find(x=>e&&(x.u===e.u||nrmS(x.n)===nrmS(e.t)));if(nr){ks.forEach(k=>state.plan[k]=nr.id);commit();closeModal();renderAll();toast("Recette réparée");openModal(nr.id)}else{commit();closeModal();renderAll();toast("Impossible de la réparer : retire-la du planning")}}},true);
+// au chargement : un repas planifié dont la recette n'existe plus est signalé dans la console seulement (la fiche ci-dessus s'occupe du reste)
 
 try{setTab(ui.tab);renderAll()}catch(e){try{sbDiag("affichage au démarrage",e)}catch(x){}}try{initDb()}catch(e){}sbStart();
 
