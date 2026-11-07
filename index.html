@@ -2779,7 +2779,7 @@ body.lock .fab,body.panel-open .fab{display:none!important}
 </div>
 <div id="timers" class="timers" hidden aria-live="polite"></div>
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
-<script>window.NS_CONFIG={"hosted": true, "sbUrl": "https://zjsawjudrdneeptxbskd.supabase.co", "sbKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpqc2F3anVkcmRuZWVwdHhic2tkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1NjUxMjcsImV4cCI6MjEwNzE0MTEyN30.Wn1bUy--5O78gGICTOyEGbnT6B-SdoNCG_XxBBaaUIY", "build": "20261107100143"}</script>
+<script>window.NS_CONFIG={"hosted": true, "sbUrl": "https://zjsawjudrdneeptxbskd.supabase.co", "sbKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpqc2F3anVkcmRuZWVwdHhic2tkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1NjUxMjcsImV4cCI6MjEwNzE0MTEyN30.Wn1bUy--5O78gGICTOyEGbnT6B-SdoNCG_XxBBaaUIY", "build": "20261107102429"}</script>
 <script>
 const AISLES={L:"Fruits & légumes",H:"Herbes fraîches",V:"Viandes & poissons",C:"Crèmerie & œufs",S:"Surgelés",F:"Féculents",B:"Conserves",E:"Épices & condiments"};
 const AISLE_ORDER=["L","H","V","C","S","F","B","E"];
@@ -10215,6 +10215,25 @@ document.addEventListener("click",async ev=>{const t=ev.target.closest&&ev.targe
   state.myrec=(state.myrec||[]).filter(x=>x.id!==id);try{await discAdd(d,false)}catch(e){}
   const e=DISC_MAP[d],nr=(state.myrec||[]).find(x=>e&&(x.u===e.u||nrmS(x.n)===nrmS(e.t)));if(nr){ks.forEach(k=>state.plan[k]=nr.id);commit();closeModal();renderAll();toast("Recette réparée");openModal(nr.id)}else{commit();closeModal();renderAll();toast("Impossible de la réparer : retire-la du planning")}}},true);
 // au chargement : un repas planifié dont la recette n'existe plus est signalé dans la console seulement (la fiche ci-dessus s'occupe du reste)
+
+
+// ================= v61 : Découvrir (swipe) et récupération automatique de recettes débranchés =================
+// Plus aucune lecture de la collecte (branche data) : ni plats, ni vidéos, ni idées d'encas. Les recettes déjà ajoutées restent dans « Mes recettes ».
+const DREM_OFF=String(DREM);
+window.fetch=(f=>function(u){try{const s=typeof u==="string"?u:(u&&u.url)||"";if(s.startsWith(DREM_OFF))return Promise.reject(new Error("collecte débranchée"))}catch(e){}return f.apply(this,arguments)})(window.fetch);
+dqFetch=async function(){return{got:0,left:0}};
+discTopUp=async function(){};
+discRefresh=async function(){};
+try{vidFetch=async function(){return null};vidKick=async function(){}}catch(e){}
+snkiFetch=async function(){return null};
+renderSnackIdeas=function(){const b=document.getElementById("snkIdeas");if(b)b.remove()};
+renderDiscBanner=function(){document.querySelectorAll(".dc-banner,#discCard,#vcDisc").forEach(x=>x.remove())};
+openPanel=(f=>function(name){if(name==="decouvrir")return;return f.apply(this,arguments)})(openPanel);
+document.addEventListener("click",ev=>{const t=ev.target.closest&&ev.target.closest('[data-dsc="open"],[data-snki-see],[data-snki-add]');if(t){ev.stopPropagation();ev.preventDefault()}},true);
+renderAll=(f=>function(){const r=f.apply(this,arguments);try{renderDiscBanner();renderSnackIdeas();if(ui.panel==="decouvrir")closePanel()}catch(e){}return r})(renderAll);
+// caches de la collecte retirés du téléphone
+try{for(const k of [DQ_KEY,DP_KEY,LS+"-snkideas",LS+"-vids"])localStorage.removeItem(k)}catch(e){}
+try{DQ.length=0;for(const e of DISC.splice(0))delete DISC_MAP[e.id]}catch(e){}
 
 try{setTab(ui.tab);renderAll()}catch(e){try{sbDiag("affichage au démarrage",e)}catch(x){}}try{initDb()}catch(e){}sbStart();
 
