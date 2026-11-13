@@ -2779,7 +2779,7 @@ body.lock .fab,body.panel-open .fab{display:none!important}
 </div>
 <div id="timers" class="timers" hidden aria-live="polite"></div>
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
-<script>window.NS_CONFIG={"hosted": true, "sbUrl": "https://zjsawjudrdneeptxbskd.supabase.co", "sbKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpqc2F3anVkcmRuZWVwdHhic2tkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1NjUxMjcsImV4cCI6MjEwNzE0MTEyN30.Wn1bUy--5O78gGICTOyEGbnT6B-SdoNCG_XxBBaaUIY", "build": "20261107102429"}</script>
+<script>window.NS_CONFIG={"hosted": true, "sbUrl": "https://zjsawjudrdneeptxbskd.supabase.co", "sbKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpqc2F3anVkcmRuZWVwdHhic2tkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1NjUxMjcsImV4cCI6MjEwNzE0MTEyN30.Wn1bUy--5O78gGICTOyEGbnT6B-SdoNCG_XxBBaaUIY", "build": "20261113210754"}</script>
 <script>
 const AISLES={L:"Fruits & légumes",H:"Herbes fraîches",V:"Viandes & poissons",C:"Crèmerie & œufs",S:"Surgelés",F:"Féculents",B:"Conserves",E:"Épices & condiments"};
 const AISLE_ORDER=["L","H","V","C","S","F","B","E"];
@@ -10234,6 +10234,25 @@ renderAll=(f=>function(){const r=f.apply(this,arguments);try{renderDiscBanner();
 // caches de la collecte retirés du téléphone
 try{for(const k of [DQ_KEY,DP_KEY,LS+"-snkideas",LS+"-vids"])localStorage.removeItem(k)}catch(e){}
 try{DQ.length=0;for(const e of DISC.splice(0))delete DISC_MAP[e.id]}catch(e){}
+
+
+// ================= v62 : toutes les formes de pâtes reconnues par le calcul =================
+// orzo, risoni, rigatoni, paccheri, cheveux d'ange… = pâtes sèches ; pâtes fraîches ; pâtes farcies (raviolis, tortellinis) ;
+// gnocchis de pomme de terre ; pâtes de pois chiches ; vermicelles de blé (ceux de riz restent des nouilles de riz)
+Object.assign(NUTX,{_pates_farcies:[266,11,8,37,2.2],_pates_pois_chiches:[355,21,6,48,9]});
+NXN.unshift(
+ [/\b(raviol[ie]s?|ravioles?|tortell?inis?|tortelloni|cappelletti|agnolotti|mezzelune|girasoli|pates? farcies?)\b/,"_pates_farcies"],
+ [/\bgnocchis?\b/,"_gnocchi"],
+ [/\bpates?\b.*\b(pois ?chiches?|chickpeas?)\b/,"_pates_pois_chiches"],
+ [/\b(vermicelles?|nouilles?) de riz\b/,"nouilles"],
+ [/\b(pates?|tagliatelles?|fettuccines?|pappardelles?|linguines?|spaghett?is?|raviol\w*) fraiches?\b/,"hf_lasagne_fraiche"],
+ [/\b(orzo|risoni|rigatonis?|conchiglies?|conchigliettes?|orecchiettes?|pappardelles?|cheveux d ange|capellinis?|mafaldines?|paccheris?|casarecces?|trofies?|ditalinis?|cannellonis?|fettuccines?|bucatinis?|tortiglionis?|gemellis?|radiatoris?|campanelles?|cavatappis?|pipe rigate|pipes?|mezze maniche|zitis?|torsades?|langues? d oiseaux?|perles de ble|coquillettes?|macaronis?|vermicelles?|calamarata|lumaconis?|fregola|ptitim|pennettes?|pennes?|spaghettinis?|bavettes?|tagliolinis?|strozzapretis?|fusillis?|farfalles?|tagliatelles?|linguines?|spaghett?is?|lasagnes?|cellentanis?|rotinis?|gramigna|stellines?)\b(?!.*\b(farcies?|fraiches?|pois ?chiches?|lentilles?|riz|complete?s?)\b)/,"_pates"],
+ [/\b(orzo|risoni|rigatonis?|pennes?|fusillis?|spaghett?is?|macaronis?|coquillettes?|farfalles?|tagliatelles?|linguines?)\b.*\bcomplete?s?\b/,"pates"]
+);
+try{for(const k in NX_CACHE)delete NX_CACHE[k]}catch(e){}
+try{if(typeof nx51Reset==="function")nx51Reset()}catch(e){}
+try{nxRefresh(RECIPES)}catch(e){}
+try{cqReady(()=>{try{for(const k in NX_CACHE)delete NX_CACHE[k];nxRefresh(RECIPES);renderAll()}catch(e){}})}catch(e){}
 
 try{setTab(ui.tab);renderAll()}catch(e){try{sbDiag("affichage au démarrage",e)}catch(x){}}try{initDb()}catch(e){}sbStart();
 
